@@ -14,7 +14,7 @@ Just follow these steps:
 
 * Install cqfd (see below)
 * Go into your project's directory
-* Create a .cqfdrc file
+* Create a .cqfdrc file ([cqfdrc(5)](cqfdrc.5.md))
 * Put a Dockerfile and save it as .cqfd/docker/Dockerfile
 * Run ``cqfd init``
 
@@ -70,7 +70,7 @@ workstation:
 
 -  Restart your docker service if you needed to create the group.
 
-## Installing/removing cqfd ##
+## Installing/removing ##
 
 The cqfd script can be installed system-wide.
 
