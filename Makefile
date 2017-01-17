@@ -9,10 +9,12 @@ all:	help
 help:
 	@echo "Available make targets:"
 	@echo "   help:      This help message"
+	@echo "   doc:       Generate documentation"
 	@echo "   install:   Install script, doc and resources"
 	@echo "   uninstall: Remove script, doc and resources"
 	@echo "   tests:     Run functional tests"
-	@echo "   clean:     Clean temporary files"
+
+doc: cqfd.1.gz cqfdrc.5.gz
 
 install: cqfd.1.gz cqfdrc.5.gz
 	install -d $(DESTDIR)$(PREFIX)/bin/
@@ -38,6 +40,20 @@ tests:
 
 clean:
 	rm -f cqfd.1.gz cqfdrc.5.gz
+
+%.1: %.1.md
+	ronn --style=man \
+	     --date="2017-01-17" \
+	     --manual="C.Q.F.D. Manual" \
+	     --organization="C.Q.F.D." \
+	     $<
+
+%.5: %.5.md
+	ronn --style=man \
+	     --date="2017-01-17" \
+	     --manual="C.Q.F.D. Manual" \
+	     --organization="C.Q.F.D." \
+	     $<
 
 %.gz: %
 	gzip -c $^ >$@
