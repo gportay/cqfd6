@@ -28,6 +28,8 @@ build environment for your project.
 
 ### Regular builds ###
 
+[See](cqfd.1.md#examples)
+
 ### Release ###
 
 ### Flavors ###
