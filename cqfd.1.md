@@ -16,27 +16,27 @@ system, e.g. building a RHEL7 app when your workstation runs on Ubuntu 16.04.
 ## COMMANDS
 
 **init**
-    Initialize project build container
+: Initialize project build container
 
 **run**
-    Run argument(s) inside build container
+: Run argument(s) inside build container
 
 **release**
-    Run argument(s) and release software
+: Run argument(s) and release software
 
 **help**
-    Show this help text
+: Show this help text
 
 ## OPTIONS
 
 **-f <file>**
-    Use file as config file (default .cqfdrc)
+: Use file as config file (default .cqfdrc)
 
 **-b <flavor_name>**
-    Target a specific build flavor.
+: Target a specific build flavor.
 
 **-h or --help**
-    Display this help message.
+: Display this help message.
 
 ## EXAMPLES
 
@@ -105,18 +105,18 @@ $ cqfd -f .cqfdrc.test
 ## ENVIRONMENT
 
 **CQFD_EXTRA_VOLUMES**
-    A space-separated list of additional volume mappings to be configured inside
+: A space-separated list of additional volume mappings to be configured inside
 the started container. Format is the same as (and passed to) docker-run’s __-v__
 option.
 
 **CQFD_EXTRA_HOSTS**
-    A space-separated list of additional host mappings to be configured inside
-the started container. Format is the same as (and passed to) docker-run’s
+: A space-separated list of additional host mappings to be configured inside the
+started container. Format is the same as (and passed to) docker-run’s
 __--add-host__ option.
 
 **CQFD_EXTRA_ENV**
-    A space-separated list of additional environment variables to be passed to
-the started container. Format is the same as (and passed to) docker-run’s __-e__
+: A space-separated list of additional environment variables to be passed to the
+started container. Format is the same as (and passed to) docker-run’s __-e__
 option.
 
 ## BUGS
