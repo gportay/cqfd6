@@ -205,9 +205,8 @@ The cqfd script can be installed system-wide.
 
 Install or remove the script and its resources:
 
-    $ make install
-    $ make DESTDIR=/usr install
-    $ make uninstall
+    $ make install [PREFIX=/usr/local] [DESTDIR=]
+    $ make uninstall [PREFIX=/usr/local] [DESTDIR=]
 
 ## Testing cqfd (for developers) ##
 

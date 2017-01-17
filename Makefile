@@ -1,6 +1,6 @@
 # Makefile for cqfd
 
-DESTDIR=/usr/local
+PREFIX?=/usr/local
 
 .PHONY: all help install uninstall tests clean
 
@@ -15,23 +15,23 @@ help:
 	@echo "   clean:     Clean temporary files"
 
 install: cqfd.1.gz cqfdrc.5.gz
-	install -d $(DESTDIR)/bin
-	install -m 0755 cqfd $(DESTDIR)/bin/cqfd
-	install -d $(DESTDIR)/share/doc/cqfd
-	install -m 0644 AUTHORS CHANGELOG LICENSE README.md $(DESTDIR)/share/doc/cqfd/
-	install -d $(DESTDIR)/share/man/man1
-	install -m 644 cqfd.1.gz $(DESTDIR)/share/man/man1
-	install -d $(DESTDIR)/share/man/man5
-	install -m 644 cqfdrc.5.gz $(DESTDIR)/share/man/man5
-	install -d $(DESTDIR)/share/cqfd/samples
-	install -m 0644 samples/* $(DESTDIR)/share/cqfd/samples
+	install -d $(DESTDIR)$(PREFIX)/bin/
+	install -m 0755 cqfd $(DESTDIR)$(PREFIX)/bin/
+	install -d $(DESTDIR)$(PREFIX)/share/doc/cqfd/
+	install -m 0644 AUTHORS CHANGELOG LICENSE README.md $(DESTDIR)$(PREFIX)/share/doc/cqfd/
+	install -d $(DESTDIR)$(PREFIX)/share/man/man1/
+	install -m 644 cqfd.1.gz $(DESTDIR)$(PREFIX)/share/man/man1/
+	install -d $(DESTDIR)$(PREFIX)/share/man/man5/
+	install -m 644 cqfdrc.5.gz $(DESTDIR)$(PREFIX)/share/man/man5/
+	install -d $(DESTDIR)$(PREFIX)/share/cqfd/samples/
+	install -m 0644 samples/* $(DESTDIR)$(PREFIX)/share/cqfd/samples/
 
 uninstall:
-	rm -rf $(DESTDIR)/bin/cqfd \
-		$(DESTDIR)/share/man/man1/cqfd.1.gz \
-		$(DESTDIR)/share/man/man5/cqfdrc.5.gz \
-		$(DESTDIR)/share/doc/cqfd \
-		$(DESTDIR)/share/cqfd
+	rm -rf $(DESTDIR)$(PREFIX)/bin/cqfd \
+		$(DESTDIR)$(PREFIX)/share/man/man1/cqfd.1.gz \
+		$(DESTDIR)$(PREFIX)/share/man/man5/cqfdrc.5.gz \
+		$(DESTDIR)$(PREFIX)/share/doc/cqfd \
+		$(DESTDIR)$(PREFIX)/share/cqfd
 
 tests:
 	@make -C tests
