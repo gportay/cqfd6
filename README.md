@@ -12,13 +12,14 @@ runs on Ubuntu 16.04.
 
 Just follow these steps:
 
-* Install cqfd (see below)
+* [here](#requirements)
+* Install cqfd (see [below](#installingremoving))
 * Go into your project's directory
 * Create a .cqfdrc file ([cqfdrc(5)](cqfdrc.5.md))
 * Put a Dockerfile and save it as .cqfd/docker/Dockerfile
 * Run ``cqfd init``
 
-Examples are available in the samples/ directory.
+Examples are available in the [samples/](samples) directory.
 
 cqfd will use the provided Dockerfile to create a normalized runtime
 build environment for your project.
