@@ -17,7 +17,9 @@ help:
 
 doc: cqfd.1.gz cqfdrc.5.gz
 
-install:
+doc: cqfd.1.gz cqfdrc.5.gz
+
+install: cqfd.1.gz cqfdrc.5.gz
 	install -d $(DESTDIR)$(PREFIX)/bin/
 	install -m 0755 cqfd $(DESTDIR)$(PREFIX)/bin/
 	install -d $(DESTDIR)$(PREFIX)/share/doc/cqfd/
