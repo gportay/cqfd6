@@ -12,32 +12,27 @@ runs on Ubuntu 16.04.
 
 Just follow these steps:
 
-* Install cqfd (see below)
+* Follow requirements (see [below](#requirements))
+* Install cqfd (see [below](#installingremoving-cqfd))
 * Go into your project's directory
-* Create a .cqfdrc file
+* Create a .cqfdrc file ([cqfdrc(5)](cqfdrc.5.md#examples))
 * Put a Dockerfile and save it as .cqfd/docker/Dockerfile
 * Run ``cqfd init``
 
-Examples are available in the samples/ directory.
+Examples are available in the [samples/](samples) directory.
 
 cqfd will use the provided Dockerfile to create a normalized runtime
 build environment for your project.
 
-## Using cqfd on a daily basis ##
+## Usefull links
 
-### Regular builds ###
+* [cqfd(1)](cqfd.1.md) and [cqfdrc(5)](cqfdrc.5.md) man pages
+* Using [cqfd](cqfd.1.md#examples) on a daily basis
+* The [.cqfdrc](cqfdrc.5.md#examples) file
+* [Environment variables](cqfd.1.md#environment)
+* [SSH handling](#sshhandling)
 
-### Release ###
-
-### Flavors ###
-
-## The .cqfdrc file ##
-
-### Environment variables ###
-
-### Other command-line options ###
-
-## Build Container Environment ##
+## Build Container Environment
 
 When cqfd runs, a docker container is launched as the environment in
 which to run the *command*.  Within this environment, commands are
