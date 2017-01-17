@@ -31,6 +31,7 @@ Usage: $PROGNAME [OPTION ARGUMENT] [COMMAND] [ARGUMENTS]
 Options:
     -f <file>           Use file as config file (default .cqfdrc)
     -b <flavor_name>    Target a specific build flavor.
+    -h or --help        Display this help message.
 
 Commands:
     init     Initialize project build container
