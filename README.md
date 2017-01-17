@@ -19,11 +19,11 @@ Just follow these steps:
 * [Install cqfd](#installingremoving-cqfd)
 * Make sure your user is a member of the `docker` group
 * Go into your project's directory
-* Create a `.cqfdrc` file
+* Create a [.cqfdrc](cqfdrc.5.adoc#examples)
 * Create a Dockerfile and save it as `.cqfd/docker/Dockerfile`
 * Run `cqfd init`
 
-Examples are available in the `samples/` directory.
+Examples are available in the [samples](samples) directory.
 
 `cqfd` will use the provided Dockerfile to create a normalized runtime
 build environment for your project.
@@ -528,6 +528,10 @@ The codebase contains tests which can be invoked using the following
 command, if the above requirements are met on the system:
 
     $ make tests
+
+## Man pages
+
+Have a look at [cqfd(1)](cqfd.1.adoc) and [cqfdrc(5)](cqfdrc.5.adoc) man pages.
 
 ## Patches
 
