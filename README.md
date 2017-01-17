@@ -32,10 +32,12 @@ eXperimentation*.
 
 Just follow these steps:
 
+* Follow [requirements](#requirements)
 * [Install cqfd](#installingremoving-cqfd6)
 * Go into your project's directory
-* Create a `.cqfdrc` file
-* Create a `Dockerfile` and save it as `.cqfd/docker/Dockerfile`
+* Create a [.cqfdrc](cqfdrc.5.adoc) file
+* Create a [Dockerfile](https://docs.docker.com/reference/dockerfile/) and save
+  it as `.cqfd/docker/Dockerfile`
 * Run `cqfd --init`
 
 cqfd run itself to build the documention or to release packages; see in-tree
@@ -314,6 +316,13 @@ Example:
     ~/src/buildroot$ source environment
     ~/src/buildroot$ cqfd
     (...)
+
+## Usefull links
+
+* [cqfd(1)](cqfd.1.adoc) and [cqfdrc(5)](cqfdrc.5.adoc) man pages
+* Using [cqfd](cqfd.1.adoc#examples) examples on a daily basis
+* The [.cqfdrc](cqfdrc.5.adoc#examples) example files
+* [Environment variables](cqfd.1.adoc#environment)
 
 ## Build Container Environment
 
