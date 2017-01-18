@@ -31,6 +31,10 @@ fi
 #restore cqfdrc
 mv $cqfdrc_old .cqfdrc
 
-#restore docker image to run on
+jtest_prepare "restore docker image to run on"
 $TDIR/.cqfd/cqfd init
+jtest_result pass
 
+jtest_prepare "run cqfd init in quiet mode"
+$TDIR/.cqfd/cqfd -q init | grep -E "^sha256:"
+jtest_result pass
