@@ -36,6 +36,7 @@ Options:
 
 Commands:
     init     Initialize project build container
+    destroy  Destroy project build container
     run      Run argument(s) inside build container
     release  Run argument(s) and release software
     help     Show this help text
@@ -102,6 +103,11 @@ docker_build() {
 		die "no Dockerfile found at location $dockerfile"
 	fi
 	docker build ${quiet:+-q} -t "$docker_img_name" `dirname $dockerfile`
+}
+
+# docker_rmi() - Remove build container
+docker_rmi() {
+	docker rmi "$docker_img_name"
 }
 
 # docker_run() - run command in configured container
@@ -260,6 +266,11 @@ while [ $# -gt 0 ]; do
 	init)
 		config_load $flavor
 		docker_build
+		exit $?
+		;;
+	destroy)
+		config_load $flavor
+		docker_rmi
 		exit $?
 		;;
 	-b)
