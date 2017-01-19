@@ -45,6 +45,7 @@ Options:
 
 Commands:
     init                 Initialize project build container.
+    destroy              Destroy project build container.
     exec cmd [args]      Run argument(s) inside build container.
     flavors              List flavors from config file to stdout.
     run [cmdstring]      Run argument(s) inside build container.
@@ -173,6 +174,11 @@ docker_build() {
 # arg$1: the image name to check
 image_exists_locally() {
 	docker image inspect "$1" &> /dev/null
+}
+
+# docker_rmi() - Remove image
+docker_rmi() {
+	docker rmi "$docker_img_name"
 }
 
 # docker_run() - run command in configured container
@@ -608,6 +614,11 @@ while [ $# -gt 0 ]; do
 	init)
 		config_load "$flavor"
 		docker_build
+		exit $?
+		;;
+	destroy)
+		config_load "$flavor"
+		docker_rmi
 		exit $?
 		;;
 	flavors)
