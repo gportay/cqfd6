@@ -15,7 +15,7 @@ Just follow these steps:
 * Follow requirements (see [below](#requirements))
 * Install cqfd (see [below](#installingremoving-cqfd))
 * Go into your project's directory
-* Create a .cqfdrc file ([cqfdrc(5)](cqfdrc.5.md#examples))
+* Create a .cqfdrc file ([cqfdrc(5)](cqfdrc.5.adoc#examples))
 * Put a Dockerfile and save it as .cqfd/docker/Dockerfile
 * Run ``cqfd init``
 
@@ -26,10 +26,10 @@ build environment for your project.
 
 ## Usefull links
 
-* [cqfd(1)](cqfd.1.md) and [cqfdrc(5)](cqfdrc.5.md) man pages
-* Using [cqfd](cqfd.1.md#examples) on a daily basis
-* The [.cqfdrc](cqfdrc.5.md#examples) file
-* [Environment variables](cqfd.1.md#environment)
+* [cqfd(1)](cqfd.1.adoc) and [cqfdrc(5)](cqfdrc.5.adoc) man pages
+* Using [cqfd](cqfd.1.adoc#examples) on a daily basis
+* The [.cqfdrc](cqfdrc.5.adoc#examples) file
+* [Environment variables](cqfd.1.adoc#environment)
 * [SSH handling](#sshhandling)
 
 ## Build Container Environment
@@ -86,3 +86,10 @@ The codebase contains tests which can be invoked using the following
 command, if the above requirements are met on the system:
 
     $ make tests
+
+## Building documentation using cqfd ##
+
+If __asciidoctor__ is not installed, *cqfd* can build it for you:
+
+    $ ./cqfd init
+    $ ./cqfd
