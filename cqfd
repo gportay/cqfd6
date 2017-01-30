@@ -161,8 +161,8 @@ docker_run() {
 	       ${SSH_AUTH_SOCK:+ -v $SSH_AUTH_SOCK:/home/builder/.sockets/ssh} \
 	       ${SSH_AUTH_SOCK:+ -e SSH_AUTH_SOCK=/home/builder/.sockets/ssh} \
 	       $docker_img_name \
-	       /bin/bash -c "groupadd -og $GROUPS -f builders && \
-	       useradd -s /bin/bash -u $UID -g $GROUPS builder && \
+	       /bin/bash -c "groupadd -og $GROUPS -f builders $CQFD_EXTRA_GROUPADD && \
+	       useradd -s /bin/bash -u $UID -g $GROUPS builder $CQFD_EXTRA_USERADD && \
 	       chown $UID:$GROUPS /home/builder && \
 	       su builder -p -c \"cd ~builder/src/ && $1\" 2>&1"
 }
