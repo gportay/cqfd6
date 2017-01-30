@@ -31,6 +31,7 @@ Usage: $PROGNAME [OPTION ARGUMENT] [COMMAND] [ARGUMENTS]
 Options:
     -f <file>           Use file as config file (default .cqfdrc).
     -b <flavor_name>    Target a specific build flavor.
+    -d                  Turn on dind mode.
     -q                  Turn on quiet mode
     -h or --help        Show this help text.
 
@@ -151,9 +152,19 @@ docker_run() {
 		done
 	fi
 
+	if ${dind:-false}; then
+		dind_img_name="${docker_img_name}_dind"
+		dind_img_id="$(docker ps -qf "name=$dind_img_name")"
+		dindopts="--link $dind_img_name"
+		if [ -z "$dind_img_id" ]; then
+			docker run --privileged --name "$dind_img_name" -d docker:dind
+		fi
+	fi
+
 	docker run --privileged -v "$PWD":/home/builder/src \
 	       -v ~/.ssh:/home/builder/.ssh \
 	       --rm \
+	       $dindopts \
 	       $extravol \
 	       $extrahosts \
 	       $extraenv \
@@ -268,6 +279,9 @@ while [ $# -gt 0 ]; do
 		config_load $flavor
 		docker_rmi
 		exit $?
+		;;
+	-d)
+		dind=true
 		;;
 	-b)
 		shift
