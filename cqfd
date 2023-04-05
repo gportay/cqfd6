@@ -682,7 +682,7 @@ for g in ${CQFD_GROUPS[*]}; do
 		groupadd -og "\$gid" -f "\$group"
 	fi
 
-	usermod -a -G \$group $cqfd_user
+	usermod -a -G "\$group" $cqfd_user
 done
 
 # Add docker group as cqfd to cqfd_user
@@ -734,6 +734,9 @@ locate_project_dir() {
 ## load_config() - load build settings from cqfdrc
 # $1: optional "flavor" of the build, is a suffix of command
 load_config() {
+	local dockerfile_hash
+	local format_user
+
 	# get the project directory
 	local project_dir
 	if ! project_dir=$(locate_project_dir); then
