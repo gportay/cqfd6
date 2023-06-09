@@ -35,7 +35,14 @@ cqfd_cachedir="${CQFD_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/cqfd}"
 # stdout: the usage
 usage() {
 	cat <<EOF
-Usage: $PROGNAME [OPTIONS] [COMMAND] [COMMAND OPTIONS] [ARGUMENTS]
+Usage: $PROGNAME [OPTIONS] --init|--deinit
+       $PROGNAME [OPTIONS] --ls|--gc
+       $PROGNAME [OPTIONS] --exec COMMAND [ARGUMENTS]
+       $PROGNAME [OPTIONS] --flavors
+       $PROGNAME [OPTIONS] --run [COMMAND_STRING]
+       $PROGNAME [OPTIONS] --run -c ARGUMENT_STRING
+       $PROGNAME [OPTIONS] --shell [SHELL_ARGUMENTS]
+       $PROGNAME [OPTIONS] [--] [PROGRAM] [ARGUMENTS]
 
 Options:
     --reinit             Reinitialize build container.
@@ -53,17 +60,14 @@ Options:
     -h or --help         Show this help text.
 
 Commands:
-    init                 Initialize project build container.
-    deinit               Deinitialize project build container.
-    ls                   List build containers.
-    gc                   Cleanup unused build containers.
-    exec cmd [args]      Run command inside build container.
-    flavors              List flavors from config file to stdout.
-    run [cmdstring]      Run command string inside build container.
-    release              Release software.
-    shell [shargs]       Run shell command inside build container.
-    version              Show version.
-    help                 Show this help text.
+    --init               Initialize project build container.
+    --deinit             Deinitialize project build container.
+    --ls                 List build containers.
+    --gc                 Cleanup unused build containers.
+    --exec cmd [args]    Run command inside build container.
+    --flavors            List flavors from config file to stdout.
+    --run [cmdstring]    Run command string inside build container.
+    --shell [shargs]     Run shell command inside build container.
 
     By default, the 'run' command is assumed, with the default
     command string configured in your .cqfdrc (see build.command).
@@ -434,7 +438,7 @@ docker_run() {
 				die "Custom image couldn't be pulled, please build/upload it first"
 			fi
 		else
-			die "The docker image doesn't exist, launch 'cqfd init' to create it"
+			die "The docker image doesn't exist, launch 'cqfd --init' to create it"
 		fi
 	fi
 
@@ -1044,7 +1048,7 @@ while [ $# -gt 0 ]; do
 		export CQFD_DEBUG=true
 		export BUILDKIT_PROGRESS=plain
 		;;
-	init)
+	init|--init)
 		shift
 		if [ "$#" -gt 0 ]; then
 			usage
@@ -1054,7 +1058,7 @@ while [ $# -gt 0 ]; do
 		docker_pull_or_build
 		exit
 		;;
-	deinit)
+	deinit|--deinit)
 		shift
 		if [ "$#" -gt 0 ]; then
 			usage
@@ -1064,7 +1068,7 @@ while [ $# -gt 0 ]; do
 		docker_rmi
 		exit
 		;;
-	ls)
+	ls|--ls)
 		shift
 		if [ "$#" -gt 0 ]; then
 			usage
@@ -1074,7 +1078,7 @@ while [ $# -gt 0 ]; do
 		list
 		exit
 		;;
-	gc)
+	gc|--gc)
 		shift
 		if [ "$#" -gt 0 ]; then
 			usage
@@ -1084,7 +1088,7 @@ while [ $# -gt 0 ]; do
 		prune
 		exit
 		;;
-	flavors)
+	flavors|--flavors)
 		shift
 		if [ "$#" -gt 0 ]; then
 			usage
@@ -1128,7 +1132,7 @@ while [ $# -gt 0 ]; do
 		shift
 		CQFD_PLATFORM="$1"
 		;;
-	exec)
+	exec|--exec)
 		cqfd_command="$1"
 		shift
 		if [ "$#" -lt 1 ]; then
@@ -1139,7 +1143,7 @@ while [ $# -gt 0 ]; do
 		build_command="${*@Q}"
 		break
 		;;
-	run|release)
+	run|--run|release)
 		cqfd_command="$1"
 		shift
 
@@ -1195,7 +1199,7 @@ while [ $# -gt 0 ]; do
 		fi
 		break
 		;;
-	sh|ash|dash|bash|ksh|zsh|csh|tcsh|fish|shell)
+	shell|--shell)
 		cqfd_command="$1"
 		if [ "$1" != "shell" ]; then
 			cqfd_shell="$1"
@@ -1208,9 +1212,20 @@ while [ $# -gt 0 ]; do
 		fi
 		break
 		;;
-	*)
+	--)
+		shift
+		break
+		;;
+	-*)
 		usage
-		die "$1: Invalid command!"
+		die "$1: Invalid option!"
+		;;
+	*)
+		# Run command
+		cqfd_command="exec"
+		load_config "$flavor"
+		build_command="${*@Q}"
+		break
 		;;
 	esac
 	shift
