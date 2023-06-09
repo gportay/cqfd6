@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of run command su and sudo backends
+# validate the behavior with su and sudo backends
 
 set -o pipefail
 
@@ -18,13 +18,13 @@ echo "FROM ubuntu:16.04" > .cqfd/docker/Dockerfile
 echo "ENV CQFD_DEBUG=1" >> .cqfd/docker/Dockerfile
 
 ################################################################################
-# cqfd run should be happy using su -c.
+# cqfd should be happy using su -c.
 ################################################################################
-jtest_prepare "cqfd run with su -c"
+jtest_prepare "cqfd with su -c"
 if [ "$cqfd_docker" = "podman" ]; then
 	jtest_result skip
 else
-	if "$cqfd" init && "$cqfd" run true \
+	if "$cqfd" --init && "$cqfd" true \
 		| awk -v rc=1 '/Using "su" to execute command/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -39,13 +39,13 @@ echo "FROM ubuntu:24.04" > .cqfd/docker/Dockerfile
 echo "ENV CQFD_DEBUG=1" >> .cqfd/docker/Dockerfile
 
 ################################################################################
-# cqfd run should be happy using su --session-command.
+# cqfd should be happy using su --session-command.
 ################################################################################
-jtest_prepare "cqfd run with su --session-command"
+jtest_prepare "cqfd with su --session-command"
 if [ "$cqfd_docker" = "podman" ]; then
 	jtest_result skip
 else
-	if "$cqfd" init && "$cqfd" run true \
+	if "$cqfd" --init && "$cqfd" true \
 		| awk -v rc=1 '/Using "su" to execute session command/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -60,13 +60,13 @@ echo "ENV DEBIAN_FRONTEND noninteractive" >> .cqfd/docker/Dockerfile
 echo "RUN apt-get update && apt-get install -y --no-install-recommends sudo" >> .cqfd/docker/Dockerfile
 
 ################################################################################
-# cqfd run should be happy using sudo.
+# cqfd should be happy using sudo.
 ################################################################################
-jtest_prepare "cqfd run with sudo"
+jtest_prepare "cqfd with sudo"
 if [ "$cqfd_docker" = "podman" ]; then
 	jtest_result skip
 else
-	if "$cqfd" init && "$cqfd" run true \
+	if "$cqfd" --init && "$cqfd" true \
 		| awk -v rc=1 '/Using "sudo" to execute command/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -78,4 +78,4 @@ fi
 # Restore initial Dockerfile.
 ################################################################################
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
-"$cqfd" init
+"$cqfd" --init

@@ -45,13 +45,12 @@ Options:
     -v or --version      Show version.
     --verbose            Increase the script's verbosity.
     -h or --help         Show this help text.
+    --init               Initialize project build container
+    --flavors            List flavors from config file to stdout
+    --release            Run argument(s) and release software
 
 Commands:
-    init                 Initialize project build container.
     exec cmd [args]      Run argument(s) inside build container.
-    flavors              List flavors from config file to stdout.
-    run [cmdstring]      Run argument(s) inside build container.
-    release [cmdstring]  Run argument(s) and release software.
     shell [shargs]       Run shell command inside build container.
     help                 Show this help text.
 
@@ -182,7 +181,7 @@ docker_run() {
 				die "Custom image couldn't be pulled, please build/upload it first"
 			fi
 		else
-			die "The docker image doesn't exist, launch 'cqfd init' to create it"
+			die "The docker image doesn't exist, launch 'cqfd --init' to create it"
 		fi
 	fi
 
@@ -611,29 +610,31 @@ config_load() {
 
 has_custom_cqfdrc=false
 has_to_release=false
-has_alternate_command=false
 while [ $# -gt 0 ]; do
 	case "$1" in
-	help|-h|--help)
+	-h|--help)
 		usage
 		exit
 		;;
-	version|-v|--version)
+	-v|--version)
 		echo $VERSION
 		exit
 		;;
 	--verbose)
 		export CQFD_DEBUG=true
 		;;
-	init)
+	--init)
 		config_load "$flavor"
 		docker_build
 		exit
 		;;
-	flavors)
+	--flavors)
 		config_load
 		echo "$build_flavors"
 		exit
+		;;
+	--release)
+		has_to_release=true
 		;;
 	-b)
 		shift
@@ -665,30 +666,6 @@ while [ $# -gt 0 ]; do
 		docker_run "$command_string"
 		exit
 		;;
-	run|release)
-		if [ "$1" = "release" ]; then
-			has_to_release=true
-		fi
-
-		shift
-
-		# No more args? run default command
-		[ "$#" -eq 0 ] && break
-
-		# -c appends following args to the default command
-		if [ "$1" = "-c" ]; then
-			if [ "$#" -lt 2 ]; then
-				die "option -c requires arguments"
-			fi
-
-			shift
-			break
-		fi
-
-		# Run alternate command
-		has_alternate_command=true
-		break
-		;;
 	sh|ash|dash|bash|ksh|zsh|csh|tcsh|fish|shell)
 		if [ "$1" != "shell" ]; then
 			cqfd_shell="$1"
@@ -702,13 +679,9 @@ while [ $# -gt 0 ]; do
 		docker_run "$command_string"
 		exit
 		;;
-	?*)
-		echo "Unknown command: $1" >&2
-		usage
-		exit 1
-		;;
 	*)
-		# empty or no argument case
+		# run a command
+		break
 		;;
 	esac
 	shift
@@ -716,10 +689,20 @@ done
 
 config_load "$flavor"
 
-if $has_alternate_command; then
-	build_cmd="$*"
-elif [ -n "$*" ]; then
-	build_cmd+=" $*"
+# No more args? run default command
+if [ "$#" -ne 0 ]; then
+	# -c appends following args to the default command
+	if [ "$1" = "-c" ]; then
+		if [ "$#" -lt 2 ]; then
+			die "option -c requires arguments"
+		fi
+
+		shift
+		build_cmd+=" $*"
+	else
+		# Run alternate command
+		build_cmd="$*"
+	fi
 fi
 
 if [ -z "$build_cmd" ]; then

@@ -21,14 +21,14 @@ Just follow these steps:
 * Go into your project's directory
 * Create a .cqfdrc file
 * Put a Dockerfile and save it as .cqfd/docker/Dockerfile
-* Run ``cqfd init``
+* Run ``cqfd --init``
 
 Examples are available in the samples/ directory.
 
 cqfd will use the provided Dockerfile to create a normalized runtime
 build environment for your project.
 
-Warning: Running cqfd init creates and names a new Docker image each
+Warning: Running cqfd --init creates and names a new Docker image each
 time the Dockerfile is modified, which may lead to a large number of
 unused images that cannot be automatically purged. Currently, cqfd
 does not have a systematic clean-up system in place.
@@ -45,15 +45,15 @@ default build command as configured in .cqfdrc, use:
 Alternatively, you may want to specify a single custom command to be
 executed from inside the build container.
 
-    $ cqfd exec make clean
+    $ cqfd make clean
 
 Or custom commands composed with shell grammar:
 
-    $ cqfd shell -c "make linux-dirclean && make foobar-dirclean"
+    $ cqfd -c "make linux-dirclean && make foobar-dirclean"
 
 Or run a shell script with arguments:
 
-    $ cqfd shell ./build.sh debug
+    $ cqfd ./build.sh debug
 
 When ``cqfd`` is running, the current directory is mounted by Docker
 as a volume. As a result, all the build artefacts generated inside the
@@ -66,7 +66,7 @@ The release command behaves exactly like run, but creates a release
 tarball for your project additionally. The release files (as specified
 in your ``.cqfdrc``) will be included inside the release archive.
 
-    $ cqfd release
+    $ cqfd --release
 
 The resulting release file is then called according to the archive
 template, which defaults to ``%Po-%Pn.tar.xz``.
@@ -262,8 +262,8 @@ the cqfd group in the container.
 
 ### Appending to the build command ###
 
-The `-c` option set immediately after the command run allows appending the
-command of a cqfd run for temporary developments:
+The `-c` option allows appending the command of a cqfd for temporary
+developments:
 
     $ cqfd -b centos7 run -c "clean"
     $ cqfd -b centos7 run -c "TRACING=1"

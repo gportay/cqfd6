@@ -11,12 +11,12 @@ cqfd="$TDIR/.cqfd/cqfd"
 cd "$TDIR/" || exit 1
 
 ################################################################################
-# 'cqfd run' accepts running when not in a tty
+# 'cqfd' accepts running when not in a tty
 ################################################################################
 jtest_prepare "cqfd works when not in a tty"
 
 # the key here is to use /dev/null as stdin
-if "$cqfd" run cat /etc/passwd </dev/null | grep -q "^root:"; then
+if "$cqfd" cat /etc/passwd </dev/null | grep -q "^root:"; then
 	jtest_result pass
 else
 	jtest_result fail

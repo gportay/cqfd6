@@ -45,12 +45,12 @@ _cqfd() {
 		done
 
 		if [ -e "$cqfdrc" ]; then
-			flavors=$(cqfd -f $cqfdrc flavors)
+			flavors=$(cqfd -f $cqfdrc --flavors)
 			COMPREPLY=( $(compgen -W "$flavors" -- "$cur") )
 		fi
 		return
 		;;
-	init|flavors|release|help)
+	--init|--flavors|--release|--help)
 		return
 		;;
 	esac
@@ -91,14 +91,14 @@ _cqfd() {
 		return
 	fi
 
-	local opts="-C -d -f -b -q -V --version -h --help"
+	local opts="-C -d -f -b -q -V --version -h --help --init --falvors --release"
 	if [[ "$cur" == -* ]]; then
 		COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
 		return
 	fi
 
 	local shells="sh ash dash bash ksh zsh csh tcsh fish"
-	local cmds="init flavors exec run release shell version help"
+	local cmds="exec shell"
 	COMPREPLY=( $(compgen -W "$shells $cmds $opts" -- "$cur") )
 } &&
 complete -F _cqfd cqfd
