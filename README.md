@@ -23,7 +23,8 @@ emulation.
 cqfd6 is a fork of cqfd fixing several broken things in the upstream project.
 It depreciates the former CLI to modernize it to something much more simple and
 much more common such as the CLI of `sudo`. Moreover, the project need a new
-name, remembering its roots.
+name, remembering its roots. Meanwhile, cqfd6 is for *CQFD Sudo Interface
+eXperimentation*.
 
 # Using cqfd
 
@@ -36,7 +37,7 @@ Just follow these steps:
 * Go into your project's directory
 * Create a `.cqfdrc` file
 * Create a Dockerfile and save it as `.cqfd/docker/Dockerfile`
-* Run `cqfd init`
+* Run `cqfd --init`
 
 Examples are available in the `samples/` directory.
 
@@ -45,7 +46,7 @@ build environment for your project.
 
 > ⚠️ Warning
 >
-> Running `cqfd init` creates and names a new Docker image each
+> Running `cqfd --init` creates and names a new Docker image each
 > time the Dockerfile is modified, which may lead to a large number of
 > unused images that are not automatically purged.
 
@@ -61,15 +62,15 @@ default build command as configured in `.cqfdrc`, use:
 Alternatively, you may want to specify a single custom command to be
 executed from inside the build container.
 
-    $ cqfd exec make clean
+    $ cqfd --exec make clean
 
 Or custom commands composed with shell grammar:
 
-    $ cqfd shell -c "make linux-dirclean && make foobar-dirclean"
+    $ cqfd --shell -c "make linux-dirclean && make foobar-dirclean"
 
 Or run a shell script with arguments:
 
-    $ cqfd shell ./build.sh debug
+    $ cqfd --shell ./build.sh debug
 
 When `cqfd` is running, the current directory is mounted by Docker
 as a volume. As a result, all the build artefacts generated inside the
@@ -168,7 +169,7 @@ image=ubuntu:16:04
 ```
 
 Note: When using a prebuilt image from a repository using `custom_img_name` or
-`image`, the `cqfd init` is **not** necessary as no image has to be built.
+`image`, the `cqfd --init` is **not** necessary as no image has to be built.
 Furthermore, when using `image` the `Dockerfile` is **not** necessary as well.
 
 ### The [build] section
@@ -340,11 +341,11 @@ the cqfd group in the container.
 
 ### Appending to the build command
 
-The `-c` option set immediately after the command run allows appending the
-command of a cqfd run for temporary developments:
+The `-c` option set immediately after the command --run allows appending the
+command of a cqfd --run for temporary developments:
 
-    $ cqfd --build centos7 run -c "clean"
-    $ cqfd --build centos7 run -c "TRACING=1"
+    $ cqfd --build centos7 --run -c "clean"
+    $ cqfd --build centos7 --run -c "TRACING=1"
 
 ### Running a shell in the container
 
@@ -354,18 +355,18 @@ the `CQFD_SHELL` environment variable.
 
 Example:
 
-    fred@host:~/project$ cqfd shell
+    fred@host:~/project$ cqfd --shell
     fred@container:~/project$
 
 ### Use cqfd as an interpreter for shell script
 
-You can use the `shell` command to write a shell script and run it in your
+You can use the `--shell` command to write a shell script and run it in your
 defined container.
 
 Example:
 
     fred@host:~/project$ cat get-container-pretty-name.sh
-    #!/usr/bin/env -S cqfd shell
+    #!/usr/bin/env -S cqfd --shell
     if ! test -e /.dockerenv; then
         exit 1
     fi
@@ -376,12 +377,12 @@ Example:
 
 ### Use cqfd as a standard shell for binaries
 
-You can even use the `shell` command to use it as a standard `$SHELL` so
+You can even use the `--shell` command to use it as a standard `$SHELL` so
 binaries honoring that variable run shell commands in your defined container.
 
 Example:
 
-    fred@host:~/project$ make SHELL="cqfd shell"
+    fred@host:~/project$ make SHELL="cqfd --shell"
     Available make targets:
        help:      This help message
        install:   Install script, doc and resources
@@ -404,11 +405,11 @@ First, specify the desired platform in the `Dockerfile`, as shown below:
 
 Then, initialize the image:
 
-    $ cqfd init
+    $ cqfd --init
 
 Finally, test the build container:
 
-    $ cqfd exec uname -m
+    $ cqfd --exec uname -m
     aarch64
 
 Additionally, cqfd supports the option `--platform TARGET`, the environment
@@ -417,13 +418,13 @@ platform dynamically.
 
 Examples:
 
-    $ cqfd --platform linux/arm64 init
-    $ cqfd --platform linux/arm64 exec uname -m
+    $ cqfd --platform linux/arm64 --init
+    $ cqfd --platform linux/arm64 --exec uname -m
     aarch64
 
     $ export CQFD_PLATFORM="linux/arm64"
-    $ cqfd init
-    $ cqfd exec uname -m
+    $ cqfd --init
+    $ cqfd --exec uname -m
     aarch64
 
     $ cat .cqfdrc
@@ -436,10 +437,10 @@ Examples:
 
     [build]
     command='uname -a'
-    $ cqfd init
-    $ cqfd exec uname -m
+    $ cqfd --init
+    $ cqfd --exec uname -m
     x86_64
-    $ cqfd --build arm64 exec uname -m
+    $ cqfd --build arm64 --exec uname -m
     aarch64
 
 ### Key files and directories
