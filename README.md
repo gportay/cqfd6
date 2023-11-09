@@ -2,9 +2,8 @@
 
 # What are cqfd and cqfd6 ?
 
-cqfd provides a quick and convenient way to run commands in the current
-directory, but within a Docker container defined in a per-project config
-file.
+cqfd provides a quick and convenient way to run command string in the current
+directory, but within a Docker container defined in a per-project config file.
 
 This becomes useful when building an application designed for another
 Linux system, e.g. building an old embedded firmware that only works
@@ -54,11 +53,11 @@ build environment for your project.
 ### Regular builds
 
 To build your project from the configured build environment with the
-default build command as configured in `.cqfdrc`, use:
+default build command stringas configured in `.cqfdrc`, use:
 
     $ cqfd
 
-Alternatively, you may want to specify a custom command to be
+Alternatively, you may want to specify a custom command string to be
 executed from inside the build container.
 
     $ cqfd run make clean
@@ -90,8 +89,8 @@ template, which defaults to `%Po-%Pn.tar.xz`.
 
 ### Flavors
 
-Flavors are used to create alternate build scenarios. For example, to
-use another container or another build command.
+Flavors are used to create alternate build scenarios. For example, to use
+another container or another build command string.
 
 ## The .cqfdrc file
 
@@ -125,7 +124,7 @@ and right after a section.
 `build_context` (optional): a directory to pass as the build context
 to Docker. This should be specified relatively to where `cqfd` is
 invoked.  For example, it can be set to `.`, to use the current
-working directory of the invoked `cqfd` command as the Docker build
+working directory of the invoked `cqfd` command string as the Docker build
 context, which can be useful when files at the root of the project are
 required to build the image.  When using this option, a
 `.dockerignore` file can be useful to limit what gets sent to the
@@ -185,8 +184,8 @@ format, or simply specify the `group` name if it exists either in the host or
 inside the docker image.
 
 `flavors` (optional): the list of build flavors (see below). Each flavor has
-its own command just like `build.command`. This property is now automatically
-deduced from the flavors sections of `.cqfdrc`.
+its own command string just like `build.command`. This property is now
+automatically deduced from the flavors sections of `.cqfdrc`.
 
 `dockerfile` (optional): the path to the `Dockerfile`. The path is relative to
 the project directory (i.e. the parent directory of `.cqfd`). By default, cqfd
