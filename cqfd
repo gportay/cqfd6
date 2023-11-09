@@ -51,8 +51,8 @@ Commands:
     init                 Initialize project build container.
     exec cmd [args]      Run argument(s) inside build container.
     flavors              List flavors from config file to stdout.
-    run [cmdstring]      Run argument(s) inside build container.
-    release [cmdstring]  Run argument(s) and release software.
+    run [cmdstring]      Run command string inside build container.
+    release [cmdstring]  Run command string and release software.
     shell [shargs]       Run shell command inside build container.
     help                 Show this help text.
 
@@ -159,7 +159,7 @@ image_exists_locally() {
 	"$cqfd_docker" image inspect "$1" &>/dev/null
 }
 
-## docker_run() - run command in configured container
+## docker_run() - run command string in configured container
 # A few implementation details:
 #
 # - The user executing the command string inside the container is
@@ -480,7 +480,7 @@ if [ "${cqfd_docker_gid:-0}" -gt 0 ]; then
 	usermod -a -G cqfd $cqfd_user
 fi	
 
-# Drop the root privileges and run providing command, using sudo if it exists
+# Drop the root privileges and run provided command, using sudo if it exists
 if [ -n "\$has_sudo" ]; then
 	debug "Using \"sudo\" to execute command sh -c \"\$1\" as user \"$cqfd_user\""
 	exec sudo -E -u $cqfd_user sh -c "\$1"
@@ -691,10 +691,10 @@ while [ $# -gt 0 ]; do
 
 		shift
 
-		# No more args? run default command
+		# No more args? run default command string
 		[ "$#" -eq 0 ] && break
 
-		# -c appends following args to the default command
+		# -c appends following args to the default command string
 		if [ "$1" = "-c" ]; then
 			shift
 
@@ -705,7 +705,7 @@ while [ $# -gt 0 ]; do
 			break
 		fi
 
-		# Run alternate command
+		# Run alternate command string
 		has_alternate_command=true
 		break
 		;;
