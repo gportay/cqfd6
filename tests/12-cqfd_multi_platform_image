@@ -16,7 +16,7 @@ cp .cqfd/docker/Dockerfile.platform .cqfd/docker/Dockerfile
 cp cqfdrc-platform .cqfdrc
 
 jtest_prepare "run cqfd with FROM --platform=linux/arm64 in Dockerfile should run linux/arm64 docker platform"
-if cqfd init && cqfd | grep "^aarch64$"; then
+if cqfd --reinit | grep "^aarch64$"; then
 	jtest_result pass
 else
 	jtest_result fail

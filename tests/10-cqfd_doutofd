@@ -41,7 +41,7 @@ else
 	cp .cqfd/docker/Dockerfile.doutofd .cqfd/docker/Dockerfile
 	sed -e "/\[build\]/,/^$/s,^command=.*$,command='docker run --rm ubuntu:24.04 cat /etc/os-release'," .cqfdrc.orig >.cqfdrc
 
-	if cqfd init && CQFD_BIND_DOCKER_SOCK=true cqfd | grep -E "^PRETTY_NAME=\"Ubuntu 24.04(.[[:digit:]]+)? LTS\"$"; then
+	if CQFD_BIND_DOCKER_SOCK=true cqfd --reinit | grep -E "^PRETTY_NAME=\"Ubuntu 24.04(.[[:digit:]]+)? LTS\"$"; then
 		jtest_result pass
 	else
 		jtest_result fail

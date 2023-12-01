@@ -17,7 +17,7 @@ sed -e "/\[build\]/,/^$/s,^command=.*$,command='true'," .cqfdrc.orig >.cqfdrc
 cat .cqfd/docker/Dockerfile.orig - <<EOF >>.cqfd/docker/Dockerfile
 ENTRYPOINT ["false"]
 EOF
-if cqfd init && cqfd; then
+if cqfd --reinit; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -28,7 +28,7 @@ sed -e "/\[build\]/,/^$/s,^command=.*$,command='pwd'," .cqfdrc.orig >.cqfdrc
 cat .cqfd/docker/Dockerfile.orig - <<EOF >>.cqfd/docker/Dockerfile
 WORKDIR /mnt
 EOF
-if cqfd init && cqfd | grep "^$PWD$"; then
+if cqfd --reinit | grep "^$PWD$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -39,7 +39,7 @@ sed -e "/\[build\]/,/^$/s,^command=.*$,command='id -un'," .cqfdrc.orig >.cqfdrc
 cat .cqfd/docker/Dockerfile.orig - <<EOF >>.cqfd/docker/Dockerfile
 USER nobody
 EOF
-if cqfd init && cqfd | grep "^nobody$"; then
+if cqfd --reinit | grep "^nobody$"; then
 	jtest_result pass
 fi
 

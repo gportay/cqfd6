@@ -26,7 +26,7 @@ EOF
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && cqfd run env | grep "^PATH=/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin$"; then
+	if cqfd --reinit run env | grep "^PATH=/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin$"; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -53,7 +53,7 @@ EOF
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && cqfd run env | grep "^PATH=/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin$"; then
+	if cqfd --reinit run env | grep "^PATH=/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin$"; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -80,7 +80,7 @@ EOF
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && cqfd run env | grep "^PATH=/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin$"; then
+	if cqfd --reinit run env | grep "^PATH=/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin$"; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -109,7 +109,7 @@ EOF
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && cqfd run env | grep "^PATH=/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin$"; then
+	if cqfd --reinit run env | grep "^PATH=/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin$"; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -137,13 +137,13 @@ USER $UID:${GROUPS[0]}
 EOF
 jtest_prepare "run cqfd run with path and sh should set PATH"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
-	if cqfd init && cqfd run env | grep "^PATH=/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin$"; then
+	if cqfd --reinit run env | grep "^PATH=/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin$"; then
 		jtest_result pass
 	else
 		jtest_result fail
 	fi
 else
-	if cqfd init && cqfd run env | grep "^PATH=/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin$"; then
+	if cqfd --reinit run env | grep "^PATH=/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin$"; then
 		jtest_result pass
 	else
 		jtest_result fail

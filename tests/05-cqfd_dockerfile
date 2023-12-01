@@ -14,8 +14,7 @@ jtest_prepare "run cqfd should use the Dockerfile set in dockerfile"
 echo "FROM ubuntu:16.04" >Dockerfile
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='grep ^PRETTY_NAME /etc/os-release'," .cqfdrc.orig >.cqfdrc
 sed -e '/\[build\]/adockerfile="Dockerfile"' -i .cqfdrc
-if cqfd init && \
-   cqfd | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
+if cqfd --reinit | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -34,8 +33,7 @@ mkdir -p support/docker
 mv Dockerfile support/docker/Dockerfile
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='grep ^PRETTY_NAME /etc/os-release'," .cqfdrc.orig >.cqfdrc
 sed -e '/\[build\]/adockerfile="support/docker/Dockerfile"' -i .cqfdrc
-if cqfd init && \
-   cqfd | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
+if cqfd --reinit | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -55,8 +53,7 @@ jtest_prepare "run cqfd should use the Dockerfile named Containerfile set in doc
 echo "FROM ubuntu:16.04" >.cqfd/docker/Containerfile
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='grep ^PRETTY_NAME /etc/os-release'," .cqfdrc.orig >.cqfdrc
 sed -e '/\[build\]/adockerfile=".cqfd/docker/Containerfile"' -i .cqfdrc
-if cqfd init && \
-   cqfd | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
+if cqfd --reinit | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -67,8 +64,7 @@ echo "ADD ./cqfdrc-build_context /tmp/" >>.cqfd/docker/Containerfile
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='grep ^PRETTY_NAME /etc/os-release \&\& test -e /tmp/cqfdrc-build_context'," .cqfdrc.orig >.cqfdrc
 sed -e '/\[build\]/adockerfile=".cqfd/docker/Containerfile"' -i .cqfdrc
 sed -e '/\[project\]/abuild_context="."' -i .cqfdrc
-if cqfd init && \
-   cqfd | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
+if cqfd --reinit | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
