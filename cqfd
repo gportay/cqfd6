@@ -38,6 +38,7 @@ usage() {
 Usage: $PROGNAME [OPTIONS] [COMMAND] [COMMAND OPTIONS] [ARGUMENTS]
 
 Options:
+    --reinit             Reinitialize build container.
     --release            Release software.
     -f <file>            Use file as config file (default .cqfdrc).
     -d <directory>       Use directory as cqfd directory (default .cqfd).
@@ -940,6 +941,8 @@ load_config() {
 	fi
 }
 
+has_custom_cqfdrc=false
+has_to_init=false
 has_to_release=false
 has_alternate_command=false
 while [ $# -gt 0 ]; do
@@ -1005,6 +1008,9 @@ while [ $# -gt 0 ]; do
 		quiet=true
 		export BUILDKIT_PROGRESS=quiet
 		;;
+	--reinit)
+		has_to_init=true
+		;;
 	--release)
 		has_to_release=true
 		;;
@@ -1016,6 +1022,9 @@ while [ $# -gt 0 ]; do
 		fi
 		load_config "$flavor"
 		command_string="${*@Q}"
+		if $has_to_init; then
+			docker_build
+		fi
 		docker_run "$command_string"
 		exit
 		;;
@@ -1050,6 +1059,9 @@ while [ $# -gt 0 ]; do
 		fi
 		shift
 		load_config "$flavor"
+		if $has_to_init; then
+			docker_build
+		fi
 		command_string="$cqfd_shell"
 		if [ "$#" -gt 0 ]; then
 			command_string+=" ${*@Q}"
@@ -1069,6 +1081,10 @@ load_config "$flavor"
 
 if ! $has_alternate_command && [ -n "$*" ] && [ -z "$build_command" ]; then
 	warn ".cqfdrc: Missing or empty build.command property!"
+fi
+
+if $has_to_init; then
+	docker_build
 fi
 
 if $has_alternate_command; then
