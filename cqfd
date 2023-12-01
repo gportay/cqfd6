@@ -1054,12 +1054,11 @@ while [ $# -gt 0 ]; do
 
 		# -c appends following args to the default command
 		if [ "$1" = "-c" ]; then
-			shift
-
 			if [ "$#" -lt 1 ]; then
 				usage
 				die "run -c: Missing arguments!"
 			fi
+			shift
 
 			# Display a warning message if using run -c with multiple arguments
 			if [ "$#" -gt 1 ]; then
