@@ -38,6 +38,7 @@ usage() {
 Usage: $PROGNAME [OPTIONS] [COMMAND] [COMMAND OPTIONS] [ARGUMENTS]
 
 Options:
+    --reinit             Reinitialize build container.
     --release            Release software.
     --platform <target>  Set target platform.
     -f <file>            Use file as config file (default .cqfdrc).
@@ -1016,6 +1017,7 @@ load_config() {
 	fi
 }
 
+has_to_init=false
 has_to_release=false
 while [ $# -gt 0 ]; do
 	case "$1" in
@@ -1115,6 +1117,9 @@ while [ $# -gt 0 ]; do
 		quiet=true
 		export BUILDKIT_PROGRESS=quiet
 		;;
+	--reinit)
+		has_to_init=true
+		;;
 	--release)
 		has_to_release=true
 		;;
@@ -1209,6 +1214,10 @@ fi
 
 if [ -z "$build_command" ]; then
 	die ".cqfdrc: Missing or empty build.command property!"
+fi
+
+if $has_to_init; then
+	docker_pull_or_build
 fi
 
 docker_run "$build_command"
