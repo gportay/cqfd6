@@ -1046,6 +1046,7 @@ while [ $# -gt 0 ]; do
 				usage
 				die "run -c: Missing arguments!"
 			fi
+			shift
 
 			# Display a warning message if using run -c with multiple arguments
 			if [ "$#" -gt 1 ]; then
