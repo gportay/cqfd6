@@ -1108,10 +1108,6 @@ done
 
 load_config "$flavor"
 
-if ! $has_alternate_command && [ -n "$*" ] && [ -z "$build_command" ]; then
-	warn ".cqfdrc: Missing or empty build.command property!"
-fi
-
 if $has_to_init; then
 	docker_build
 fi
