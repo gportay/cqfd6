@@ -12,7 +12,7 @@ mv .cqfdrc .cqfdrc.orig
 jtest_prepare "run cqfd init without using build_context should not use context directory"
 cp .cqfdrc.orig .cqfdrc
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='! test -e /tmp/cqfdrc-build_context'," -i .cqfdrc
-if cqfd init && cqfd; then
+if cqfd --reinit && cqfd; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -25,7 +25,7 @@ jtest_prepare "run cqfd init using build_context should use the context director
 cp .cqfd/docker/Dockerfile.build_context .cqfd/docker/Dockerfile
 cp cqfdrc-build_context .cqfdrc
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='test -e /tmp/cqfdrc-build_context'," -i .cqfdrc
-if cqfd init && cqfd; then
+if cqfd --reinit && cqfd; then
 	jtest_result pass
 else
 	jtest_result fail

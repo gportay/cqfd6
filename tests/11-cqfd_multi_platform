@@ -27,39 +27,35 @@ if uname -m | grep -q "^aarch64$"; then
 fi
 
 jtest_prepare "run cqfd without environment CQFD_PLATFORM and option --platform should run native docker platform ($native_platform = $native_machine)"
-if cqfd init && cqfd | grep "^$native_machine$"; then
+if cqfd --reinit | grep "^$native_machine$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "run cqfd with environment CQFD_PLATFORM should run native docker platform ($native_platform = $native_machine)"
-if CQFD_PLATFORM="$native_platform" cqfd init && \
-   CQFD_PLATFORM="$native_platform" cqfd | grep "^$native_machine$"; then
+if CQFD_PLATFORM="$native_platform" cqfd --reinit | grep "^$native_machine$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "run cqfd with option --platform should run native docker platform ($native_platform = $native_machine)"
-if cqfd --platform "$native_platform" init && \
-   cqfd --platform "$native_platform" | grep "^$native_machine$"; then
+if cqfd --platform "$native_platform" --reinit | grep "^$native_machine$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "run cqfd with environment CQFD_PLATFORM should run cross docker platform ($cross_platform = $cross_machine)"
-if CQFD_PLATFORM="$cross_platform" cqfd init && \
-   CQFD_PLATFORM="$cross_platform" cqfd | grep "^$cross_machine$"; then
+if CQFD_PLATFORM="$cross_platform" cqfd --reinit | grep "^$cross_machine$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "run cqfd with option --platform should run cross docker platform ($cross_platform = $cross_machine)"
-if cqfd --platform "$cross_platform" init && \
-   cqfd --platform "$cross_platform" | grep "^$cross_machine$"; then
+if cqfd --platform "$cross_platform" --reinit | grep "^$cross_machine$"; then
 	jtest_result pass
 else
 	jtest_result fail

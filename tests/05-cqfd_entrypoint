@@ -23,7 +23,7 @@ jtest_prepare "run cqfd without useradd and groupadd commands should fail"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && ! cqfd; then
+	if ! cqfd --reinit; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -35,7 +35,7 @@ echo 'RUN apk add shadow' >>.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && cqfd --verbose; then
+	if cqfd --reinit --verbose; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -46,7 +46,7 @@ jtest_prepare "run cqfd without CQFD_SHELL command should fail"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && ! CQFD_SHELL=/bin/bash cqfd --verbose; then
+	if ! CQFD_SHELL=/bin/bash cqfd --reinit --verbose; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -58,7 +58,7 @@ echo 'RUN apk add bash' >>.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && CQFD_SHELL=/bin/bash cqfd --verbose; then
+	if CQFD_SHELL=/bin/bash cqfd --reinit --verbose; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -69,7 +69,7 @@ jtest_prepare "run cqfd with su command should pass"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && cqfd --verbose \
+	if cqfd --reinit --verbose \
 		| awk -v rc=1 '/Using "su"/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -82,7 +82,7 @@ echo 'RUN apk add sudo' >>.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && cqfd --verbose \
+	if cqfd --reinit --verbose \
 		| awk -v rc=1 '/Using "sudo"/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -95,7 +95,7 @@ sed -e "/\[build\]/,/^$/s,^command=.*$,command='grep \"^$USER:x:$UID:${GROUPS[0]
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && cqfd; then
+	if cqfd --reinit; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -108,7 +108,7 @@ sed -e "/\[build\]/,/^$/s,^command=.*$,command='test -w $HOME'," .cqfdrc.orig >.
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && CQFD_NO_USER_SSH_CONFIG=true CQFD_NO_USER_GIT_CONFIG=true cqfd; then
+	if CQFD_NO_USER_SSH_CONFIG=true CQFD_NO_USER_GIT_CONFIG=true cqfd --reinit; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -169,7 +169,7 @@ echo "FROM ubuntu:16.04" >.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && cqfd --verbose \
+	if cqfd --reinit --verbose \
 		| awk -v rc=1 '/Using "su" to execute command/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -182,7 +182,7 @@ echo "FROM ubuntu:24.04" >.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && cqfd --verbose \
+	if cqfd --reinit --verbose \
 		| awk -v rc=1 '/Using "su" to execute session command/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -196,7 +196,7 @@ echo "RUN apt-get update && apt-get install -y --no-install-recommends sudo" >>.
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && cqfd --verbose \
+	if cqfd --reinit --verbose \
 		| awk -v rc=1 '/Using "sudo" to execute command/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
