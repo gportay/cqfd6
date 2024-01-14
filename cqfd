@@ -118,7 +118,8 @@ debug() {
 
 ## docker_build() - initialize build container
 docker_build() {
-	local args=()
+	local args
+	args=()
 
 	# Suppress the build output
 	if [ "$quiet" ]; then
@@ -177,7 +178,7 @@ image_exists_locally() {
 #
 # $1: the command string to execute as $cqfd_user
 docker_run() {
-	local args=(--privileged)
+	local args=()
 
 	# The image does not exist
 	if ! image_exists_locally "$docker_img_name"; then
@@ -207,12 +208,19 @@ docker_run() {
 		args+=("${array[@]}")
 	fi
 
-	args+=(--rm --log-driver=none)
+	# Give access to all host devices
+	args+=(--privileged)
 
-	# always keep stdin open
+	# Cleanup container after exit
+	args+=(--rm)
+
+	# Do not log
+	args+=(--log-driver=none)
+
+	# Always keep stdin open
 	args+=(--interactive)
 
-	# allocate a pty if stdin/err are connected to a tty
+	# Allocate a pty if stdin/err are connected to a tty
 	if [ -t 0 ] && [ -t 2 ]; then
 		args+=(--tty)
 	fi
@@ -222,6 +230,7 @@ docker_run() {
 		cqfd_user="$USER"
 	fi
 
+	# And, map cqfd_user_home and cqfd_user_cwd
 	if [ -n "$HOME" ]; then
 		cqfd_user_home="$(cd "$HOME"; pwd)"
 		cqfd_user_cwd="$(pwd)"
