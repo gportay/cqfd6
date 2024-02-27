@@ -483,7 +483,7 @@ of the `cqfd6` package via:
 rpmdev-setuptree
 cp cqfd6.spec ~/rpmbuild/SPECS/
 cd ~/rpmbuild/SPECS
-rpmbuild --undefine=_disable_source_fetch -ba cqfd6.spec "$@"
+rpmbuild --undefine=_disable_source_fetch --define='_dockerlibdir %{_exec_prefix}/lib/docker' -ba cqfd6.spec "$@"
 cp ~/rpmbuild/SRPMS/*.src.rpm ~/rpmbuild/RPMS/*/*.rpm "$OLDPWD"
 ```
 

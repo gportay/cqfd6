@@ -19,6 +19,7 @@ help:
 
 doc: cqfd.1.gz cqfdrc.5.gz
 
+install: DOCKERLIBDIR ?= $(PREFIX)/lib/docker
 install:
 	install -d $(DESTDIR)$(PREFIX)/bin/
 	install -m 0755 cqfd $(DESTDIR)$(PREFIX)/bin/cqfd$(COMPAT)
@@ -26,6 +27,7 @@ install:
 	for i in linux-amd64 linux-arm linux-arm64 linux-ppc64le linux-riscv64 linux-s390x; do \
 		ln -sf cqfd6 $(DESTDIR)$(PREFIX)/bin/$$i-cqfd6; \
 	done
+	install -D -m 755 docker-cqfd $(DESTDIR)$(DOCKERLIBDIR)/cli-plugins/docker-cqfd
 	install -d $(DESTDIR)$(PREFIX)/share/doc/cqfd6/
 	install -m 0644 AUTHORS CHANGELOG.md LICENSE README.md $(DESTDIR)$(PREFIX)/share/doc/cqfd6/
 	if [ -e cqfd.1.gz ]; then \
@@ -47,9 +49,11 @@ install:
 		install -m 644 bash-completion $(DESTDIR)$$completionsdir/cqfd6; \
 	fi
 
+uninstall: DOCKERLIBDIR ?= $(PREFIX)/lib/docker
 uninstall:
 	rm -rf $(DESTDIR)$(PREFIX)/bin/cqfd6 \
 		$(DESTDIR)$(PREFIX)/bin/cqfd \
+	        $(DESTDIR)$(DOCKERLIBDIR)/cli-plugins/docker-cqfd \
 		$(DESTDIR)$(PREFIX)/share/man/man1/cqfd.1.gz \
 		$(DESTDIR)$(PREFIX)/share/man/man5/cqfdrc.5.gz \
 		$(DESTDIR)$(PREFIX)/share/doc/cqfd6 \
@@ -67,7 +71,7 @@ uninstall:
 
 user-install user-uninstall:
 user-%:
-	$(MAKE) $* PREFIX=$$HOME/.local
+	$(MAKE) $* PREFIX=$$HOME/.local BASHCOMPLETIONSDIR=$$HOME/.local/share/bash-completion/completions DOCKERLIBDIR=$$HOME/.docker
 
 test tests:
 	@$(MAKE) -C tests GIT_DIR=$(CURDIR)/.git CQFD_COMPAT=$(COMPAT)

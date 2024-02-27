@@ -37,7 +37,18 @@ make check
 
 
 %install
-%make_install PREFIX=/usr
+%make_install PREFIX=/usr DOCKERLIBDIR=%_libdir/docker
+
+
+%post
+_libdir=$(rpm --eval '%%{_libdir}')
+mkdir -p "$_libdir/docker/cli-plugins"
+ln -sf ../../../../..%{_dockerlibdir}/cli-plugins/docker-cqfd "$_libdir/docker/cli-plugins/docker-cqfd"
+
+
+%postun
+_libdir=$(rpm --eval '%%{_libdir}')
+rm -f "$_libdir/docker/cli-plugins/docker-cqfd"
 
 
 %files
@@ -53,6 +64,7 @@ make check
 %{_bindir}/linux-ppc64le-cqfd6
 %{_bindir}/linux-riscv64-cqfd6
 %{_bindir}/linux-s390x-cqfd6
+%{_dockerlibdir}/cli-plugins/docker-cqfd
 %{_datadir}/bash-completion/completions/%{name}
 %{_datadir}/%{name}/samples/Dockerfile.focalFossa.android34
 %{_datadir}/%{name}/samples/Dockerfile.focalFossa.nodejs20x
