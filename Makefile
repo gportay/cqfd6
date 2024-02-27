@@ -2,7 +2,7 @@
 
 PREFIX?=/usr/local
 
-.PHONY: all help doc install uninstall test tests check
+.PHONY: all help doc install install-cli-plugin uninstall user-uninstall-cli-plugin test tests
 
 all:	help
 
@@ -41,6 +41,10 @@ install:
 		install -m 644 bash-completion $(DESTDIR)$$completionsdir/cqfd; \
 	fi
 
+install-cli-plugin: DOCKERLIBDIR ?= $(PREFIX)/lib/docker
+install-cli-plugin:
+	install -D -m 755 docker-cqfd $(DESTDIR)$(DOCKERLIBDIR)/cli-plugins/docker-cqfd
+
 uninstall:
 	rm -rf $(DESTDIR)$(PREFIX)/bin/cqfd \
 		$(DESTDIR)$(PREFIX)/share/man/man1/cqfd.1.gz \
@@ -55,9 +59,13 @@ uninstall:
 		rm -rf $(DESTDIR)$$completionsdir/cqfd; \
 	fi
 
-user-install user-uninstall:
+uninstall-cli-plugin: DOCKERLIBDIR ?= $(PREFIX)/lib/docker
+uninstall-cli-plugin:
+	rm -f $(DESTDIR)$(DOCKERLIBDIR)/cli-plugins/docker-cqfd
+
+user-install user-uninstall user-install-cli-plugin user-uninstall-cli-plugin:
 user-%:
-	$(MAKE) $* PREFIX=$$HOME/.local
+	$(MAKE) $* PREFIX=$$HOME/.local BASHCOMPLETIONSDIR=$$HOME/.local/share/bash-completion/completions DOCKERLIBDIR=$$HOME/.docker
 
 test tests:
 	@$(MAKE) -C tests GIT_DIR=$(CURDIR)/.git
