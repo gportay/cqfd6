@@ -127,4 +127,17 @@ else
 	jtest_result fail
 fi
 
+cp -f "$cqfdrc_old" .cqfdrc
+echo "command=\"echo \\
+	foo=bar \\
+	baz=qnux\"
+" >>.cqfdrc
+
+jtest_prepare "cqfdrc with multiline should pass"
+if $cqfd | grep 'foo=bar baz=qnux'; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
 mv -f "$cqfdrc_old" .cqfdrc
