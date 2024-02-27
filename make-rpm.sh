@@ -2,5 +2,5 @@
 set -e
 rpmdev-setuptree
 cd ~/rpmbuild/SPECS
-rpmbuild --undefine=_disable_source_fetch -ba cqfd6.spec "$@"
+rpmbuild --undefine=_disable_source_fetch --define='_dockerlibdir %{_exec_prefix}/lib/docker' -ba cqfd6.spec "$@"
 rpmlint ~/rpmbuild/SPECS/cqfd6.spec ~/rpmbuild/SRPMS/cqfd6*.rpm ~/rpmbuild/RPMS/cqfd6*.rpm
