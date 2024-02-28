@@ -189,6 +189,12 @@ should be a member of in the container. You can either use the `group:gid`
 format, or simply specify the `group` name if it exists either in the host or
 inside the docker image.
 
+``docker`` (optional): program used to invoke `docker` client.
+For example, to use docker if not in the docker group, it can be set like:
+```
+docker='sudo docker'
+```
+
 `dockerfile` (optional): the path to the `Dockerfile`. The path is relative to
 the project directory (i.e. the parent directory of `.cqfd`). By default, cqfd
 uses `.cqfd/$distro/Dockerfile` with `distro=docker` if `distro` is unset. For

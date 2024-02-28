@@ -891,6 +891,8 @@ load_config() {
 	# shellcheck disable=SC2154
 	build_platform="$platform"
 	# shellcheck disable=SC2154
+	build_docker="$docker"
+	# shellcheck disable=SC2154
 	build_dockerfile="$dockerfile"
 	# shellcheck disable=SC2154
 	build_docker_build_args="$docker_build_args"
@@ -908,6 +910,12 @@ load_config() {
 	release_transform="$tar_transform"
 	# shellcheck disable=SC2154
 	release_tar_opts="$tar_options"
+
+	# set docker if docker= is set
+	if [ "$build_docker" ]; then
+		# shellcheck disable=SC2162
+		read -a cqfd_docker <<<"$build_docker"
+	fi
 
 	# set native if platform= unspecified
 	cqfd_platform="$build_platform"
