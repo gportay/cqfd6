@@ -115,6 +115,9 @@ The `.cqfdrc` file supports Unix shell comments; the words after the character
 `#` are ignored up to the end of line. A comment cannot be set in the first
 line, and right after a section.
 
+Note: The traditional .ini comment, i.e. words after the character `;` are not
+supported anymore since cqfd6.
+
 ### Using build flavors
 
 In some cases, it may be desirable to build the project using variations of the
