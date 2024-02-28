@@ -18,3 +18,11 @@ command='cp README.md README.FOOINC \
          && asciidoc README.FOOINC'
 files='README.html'
 archive='cqfd_${BUILD_ID}_%Gh.tar.xz'
+
+[sudo]
+docker="sudo docker"
+command="test /.dockerenv && echo docker"
+
+[podman]
+docker="podman"
+command="test \"\$container\"  =  podman && echo podman"

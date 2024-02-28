@@ -413,7 +413,7 @@ docker_run() {
 				die "Custom image couldn't be pulled, please build/upload it first"
 			fi
 		else
-			die "The docker image doesn't exist, launch 'cqfd init' to create it"
+			die "The image doesn't exist, launch 'cqfd init' to create it"
 		fi
 	fi
 
