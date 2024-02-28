@@ -151,6 +151,12 @@ inside the docker image.
 its own command just like `build.command`. This property is now automatically
 deduced from the flavors sections of `.cqfdrc`.
 
+`docker` (optional): program used to invoke `docker` client.
+For example, to use docker if not in the docker group, it can be set like:
+```
+docker='sudo docker'
+```
+
 `docker_build_args` (optional): arguments used to invoke `docker build`.
 For example, to attempt to pull newer version of the image, it can be set like:
 ```
