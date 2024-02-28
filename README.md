@@ -116,6 +116,9 @@ The `.cqfdrc` file supports Unix shell comments; the words after the character `
 are ignored up to the end of line. A comment cannot be set in the first line,
 and right after a section.
 
+Note: The traditional .ini comment, i.e. words after the character `;` are not
+supported anymore since cqfd 6.
+
 ### The [project] section
 
 `org`: a short, lowercase name for the project’s parent organization.
