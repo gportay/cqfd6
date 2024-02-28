@@ -126,5 +126,15 @@ else
 	jtest_result fail
 fi
 
+cp -f .cqfdrc.orig .cqfdrc
+sed -i -e "/[build]/,/^$/s,^command=.*$,command='true; echo \"It works!\"'," .cqfdrc
+
+jtest_prepare "cqfdrc does not strip semicolons in command"
+if CQFD_COMPAT=6 "$cqfd" init && CQFD_COMPAT=6 "$cqfd" | grep "It works!" ; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
 # restore initial .cqfdrc
 mv -f .cqfdrc.orig .cqfdrc
