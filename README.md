@@ -192,6 +192,11 @@ For example, to use docker if not in the docker group, it can be set like:
 docker='sudo docker'
 ```
 
+Or, to use podman instead, it can be set like:
+```
+docker='podman'
+```
+
 ``docker_run_args`` (optional): arguments used to invoke `docker run`.
 For example, to share networking with the host, it can be set like:
 ```
