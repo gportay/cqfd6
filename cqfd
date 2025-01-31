@@ -60,7 +60,7 @@ Commands:
     exec cmd [args]      Run argument(s) inside build container.
     flavors              List flavors from config file to stdout.
     run [cmdstring]      Run argument(s) inside build container.
-    release [cmdstring]  Run argument(s) and release software.
+    release              Release software.
     shell [shargs]       Run shell command inside build container.
     help                 Show this help text.
 
@@ -1140,12 +1140,19 @@ while [ $# -gt 0 ]; do
 		;;
 	run|release)
 		cqfd_command="$1"
-		if [ "$1" = "release" ]; then
-			has_to_release=true
-		fi
-
 		shift
 
+		# Has to release
+		if [ "$cqfd_command" = "release" ]; then
+			has_to_release=true
+			if [ "$#" -gt 1 ]; then
+				warn "command release shall not support argument(s)," \
+				     "please consider the command run -c instead:"
+				echo "               cqfd --release run $*" >&2
+			fi
+		fi
+
+		# Setup build
 		load_config "$flavor"
 
 		# No more args? run default command
@@ -1168,9 +1175,9 @@ while [ $# -gt 0 ]; do
 
 			# Display a warning message if using run -c with multiple arguments
 			if [ "$#" -gt 1 ]; then
-				warn "command run -c shall support a single argument," \
+				warn "command $cqfd_command -c shall support a single argument," \
 				     "please consider the command run -c instead:"
-				echo "               cqfd run -c \"$*\"" >&2
+				echo "               cqfd $cqfd_command -c \"$*\"" >&2
 			fi
 			break
 		fi
@@ -1180,7 +1187,7 @@ while [ $# -gt 0 ]; do
 
 		# Display a warning message if using run with multiple arguments
 		if [ "$#" -ne 1 ]; then
-			warn "command run with multiple arguments is ambigous," \
+			warn "command $cqfd_command with multiple arguments is ambigous," \
 			     "please consider the commands exec or shell instead:"
 			echo "               cqfd exec $*" >&2
 			echo "               cqfd shell -c \"$*\"" >&2
