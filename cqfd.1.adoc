@@ -46,8 +46,8 @@ Linux distribution.
 *run [command_string]*::
 	Run argument(s) inside build container.
 
-*release [command_string]*::
-	Run argument(s) and release software.
+*release*::
+	Release software.
 
 *shell [sh_arguments]*::
 	Run shell command inside build container.
