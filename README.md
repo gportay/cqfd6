@@ -112,6 +112,9 @@ Here is a sample `.cqfdrc` file:
 
 ### Comments
 
+Note: The property and its value must be stick to the equal sign, without using
+whitespaces: i.e. `foo =.	bar` is invalid.
+
 The `.cqfdrc` file supports Unix shell comments; the words after the character `#`
 are ignored up to the end of line. A comment cannot be set in the first line,
 and right after a section.
