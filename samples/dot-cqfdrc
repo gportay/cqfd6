@@ -23,4 +23,4 @@ command="test /.dockerenv && echo docker"
 
 [podman]
 docker="podman"
-command="test \"\$container\"  =  podman && echo podman"
+command="test \"\$container\" = podman && echo podman"
