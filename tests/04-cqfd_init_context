@@ -12,6 +12,7 @@ cd "$TDIR/" || exit 1
 ################################################################################
 # 'cqfd --init' without context should fail the context
 ################################################################################
+cat .cqfdrc
 jtest_prepare "cqfd --init without using build_context"
 if "$cqfd" --init &&
    "$cqfd" grep '^build_context=' /tmp/cqfdrc-build_context | grep -q '^build_cont'; then
@@ -26,6 +27,7 @@ fi
 cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 cp -f .cqfd/docker/Dockerfile.build_context .cqfd/docker/Dockerfile
 cp -f cqfdrc-build_context .cqfdrc
+cat .cqfdrc
 
 ################################################################################
 # 'cqfd --init' with context changes the context
