@@ -18,7 +18,7 @@ val2="value-$RANDOM"
 
 # shellcheck disable=SC2016
 result=$(CQFD_EXTRA_RUN_ARGS="-e FOO=$val1 -e BAR=$val2" \
-	"$cqfd" echo -n '$FOO $BAR' | grep value)
+	"$cqfd" sh -c 'echo -n $FOO $BAR' | grep value)
 
 if [ "$result" = "$val1 $val2" ]; then
     jtest_result pass

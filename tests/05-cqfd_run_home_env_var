@@ -33,7 +33,7 @@ val2="value-$RANDOM"
 
 # shellcheck disable=SC2016
 result=$(CQFD_EXTRA_RUN_ARGS="-e FOO=$val1 -e HOME=$val2" \
-	"$cqfd" echo -n "\$FOO" "\$HOME" | grep value)
+	"$cqfd" sh -c 'echo -n "$FOO" "$HOME"' | grep value)
 
 if [ "$result" = "$val1 $val2" ]; then
 	jtest_result pass
@@ -50,7 +50,7 @@ val1="value-$RANDOM"
 
 # shellcheck disable=SC2016
 result=$(CQFD_EXTRA_RUN_ARGS="-e HOME=$val1" \
-	"$cqfd" echo -n "\$FOO" "\$HOME" | grep value)
+	"$cqfd" sh -c 'echo -n "$FOO" "$HOME"' | grep value)
 
 if [ "$result" = "$val1" ]; then
 	jtest_result pass
@@ -68,7 +68,7 @@ val2="value-$RANDOM"
 
 # shellcheck disable=SC2016
 result=$(CQFD_EXTRA_RUN_ARGS="-e JAVA_HOME=$val1 -e HOME=$val2" \
-	"$cqfd" echo -n "\$JAVA_HOME" "\$HOME" | grep value)
+	"$cqfd" sh -c 'echo -n "\$JAVA_HOME" "\$HOME"' | grep value)
 
 if [ "$result" = "$val1 $val2" ]; then
 	jtest_result pass
@@ -85,7 +85,7 @@ if [ "$cqfd_docker" = "podman" ]; then
 	jtest_result skip
 else
 	passwd_home=$("$cqfd" sh -c "grep \"^\$(whoami):\" /etc/passwd |cut -d: -f6")
-	user_home=$("$cqfd" echo "\$HOME")
+	user_home=$("$cqfd" sh -c 'echo "\$HOME"')
 	if [ "$passwd_home" = "$user_home" ]; then
 		jtest_result pass
 	else
