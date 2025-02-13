@@ -83,6 +83,9 @@ fi
 jtest_prepare "the user's home in passwd == \$HOME"
 if [ "$cqfd_docker" = "podman" ]; then
 	jtest_result skip
+
+if [ "$passwd_home" = "$user_home" ]; then
+	jtest_result pass
 else
 	passwd_home=$("$cqfd" grep ^$(whoami): /etc/passwd |cut -d: -f6)
 	user_home=$("$cqfd" echo '$HOME')
