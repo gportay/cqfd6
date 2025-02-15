@@ -30,6 +30,9 @@ cqfd_shell="${CQFD_SHELL:-/bin/bash}"
 read -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
 cqfd_docker_gid="${CQFD_DOCKER_GID:-0}"
 cqfd_cachedir="${CQFD_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/cqfd}"
+distro="docker"
+tar_transform=
+tar_options=
 
 ## usage() - print usage
 # stdout: the usage
@@ -250,10 +253,10 @@ prune() {
 		local args=()
 
 		# Append extra args from the .cqfdrc [build] section
-		if [ "$build_docker_rmi_args" ]; then
+		if [ "$docker_rmi_args" ]; then
 			local array
 			# shellcheck disable=SC2162
-			read -a array <<<"$build_docker_rmi_args"
+			read -a array <<<"$docker_rmi_args"
 			args+=("${array[@]}")
 		fi
 
@@ -299,7 +302,7 @@ docker_pull_or_build() {
 
 	# Pull the image
 	# If custom image name is used, it is pulled pull by docker_run()
-	if [ "$project_image" ] && [ ! "$project_custom_img_name" ] ; then
+	if [ "$image" ] && [ ! "$custom_img_name" ] ; then
 		args+=("$cqfd_image")
 
 		debug executing: "${cqfd_docker[@]}" pull "${args[@]}"
@@ -308,10 +311,10 @@ docker_pull_or_build() {
 	fi
 
 	# Append extra args from the .cqfdrc [build] section
-	if [ "$build_docker_build_args" ]; then
+	if [ "$docker_build_args" ]; then
 		local array
 		# shellcheck disable=SC2162
-		read -a array <<<"$build_docker_build_args"
+		read -a array <<<"$docker_build_args"
 		args+=("${array[@]}")
 	fi
 
@@ -327,10 +330,10 @@ docker_pull_or_build() {
 	args+=(--tag "$cqfd_image")
 
 	# Set the context
-	if [ -z "$project_build_context" ]; then
+	if [ -z "$build_context" ]; then
 		args+=("$(dirname "$cqfd_dockerfile")")
 	else
-		args+=("$project_build_context" --file "$cqfd_dockerfile")
+		args+=("$build_context" --file "$cqfd_dockerfile")
 	fi
 
 	# Run command
@@ -363,10 +366,10 @@ docker_rmi() {
 	fi
 
 	# Append extra args from the .cqfdrc [build] section
-	if [ "$build_docker_rmi_args" ]; then
+	if [ "$docker_rmi_args" ]; then
 		local array
 		# shellcheck disable=SC2162
-		read -a array <<<"$build_docker_rmi_args"
+		read -a array <<<"$docker_rmi_args"
 		args+=("${array[@]}")
 	fi
 
@@ -405,7 +408,7 @@ docker_run() {
 	# The image does not exist
 	if ! image_exists_locally "$cqfd_image"; then
 		# If custom image name is used, try to pull it before dying
-		if [ "$project_custom_img_name" ]; then
+		if [ "$custom_img_name" ]; then
 			if ! "${cqfd_docker[@]}" pull "$cqfd_image" &>/dev/null; then
 				die "Custom image couldn't be pulled, please build/upload it first"
 			fi
@@ -415,10 +418,10 @@ docker_run() {
 	fi
 
 	# Append extra args from the .cqfdrc [build] section
-	if [ "$build_docker_run_args" ]; then
+	if [ "$docker_run_args" ]; then
 		local array
 		# shellcheck disable=SC2162
-		read -a array <<<"$build_docker_run_args"
+		read -a array <<<"$docker_run_args"
 		args+=("${array[@]}")
 	fi
 
@@ -467,11 +470,11 @@ docker_run() {
 
 	# The user may set the user_extra_groups in the .cqfdrc
 	# file to add groups to the user in the container.
-	if [ -n "$build_user_extra_groups" ]; then
+	if [ -n "$user_extra_groups" ]; then
 		local group
 		local array
 		# shellcheck disable=SC2162
-		read -a array <<<"$build_user_extra_groups"
+		read -a array <<<"$user_extra_groups"
 		for group in "${array[@]}"; do
 			# optional groupd id specified ("name:123")
 			if echo "$group" | grep -qE ":[0-9]+$"; then
@@ -485,7 +488,7 @@ docker_run() {
 
 	# Set HOME variable for the $cqfd_user, except if it was explicitly set
 	# via CQFD_EXTRA_RUN_ARGS or docker_run_args
-	if ! echo "$CQFD_EXTRA_RUN_ARGS $build_docker_run_args" |
+	if ! echo "$CQFD_EXTRA_RUN_ARGS $docker_run_args" |
 	     grep -qE "(-e[[:blank:]]*|--env[[:blank:]]+)HOME="; then
 		args+=(--env "HOME=$cqfd_user_home")
 	fi
@@ -513,9 +516,9 @@ docker_run() {
 
 	# Bind mount the project directory
 	local workdir
-	if ! workdir="$(realpath "$build_workdir")" ||
+	if ! workdir="$(realpath "$workdir")" ||
 	   [ ! -d "$workdir" ]; then
-		die "$build_workdir: Missing or not a directory!"
+		die "$workdir: Missing or not a directory!"
 	fi
 	cqfd_user_cwd="$workdir"
 	args+=(--volume "$cqfd_user_cwd:$cqfd_user_cwd")
@@ -539,13 +542,14 @@ docker_run() {
 ## make_archive() - create a release package
 make_archive() {
 	local tar_opts
-	local files
+	local archive
 	local git_short
 	local git_long
 	local date_rfc3339
 	local date_unix
 
-	eval "files=($release_files)"
+	# evaluate files
+	eval "files=($files)"
 	if [ -z "${files[*]}" ]; then
 		die ".cqfdrc: Missing or empty build.files property!"
 	fi
@@ -563,49 +567,46 @@ make_archive() {
 	date_unix=$(date +%s)
 
 	# default name for the archive if not set
-	if [ -z "$release_archive" ]; then
-		release_archive="%Po-%Pn.tar.xz"
+	if [ -z "$archive" ]; then
+		archive="%Po-%Pn.tar.xz"
 	fi
 
-	# shellcheck disable=SC2001
-	release_archive=$(echo "$release_archive" |
-		sed -e 's!%%!%!g;
-			s!%Gh!'"$git_short"'!g;
-			s!%GH!'"$git_long"'!g;
-			s!%D3!'"$date_rfc3339"'!g;
-			s!%Du!'"$date_unix"'!g;
-			s!%Po!'"$project_org"'!g;
-			s!%Pn!'"$project_name"'!g;
-			s!%Cf!'"$flavor"'!g;')
+	# replace archive templates
+	archive="${archive//%Gh/$git_short}"
+	archive="${archive//%GH/$git_long}"
+	archive="${archive//%D3/$date_rfc3339}"
+	archive="${archive//%Du/$date_unix}"
+	archive="${archive//%Po/$org}"
+	archive="${archive//%Pn/$name}"
+	archive="${archive//%Cf/$flavor}"
+	archive="${archive//%%/%}"
 
 	# also replace variable names - beware with eval
-	eval "release_archive=$release_archive"
+	eval "archive=$archive"
 
 	# setting tar_transform=yes will move files to the root of a tar archive
-	if [ "$release_transform" = "yes" ]; then
+	if [ "$tar_transform" = "yes" ]; then
 		tar_opts+=('--transform' 's/.*\///g')
 	fi
 
 	# setting tar_options=x will pass the options to tar
-	if [ "$release_tar_opts" ]; then
+	if [ "$tar_options" ]; then
 		local array
 		# shellcheck disable=SC2162
-		read -a array <<<"$release_tar_opts"
+		read -a array <<<"$tar_options"
 		tar_opts+=("${array[@]}")
 	fi
 
 	# support the following archive formats
-	case "$release_archive" in
+	case "$archive" in
 	*.tar.xz)
-		XZ_OPT=-9 tar "${tar_opts[@]}" -cJf \
-			"$release_archive" "${files[@]}"
+		XZ_OPT=-9 tar "${tar_opts[@]}" -cJf "$archive" "${files[@]}"
 		;;
 	*.tar.gz)
-		tar "${tar_opts[@]}" -czf \
-			"$release_archive" "${files[@]}"
+		tar "${tar_opts[@]}" -czf "$archive" "${files[@]}"
 		;;
 	*.zip)
-		zip -q -9 -r "$release_archive" "${files[@]}"
+		zip -q -9 -r "$archive" "${files[@]}"
 		;;
 	*)
 		;;
@@ -794,21 +795,8 @@ load_config() {
 		die ".cqfdrc: Missing project section!"
 	fi
 
-	# shellcheck disable=SC2154
-	project_org="$org"
-	# shellcheck disable=SC2154
-	project_name="$name"
-	# shellcheck disable=SC2154
-	project_build_context="$build_context"
-	# shellcheck disable=SC2154
-	project_custom_img_name="$custom_img_name"
-	# shellcheck disable=SC2154
-	project_tag="$tag"
-	# shellcheck disable=SC2154
-	project_image="$image"
-
 	# check for [project] org and name properties are set and are not empty
-	if [ -z "$project_org" ] || [ -z "$project_name" ]; then
+	if [ -z "$org" ] || [ -z "$name" ]; then
 		die ".cqfdrc: Missing project.org or project.name properties"
 	fi
 
@@ -827,56 +815,31 @@ load_config() {
 		fi
 	fi
 
-	# shellcheck disable=SC2128
-	build_flavors="$flavors"
-	# shellcheck disable=SC2154
-	build_workdir="$workdir"
-	# shellcheck disable=SC2154
-	build_command="$command"
-	# shellcheck disable=SC2154
-	build_dockerfile="$dockerfile"
-	# shellcheck disable=SC2154
-	build_docker_build_args="$docker_build_args"
-	# shellcheck disable=SC2154
-	build_docker_run_args="$docker_run_args"
-	# shellcheck disable=SC2154
-	build_distro="$distro"
-	# shellcheck disable=SC2154
-	build_user_extra_groups="$user_extra_groups"
-	# shellcheck disable=SC2154
-	release_files="$files"
-	# shellcheck disable=SC2154
-	release_archive="$archive"
-	# shellcheck disable=SC2154
-	release_transform="$tar_transform"
-	# shellcheck disable=SC2154
-	release_tar_opts="$tar_options"
-
 	# warn if using legacy variable custom_img_name
-	if [ -n "$project_custom_img_name" ]; then
+	if [ -n "$custom_img_name" ]; then
 		warn "custom_img_name is deprecated, use either tag to name" \
 		     "your image or image to pull an image from a registry."
 		# backward compatibility if image= or tag= unspecified
-		if [ ! "$project_image" ]; then
-			project_image="$project_custom_img_name"
+		if [ ! "$image" ]; then
+			image="$custom_img_name"
 			# set default Dockerfile if dockerfile= unspecified
-			if [ -z "$build_dockerfile" ]; then
-				build_dockerfile="$cqfddir/${build_distro:-docker}/Dockerfile"
+			if [ -z "$dockerfile" ]; then
+				dockerfile="$cqfddir/${distro:-docker}/Dockerfile"
 			fi
 			# the Dockerfile does not exist
 			if ! cqfd_dockerfile="$(cd "$project_dir" && \
-				        	realpath "$build_dockerfile" 2>/dev/null)" || \
-			   [ ! -f "$cqfd_dockerfile" ]; then
-				die "$build_dockerfile: Missing Dockerfile!"
+				        	realpath "$dockerfile" 2>/dev/null)" || \
+			   [ ! -f "$dockerfile" ]; then
+				die "$dockerfile: Missing Dockerfile!"
 			fi
 		fi
-		if [ ! "$project_tag" ]; then
-			project_tag="$project_custom_img_name"
+		if [ ! "$tag" ]; then
+			tag="$custom_img_name"
 		fi
 	fi
 
 	# set default image if image= unspecified
-	cqfd_image="$project_image"
+	cqfd_image="$image"
 	if [ ! "$cqfd_image" ]; then
 		local Un
 		local Po
@@ -886,28 +849,28 @@ load_config() {
 		local Bd
 
 		# set default Dockerfile if dockerfile= unspecified
-		if [ -z "$build_dockerfile" ]; then
-			build_dockerfile="$cqfddir/${build_distro:-docker}/Dockerfile"
+		if [ -z "$dockerfile" ]; then
+			dockerfile="$cqfddir/${distro:-docker}/Dockerfile"
 		fi
 		# the Dockerfile does not exist
 		if ! cqfd_dockerfile="$(cd "$project_dir" && \
-				        realpath "$build_dockerfile" 2>/dev/null)" || \
+				        realpath "$dockerfile" 2>/dev/null)" || \
 		   [ ! -f "$cqfd_dockerfile" ]; then
-			die "$build_dockerfile: Missing Dockerfile!"
+			die "$dockerfile: Missing Dockerfile!"
 		fi
 
 		# shellcheck disable=SC2001
 		Un=$(sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$USER")
-		Po="$project_org"
-		Pn="$project_name"
+		Po="$org"
+		Pn="$name"
 		Dh=$(sha256sum "$cqfd_dockerfile" | cut -b 1-7)
 		DH=$(sha256sum "$cqfd_dockerfile" | cut -b 1-64)
-		Bd="${build_distro:-docker}"
+		Bd="${distro:-docker}"
 		# set default tag if tag= unspecified
-		if ! [ "$project_tag" ]; then
-			project_tag="cqfd_%Un_%Po_%Pn_%Dh"
-			if [ "$build_distro" ]; then
-				project_tag+="_%Bd"
+		if ! [ "$tag" ]; then
+			tag="cqfd_%Un_%Po_%Pn_%Dh"
+			if [ "$distro" ]; then
+				tag+="_%Bd"
 			fi
 		fi
 		# shellcheck disable=SC2001
@@ -916,7 +879,7 @@ load_config() {
 			             s!%Pn!'"$Pn"'!g;
 			             s!%Dh!'"$Dh"'!g;
 			             s!%DH!'"$DH"'!g;
-			             s!%Bd!'"$Bd"'!g;' <<<"$project_tag")
+			             s!%Bd!'"$Bd"'!g;' <<<"$tag")
 	fi
 
 	# set the docker gid if the group exists
@@ -990,8 +953,8 @@ while [ $# -gt 0 ]; do
 			die "init: Too many arguments"
 		fi
 		load_config
-		echo "$build_flavors"
-		exit
+		echo "${flavors[*]}"
+ 		exit
 		;;
 	-b)
 		shift
@@ -1027,7 +990,7 @@ while [ $# -gt 0 ]; do
 			die "exec: Missing arguments!"
 		fi
 		load_config "$flavor"
-		build_command="${*@Q}"
+		command="${*@Q}"
 		break
 		;;
 	run|release)
@@ -1051,16 +1014,16 @@ while [ $# -gt 0 ]; do
 				die "run -c: Missing arguments!"
 			fi
 
-			if [ -z "$build_command" ]; then
+			if [ -z "$command" ]; then
 				warn "$cqfdrc: Missing or empty build.command property"
 			fi
 
-			build_command+=" $*"
+			command+=" $*"
 			break
 		fi
 
 		# Run alternate command
-		build_command="$*"
+		command="$*"
 		break
 		;;
 	sh|ash|dash|bash|ksh|zsh|csh|tcsh|fish|shell)
@@ -1069,9 +1032,9 @@ while [ $# -gt 0 ]; do
 		fi
 		shift
 		load_config "$flavor"
-		build_command="$cqfd_shell"
+		command="$cqfd_shell"
 		if [ "$#" -gt 0 ]; then
-			build_command+=" ${*@Q}"
+			command+=" ${*@Q}"
 		fi
 		break
 		;;
@@ -1083,12 +1046,12 @@ while [ $# -gt 0 ]; do
 	shift
 done
 
-if [ -z "$build_command" ]; then
+if [ -z "$command" ]; then
 	die ".cqfdrc: Missing or empty build.command property!"
 fi
 
-docker_run "$build_command"
+docker_run "$command"
 
 if $has_to_release; then
-	make_archive
+	make_archive "$archive"
 fi
