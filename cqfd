@@ -76,30 +76,6 @@ Command options for run / release:
 EOF
 }
 
-## cfg_parser() - parse ini-style config files
-# Will parse a ini-style config file, and evaluate it to a bash array.
-#   Ref: https://ajdiaz.wordpress.com/2008/02/09/bash-ini-parser/
-#        by Andrés J. Díaz - License: MIT
-# $1: path to ini file
-cfg_parser() {
-	local ini
-
-	mapfile -t ini <"$1"                                 # convert to line-array
-	ini=("${ini[@]//[/\\[}")                             # escape [
-	ini=("${ini[@]//]/\\]}")                             # escape ]
-	ini=("${ini[@]//;*/}")                               # remove comments with ;
-	ini=("${ini[@]/$'\t'=/=}")                           # remove tabs before =
-	ini=("${ini[@]/=$'\t'/=}")                           # remove tabs after =
-	ini=("${ini[@]/\ =/=}")                              # remove space before =
-	ini=("${ini[@]/=\ /=}")                              # remove space after =
-	ini=("${ini[@]/#\\[/$'\n}\nfunction cfg_section_'}") # convert section to function (1)
-	ini=("${ini[@]/%\\]/ { :}")                          # convert section to function (2)
-	ini+=("}")                                           # add the last brace
-	ini[0]="${ini[0]/\}/}"                               # remove the first brace
-	ini=("$(printf "%s\n" "${ini[@]}")")                 # reconvert to line-array
-	eval "${ini[*]}"                                     # eval the result
-}
-
 ## warn() - output warning
 # $*: messages and variables shown in the message
 warn() {
@@ -188,6 +164,89 @@ images() {
 			fi
 
 			echo "$image" "$status" "$dockerfile" "dockerfile_hash" "$hash"
+		done
+	done
+}
+
+## source_ini_file() - source ini file to INI* bash arrays
+# $1: path to ini file
+source_ini_file() {
+	local multiline
+	local section
+	local line
+
+	# Unset former context
+	unset INI "${!INI@}"
+
+	# Convert lines to bash array and iterate over lines
+	mapfile -t lines <"$1"
+	for line in "${lines[@]}"; do
+		# Prepend previous multiline if any
+		if [[ "$multiline" ]]; then
+			line="$multiline
+$line"
+			unset multiline
+		fi
+
+		# Skip shell and .ini comments
+		if [[ "$line" =~ ^[\ \	]*[\#\;] ]]; then
+			continue
+		# Save multiline and continue
+		elif [[ "$line" =~ \\$ ]]; then
+			multiline="$line"
+			continue
+		fi
+
+		# Add new section
+		if [[ "$line" =~ ^\[(.*)\]$ ]]; then
+			section="${BASH_REMATCH[1]}"
+			section="${section//./_}"
+			section="${section//-/_}"
+			eval "INI+=('${BASH_REMATCH[1]}')"
+		# Add new property to current section
+		elif [[ "$line" =~ ^([A-Za-z0-9_-]+)[\ \	]*(\+?=)[\ \	]*(.*)$ ]]; then
+			local property
+			local value
+			property="${BASH_REMATCH[1]}"
+			property="${property//./_}"
+			property="${property//-/_}"
+			value="${BASH_REMATCH[3]}"
+			eval "INI__${section^^}__${property^^}${BASH_REMATCH[2]}$value"
+			eval "INI__${section^^}+=('${BASH_REMATCH[1]}')"
+		# Die
+		elif [[ "$line" ]]; then
+			die "line \"$line\" is invalid"
+		fi
+	done
+}
+
+## source_ini_sections() - source sections to environment
+# $*: sections from the ini file to source
+source_ini_sections() {
+	local section
+
+	for section in "$@"; do
+		local i
+		for i in "${INI[@]}"; do
+			if [[ "$i" == "$section" ]]; then
+				break
+			fi
+		done
+		if [[ "$i" != "$section" ]]; then
+			return 1	
+		fi
+
+		local sections
+		eval "sections=(\"\${INI__${section^^}[@]}\")"
+		if [[ "${#sections[@]}" -eq 0 ]]; then
+			continue
+		fi
+
+		local property
+		local properties
+		eval "properties=(\"\${INI__${section^^}[@]}\")"
+		for property in "${properties[@]}"; do
+			eval "$property=\"\${INI__${section^^}__${property^^}}\""
 		done
 	done
 }
@@ -765,17 +824,15 @@ load_config() {
 	fi
 
 	# parse cqfdrc file
-	if ! cfg_parser "$cqfdrc"; then
-		die ".cqfdrc: Invalid ini-file!"
+	if ! source_ini_file "$cqfdrc_dir$cqfdrc"; then
+		die "$cqfdrc_dir$cqfdrc: Invalid ini-file!"
 	fi
 
-	# generate dynamically the list of flavors based on the names of shell
-	# functions reported by the builtin:
-	#  - the cfg_section_ prefix is stripped
-	#  - the build and project sections are stripped
+	# generate dynamically the list of flavors based on the sections (build
+	# and project sections are stripped out
 	local flavors
-	mapfile -t flavors < <(compgen -A function -X '!cfg_section_*')
-	flavors=("${flavors[@]/cfg_section_/}")
+	local i
+	flavors=("${INI[@]}")
 	for i in "${!flavors[@]}"; do
 		if [[ "${flavors[$i]}" =~ ^(build|project)$ ]]; then
 			unset 'flavors[$i]'
@@ -785,7 +842,7 @@ load_config() {
 	flavors="${flavors[*]}"
 
 	# load the [project] section
-	if ! cfg_section_project 2>/dev/null; then
+	if ! source_ini_sections project 2>/dev/null; then
 		die ".cqfdrc: Missing project section!"
 	fi
 
@@ -808,16 +865,14 @@ load_config() {
 	fi
 
 	# load the [build] section
-	if ! cfg_section_build 2>/dev/null; then
+	if ! source_ini_sections build 2>/dev/null; then
 		die ".cqfdrc: Missing build section!"
 	fi
 
 	# build parameters may be overriden by a flavor defined in the
 	# build section's 'flavors' parameter.
-	local flavor="$1"
-	if [ -n "$flavor" ]; then
-		# load the [$flavor] section
-		if ! cfg_section_"$flavor" 2>/dev/null; then
+	if [ -n "$1" ]; then
+		if ! source_ini_sections "$1" 2>/dev/null; then
 			die ".cqfdrc: Missing $flavor section!"
 		fi
 	fi
