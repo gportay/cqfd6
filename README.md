@@ -109,17 +109,11 @@ Here is a sample `.cqfdrc` file:
     files='README.FOOINC output/images/sdcard.img'
     archive='cqfd-%Gh.tar.xz'
 
-Note: The property and its value must not have whitespace around the equal sign
-since cqfd6: i.e. `foo =	bar` is invalid.
-
 ### Comments
 
 The `.cqfdrc` file supports Unix shell comments: words after the character `#`
 are ignored to the end of the line. A comment cannot appear on the first line
 or immediately after a section header.
-
-Note: The traditional .ini comment is not supported anymore in cqfd6: i.e. words
-after the character `;`
 
 ### Using build flavors
 
@@ -510,45 +504,6 @@ if the above requirements are met on the system:
 
     $ make tests
 
-## The parser
-
-The .ini parser is implemented using a series of bash substitutions that
-transform an .ini-style configuration file into shell instructions. The
-original code was written by Andrés J. Díaz and later improved and
-simplified[1].
-
-In practice, sections are converted into functions whose names are prefixed
-with `cfg_section_`, while properties are translated into variables. The
-resulting code is then evaluated with `eval`, and the section functions are
-executed to set the corresponding properties in the shell environment.
-
-For example:
-
-``` .ini
-# The content of .cqfdrc:
-[project]
-org=savoirfairelinux
-name=cqfd
-
-[build]
-command=/bin/sh
-```
-
-``` sh
-# The generated shell code
-function cfg_section_project {
-    org=savoirfairelinux
-    name=cqfd
-}
-
-function cfg_section_build {
-    command=/bin/sh
-}
-```
-
-_Important_: Shell commands must not be placed inside sections; any code
-present is executed upon section load.
-
 ## Patches
 
 Submit patches at *https://github.com/gportay/cqfd6/pulls*
@@ -564,5 +519,4 @@ to be Dockerized".
 
 SIX stands for *Sudo Interface eXperimentation*.
 
-[1]: https://ajdiaz.wordpress.com/2008/02/09/bash-ini-parser/
 [0b69ccba9000b9298c8f0b39416884c697b50a38]: https://github.com/gportay/cqfd6/commit/0b69ccba9000b9298c8f0b39416884c697b50a38
