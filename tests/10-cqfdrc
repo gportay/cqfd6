@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+#
+# validate the read for .cqfdrc
+
+. "$(dirname "$0")/jtest.inc" "$1"
+cqfd="$TDIR/.cqfd/cqfd"
+
+cd "$TDIR/" || exit 1
+
+cp -f .cqfdrc .cqfdrc.orig
+
+jtest_prepare "cqfdrc does not strip semicolons in command"
+sed -i -e "/[build]/,/^$/s,^command=.*$,command='true; echo \"It works!\"'," .cqfdrc
+if "$cqfd" | grep "It works!" ; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+jtest_prepare "cqfdrc does not strip whitespaces in command"
+sed -i -e "/[build]/,/^$/s,^command=.*$,command='if test \"\$USER\" = \"\"; then echo USER is unset; else echo \"\$USER\"; fi'," .cqfdrc
+if "$cqfd" | grep "$USER" ; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+jtest_prepare "cqfdrc supports shell comment (#)"
+echo "#comment='echo \"this is a comment\"" >>.cqfdrc
+if "$cqfd" | grep -v "this is a comment" ; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+jtest_prepare "cqfdrc supports ini comment (;)"
+echo ";comment='echo \"this is a comment\"" >>.cqfdrc
+if "$cqfd" | grep -v "this is a comment" ; then
+	jtest_result pass
+else
+       jtest_result fail
+fi
+
+# restore .cqfdrc
+mv -f .cqfdrc.orig .cqfdrc

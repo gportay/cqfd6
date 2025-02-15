@@ -1,18 +1,18 @@
 [project]
-org='fooinc'
-name='barproject'
+org=fooinc
+name=barproject
 
 [hello]
-command="echo 'Hello World!'"
+command=echo 'Hello World!'
 
 [app]
-command='./configure && make'
+command=./configure && make
 
 [debug]
-command='./configure --enable-debug && make DEBUG=all'
+command=./configure --enable-debug && make DEBUG=all
 
 [build]
-command='cp README.md README.FOOINC \
-         && asciidoc README.FOOINC'
-files='README.html'
-archive='cqfd_${BUILD_ID}_%Gh.tar.xz'
+command=cp README.md README.FOOINC \
+         && asciidoc README.FOOINC
+files=README.html
+archive=cqfd_${BUILD_ID}_%Gh.tar.xz
