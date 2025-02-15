@@ -9,11 +9,19 @@ cd "$TDIR/"
 
 cqfdrc_old=$(mktemp)
 cp -f .cqfdrc "$cqfdrc_old"
-sed -i -e "/[build]/,/^$/s,^command=.*$,command='true; echo \"It works!\"'," .cqfdrc
 $cqfd init
 
 jtest_prepare "cqfdrc does not strip semicolons in command"
+sed -i -e "/[build]/,/^$/s,^command=.*$,command='true; echo \"It works!\"'," .cqfdrc
 if $cqfd | grep "It works!" ; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+jtest_prepare "cqfdrc does not strip whitespaces in command"
+sed -i -e "/[build]/,/^$/s,^command=.*$,command='if test \"\$USER\" = \"\"; then echo USER is unset; else echo \"\$USER\"; fi'," .cqfdrc
+if $cqfd | grep "$USER" ; then
 	jtest_result pass
 else
 	jtest_result fail

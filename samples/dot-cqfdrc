@@ -19,6 +19,12 @@ command='cp README.md README.FOOINC \
 files='README.html'
 archive='cqfd_${BUILD_ID}_%Gh.tar.xz'
 
+[xxx]
+command='if test "$USER"  =  \"\"; then echo USER is unset; else echo $USER; fi'
+
+[yyy]
+command='if test "$USER"  =  \"\"; then echo USER is unset; else echo $USER; fi'
+
 [sudo]
 docker="sudo docker"
 command="test /.dockerenv && echo docker"
