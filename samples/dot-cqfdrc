@@ -1,34 +1,37 @@
 [project]
-org='fooinc'
-name='barproject'
-docker='podman'
-docker_run_args="--userns keep-id --group-add keep-groups"
+org=fooinc
+name=barproject
+docker=podman
+docker_run_args=--userns keep-id --group-add keep-groups
 
 [hello]
-command="echo 'Hello World!'"
+command=echo 'Hello World!'
 
 [app]
-command='./configure && make'
+command=./configure && make
 
 [debug]
-command='./configure --enable-debug && make DEBUG=all'
+command=./configure --enable-debug && make DEBUG=all
 
 [build]
-command='cp README.md README.FOOINC \
-         && asciidoc README.FOOINC'
-files='README.html'
-archive='cqfd_${BUILD_ID}_%Gh.tar.xz'
+command=cp README.md README.FOOINC \
+         && asciidoc README.FOOINC
+files=README.html
+archive=cqfd_${BUILD_ID}_%Gh.tar.xz
 
 [xxx]
-command='if test "$USER"  =  \"\"; then echo USER is unset; else echo $USER; fi'
+command=if test "$USER"  =  \"\"; then echo USER is unset; else echo $USER; fi
 
 [yyy]
-command='if test "$USER"  =  \"\"; then echo USER is unset; else echo $USER; fi'
+command=if test "$USER"  =  \"\"; then echo USER is unset; else echo $USER; fi
 
 [sudo]
-docker="sudo docker"
-command="test /.dockerenv && echo docker"
+docker=sudo docker
+command=test /.dockerenv && echo docker
 
 [podman]
-docker="podman"
-command="test \"\$container\" = podman && echo podman"
+docker=podman
+command=test "$container" = podman && echo podman
+
+[org]
+command=echo org=$org; echo name=$name

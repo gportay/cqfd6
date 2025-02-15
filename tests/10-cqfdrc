@@ -13,7 +13,7 @@ $cqfd init
 
 jtest_prepare "cqfdrc does not strip semicolons in command"
 sed -i -e "/[build]/,/^$/s,^command=.*$,command='true; echo \"It works!\"'," .cqfdrc
-if $cqfd | grep "It works!" ; then
+if "$cqfd" | grep "It works!" ; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -21,7 +21,23 @@ fi
 
 jtest_prepare "cqfdrc does not strip whitespaces in command"
 sed -i -e "/[build]/,/^$/s,^command=.*$,command='if test \"\$USER\" = \"\"; then echo USER is unset; else echo \"\$USER\"; fi'," .cqfdrc
-if $cqfd | grep "$USER" ; then
+if "$cqfd" | grep "$USER" ; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+jtest_prepare "cqfdrc supports shell comment (#)"
+echo "#comment='echo \"this is a comment\"" >>.cqfdrc
+if "$cqfd" | grep -v "this is a comment" ; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+jtest_prepare "cqfdrc supports ini comment (;)"
+echo ";comment='echo \"this is a comment\"" >>.cqfdrc
+if "$cqfd" | grep -v "this is a comment" ; then
 	jtest_result pass
 else
 	jtest_result fail

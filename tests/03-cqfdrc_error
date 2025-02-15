@@ -89,11 +89,8 @@ fi
 cp -f .cqfdrc.orig .cqfdrc
 echo "foo	=bar" >>.cqfdrc
 
-#
-# Legacy syntax
-#
-jtest_prepare "cqfdrc with tabulation before should not pass"
-if ! "$cqfd" run true; then
+jtest_prepare "cqfdrc with tabulation before should pass"
+if "$cqfd" run true; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -102,8 +99,8 @@ fi
 cp -f .cqfdrc.orig .cqfdrc
 echo "foo=	bar" >>.cqfdrc
 
-jtest_prepare "cqfdrc with tabulation after should not pass"
-if ! "$cqfd" run true; then
+jtest_prepare "cqfdrc with tabulation after should pass"
+if "$cqfd" run true; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -112,8 +109,8 @@ fi
 cp -f .cqfdrc.orig .cqfdrc
 echo "foo =bar" >>.cqfdrc
 
-jtest_prepare "cqfdrc with space before should not pass"
-if ! "$cqfd" run true; then
+jtest_prepare "cqfdrc with space before should pass"
+if "$cqfd" run true; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -122,8 +119,8 @@ fi
 cp -f .cqfdrc.orig .cqfdrc
 echo "foo= bar" >>.cqfdrc
 
-jtest_prepare "cqfdrc with space after should not pass"
-if ! "$cqfd" run true; then
+jtest_prepare "cqfdrc with space after should pass"
+if "$cqfd" run true; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -135,9 +132,6 @@ echo "command=\"echo \\
 	baz=qnux\"
 " >>.cqfdrc
 
-#
-# Syntax
-#
 jtest_prepare "cqfdrc with multiline should pass"
 if $cqfd | grep 'foo=bar baz=qnux'; then
 	jtest_result pass
