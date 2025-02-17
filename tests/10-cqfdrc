@@ -10,6 +10,7 @@ cd "$TDIR/"
 cqfdrc_old=$(mktemp)
 cp -f .cqfdrc "$cqfdrc_old"
 $cqfd init
+cat .cqfdrc
 
 jtest_prepare "cqfdrc does not strip semicolons in command"
 sed -i -e "/[build]/,/^$/s,^command=.*$,command='true; echo \"It works!\"'," .cqfdrc

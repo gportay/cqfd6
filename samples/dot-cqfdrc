@@ -35,3 +35,9 @@ command=test "$container" = podman && echo podman
 
 [org]
 command=echo org=$org; echo name=$name
+
+[spaces]
+command = echo org=$org; echo name=$name
+
+[tabs]
+command	=	echo org=$org; echo name=$name

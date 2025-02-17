@@ -214,6 +214,7 @@ $line"
 			property="${property//./_}"
 			property="${property//-/_}"
 			value="${BASH_REMATCH[3]}"
+eval "echo INI__${section^^}__${property^^}=$value >&2"
 			eval "INI__${section^^}__${property^^}${BASH_REMATCH[2]}$value"
 			eval "INI__${section^^}+=('${BASH_REMATCH[1]}')"
 		# Die
