@@ -188,6 +188,17 @@ inside the docker image.
 its own command just like `build.command`. This property is now automatically
 deduced from the flavors sections of `.cqfdrc`.
 
+`docker` (optional): program used to invoke `docker` client.
+For example, to use docker if not in the docker group, it can be set like:
+```
+docker='sudo docker'
+```
+
+Or, to use podman instead, it can be set like:
+```
+docker='podman'
+```
+
 `dockerfile` (optional): the path to the `Dockerfile`. The path is relative to
 the project directory (i.e. the parent directory of `.cqfd`). By default, cqfd
 uses `.cqfd/$distro/Dockerfile` with `distro=docker` if `distro` is unset. For
