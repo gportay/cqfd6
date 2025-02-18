@@ -635,7 +635,7 @@ test_cmd() {
 }
 
 test_su_session_command() {
-	su --session-command true >/dev/null 2>&1
+	su -T --session-command true >/dev/null 2>&1
 }
 
 # Change to working directory
