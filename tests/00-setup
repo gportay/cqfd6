@@ -11,20 +11,20 @@ cqfd="$TDIR/.cqfd/cqfd"
 cd "$TDIR/" || exit 1
 
 ################################################################################
-# running 'cqfd ls' without a proper config and empty cache should pass
+# running 'cqfd ls' without a proper config should fail
 ################################################################################
-jtest_prepare "cqfd ls runs without an .cqfdrc and with an empty cache"
-if "$cqfd" ls; then
+jtest_prepare "cqfd ls complains without an .cqfdrc"
+if ! "$cqfd" ls; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 ################################################################################
-# running 'cqfd gc' without a proper config and empty cache should pass
+# running 'cqfd gc' without a proper config should fail
 ################################################################################
-jtest_prepare "cqfd gc runs without an .cqfdrc and with an empty cache"
-if "$cqfd" gc; then
+jtest_prepare "cqfd gc complains without an .cqfdrc"
+if ! "$cqfd" gc; then
 	jtest_result pass
 else
 	jtest_result fail

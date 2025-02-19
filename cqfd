@@ -27,8 +27,9 @@ cqfd_user="${USER:-builder}"
 cqfd_user_home="${HOME:-/home/$cqfd_user}"
 cqfd_user_cwd="${PWD:-$cqfd_user_home/src}"
 cqfd_shell="${CQFD_SHELL:-/bin/bash}"
+# shellcheck disable=SC2162
+read -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
 cqfd_docker_gid="${CQFD_DOCKER_GID:-0}"
-cqfd_docker="${CQFD_DOCKER:-docker}"
 cqfd_cachedir="${CQFD_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/cqfd}"
 
 ## usage() - print usage on stdout
@@ -122,7 +123,7 @@ debug() {
 # $1: the image name to check if running
 image_is_running() {
 	local ids
-	mapfile -t ids < <("$cqfd_docker" ps --filter "ancestor=$1" --filter status=running --quiet)
+	mapfile -t ids < <("${cqfd_docker[@]}" ps --filter "ancestor=$1" --filter status=running --quiet)
 	test "${#ids[@]}" -gt 0
 }
 
@@ -137,13 +138,13 @@ images() {
 	# shellcheck disable=SC2001
 	user="$(sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$USER")"
 
-	mapfile -t images < <("$cqfd_docker" images "cqfd_$user\_*" --format "{{.Repository}}")
+	mapfile -t images < <("${cqfd_docker[@]}" images "cqfd_$user\_*" --format "{{.Repository}}")
 	for image in "${images[@]}"; do
 		local symlink
 
 		# Remove registry if any
 		image="${image##*/}"
-		for symlink in "$cqfd_cachedir/$cqfd_docker"/*/"$image"; do
+		for symlink in "$cqfd_cachedir/${cqfd_docker[-1]}"/*/"$image"; do
 			local array
 			local hash
 			local status
@@ -265,11 +266,11 @@ prune() {
 		fi
 
 		# Remove image
-		"$cqfd_docker" rmi --force "${args[@]}" "${tags[@]}"
+		"${cqfd_docker[@]}" rmi --force "${args[@]}" "${tags[@]}"
 	fi
 
 	# Consolidate the database
-	for symlink in "$cqfd_cachedir/$cqfd_docker"/*/*; do
+	for symlink in "$cqfd_cachedir/${cqfd_docker[-1]}"/*/*; do
 		local tag
 
 		if [ ! -L "$symlink" ]; then
@@ -301,8 +302,8 @@ docker_pull_or_build() {
 	if [ "$project_image" ] && [ ! "$project_custom_img_name" ] ; then
 		args+=("$cqfd_image")
 
-		debug executing: "$cqfd_docker" pull "${args[@]}"
-		"$cqfd_docker" pull "${args[@]}"
+		debug executing: "${cqfd_docker[@]}" pull "${args[@]}"
+		"${cqfd_docker[@]}" pull "${args[@]}"
 		return
 	fi
 
@@ -333,22 +334,22 @@ docker_pull_or_build() {
 	fi
 
 	# Run command
-	debug executing: "$cqfd_docker" build "${args[@]}"
-	"$cqfd_docker" build "${args[@]}"
+	debug executing: "${cqfd_docker[@]}" build "${args[@]}"
+	"${cqfd_docker[@]}" build "${args[@]}"
 
 	# Cache image
 	local file
 	local hash
 	file="$(realpath "$dockerfile")"
 	hash="$(sha256sum <<<"$PWD" | cut -b 1-64)"
-	mkdir -p "$cqfd_cachedir/$cqfd_docker/$hash"
-	ln -sf "$file" "$cqfd_cachedir/$cqfd_docker/$hash/$cqfd_image"
+	mkdir -p "$cqfd_cachedir/${cqfd_docker[-1]}/$hash"
+	ln -sf "$file" "$cqfd_cachedir/${cqfd_docker[-1]}/$hash/$cqfd_image"
 }
 
 ## image_exists_locally(): checks if image exists in the local image store
 # $1: the image name to check
 image_exists_locally() {
-	"$cqfd_docker" image inspect "$1" &>/dev/null
+	"${cqfd_docker[@]}" image inspect "$1" &>/dev/null
 }
 
 ## docker_rmi() - remove build container
@@ -381,8 +382,8 @@ docker_rmi() {
 	args+=("$cqfd_image")
 
 	# Run command
-	debug executing: "$cqfd_docker" rmi "${args[@]}"
-	"$cqfd_docker" rmi "${args[@]}"
+	debug executing: "${cqfd_docker[@]}" rmi "${args[@]}"
+	"${cqfd_docker[@]}" rmi "${args[@]}"
 
 	# Remove image if cached
 	if [ -e "$dockerfile" ]; then
@@ -390,8 +391,8 @@ docker_rmi() {
 		local hash
 		file="$(realpath "$dockerfile")"
 		hash="$(sha256sum <<<"$PWD" | cut -b 1-64)"
-		rm --force "$cqfd_cachedir/$cqfd_docker/$hash/$cqfd_image"
-		rmdir --ignore-fail-on-non-empty "$cqfd_cachedir/$cqfd_docker/$hash"
+		rm --force "$cqfd_cachedir/${cqfd_docker[-1]}/$hash/$cqfd_image"
+		rmdir --ignore-fail-on-non-empty "$cqfd_cachedir/${cqfd_docker[-1]}/$hash"
 	fi
 }
 
@@ -417,7 +418,7 @@ docker_run() {
 	if ! image_exists_locally "$cqfd_image"; then
 		# If custom image name is used, try to pull it before dying
 		if [ "$project_custom_img_name" ]; then
-			if ! "$cqfd_docker" pull "$cqfd_image" &>/dev/null; then
+			if ! "${cqfd_docker[@]}" pull "$cqfd_image" &>/dev/null; then
 				die "Custom image couldn't be pulled, please build/upload it first"
 			fi
 		else
@@ -542,8 +543,8 @@ docker_run() {
 	args+=("$cqfd_image" "$1")
 
 	# Run command
-	debug executing: "$cqfd_docker" run "${args[@]}"
-	"$cqfd_docker" run "${args[@]}"
+	debug executing: "${cqfd_docker[@]}" run "${args[@]}"
+	"${cqfd_docker[@]}" run "${args[@]}"
 }
 
 ## make_archive(): create a release package
@@ -918,7 +919,7 @@ load_config() {
 			             s!%Bd!'"$Bd"'!g;' <<<"$project_tag")
 	fi
 
-	# Get the docker gid if the group exists
+	# set the docker gid if the group exists
 	if [ "$cqfd_docker_gid" -eq 0 ]; then
 		local docker_group
 		if IFS=: read -r -a docker_group < <(getent group docker); then
@@ -931,6 +932,11 @@ load_config() {
 				fi
 			done
 		fi
+	fi
+
+	# use sudo if user is not in the docker group
+	if [ "$CQFD_RUN_WITH_SUDO" = true ] && [ "$cqfd_docker_gid" -eq 0 ]; then
+		cqfd_docker=(sudo "${cqfd_docker[@]}")
 	fi
 }
 
@@ -961,10 +967,12 @@ while [ $# -gt 0 ]; do
 		exit
 		;;
 	ls)
+		load_config "$flavor"
 		list
 		exit
 		;;
 	gc)
+		load_config "$flavor"
 		prune
 		exit
 		;;
