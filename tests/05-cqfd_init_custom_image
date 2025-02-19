@@ -6,7 +6,10 @@ set -o pipefail
 
 . "$(dirname "$0")"/jtest.inc "$1"
 cqfd="$TDIR/.cqfd/cqfd"
-cqfd_docker="${CQFD_DOCKER:-docker}"
+read -r -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
+if [ "$CQFD_RUN_WITH_SUDO" = true ]; then
+	cqfd_docker=(sudo "${cqfd_docker[@]}")
+fi
 
 cd "$TDIR/" || exit 1
 
@@ -20,9 +23,9 @@ cp -f cqfdrc-custom_image .cqfdrc
 ################################################################################
 custom_img_name="ubuntu:16.04"
 sed -i -e "s!^custom_img_name=.*\$!custom_img_name='$custom_img_name'!" .cqfdrc
-if "$cqfd_docker" inspect "$custom_img_name" &>/dev/null; then
-	jtest_log info "$cqfd_docker registry contains image named: $custom_img_name, removing..."
-	"$cqfd_docker" rmi "$custom_img_name"
+if "${cqfd_docker[@]}" inspect "$custom_img_name" &>/dev/null; then
+	jtest_log info "${cqfd_docker[-1]} registry contains image named: $custom_img_name, removing..."
+	"${cqfd_docker[@]}" rmi "$custom_img_name"
 fi
 
 jtest_prepare "cqfd pulls image $custom_img_name from registry"
@@ -37,10 +40,10 @@ fi
 ################################################################################
 custom_img_name="cqfd_test_custom_image_$RANDOM$RANDOM"
 sed -i -e "s!^custom_img_name=.*\$!custom_img_name='$custom_img_name'!" .cqfdrc
-jtest_log info "$cqfd_docker registry contains NO image named: $custom_img_name"
-if "$cqfd_docker" inspect "$custom_img_name" &>/dev/null; then
-	jtest_log info "$cqfd_docker registry contains image named: $custom_img_name, removing..."
-	"$cqfd_docker" rmi "$custom_img_name"
+jtest_log info "${cqfd_docker[-1]} registry contains NO image named: $custom_img_name"
+if "${cqfd_docker[@]}" inspect "$custom_img_name" &>/dev/null; then
+	jtest_log info "${cqfd_docker[-1]} registry contains image named: $custom_img_name, removing..."
+	"${cqfd_docker[@]}" rmi "$custom_img_name"
 fi
 
 jtest_prepare "cqfd fails pulling inexistant image $custom_img_name from registry"
@@ -52,7 +55,7 @@ fi
 
 jtest_prepare "cqfd init creates image $custom_img_name from Dockerfile"
 if "$cqfd" init && \
-   "$cqfd_docker" inspect "$custom_img_name" &>/dev/null; then
+   "${cqfd_docker[@]}" inspect "$custom_img_name" &>/dev/null; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -65,7 +68,7 @@ else
 	jtest_result fail
 fi
 # cleanup
-"$cqfd_docker" rmi "$custom_img_name"
+"${cqfd_docker[@]}" rmi "$custom_img_name"
 
 ################################################################################
 # Restore initial .cqfdrc and Dockerfile

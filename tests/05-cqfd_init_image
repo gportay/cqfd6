@@ -6,7 +6,10 @@ set -o pipefail
 
 . "$(dirname "$0")"/jtest.inc "$1"
 cqfd="$TDIR/.cqfd/cqfd"
-cqfd_docker="${CQFD_DOCKER:-docker}"
+read -r -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
+if [ "$CQFD_RUN_WITH_SUDO" = true ]; then
+	cqfd_docker=(sudo "${cqfd_docker[@]}")
+fi
 
 cd "$TDIR/" || exit 1
 
@@ -19,14 +22,14 @@ cp -f cqfdrc-image .cqfdrc
 ################################################################################
 image="ubuntu:16.04"
 sed -i -e "s!^image=.*\$!image='$image'!" .cqfdrc
-if "$cqfd_docker" inspect "$image" &>/dev/null; then
-	jtest_log info "$cqfd_docker registry contains image named: $image, removing..."
-	"$cqfd_docker" rmi "$image"
+if "${cqfd_docker[@]}" inspect "$image" &>/dev/null; then
+	jtest_log info "${cqfd_docker[-1]} registry contains image named: $image, removing..."
+	"${cqfd_docker[@]}" rmi "$image"
 fi
 
 jtest_prepare "cqfd init pulls image $image from registry"
 if "$cqfd" init && \
-   "$cqfd_docker" inspect "$image" &>/dev/null; then
+   "${cqfd_docker[@]}" inspect "$image" &>/dev/null; then
 	jtest_result pass
 else
 	jtest_result fail
