@@ -543,13 +543,14 @@ docker_run() {
 make_archive() {
 	local tar_opts
 	local archive
+	local files
 	local git_short
 	local git_long
 	local date_rfc3339
 	local date_unix
 
 	# evaluate files
-	eval "files=($files)"
+	eval "files=($2)"
 	if [ -z "${files[*]}" ]; then
 		die ".cqfdrc: Missing or empty build.files property!"
 	fi
@@ -567,8 +568,9 @@ make_archive() {
 	date_unix=$(date +%s)
 
 	# default name for the archive if not set
-	if [ -z "$archive" ]; then
-		archive="%Po-%Pn.tar.xz"
+	archive="%Po-%Pn.tar.xz"
+	if [ -n "$1" ]; then
+		archive="$1"
 	fi
 
 	# replace archive templates
@@ -1075,5 +1077,5 @@ fi
 docker_run "$command"
 
 if $has_to_release; then
-	make_archive "$archive"
+	make_archive "$archive" "$files"
 fi
