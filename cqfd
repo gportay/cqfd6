@@ -524,6 +524,7 @@ docker_run() {
 	args+=(--volume "$cqfd_user_cwd:$cqfd_user_cwd")
 
 	# Create and bind mount the entrypoint
+	local tmp_entrypoint
 	tmp_entrypoint=$(mktemp /tmp/cqfd-entrypoint.XXXXXX)
 	trap 'rm -f "$tmp_entrypoint"' EXIT
 	make_entrypoint "$tmp_entrypoint"
