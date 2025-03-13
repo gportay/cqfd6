@@ -523,17 +523,15 @@ docker_run() {
 	cqfd_user_cwd="$workdir"
 	args+=(--volume "$cqfd_user_cwd:$cqfd_user_cwd")
 
-	# Create and bind mount the entrypoint
-	local tmp_entrypoint
-	tmp_entrypoint=$(mktemp /tmp/cqfd-entrypoint.XXXXXX)
+	# Create and bind mount the launcher script
+	tmp_entrypoint=$(make_entrypoint)
 	trap 'rm -f "$tmp_entrypoint"' EXIT
 	make_entrypoint "$tmp_entrypoint"
 	chmod 0755 "$tmp_entrypoint"
-	args+=(--volume "$tmp_entrypoint:/bin/cqfd-entrypoint")
-	args+=(--entrypoint "/bin/cqfd-entrypoint")
+	args+=(--volume "$tmp_entrypoint:/bin/entrypoint")
 
 	# Set positional arguments
-	args+=("$cqfd_image" "$1")
+	args+=("$cqfd_image" entrypoint "$1")
 
 	# Run command
 	debug executing: "${cqfd_docker[@]}" run "${args[@]}"
