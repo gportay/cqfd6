@@ -14,3 +14,8 @@ archive=cqfd-%Cf.tar.xz
 
 [build]
 command='make build'
+
+[podman]
+docker=podman
+command='make build'
+docker_run_args="--userns keep-id --group-add keep-groups"
