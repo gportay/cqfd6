@@ -1051,6 +1051,11 @@ load_config() {
 		cqfd_platform="$native"
 	fi
 
+	# check for [build] command is set and is not empty
+	if [ -z "$build_command" ]; then
+		die ".cqfdrc: Missing build.command property!"
+	fi
+
 	# warn if using legacy variable distro
 	if [ -n "$build_distro" ]; then
 		warn "distro is deprecated, use dockerfile to set path to" \
@@ -1405,11 +1410,6 @@ while [ $# -gt 0 ]; do
 
 		# No extra argument given
 		if [ "$#" -eq 0 ]; then
-			# Check for [build] command property is set and not empty
-			if [ -z "$build_command" ]; then
-				die ".cqfdrc: Missing or empty build.command property!"
-			fi
-
 			# Run default command
 			break
 		fi
@@ -1423,11 +1423,6 @@ while [ $# -gt 0 ]; do
 			if [ "$#" -lt 1 ]; then
 				usage
 				die "$cqfd_command -c: Missing arguments!"
-			fi
-
-			# Check for [build] command property is set and not empty
-			if [ -z "$build_command" ]; then
-				warn ".cqfdrc: Missing or empty build.command property!"
 			fi
 
 			# Display a warning message if using -c with multiple arguments
@@ -1534,11 +1529,6 @@ done
 if [ -z "$cqfd_command" ]; then
 	# Setup build
 	load_config "$flavor"
-
-	# Check for [build] command property is set and not empty
-	if [ -z "$build_command" ]; then
-		die ".cqfdrc: Missing or empty build.command property!"
-	fi
 fi
 
 # Has to pull or build image
