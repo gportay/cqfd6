@@ -328,9 +328,9 @@ docker_pull_or_build() {
 
 	# Set the context
 	if [ -z "$project_build_context" ]; then
-		args+=("$(dirname "$dockerfile")")
+		args+=("$(dirname "$cqfd_dockerfile")")
 	else
-		args+=("$project_build_context" --file "$dockerfile")
+		args+=("$project_build_context" --file "$cqfd_dockerfile")
 	fi
 
 	# Run command
@@ -340,7 +340,7 @@ docker_pull_or_build() {
 	# Cache image
 	local file
 	local hash
-	file="$(realpath "$dockerfile")"
+	file="$(realpath "$cqfd_dockerfile")"
 	hash="$(sha256sum <<<"$PWD" | cut -b 1-64)"
 	mkdir -p "$cqfd_cachedir/${cqfd_docker[-1]}/$hash"
 	ln -sf "$file" "$cqfd_cachedir/${cqfd_docker[-1]}/$hash/$cqfd_image"
@@ -386,10 +386,10 @@ docker_rmi() {
 	"${cqfd_docker[@]}" rmi "${args[@]}"
 
 	# Remove image if cached
-	if [ -e "$dockerfile" ]; then
+	if [ -e "$cqfd_dockerfile" ]; then
 		local file
 		local hash
-		file="$(realpath "$dockerfile")"
+		file="$(realpath "$cqfd_dockerfile")"
 		hash="$(sha256sum <<<"$PWD" | cut -b 1-64)"
 		rm --force "$cqfd_cachedir/${cqfd_docker[-1]}/$hash/$cqfd_image"
 		rmdir --ignore-fail-on-non-empty "$cqfd_cachedir/${cqfd_docker[-1]}/$hash"
@@ -844,6 +844,8 @@ load_config() {
 	# shellcheck disable=SC2154
 	build_command="$command"
 	# shellcheck disable=SC2154
+	build_dockerfile="$dockerfile"
+	# shellcheck disable=SC2154
 	build_docker_build_args="$docker_build_args"
 	# shellcheck disable=SC2154
 	build_docker_run_args="$docker_run_args"
@@ -867,11 +869,15 @@ load_config() {
 		# backward compatibility if image= or tag= unspecified
 		if [ ! "$project_image" ]; then
 			project_image="$project_custom_img_name"
-			# set the path to Dockerfile
-			dockerfile="$cqfddir/${build_distro:-docker}/Dockerfile"
+			# set default Dockerfile if dockerfile= unspecified
+			if [ -z "$build_dockerfile" ]; then
+				build_dockerfile="$cqfddir/${build_distro:-docker}/Dockerfile"
+			fi
 			# the Dockerfile does not exist
-			if [ ! -f "$dockerfile" ]; then
-				die "$dockerfile: Missing Dockerfile!"
+			if ! cqfd_dockerfile="$(cd "$project_dir" && \
+				        	realpath "$build_dockerfile" 2>/dev/null)" || \
+			   [ ! -f "$cqfd_dockerfile" ]; then
+				die "$build_dockerfile: Missing Dockerfile!"
 			fi
 		fi
 		if [ ! "$project_tag" ]; then
@@ -889,19 +895,23 @@ load_config() {
 		local DH
 		local Bd
 
-		# set the path to Dockerfile
-		dockerfile="$cqfddir/${build_distro:-docker}/Dockerfile"
+		# set default Dockerfile if dockerfile= unspecified
+		if [ -z "$build_dockerfile" ]; then
+			build_dockerfile="$cqfddir/${build_distro:-docker}/Dockerfile"
+		fi
 		# the Dockerfile does not exist
-		if [ ! -f "$dockerfile" ]; then
-			die "$dockerfile: Missing Dockerfile!"
+		if ! cqfd_dockerfile="$(cd "$project_dir" && \
+				        realpath "$build_dockerfile" 2>/dev/null)" || \
+		   [ ! -f "$cqfd_dockerfile" ]; then
+			die "$build_dockerfile: Missing Dockerfile!"
 		fi
 
 		# shellcheck disable=SC2001
 		Un=$(sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$USER")
 		Po="$project_org"
 		Pn="$project_name"
-		Dh=$(sha256sum "$dockerfile" | cut -b 1-7)
-		DH=$(sha256sum "$dockerfile" | cut -b 1-64)
+		Dh=$(sha256sum "$cqfd_dockerfile" | cut -b 1-7)
+		DH=$(sha256sum "$cqfd_dockerfile" | cut -b 1-64)
 		Bd="${build_distro:-docker}"
 		# set default tag if tag= unspecified
 		if ! [ "$project_tag" ]; then
