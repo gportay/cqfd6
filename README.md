@@ -167,6 +167,7 @@ within the build container, to generate the build artefacts.
 
 `distro` (optional): the name of the directory containing the Dockerfile. By
 default, cqfd uses `"docker"`, and `.cqfd/docker/Dockerfile` is used.
+`distro` is *deprecated*, use `dockerfile` to set the path to the `Dockerfile`.
 
 `user_extra_groups` (optional): a space-separated list of groups the user
 should be a member of in the container. You can either use the `group:gid`
@@ -176,6 +177,14 @@ inside the docker image.
 `flavors` (optional): the list of build flavors (see below). Each flavor has
 its own command just like `build.command`. This property is now automatically
 deduced from the flavors sections of `.cqfdrc`.
+
+`dockerfile` (optional): the path to the `Dockerfile`. The path is relative to
+the project directory (i.e. the parent directory of `.cqfd`). By default, cqfd
+uses `.cqfd/$distro/Dockerfile` with `distro=docker` if `distro` is unset. For
+example, to use existing `Dockerfile`, it can be set like:
+```
+dockerfile='support/docker/Dockerfile'
+```
 
 `docker_build_args` (optional): arguments used to invoke `docker build`.
 For example, to attempt to pull newer version of the image, it can be set like:

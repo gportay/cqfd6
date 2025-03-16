@@ -75,6 +75,8 @@ line, and right after a section.
 *distro (optional)*::
 	The name of the directory containing the Dockerfile. By default, cqfd
 	uses _"docker"_, and _.cqfd/docker/Dockerfile_ is used.
+	_distro_ is *deprecated*, use _dockerfile_ to set the path to the
+	_Dockerfile_.
 
 *user_extra_groups (optional)*::
 	A space-separated list of groups the user should be a member of in the
@@ -86,6 +88,11 @@ line, and right after a section.
 	The list of build flavors (see below). Each flavor has its own command
 	just like _build.command_. This property is now automatically deduced
 	from the flavors sections of _.cqfdrc_.
+
+*dockerfile (optional)*::
+	The path to the _Dockerfile_. The path is relative to the project
+	directory (i.e. the parent directory of _.cqfd_). By default, cqfd uses
+	_.cqfd/$distro/Dockerfile_ with _distro=docker_ if _distro_ is unset.
 
 *docker_build_args (optional)*::
 	Arguments used to invoke _docker build_.
