@@ -46,7 +46,7 @@ _colorize()
 	white2)  c='\033[1;97m' ;;
 	esac
 
-	printf "%s%s%s" "${c}" "${text}" "${nc}"
+	printf "%s%s%s" "$c" "$text" "$nc"
 }
 
 # _jtest_log_init() - initialize log subsystem

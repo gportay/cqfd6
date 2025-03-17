@@ -1,4 +1,4 @@
 FROM ubuntu:24.04
 
 ARG FOO
-RUN touch ${FOO} 2>/dev/null
+RUN touch $FOO 2>/dev/null
