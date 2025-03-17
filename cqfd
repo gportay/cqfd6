@@ -938,6 +938,21 @@ load_config() {
 	if [ "$CQFD_RUN_WITH_SUDO" = true ] && [ "$cqfd_docker_gid" -eq 0 ]; then
 		cqfd_docker=(sudo "${cqfd_docker[@]}")
 	fi
+
+	# Get the docker gid if the group exists
+	if [ "$cqfd_docker_gid" -eq 0 ]; then
+		local docker_group
+		if IFS=: read -r -a docker_group < <(getent group docker); then
+			local docker_users
+			IFS=, read -r -a docker_users <<<"${docker_group[3]}"
+			for user in "${docker_users[@]}"; do
+				if [ "$user" = "$cqfd_user" ]; then
+					cqfd_docker_gid="${docker_group[2]}"
+					break
+				fi
+			done
+		fi
+	fi
 }
 
 has_to_release=false
