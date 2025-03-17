@@ -458,21 +458,6 @@ docker_run() {
 		args+=(--tty)
 	fi
 
-	# Get the docker gid if the group exists
-	if [ "$cqfd_docker_gid" -eq 0 ]; then
-		local docker_group
-		if IFS=: read -r -a docker_group < <(getent group docker); then
-			local docker_users
-			IFS=, read -r -a docker_users <<<"${docker_group[3]}"
-			for user in "${docker_users[@]}"; do
-				if [ "$user" = "$cqfd_user" ]; then
-					cqfd_docker_gid="${docker_group[2]}"
-					break
-				fi
-			done
-		fi
-	fi
-
 	# Terminate if using legacy variable
 	if [ -n "$CQFD_EXTRA_VOLUMES" ]; then
 		die "CQFD_EXTRA_VOLUMES is no more supported, use" \
@@ -931,6 +916,21 @@ load_config() {
 			             s!%Dh!'"$Dh"'!g;
 			             s!%DH!'"$DH"'!g;
 			             s!%Bd!'"$Bd"'!g;' <<<"$project_tag")
+	fi
+
+	# Get the docker gid if the group exists
+	if [ "$cqfd_docker_gid" -eq 0 ]; then
+		local docker_group
+		if IFS=: read -r -a docker_group < <(getent group docker); then
+			local docker_users
+			IFS=, read -r -a docker_users <<<"${docker_group[3]}"
+			for user in "${docker_users[@]}"; do
+				if [ "$user" = "$cqfd_user" ]; then
+					cqfd_docker_gid="${docker_group[2]}"
+					break
+				fi
+			done
+		fi
 	fi
 }
 
