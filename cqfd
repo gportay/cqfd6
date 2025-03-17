@@ -736,8 +736,12 @@ locate_project_dir() {
 load_config() {
 	# get the project directory
 	local project_dir
-	if ! project_dir=$(locate_project_dir); then
-		die ".cqfd: Missing project directory!"
+
+	project_dir="$PWD"
+	if [ ! "$CQFD_DIR" ]; then
+		if ! project_dir=$(locate_project_dir); then
+			die ".cqfd: Missing project directory!"
+		fi
 	fi
 
 	local workdir

@@ -19,7 +19,9 @@ tests:
 	@export CQFD_CACHE=$(TDIR); \
 	for f in [0-9][0-9]*; do \
 		if [ -x "$$f" ]; then \
-			./$$f $(TDIR); \
+			if bash -x $$f $(TDIR); then \
+				echo "$$f has errors" >&2; \
+			fi; \
 		fi; \
 	done; \
 	failed=0; \
