@@ -57,8 +57,7 @@ _jtest_log_init()
 	local i=0
 
 	for l in all debug error fatal info notice off; do
-		_jloglevels[$l]=$i
-		((i++))
+		_jloglevels[$l]=$((i++))
 	done
 }
 

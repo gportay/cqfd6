@@ -2,6 +2,7 @@
 #
 # validate the behavior of run command with extra groups
 
+set -e
 set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"

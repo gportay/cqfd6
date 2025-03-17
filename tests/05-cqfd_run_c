@@ -2,6 +2,8 @@
 #
 # validate the behavior of run -c command with flavors
 
+set -e
+
 . "$(dirname "$0")/jtest.inc" "$1"
 cqfd="$TDIR/.cqfd/cqfd"
 test_file="a/cqfd_a.txt"

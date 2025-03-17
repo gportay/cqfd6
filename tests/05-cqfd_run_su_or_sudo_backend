@@ -2,6 +2,7 @@
 #
 # validate the behavior of run command su and sudo backends
 
+set -e
 set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"

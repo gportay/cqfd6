@@ -2,6 +2,8 @@
 #
 # validate the behavior of init with alternate file and external directory
 
+set -e
+
 . "$(dirname "$0")/jtest.inc" "$1"
 
 cd "$TDIR/" || exit 1

@@ -2,6 +2,8 @@
 #
 # validate the behavior with skelton bring up
 
+set -e
+
 . "$(dirname "$0")/jtest.inc" "$1"
 mkdir -p "$TDIR/.cqfd/docker"
 cp -a ../cqfd "$TDIR/.cqfd/"

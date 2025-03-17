@@ -2,6 +2,7 @@
 #
 # validate the .cqfdrc syntax
 
+set -e
 set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"

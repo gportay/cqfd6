@@ -2,6 +2,7 @@
 #
 # validate the behavior of dependencies
 
+set -e
 set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"

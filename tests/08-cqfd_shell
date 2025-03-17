@@ -2,6 +2,7 @@
 #
 # validate the behavior of shell command
 
+set -e
 set -o pipefail
 
 unset CQFD_SHELL

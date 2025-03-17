@@ -2,6 +2,7 @@
 #
 # validate the resiliency of cqfd run against whitespaces
 
+set -e
 set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"

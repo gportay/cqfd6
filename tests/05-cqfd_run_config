@@ -2,6 +2,8 @@
 #
 # validate the behavior of run command with alternative config file
 
+set -e
+
 . "$(dirname "$0")/jtest.inc" "$1"
 cqfd="$TDIR/.cqfd/cqfd"
 confdir="$TDIR/.config/dir"
