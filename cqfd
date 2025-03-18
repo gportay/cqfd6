@@ -30,6 +30,7 @@ cqfd_shell="${CQFD_SHELL:-/bin/bash}"
 read -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
 cqfd_docker_gid="${CQFD_DOCKER_GID:-0}"
 cqfd_cachedir="${CQFD_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/cqfd}"
+cqfd_entrypoint="$CQFD_ENTRYPOINT"
 
 ## usage() - print usage
 # stdout: the usage
@@ -521,15 +522,18 @@ docker_run() {
 	args+=(--volume "$cqfd_user_cwd:$cqfd_user_cwd")
 
 	# Create and bind mount the entrypoint
-	tmp_entrypoint=$(mktemp /tmp/cqfd-entrypoint.XXXXXX)
-	trap 'rm -f "$tmp_entrypoint"' EXIT
-	make_entrypoint "$tmp_entrypoint"
-	chmod 0755 "$tmp_entrypoint"
-	args+=(--volume "$tmp_entrypoint:/bin/cqfd-entrypoint")
-	args+=(--entrypoint "/bin/cqfd-entrypoint")
+	if [ -z "$cqfd_entrypoint" ]; then
+		tmp_entrypoint=$(mktemp /tmp/cqfd-entrypoint.XXXXXX)
+		trap 'rm -f "$tmp_entrypoint"' EXIT
+		make_entrypoint "$tmp_entrypoint"
+		chmod 0755 "$tmp_entrypoint"
+		args+=(--volume "$tmp_entrypoint:/bin/cqfd-entrypoint")
+		args+=(--entrypoint "/bin/cqfd-entrypoint")
+	fi
+
 
 	# Set positional arguments
-	args+=("$cqfd_image" "$1")
+	args+=("$cqfd_image" -c "$1")
 
 	# Run command
 	debug executing: "${cqfd_docker[@]}" run "${args[@]}"
@@ -620,6 +624,7 @@ make_entrypoint() {
 # create container user to match expected environment
 
 set -e
+set -x
 
 die() {
 	echo "error: \$*" >&2
@@ -868,6 +873,11 @@ load_config() {
 		if [ ! "$project_tag" ]; then
 			project_tag="$project_custom_img_name"
 		fi
+	fi
+
+	# set default entrypoint if entrypoint= unspecified
+	if [ "$build_entrypoint" ]; then
+		cqfd_entrypoint="$build_entrypoint"
 	fi
 
 	# set default image if image= unspecified
