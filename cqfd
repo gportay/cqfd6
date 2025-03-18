@@ -833,6 +833,10 @@ test_cmd() {
 	command -v "\$1" >/dev/null 2>&1
 }
 
+test_shell() {
+	command -v "\$1" 2>&1
+}
+
 test_su_session_command() {
 	su --session-command true >/dev/null 2>&1
 }
@@ -850,7 +854,7 @@ test_cmd usermod || { failed=1 && echo "error: Missing command: usermod" >&2; }
 test_cmd chown || { failed=1 && echo "error: Missing command: chown" >&2; }
 test_cmd sudo && has_sudo=1 || test_cmd su ||
 	{ failed=1 && echo "error: Missing command: su or sudo" >&2; }
-shell=\$(test_cmd "$cqfd_shell") ||
+shell=\$(test_shell "$cqfd_shell") ||
 	{ failed=1 && echo "error: Missing command: $cqfd_shell" >&2; }
 test -n "\$failed" &&
 	die "Some dependencies are missing from the container, see above messages."

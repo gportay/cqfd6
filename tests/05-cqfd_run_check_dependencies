@@ -103,6 +103,20 @@ else
 fi
 
 ################################################################################
+# cqfd run should now creates the user correctly.
+################################################################################
+jtest_prepare "cqfd run creates the user correctly"
+if [ "${cqfd_docker[-1]}" = "podman" ]; then
+	jtest_result skip
+else
+	if "$cqfd" init && "$cqfd" run "grep \"^$USER:x:$UID:${GROUPS[0]}::$HOME:/bin/sh\$\" /etc/passwd"; then
+		jtest_result pass
+	else
+		jtest_result fail
+	fi
+fi
+
+################################################################################
 # restore initial Dockerfile
 ################################################################################
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
