@@ -30,9 +30,42 @@ else
 fi
 
 ################################################################################
-# Add Bash and the 'shadow' package, which provides useradd, groupadd.
+# Add the 'shadow' package, which provides useradd, groupadd.
 ################################################################################
-echo 'RUN apk add bash shadow' >>.cqfd/docker/Dockerfile
+echo 'RUN apk add shadow' >>.cqfd/docker/Dockerfile
+
+################################################################################
+# cqfd run should now be happy with the required commands useradd and groupadd
+################################################################################
+jtest_prepare "cqfd run with satisfied command useradd and groupadd requirements"
+if [ "${cqfd_docker[-1]}" = "podman" ]; then
+	jtest_result skip
+else
+	if "$cqfd" init && CQFD_SHELL=/bin/sh "$cqfd" --verbose run true; then
+		jtest_result pass
+	else
+		jtest_result fail
+	fi
+fi
+
+################################################################################
+# Add Bash package.
+################################################################################
+echo 'RUN apk add bash' >>.cqfd/docker/Dockerfile
+
+################################################################################
+# cqfd run should now be happy with the required shell
+################################################################################
+jtest_prepare "cqfd run with satisfied command shell requirements"
+if [ "${cqfd_docker[-1]}" = "podman" ]; then
+	jtest_result skip
+else
+	if "$cqfd" init && "$cqfd" --verbose run true; then
+		jtest_result pass
+	else
+		jtest_result fail
+	fi
+fi
 
 ################################################################################
 # cqfd run should now be happy with the required commands, using su.
