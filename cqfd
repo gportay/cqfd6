@@ -659,17 +659,13 @@ test_cmd usermod || { failed=1 && echo "error: Missing command: usermod" >&2; }
 test_cmd chown || { failed=1 && echo "error: Missing command: chown" >&2; }
 test_cmd sudo && has_sudo=1 || test_cmd su ||
 	{ failed=1 && echo "error: Missing command: su or sudo" >&2; }
+shell=\$(test_shell "$cqfd_shell") ||
+	{ failed=1 && echo "error: Missing command: $cqfd_shell" >&2; }
 test -n "\$failed" &&
 	die "Some dependencies are missing from the container, see above messages."
 
 # Check is su supports --session-command if not using sudo
 #test "\$has_sudo" = 1 || test_su_session_command && has_su_session_command=1
-
-# Get full path to cqfd_shell interpreter
-if ! shell=\$(command -v "$cqfd_shell"); then
-	echo "$cqfd_shell: command not found" >&2
-	exit 127
-fi
 
 # Add the host's user and group to the container, and adjust ownership
 groupadd -og "${GROUPS[0]}" -f builders
