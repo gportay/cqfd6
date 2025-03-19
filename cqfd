@@ -296,6 +296,11 @@ docker_build() {
 		args+=(--quiet)
 	fi
 
+	# If custom image name is used, it is pulled pull by docker_run()
+	if [ "$project_image" ] && [ ! "$project_custom_img_name" ] ; then
+		return
+	fi
+
 	# Append extra args from the .cqfdrc [build] section
 	if [ "$build_docker_build_args" ]; then
 		local array
@@ -313,7 +318,7 @@ docker_build() {
 	fi
 
 	# Name the resulting image
-	args+=(--tag "$docker_img_name")
+	args+=(--tag "$cqfd_image")
 
 	# Set the context
 	if [ -z "$project_build_context" ]; then
@@ -332,7 +337,7 @@ docker_build() {
 	file="$(realpath "$dockerfile")"
 	hash="$(sha256sum <<<"$PWD" | cut -b 1-64)"
 	mkdir -p "$cqfd_cachedir/$cqfd_docker/$hash"
-	ln -sf "$file" "$cqfd_cachedir/$cqfd_docker/$hash/$docker_img_name"
+	ln -sf "$file" "$cqfd_cachedir/$cqfd_docker/$hash/$cqfd_image"
 }
 
 ## image_exists_locally(): checks if image exists in the local image store
@@ -347,8 +352,8 @@ docker_rmi() {
 	args=()
 
 	# Check if image is running
-	if image_is_running "$docker_img_name"; then
-		die "$docker_img_name: Image busy"
+	if image_is_running "$cqfd_image"; then
+		die "$cqfd_image: Image busy"
 	fi
 
 	# Append extra args from the .cqfdrc [build] section
@@ -368,7 +373,7 @@ docker_rmi() {
 	fi
 
 	# Set the image to remove
-	args+=("$docker_img_name")
+	args+=("$cqfd_image")
 
 	# Run command
 	debug executing: "$cqfd_docker" rmi "${args[@]}"
@@ -380,7 +385,7 @@ docker_rmi() {
 		local hash
 		file="$(realpath "$dockerfile")"
 		hash="$(sha256sum <<<"$PWD" | cut -b 1-64)"
-		rm --force "$cqfd_cachedir/$cqfd_docker/$hash/$docker_img_name"
+		rm --force "$cqfd_cachedir/$cqfd_docker/$hash/$cqfd_image"
 		rmdir --ignore-fail-on-non-empty "$cqfd_cachedir/$cqfd_docker/$hash"
 	fi
 }
@@ -404,10 +409,10 @@ docker_run() {
 	args=()
 
 	# The image does not exist
-	if ! image_exists_locally "$docker_img_name"; then
+	if ! image_exists_locally "$cqfd_image"; then
 		# If custom image name is used, try to pull it before dying
-		if [ "$project_custom_img_name" ]; then
-			if ! "$cqfd_docker" pull "$docker_img_name" &>/dev/null; then
+		if [ "$project_image" ]; then
+			if ! "$cqfd_docker" pull "$cqfd_image" &>/dev/null; then
 				die "Custom image couldn't be pulled, please build/upload it first"
 			fi
 		else
@@ -550,7 +555,7 @@ docker_run() {
 	args+=(--entrypoint "/bin/cqfd-entrypoint")
 
 	# Set positional arguments
-	args+=("$docker_img_name" "$1")
+	args+=("$cqfd_image" "$1")
 
 	# Run command
 	debug executing: "$cqfd_docker" run "${args[@]}"
@@ -807,6 +812,10 @@ load_config() {
 	project_build_context="$build_context"
 	# shellcheck disable=SC2154
 	project_custom_img_name="$custom_img_name"
+	# shellcheck disable=SC2154
+	project_tag="$tag"
+	# shellcheck disable=SC2154
+	project_image="$image"
 
 	# check for [project] org and name properties are set and are not empty
 	if [ -z "$project_org" ] || [ -z "$project_name" ]; then
@@ -853,22 +862,63 @@ load_config() {
 	# shellcheck disable=SC2154
 	release_tar_opts="$tar_options"
 
-	dockerfile="$cqfddir/${build_distro:-docker}/Dockerfile"
-	if [ ! -f "$dockerfile" ]; then
-		die "$dockerfile: Missing Dockerfile!"
+	# warn if using legacy variable custom_img_name
+	if [ -n "$project_custom_img_name" ]; then
+		warn "custom_img_name is deprecated, use either tag to name" \
+		     "your image or image to pull an image from a registry."
+		# backward compatibility if image= or tag= unspecified
+		if [ ! "$project_image" ]; then
+			project_image="$project_custom_img_name"
+			# set the path to Dockerfile
+			dockerfile="$cqfddir/${build_distro:-docker}/Dockerfile"
+			# the Dockerfile does not exist
+			if [ ! -f "$dockerfile" ]; then
+				die "$dockerfile: Missing Dockerfile!"
+			fi
+		fi
+		if [ ! "$project_tag" ]; then
+			project_tag="$project_custom_img_name"
+		fi
 	fi
 
-	if [ "$project_custom_img_name" ]; then
-		docker_img_name="$project_custom_img_name"
-	else
-		local format_user
-		local dockerfile_hash
+	# set default image if image= unspecified
+	cqfd_image="$project_image"
+	if [ ! "$cqfd_image" ]; then
+		local Un
+		local Po
+		local Pn
+		local Dh
+		local DH
+		local Bd
 
-		# This will look like cqfd_USER_ORG_NAME_HASH
+		# set the path to Dockerfile
+		dockerfile="$cqfddir/${build_distro:-docker}/Dockerfile"
+		# the Dockerfile does not exist
+		if [ ! -f "$dockerfile" ]; then
+			die "$dockerfile: Missing Dockerfile!"
+		fi
+
 		# shellcheck disable=SC2001
-		format_user=$(sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$USER")
-		dockerfile_hash=$(sha256sum "$dockerfile" | cut -b 1-7)
-		docker_img_name="cqfd${format_user:+_$format_user}_${project_org}_${project_name}_${dockerfile_hash}${build_distro:+_$build_distro}"
+		Un=$(sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$USER")
+		Po="$project_org"
+		Pn="$project_name"
+		Dh=$(sha256sum "$dockerfile" | cut -b 1-7)
+		DH=$(sha256sum "$dockerfile" | cut -b 1-64)
+		Bd="${build_distro:-docker}"
+		# set default tag if tag= unspecified
+		if ! [ "$project_tag" ]; then
+			project_tag="cqfd_%Un_%Po_%Pn_%Dh"
+			if [ "$build_distro" ]; then
+				project_tag+="_%Bd"
+			fi
+		fi
+		# shellcheck disable=SC2001
+		cqfd_image=$(sed -e 's!%Un!'"$Un"'!g;
+			             s!%Po!'"$Po"'!g;
+			             s!%Pn!'"$Pn"'!g;
+			             s!%Dh!'"$Dh"'!g;
+			             s!%DH!'"$DH"'!g;
+			             s!%Bd!'"$Bd"'!g;' <<<"$project_tag")
 	fi
 }
 
