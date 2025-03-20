@@ -425,7 +425,7 @@ docker_run() {
 	fi
 
 	# Give access to all host devices
-	args+=(--privileged)
+	#args+=(--privileged)
 
 	# Cleanup container after exit
 	args+=(--rm)
@@ -506,13 +506,9 @@ docker_run() {
 	fi
 
 	# Bind mount the project directory
-	local workdir
-	if ! workdir="$(realpath "$build_workdir")" ||
-	   [ ! -d "$workdir" ]; then
-		die "$build_workdir: Missing or not a directory!"
-	fi
-	cqfd_user_cwd="$workdir"
-	args+=(--volume "$cqfd_user_cwd:$cqfd_user_cwd")
+	#args+=(-v "$cqfd_project_dir:$cqfd_project_dir:idmap=uids=1000;gids=1000")
+	#args+=(-v "$cqfd_project_dir:$cqfd_project_dir:U")
+	args+=(--mount "type=bind,src=$cqfd_project_dir,dst=$cqfd_project_dir,U=true")
 
 	# Create and bind mount the entrypoint
 	tmp_entrypoint=$(mktemp /tmp/cqfd-entrypoint.XXXXXX)
@@ -631,6 +627,8 @@ test_cmd() {
 test_su_session_command() {
 	su --session-command true >/dev/null 2>&1
 }
+
+ls -l "$cqfd_user_cwd"
 
 # Change to working directory
 cd "$cqfd_user_cwd"
