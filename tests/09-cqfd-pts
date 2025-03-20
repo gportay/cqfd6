@@ -16,7 +16,7 @@ jtest_prepare "cqfd without redirection should allocate a tty"
 if ! tty; then
 	jtest_result skip
 else
-	if "$cqfd" | grep "/dev/pts/" ; then
+	if "$cqfd" | grep "/dev/pts/[[:digit:]]\+" ; then
 		jtest_result pass
 	else
 		jtest_result fail
