@@ -346,12 +346,6 @@ docker_pull_or_build() {
 	ln -sf "$file" "$cqfd_cachedir/${cqfd_docker[-1]}/$hash/$cqfd_image"
 }
 
-## image_exists_locally() - checks if image exists in the local image store
-# $1: the image name to check
-image_exists_locally() {
-	"${cqfd_docker[@]}" image inspect "$1" &>/dev/null
-}
-
 ## docker_rmi() - remove build container
 docker_rmi() {
 	local args
@@ -403,7 +397,7 @@ docker_run() {
 	args=()
 
 	# The image does not exist
-	if ! image_exists_locally "$cqfd_image"; then
+	if ! "$cqfd_docker" image inspect "$cqfd_image" &>/dev/null; then
 		# If custom image name is used, try to pull it before dying
 		if [ "$project_custom_img_name" ]; then
 			if ! "${cqfd_docker[@]}" pull "$cqfd_image" &>/dev/null; then
