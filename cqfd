@@ -40,7 +40,7 @@ PROGNAME=$(basename "$0")
 VERSION=6
 COMPAT="${CQFD_COMPAT:-$(compat "$VERSION")}"
 cqfd_user="${USER:-builder}"
-cqfd_user_home="${HOME:-/home/$cqfd_user}"
+cqfd_home="${HOME:-/home/$cqfd_user}"
 cqfd_shell="${CQFD_SHELL:-/bin/bash}"
 # shellcheck disable=SC2162
 read -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
@@ -541,11 +541,11 @@ docker_run() {
 	# via CQFD_EXTRA_RUN_ARGS or docker_run_args
 	if ! echo "$CQFD_EXTRA_RUN_ARGS $build_docker_run_args" |
 	     grep -qE "(-e[[:blank:]]*|--env[[:blank:]]+)HOME="; then
-		args+=(--env "HOME=$cqfd_user_home")
+		args+=(--env "HOME=$cqfd_home")
 	fi
 
 	if [ "$CQFD_NO_USER_SSH_CONFIG" != true ]; then
-		args+=(--volume "$cqfd_user_home/.ssh:$cqfd_user_home/.ssh")
+		args+=(--volume "$cqfd_home/.ssh:$cqfd_home/.ssh")
 	fi
 
 	if [ "$CQFD_NO_SSH_CONFIG" != true ]; then
@@ -553,12 +553,12 @@ docker_run() {
 	fi
 
 	if [ "$CQFD_NO_SSH_AUTH_SOCK" != true ] && [ "$SSH_AUTH_SOCK" ]; then
-		args+=(--volume "$SSH_AUTH_SOCK:$cqfd_user_home/.sockets/ssh")
-		args+=(--env "SSH_AUTH_SOCK=$cqfd_user_home/.sockets/ssh")
+		args+=(--volume "$SSH_AUTH_SOCK:$cqfd_home/.sockets/ssh")
+		args+=(--env "SSH_AUTH_SOCK=$cqfd_home/.sockets/ssh")
 	fi
 
-	if [ "$CQFD_NO_USER_GIT_CONFIG" != true ] && [ -f "$cqfd_user_home/.gitconfig" ]; then
-		args+=(--mount "type=bind,src=$cqfd_user_home/.gitconfig,dst=$cqfd_user_home/.gitconfig")
+	if [ "$CQFD_NO_USER_GIT_CONFIG" != true ] && [ -f "$cqfd_home/.gitconfig" ]; then
+		args+=(--mount "type=bind,src=$cqfd_home/.gitconfig,dst=$cqfd_home/.gitconfig")
 	fi
 
 	if [ "$CQFD_BIND_DOCKER_SOCK" = true ]; then
@@ -693,7 +693,7 @@ test_su_session_command() {
 }
 
 # Change to working directory
-cd "$cqfd_user_cwd"
+cd "$cqfd_cwd"
 
 # Check if privileges are already dropped
 uid="\$(id -u)"
@@ -722,9 +722,9 @@ fi
 
 # Add the host's user and group to the container, and adjust ownership
 groupadd -og "${GROUPS[0]}" -f builders
-useradd -s "\$shell" -oN -u "$UID" -g "${GROUPS[0]}" -d "$cqfd_user_home" "$cqfd_user"
-mkdir -p "$cqfd_user_home"
-chown "$UID:${GROUPS[0]}" "$cqfd_user_home"
+useradd -s "\$shell" -oN -u "$UID" -g "${GROUPS[0]}" -d "$cqfd_home" "$cqfd_user"
+mkdir -p "$cqfd_home"
+chown "$UID:${GROUPS[0]}" "$cqfd_home"
 
 # Add specified groups to cqfd_user
 for g in ${CQFD_GROUPS[*]}; do
