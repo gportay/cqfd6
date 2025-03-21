@@ -82,7 +82,6 @@ EOF
 #        by Andrés J. Díaz - License: MIT
 # $1: path to ini file
 cfg_parser() {
-	local -r PATH
 	local ini
 
 	mapfile -t ini <"$1"                                 # convert to line-array
@@ -766,7 +765,7 @@ load_config() {
 	fi
 
 	# parse cqfdrc file
-	if ! cfg_parser "$cqfdrc"; then
+	if ! PATH= cfg_parser "$cqfdrc"; then
 		die ".cqfdrc: Invalid ini-file!"
 	fi
 
@@ -786,7 +785,7 @@ load_config() {
 	flavors="${flavors[*]}"
 
 	# load the [project] section
-	if ! cfg_section_project 2>/dev/null; then
+	if ! PATH= cfg_section_project 2>/dev/null; then
 		die ".cqfdrc: Missing project section!"
 	fi
 
@@ -809,7 +808,7 @@ load_config() {
 	fi
 
 	# load the [build] section
-	if ! cfg_section_build 2>/dev/null; then
+	if ! PATH= cfg_section_build 2>/dev/null; then
 		die ".cqfdrc: Missing build section!"
 	fi
 
@@ -818,7 +817,7 @@ load_config() {
 	local flavor="$1"
 	if [ -n "$flavor" ]; then
 		# load the [$flavor] section
-		if ! cfg_section_"$flavor" 2>/dev/null; then
+		if ! PATH= cfg_section_"$flavor" 2>/dev/null; then
 			die ".cqfdrc: Missing $flavor section!"
 		fi
 	fi
