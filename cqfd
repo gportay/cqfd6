@@ -286,8 +286,8 @@ prune() {
 	done
 }
 
-## docker_build() - initialize build container
-docker_build() {
+## docker_pull_or_build() - initialize build container
+docker_pull_or_build() {
 	local args
 	args=()
 
@@ -296,8 +296,13 @@ docker_build() {
 		args+=(--quiet)
 	fi
 
+	# Pull the image
 	# If custom image name is used, it is pulled pull by docker_run()
 	if [ "$project_image" ] && [ ! "$project_custom_img_name" ] ; then
+		args+=("$cqfd_image")
+
+		debug executing: "$cqfd_docker" pull "${args[@]}"
+		"$cqfd_docker" pull "${args[@]}"
 		return
 	fi
 
@@ -411,7 +416,7 @@ docker_run() {
 	# The image does not exist
 	if ! image_exists_locally "$cqfd_image"; then
 		# If custom image name is used, try to pull it before dying
-		if [ "$project_image" ]; then
+		if [ "$project_custom_img_name" ]; then
 			if ! "$cqfd_docker" pull "$cqfd_image" &>/dev/null; then
 				die "Custom image couldn't be pulled, please build/upload it first"
 			fi
@@ -942,7 +947,7 @@ while [ $# -gt 0 ]; do
 		;;
 	init)
 		load_config "$flavor"
-		docker_build
+		docker_pull_or_build
 		exit
 		;;
 	deinit)
