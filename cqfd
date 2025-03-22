@@ -917,7 +917,7 @@ while [ $# -gt 0 ]; do
 		;;
 	init)
 		load_config "$flavor"
-		docker_pull_or_build "$docker_img_name"
+		docker_pull_or_build "$image"
 		exit
 		;;
 	deinit)
