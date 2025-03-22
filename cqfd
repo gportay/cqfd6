@@ -290,6 +290,7 @@ prune() {
 }
 
 ## docker_pull_or_build() - initialize build container
+# $1: the image name to pull or build
 docker_pull_or_build() {
 	local args
 	args=()
@@ -302,7 +303,7 @@ docker_pull_or_build() {
 	# Pull the image
 	# If custom image name is used, it is pulled pull by docker_run()
 	if [ "$image" ] && [ ! "$custom_img_name" ] ; then
-		args+=("$cqfd_image")
+		args+=("$1")
 
 		debug executing: "${cqfd_docker[@]}" pull "${args[@]}"
 		"${cqfd_docker[@]}" pull "${args[@]}"
@@ -326,7 +327,7 @@ docker_pull_or_build() {
 	fi
 
 	# Name the resulting image
-	args+=(--tag "$cqfd_image")
+	args+=(--tag "$1")
 
 	# Set the context
 	if [ -z "$build_context" ]; then
@@ -345,7 +346,7 @@ docker_pull_or_build() {
 	file="$(realpath "$cqfd_dockerfile")"
 	hash="$(sha256sum <<<"$PWD" | cut -b 1-64)"
 	mkdir -p "$cqfd_cachedir/${cqfd_docker[-1]}/$hash"
-	ln -sf "$file" "$cqfd_cachedir/${cqfd_docker[-1]}/$hash/$cqfd_image"
+	ln -sf "$file" "$cqfd_cachedir/${cqfd_docker[-1]}/$hash/$1"
 }
 
 ## image_exists_locally() - checks if image exists in the local image store
@@ -916,7 +917,7 @@ while [ $# -gt 0 ]; do
 		;;
 	init)
 		load_config "$flavor"
-		docker_pull_or_build
+		docker_pull_or_build "$docker_img_name"
 		exit
 		;;
 	deinit)
