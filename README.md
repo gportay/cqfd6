@@ -257,6 +257,8 @@ tasks:
 
 `CQFD_DIR`: directory used as cqfd directory (default `.cqfd`).
 
+`CQFDRC_FILE`: file as config file (default `.cqfdrc`).
+
 `CQFD_DOCKER`: program used to invoke `docker` client.
 For example, to use docker if not in the docker group, it can be set like:
 ```

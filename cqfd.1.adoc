@@ -138,6 +138,9 @@ another container or another build command.
 *CQFD_DIR*::
 	Directory used as cqfd directory (default _.cqfd_).
 
+*CQFDRC_FILE*::
+	File used as config file (default _.cqfdrc_).
+
 *CQFD_DOCKER*::
 	Program used to invoke _docker_ client.
 
