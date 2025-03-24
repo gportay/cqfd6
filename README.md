@@ -255,6 +255,8 @@ The following environment variables are supported by cqfd to provide
 the user with extra flexibility during his day-to-day development
 tasks:
 
+`CQFD_DIR`: directory used as cqfd directory (default `.cqfd`).
+
 `CQFD_DOCKER`: program used to invoke `docker` client.
 For example, to use docker if not in the docker group, it can be set like:
 ```

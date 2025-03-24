@@ -135,6 +135,9 @@ another container or another build command.
 
 == ENVIRONMENT VARIABLES
 
+*CQFD_DIR*::
+	Directory used as cqfd directory (default _.cqfd_).
+
 *CQFD_DOCKER*::
 	Program used to invoke _docker_ client.
 
