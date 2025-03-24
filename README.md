@@ -280,7 +280,8 @@ tasks:
 `CQFD_DIR`: Set the path to the config directory, by default `.cqfd`.
 The `-d` option set this value.
 
-`CQFDRC_FILE`: file as config file (default `.cqfdrc`).
+`CQFDRC_FILE`: Set an alternate config file, by default `.cqfdrc`.
+The `-f` option sets this value.
 
 `CQFD_DOCKER`: program used to invoke `docker` client.
 For example, to use podman, it can be set like:

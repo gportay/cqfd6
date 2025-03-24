@@ -990,7 +990,7 @@ while [ $# -gt 0 ]; do
 		;;
 	-f)
 		shift
-		CQFDRC_FILE="$1"
+		CQFDRC_FILE="$(realpath "$1")"
 		;;
 	-C)
 		shift
