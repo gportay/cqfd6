@@ -12,6 +12,7 @@ tests: CQFD_BIND_DOCKER_SOCK =
 tests: CQFD_DOCKER_GID =
 tests: CQFD_SHELL =
 tests: CQFD_DIR =
+tests: CQFDRC_FILE =
 tests:
 	@$(eval TDIR=$(shell mktemp -d /tmp/cqfd-test.XXXXXX))
 	@export CQFD_CACHE=$(TDIR); \
