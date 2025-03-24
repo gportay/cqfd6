@@ -277,7 +277,8 @@ tasks:
 `CQFD_WORKDIR`: directory used as working directory (default parent of
 `.cqfd`).
 
-`CQFD_DIR`: directory used as cqfd directory (default `.cqfd`).
+`CQFD_DIR`: Set the path to the config directory, by default `.cqfd`.
+The `-d` option set this value.
 
 `CQFDRC_FILE`: file as config file (default `.cqfdrc`).
 

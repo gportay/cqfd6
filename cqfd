@@ -986,7 +986,7 @@ while [ $# -gt 0 ]; do
 		;;
 	-d)
 		shift
-		CQFD_DIR="$1"
+		CQFD_DIR="$(realpath "$1")"
 		;;
 	-f)
 		shift
