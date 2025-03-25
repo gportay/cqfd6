@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of run command with extra groups
+# validate the behavior with extra groups
 
 set -o pipefail
 
@@ -14,13 +14,13 @@ fi
 cd "$TDIR/" || exit 1
 
 ################################################################################
-# 'cqfd run' should add extra_groups provided by an environment variable
+# cqfd should add extra_groups provided by an environment variable
 ################################################################################
-jtest_prepare "'cqfd run' should add extra_groups provided by an env variable"
+jtest_prepare "cqfd should add extra_groups provided by an env variable"
 if [ "$USER" = "runner" ] || [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	output=$(user_extra_groups="docker newgroup:12345" "$cqfd" run groups | grep docker | grep newgroup)
+	output=$(user_extra_groups="docker newgroup:12345" "$cqfd" groups | grep docker | grep newgroup)
 	if [ -n "$output" ]; then
 		jtest_result pass
 	else
@@ -29,15 +29,15 @@ else
 fi
 
 ################################################################################
-# 'cqfd run' should add extra_groups provided by the config
+# cqfd should add extra_groups provided by the config
 ################################################################################
-jtest_prepare "'cqfd run' should add config's extra_groups to the local user"
+jtest_prepare "cqfd should add config's extra_groups to the local user"
 if [ "$USER" = "runner" ] || [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
 	cp -f .cqfdrc .cqfdrc.orig
 	echo 'user_extra_groups="docker newgroup:12345"' >>.cqfdrc
-	output=$("$cqfd" run groups | grep docker | grep newgroup)
+	output=$("$cqfd" groups | grep docker | grep newgroup)
 	if [ -n "$output" ]; then
 		jtest_result pass
 	else

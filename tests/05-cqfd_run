@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of run command
+# validate the behavior of CLI
 
 . "$(dirname "$0")/jtest.inc" "$1"
 cqfd="$TDIR/.cqfd/cqfd"
@@ -8,44 +8,35 @@ test_file="a/cqfd_a.txt"
 
 cd "$TDIR/" || exit 1
 
-# Here we test cqfd run, which is also invoked without any argument
-for i in 0 1; do
-	# Data set shall produce a/cqfd_a.txt:
-
-	if [ -f "$test_file" ]; then
-		jtest_log fatal "$test_file already present before test"
-		rm -f "$test_file"
-		continue
-	fi
-
-	if [ "$i" = "1" ]; then
-		jtest_prepare "running \"cqfd run\" makes it run"
-		"$cqfd" run
-	else
-		jtest_prepare "running \"cqfd\" with no argument makes it run"
-		"$cqfd"
-	fi
-
-	# at the end of either test, $test_file is populated
-	if grep -qw "cqfd" "$test_file"; then
-		jtest_result pass
-	else
-		jtest_log fatal "$test_file not present after test"
-		jtest_result fail
-		rm -f "$test_file"
-		continue
-	fi
-
-	rm -f "$test_file"
-done
+################################################################################
+# 'cqfd' runs command set in .cqfdrc
+################################################################################
+jtest_prepare "cqfd run command set in .cqfdrc"
+if "$cqfd" && grep -qw "cqfd" "$test_file"; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+rm -f "$test_file"
 
 ################################################################################
-# If the Dockerfile changed and no init is done again, 'cqfd run' should fail
+# 'cqfd' runs command overriden by the command line
+################################################################################
+jtest_prepare "cqfd run command overriden by the command-line"
+if "$cqfd" touch "$test_file" && test -e "$test_file" && ! test -s "$test_file"; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+rm -f "$test_file"
+
+################################################################################
+# If the Dockerfile changed and no init is done again, 'cqfd' should fail
 ################################################################################
 jtest_prepare "Modifying the Dockerfile should require running 'cqfd init' again"
 dockerfile=.cqfd/docker/Dockerfile
 echo "RUN echo $RANDOM" >>"$dockerfile"
-if ! "$cqfd" run; then
+if ! "$cqfd"; then
 	jtest_result pass
 else
 	jtest_result fail

@@ -26,7 +26,7 @@ jtest_prepare "cqfd run with su -c"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if "$cqfd" --reinit --verbose run true \
+	if "$cqfd" --reinit --verbose true \
 		| awk -v rc=1 '/Using "su" to execute command/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -46,7 +46,7 @@ jtest_prepare "cqfd run with su --session-command"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if "$cqfd" --reinit --verbose run true \
+	if "$cqfd" --reinit --verbose true \
 		| awk -v rc=1 '/Using "su" to execute session command/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -67,7 +67,7 @@ jtest_prepare "cqfd run with sudo"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if "$cqfd" --reinit --verbose run true \
+	if "$cqfd" --reinit --verbose true \
 		| awk -v rc=1 '/Using "sudo" to execute command/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -80,6 +80,6 @@ fi
 ################################################################################
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 jtest_log info "restore container"
-if ! "$cqfd" init; then
-	jtest_log fatal "cqfd init failed"
+if ! "$cqfd" --init; then
+	jtest_log fatal "cqfd --init failed"
 fi

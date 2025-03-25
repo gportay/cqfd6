@@ -1,33 +1,34 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of run -c command
+# validate the behavior -c option
 
 . "$(dirname "$0")/jtest.inc" "$1"
 cqfd="$TDIR/.cqfd/cqfd"
 flavor="foo"
 test_file="$flavor"
-test_run_c_file="test_run_c.txt"
+test_c_file="test_c.txt"
 fail=0
 
 cd "$TDIR/" || exit 1
 
-if [ -f "$test_file" ] || [ -f "$test_run_c_file" ]; then
-	jtest_log info "$test_file or $test_run_c_file already present before test, removing..."
+if [ -f "$test_file" ] || [ -f "$test_c_file" ]; then
+	jtest_log info "$test_file or $test_c_file already present before test, removing..."
 	rm -f "$test_file"
-	rm -f "$test_run_c_file"
+	rm -f "$test_c_file"
 fi
 
-jtest_prepare "build cmd for '$flavor' flavor and concatenate with an additional option"
-if ! "$cqfd" -b "$flavor" run -c --debug >"$test_run_c_file"; then
-	jtest_log fatal "cqfd run -c --debug failed"
+jtest_prepare "cqfd -c with a given '$flavor' flavor concatenate additional option"
+if ! "$cqfd" -b "$flavor" -c --debug >"$test_c_file"; then
+	jtest_log fatal "cqfd -c --debug failed"
 	fail=1
+	rm -f "$test_c_file"
 fi
 
-# at the end of this test, $test_run_c_file is populated
-if ! grep -qw "target 'foo'" "$test_run_c_file"; then
-	jtest_log fatal "$test_run_c_file not present after test"
+# at the end of this test, $test_c_file is populated
+if ! grep -qw "target 'foo'" "$test_c_file"; then
+	jtest_log fatal "$test_c_file not present after test"
 	fail=1
-	rm -f "$test_run_c_file"
+	rm -f "$test_c_file"
 fi
 
 # at the end of either test, $test_file is populated
@@ -44,4 +45,4 @@ else
 fi
 
 rm -f "$test_file"
-rm -f "$test_run_c_file"
+rm -f "$test_c_file"

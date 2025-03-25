@@ -1,37 +1,37 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of run -c command with flavors
+# validate the behavior of -c option with flavors
 
 . "$(dirname "$0")/jtest.inc" "$1"
 cqfd="$TDIR/.cqfd/cqfd"
 test_file="a/cqfd_a.txt"
-test_run_c_file="test_run_c.txt"
+test_c_file="test_c.txt"
 
 cd "$TDIR/" || exit 1
 
 test_setup() {
-	if [ -f "$test_file" ] || [ -f "$test_run_c_file" ]; then
-		jtest_log info "$test_file or $test_run_c_file already present before test, removing..."
+	if [ -f "$test_file" ] || [ -f "$test_c_file" ]; then
+		jtest_log info "$test_file or $test_c_file already present before test, removing..."
 		rm -f "$test_file"
-		rm -f "$test_run_c_file"
+		rm -f "$test_c_file"
 	fi
 }
 
 test_cleanup() {
 	rm -f "$test_file"
-	rm -f "$test_run_c_file"
+	rm -f "$test_c_file"
 }
 
 # Append default command build with an additional option
 test_step1() {
-	jtest_prepare "running \"cqfd run -c\" makes it run with appended arguments"
-	"$cqfd" run -c --debug >>"$test_run_c_file"
+	jtest_prepare "cqfd -c makes it run with appended arguments"
+	"$cqfd" -c --debug >>"$test_c_file"
 
-	# at the end of this test, $test_run_c_file is populated
-	if ! grep -qw "target 'build'" "$test_run_c_file"; then
-		jtest_log fatal "$test_run_c_file not present after test"
+	# at the end of this test, $test_c_file is populated
+	if ! grep -qw "target 'build'" "$test_c_file"; then
+		jtest_log fatal "$test_c_file not present after test"
 		jtest_result fail
-		rm -f "$test_run_c_file"
+		rm -f "$test_c_file"
 		return
 	fi
 
@@ -46,10 +46,10 @@ test_step1() {
 	fi
 }
 
-# Build the default command with run -c
+# Build the default command with -c
 test_step2() {
-	jtest_prepare "running \"cqfd run -c\" with no argument makes it fail"
-	if "$cqfd" run -c; then
+	jtest_prepare "cqfd -c with no argument makes it fail"
+	if "$cqfd" -c; then
 		jtest_result fail
 	else
 		jtest_result pass

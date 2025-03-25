@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of init command with extra hosts in build environment variable
+# validate the behavior of --init option with extra hosts in build environment variable
 
 . "$(dirname "$0")/jtest.inc" "$1"
 cqfd="$TDIR/.cqfd/cqfd"
 
 cd "$TDIR/" || exit 1
 
-jtest_prepare "run cqfd with docker_build_args in config"
+jtest_prepare "cqfd --init with docker_build_args in config"
 # setup -- add the command and docker_build_args option to configs
 echo "RUN cp /etc/hosts /tmp/hosts" >>"$TDIR/.cqfd/docker/Dockerfile"
 sed '/\[build\]/adocker_build_args="--add-host testhost:1.2.3.4"'\

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of init with alternate file and external directory
+# validate the behavior of --init option with alternate file and external directory
 
 . "$(dirname "$0")/jtest.inc" "$1"
 
@@ -17,76 +17,76 @@ mv .cqfdrc "$extdir/cqfdrc"
 cqfd="$TDIR/$extdir/cqfd/cqfd"
 
 ################################################################################
-# 'cqfd init' without local files should fail
+# 'cqfd --init' without local files should fail
 ################################################################################
-jtest_prepare "cqfd init without local files should fail"
-if ! "$cqfd" init; then
+jtest_prepare "cqfd --init without local files should fail"
+if ! "$cqfd" --init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 ################################################################################
-# 'cqfd init' using alternate filenames in an external directory using filenames
-# should work
-################################################################################
-jtest_prepare "cqfd init using alternate filenames in an external directory using filenames using options should work"
-if "$cqfd" -C "$extdir" -d cqfd -f cqfdrc init; then
-	jtest_result pass
-else
-	jtest_result fail
-fi
-
-################################################################################
-# 'cqfd init' using alternate filenames in an external directory using absolute
+# 'cqfd --init' using alternate filenames in an external directory using
 # filenames should work
 ################################################################################
-jtest_prepare "cqfd init using alternate filenames in an external directory using relative filenames using options should work"
-if "$cqfd" -d "$extdir/cqfd" -f "$extdir/cqfdrc" init; then
+jtest_prepare "cqfd --init using alternate filenames in an external directory using filenames using options should work"
+if "$cqfd" -C "$extdir" -d cqfd -f cqfdrc --init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 ################################################################################
-# 'cqfd init' using alternate filenames in an external directory using absolute
+# 'cqfd --init' using alternate filenames in an external directory using
+# absolute filenames should work
+################################################################################
+jtest_prepare "cqfd --init using alternate filenames in an external directory using relative filenames using options should work"
+if "$cqfd" -d "$extdir/cqfd" -f "$extdir/cqfdrc" --init; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+################################################################################
+# 'cqfd --init' using alternate filenames in an external directory using
+# absolute filenames should work
+################################################################################
+jtest_prepare "cqfd --init using alternate filenames in an external directory using absolute using options filenames should work"
+if "$cqfd" -d "$PWD/$extdir/cqfd" -f "$PWD/$extdir/cqfdrc" --init; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+################################################################################
+# 'cqfd --init' using alternate filenames in an external directory using
 # filenames should work
 ################################################################################
-jtest_prepare "cqfd init using alternate filenames in an external directory using absolute using options filenames should work"
-if "$cqfd" -d "$PWD/$extdir/cqfd" -f "$PWD/$extdir/cqfdrc" init; then
+jtest_prepare "cqfd --init using alternate filenames in an external directory using filenames using environment variables should work"
+if CQFD_DIR=cqfd CQFDRC_FILE=cqfdrc "$cqfd" -C "$extdir" --init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 ################################################################################
-# 'cqfd init' using alternate filenames in an external directory using filenames
-# should work
+# 'cqfd --init' using alternate filenames in an external directory using
+# absolute filenames should work
 ################################################################################
-jtest_prepare "cqfd init using alternate filenames in an external directory using filenames using environment variables should work"
-if CQFD_DIR=cqfd CQFDRC_FILE=cqfdrc "$cqfd" -C "$extdir" init; then
+jtest_prepare "cqfd --init using alternate filenames in an external directory using relative filenames using environment variables should work"
+if CQFD_DIR="$extdir/cqfd" CQFDRC_FILE="$extdir/cqfdrc" "$cqfd" --init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 ################################################################################
-# 'cqfd init' using alternate filenames in an external directory using absolute
-# filenames should work
+# 'cqfd --init' using alternate filenames in an external directory using
+# absolute filenames should work
 ################################################################################
-jtest_prepare "cqfd init using alternate filenames in an external directory using relative filenames using environment variables should work"
-if CQFD_DIR="$extdir/cqfd" CQFDRC_FILE="$extdir/cqfdrc" "$cqfd" init; then
-	jtest_result pass
-else
-	jtest_result fail
-fi
-
-################################################################################
-# 'cqfd init' using alternate filenames in an external directory using absolute
-# filenames should work
-################################################################################
-jtest_prepare "cqfd init using alternate filenames in an external directory using absolute filenames using environment variables should work"
-if CQFD_DIR="$PWD/$extdir/cqfd" CQFDRC_FILE="$PWD/$extdir/cqfdrc" "$cqfd" init; then
+jtest_prepare "cqfd --init using alternate filenames in an external directory using absolute filenames using environment variables should work"
+if CQFD_DIR="$PWD/$extdir/cqfd" CQFDRC_FILE="$PWD/$extdir/cqfdrc" "$cqfd" --init; then
 	jtest_result pass
 else
 	jtest_result fail

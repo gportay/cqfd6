@@ -8,10 +8,10 @@ cqfd="$TDIR/.cqfd/cqfd"
 cd "$TDIR/" || exit 1
 
 ################################################################################
-# 'cqfd init' without context should fail the context
+# 'cqfd --init' without context should fail the context
 ################################################################################
-jtest_prepare "cqfd init without using build_context"
-if "$cqfd" --reinit run "! test -e /tmp/cqfdrc-build_context"; then
+jtest_prepare "cqfd --init without using build_context"
+if "$cqfd" --reinit "! test -e /tmp/cqfdrc-build_context"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -25,10 +25,10 @@ cp -f .cqfd/docker/Dockerfile.build_context .cqfd/docker/Dockerfile
 cp -f cqfdrc-build_context .cqfdrc
 
 ################################################################################
-# 'cqfd init' with context changes the context
+# 'cqfd --init' with context changes the context
 ################################################################################
-jtest_prepare "cqfd init using build_context"
-if "$cqfd" --reinit run "test -e /tmp/cqfdrc-build_context"; then
+jtest_prepare "cqfd --init using build_context"
+if "$cqfd" --reinit "test -e /tmp/cqfdrc-build_context"; then
 	jtest_result pass
 else
 	jtest_result fail
