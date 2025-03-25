@@ -35,10 +35,13 @@ cqfd_cachedir="${CQFD_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/cqfd}"
 # stdout: the usage
 usage() {
 	cat <<EOF
-Usage: $PROGNAME [OPTIONS] [COMMAND] [COMMAND OPTIONS] [ARGUMENTS]
+Usage: $PROGNAME [OPTIONS] [PROGRAM] [ARGUMENTS...]
 
 Options:
+    --init               Initialize project build container.
     --release            Release software.
+    --flavors            List flavors from config file to stdout.
+    -c <args>            Append args to the default command string.
     -f <file>            Use file as config file (default .cqfdrc).
     -d <directory>       Use directory as cqfd directory (default .cqfd).
     -w <directory>       Use directory as working directory (default parent of
@@ -50,23 +53,8 @@ Options:
     --verbose            Increase the script's verbosity.
     -h or --help         Show this help text.
 
-Commands:
-    init                 Initialize project build container.
-    deinit               Deinitialize project build container.
-    ls                   List build containers.
-    gc                   Cleanup unused build containers.
-    exec cmd [args]      Run argument(s) inside build container.
-    flavors              List flavors from config file to stdout.
-    run [cmdstring]      Run argument(s) inside build container.
-    release [cmdstring]  Run argument(s) and release software.
-    shell [shargs]       Run shell command inside build container.
-    help                 Show this help text.
-
-    By default, the 'run' command is assumed, with the default
-    command string configured in your .cqfdrc (see build.command).
-
-Command options for run / release:
-    -c <args>            Append args to the default command string.
+    By default, it runs the default command string configured in your .cqfdrc
+    (see build.command).
 
     cqfd is Copyright (C) 2015-2025 Savoir-faire Linux, Inc.
 
@@ -410,7 +398,7 @@ docker_run() {
 				die "Custom image couldn't be pulled, please build/upload it first"
 			fi
 		else
-			die "The docker image doesn't exist, launch 'cqfd init' to create it"
+			die "The docker image doesn't exist, launch 'cqfd --init' to create it"
 		fi
 	fi
 
@@ -940,43 +928,25 @@ load_config() {
 	fi
 }
 
+has_to_init=false
 has_to_release=false
+has_to_concatenate=false
 has_alternate_command=false
 while [ $# -gt 0 ]; do
 	case "$1" in
-	help|-h|--help)
+	-h|--help)
 		usage
 		exit
 		;;
-	version|-v|--version)
+	-v|--version)
 		echo "$VERSION"
 		exit
 		;;
 	--verbose)
-		export CQFD_DEBUG=true
-		export BUILDKIT_PROGRESS=plain
+		BUILDKIT_PROGRESS=plain
+		CQFD_DEBUG=true
 		;;
-	init)
-		load_config "$flavor"
-		docker_pull_or_build
-		exit
-		;;
-	deinit)
-		load_config "$flavor"
-		docker_rmi
-		exit
-		;;
-	ls)
-		load_config "$flavor"
-		list
-		exit
-		;;
-	gc)
-		load_config "$flavor"
-		prune
-		exit
-		;;
-	flavors)
+	--flavors)
 		load_config
 		echo "$build_flavors"
 		exit
@@ -1005,61 +975,22 @@ while [ $# -gt 0 ]; do
 		quiet=true
 		export BUILDKIT_PROGRESS=quiet
 		;;
+	-c)
+		has_to_concatenate=true
+		;;
+	--init)
+		has_to_init=true
+		;;
 	--release)
 		has_to_release=true
 		;;
-	exec)
-		shift
-		if [ "$#" -lt 1 ]; then
-			usage
-			die "exec: Missing arguments!"
-		fi
-		load_config "$flavor"
-		command_string="${*@Q}"
-		docker_run "$command_string"
-		exit
-		;;
-	run|release)
-		if [ "$1" = "release" ]; then
-			has_to_release=true
-		fi
-
-		shift
-
-		# No more args? run default command
-		[ "$#" -eq 0 ] && break
-
-		# -c appends following args to the default command
-		if [ "$1" = "-c" ]; then
-			shift
-
-			if [ "$#" -lt 1 ]; then
-				usage
-				die "run -c: Missing arguments!"
-			fi
-			break
-		fi
-
-		# Run alternate command
-		has_alternate_command=true
-		break
-		;;
-	sh|ash|dash|bash|ksh|zsh|csh|tcsh|fish|shell)
-		if [ "$1" != "shell" ]; then
-			cqfd_shell="$1"
-		fi
-		shift
-		load_config "$flavor"
-		command_string="$cqfd_shell"
-		if [ "$#" -gt 0 ]; then
-			command_string+=" ${*@Q}"
-		fi
-		docker_run "$command_string"
-		exit
+	-*)
+		echo "Unknown option: $1" >&2
+		usage
+		exit 1
 		;;
 	*)
-		usage
-		die "$1: Invalid command!"
+		break
 		;;
 	esac
 	shift
@@ -1067,18 +998,23 @@ done
 
 load_config "$flavor"
 
+<<<<<<< HEAD
 if ! $has_alternate_command && [ -n "$*" ] && [ -z "$build_command" ]; then
 	warn ".cqfdrc: Missing or empty build.command property!"
+=======
+if ! $has_to_concatenate && [ -n "$*" ] && [ -z "$build_command" ]; then
+	warn "$cqfdrc: Missing or empty build.command property!"
+>>>>>>> 86c6e13 (init)
 fi
 
-if $has_alternate_command; then
-	build_command="$*"
-elif [ -n "$*" ]; then
+if $has_to_concatenate; then
 	build_command+=" $*"
+elif [ -n "$*" ]; then
+	build_command="$*"
 fi
 
-if [ -z "$build_command" ]; then
-	die ".cqfdrc: Missing or empty build.command property!"
+if $has_to_init; then
+	docker_build
 fi
 
 docker_run "$build_command"
