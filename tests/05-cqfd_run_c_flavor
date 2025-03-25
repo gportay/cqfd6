@@ -18,7 +18,7 @@ if [ -f "$test_file" ] || [ -f "$test_run_c_file" ]; then
 fi
 
 jtest_prepare "build cmd for '$flavor' flavor and concatenate with an additional option"
-if ! "$cqfd" -b "$flavor" run -c --debug >>"$test_run_c_file"; then
+if ! "$cqfd" -b "$flavor" run -c --debug >"$test_run_c_file"; then
 	jtest_log fatal "cqfd run -c --debug failed"
 	fail=1
 fi
