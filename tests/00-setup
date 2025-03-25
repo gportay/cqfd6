@@ -34,7 +34,7 @@ fi
 # running 'cqfd --init' should fail, as there's no proper config
 ################################################################################
 jtest_prepare "create a test skeleton in temporary directory"
-if ! "$cqfd" init; then
+if ! "$cqfd" --init; then
 	jtest_result pass
 else
 	jtest_result fail

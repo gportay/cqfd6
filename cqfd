@@ -38,9 +38,9 @@ usage() {
 Usage: $PROGNAME [OPTIONS] [PROGRAM] [ARGUMENTS...]
 
 Options:
-    --init               Initialize project build container.
-    --reinit             Reinitialize project build container.
-    --deinit             Deinitialize project build container.
+    --init               Initialize build container.
+    --reinit             Reinitialize build container.
+    --deinit             Deinitialize build container.
     --ls                 List build containers.
     --gc                 Cleanup unused build containers.
     --release            Release software.
@@ -394,7 +394,7 @@ docker_run() {
 				die "Custom image couldn't be pulled, please build/upload it first"
 			fi
 		else
-			die "The docker image doesn't exist, launch 'cqfd init' to create it"
+			die "The docker image doesn't exist, launch 'cqfd --init' to create it"
 		fi
 	fi
 
