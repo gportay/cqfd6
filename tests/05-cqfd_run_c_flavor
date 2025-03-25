@@ -19,21 +19,21 @@ fi
 
 jtest_prepare "cqfd -c with a given '$flavor' flavor concatenate additional option"
 if ! "$cqfd" -b "$flavor" -c --debug >"$test_c_file"; then
-	jtest_log fatal "cqfd -c --debug failed"
+	jtest_log error "cqfd -c --debug failed"
 	fail=1
 	rm -f "$test_c_file"
 fi
 
 # at the end of this test, $test_c_file is populated
 if ! grep -qw "target 'foo'" "$test_c_file"; then
-	jtest_log fatal "$test_c_file not present after test"
+	jtest_log error "$test_c_file not present after test"
 	fail=1
 	rm -f "$test_c_file"
 fi
 
 # at the end of either test, $test_file is populated
 if ! grep -qw "cqfd" "$test_file"; then
-	jtest_log fatal "$test_file not present after test"
+	jtest_log error "$test_file not present after test"
 	fail=1
 	rm -f "$test_file"
 fi
