@@ -511,23 +511,39 @@ locate_project_dir() {
 		search_dir="$(readlink -f "$search_dir"/..)"
 	done
 
-	return 1
+	echo "$PWD"
 }
 
 ## load_config() - load build settings from cqfdrc
 # $1: optional "flavor" of the build, is a suffix of command
 load_config() {
-	if ! cqfd_project_dir=$(locate_project_dir); then
-		die "$cqfddir: Missing project directory!"
-	fi
+	cqfd_project_dir=$(locate_project_dir)
 
 	# unless using '-f other_cqfdrc', use base directory located above
 	if ! $has_custom_cqfdrc; then
 		local cqfdrc_dir="$cqfd_project_dir/"
 	fi
 
-	if [ ! -f "$cqfdrc_dir$cqfdrc" ]; then
-		die "$cqfdrc_dir$cqfdrc: Missing project file!"
+	if [ ! -e "$cqfdrc_dir$cqfdrc" ]; then
+		dockerfile="Dockerfile"
+		if [ ! -f "$dockerfile" ]; then
+			die "$dockerfile: Missing Dockerfile!"
+		fi
+
+		# This will look like cqfd_USER_ORG_NAME_HASH
+		# shellcheck disable=SC2001
+		local format_user
+		local dockerfile_hash
+
+		# This will look like cqfd_USER_ORG_NAME_HASH
+		# shellcheck disable=SC2001
+		format_user=$(sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$USER")
+		dockerfile_hash=$(sha256sum "$dockerfile" | cut -b 1-7)
+		docker_img_name="cqfd${format_user:+_$format_user}_${dockerfile_hash}"
+
+		# Run shell as command
+		build_command="$cqfd_shell"
+		return
 	fi
 
 	if ! cfg_parser "$cqfdrc_dir$cqfdrc"; then
