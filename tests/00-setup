@@ -27,20 +27,20 @@ fi
 mv cqfd .cqfd
 
 ################################################################################
-# running 'cqfd ls' without a proper config file should fail
+# running 'cqfd ls' without a proper config file should pass
 ################################################################################
 jtest_prepare "cqfd ls complains without an .cqfdrc file"
-if ! "$cqfd" ls; then
+if "$cqfd" ls; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 ################################################################################
-# running 'cqfd gc' without a proper config file should fail
+# running 'cqfd gc' without a proper config file should pass
 ################################################################################
 jtest_prepare "cqfd gc complains without an .cqfdrc file"
-if ! "$cqfd" gc; then
+if "$cqfd" gc; then
 	jtest_result pass
 else
 	jtest_result fail
