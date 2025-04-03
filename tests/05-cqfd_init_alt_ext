@@ -60,32 +60,8 @@ fi
 # cqfd using alternate directory and worktree map worktree as worktree
 ################################################################################
 jtest_prepare "cqfd specifying a cqfd directory and worktree map worktree"
-if "$cqfd" -d "$extdir/.cqfd" init && \
-   "$cqfd" -d "$extdir/.cqfd" run "test -e $extdir/alternate-directory" && \
-   "$cqfd" -d "$extdir/.cqfd" -w "$PWD" run "test -e local-directory"; then
-	jtest_result pass
-else
-	jtest_result fail
-fi
-
-################################################################################
-# cqfd using alternate directory and worktree map worktree as worktree
-################################################################################
-jtest_prepare "cqfd specifying a cqfd directory and worktree map worktree"
-if "$cqfd" -d "$extdir/.cqfd" init && \
-   "$cqfd" -d "$extdir/.cqfd" run "test -e $extdir/alternate-directory" && \
-   "$cqfd" -d "$extdir/.cqfd" -w "$PWD" run "test -e local-directory"; then
-	jtest_result pass
-else
-	jtest_result fail
-fi
-
-################################################################################
-# cqfd using alternate directory and worktree map worktree as worktree
-################################################################################
-jtest_prepare "cqfd specifying a cqfd directory and worktree map worktree"
-if "$cqfd" -d "$extdir/.cqfd" init && \
-   "$cqfd" -d "$extdir/.cqfd" run "test -e $extdir/alternate-directory" && \
+if "$cqfd" -d "$extdir/.cqfd"           init && \
+   "$cqfd" -d "$extdir/.cqfd"           run "test -e $extdir/alternate-directory" && \
    "$cqfd" -d "$extdir/.cqfd" -w "$PWD" run "test -e local-directory"; then
 	jtest_result pass
 else
