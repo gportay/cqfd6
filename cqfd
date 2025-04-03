@@ -714,6 +714,11 @@ EOF
 locate_project_dir() {
 	local search_dir
 
+	if [ -n "$CQFD_WORK_TREE" ]; then
+		realpath "$CQFD_WORK_TREE"
+		return
+	fi
+
 	if [ -n "$CQFD_DIR" ]; then
 		realpath "$CQFD_DIR/.."
 		return
@@ -982,7 +987,7 @@ while [ $# -gt 0 ]; do
 		;;
 	-w)
 		shift
-		CQFD_WORKDIR="$1"
+		CQFD_WORK_TREE="$(realpath "$1")"
 		;;
 	-d)
 		shift

@@ -274,8 +274,8 @@ The following environment variables are supported by cqfd to provide
 the user with extra flexibility during his day-to-day development
 tasks:
 
-`CQFD_WORKDIR`: directory used as working directory (default parent of
-`.cqfd`).
+`CQFD_WORKDIR`: Set the path to the top of the working tree, by default `$PWD`.
+The option `-w` sets this value.
 
 `CQFD_DIR`: Set the path to the config directory, by default `.cqfd`.
 The `-d` option set this value.
