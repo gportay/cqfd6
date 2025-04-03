@@ -443,7 +443,11 @@ An alternate cqfdrc file can be specified with the `-f` option:
 
 An alternate working directory can be specified with the `-w` option:
 
-    $ cqfd -w ..
+    $ cqfd -C external/directory -d cqfd_alt -f cqfdrc_alt
+    $ # cqfd will use:
+    $ #  - project directory: external/directory
+    $ #  - cqfd directory: external/directory/cqfd_alt
+    $ #  - cqfdrc file: external/directory/cqfdrc_alt
 
 These options can be combined together.
 
