@@ -21,8 +21,24 @@
 set -e
 set -o pipefail
 
+compat() {
+	local compat
+
+	compat="$(realpath "$0")"
+	compat="${compat##*/}"
+	compat="${compat#cqfd-}"
+	if [[ "$compat" = "cqfd" ]]
+	then
+		IFS=. read -r M m _ <<<"$1"
+		compat="$M${m:-0}"
+	fi
+	COMPAT="$compat"
+	echo "$compat"
+}
+
 PROGNAME=$(basename "$0")
 VERSION=6
+COMPAT="${CQFD_COMPAT:-$(compat "$VERSION")}"
 cqfd_user="${USER:-builder}"
 cqfd_user_home="${HOME:-/home/$cqfd_user}"
 cqfd_shell="${CQFD_SHELL:-/bin/bash}"
@@ -47,6 +63,7 @@ Options:
     -b <flavor_name>     Target a specific build flavor.
     -q                   Turn on quiet mode.
     -v or --version      Show version.
+    --compatibility      Show compatibility level.
     --verbose            Increase the script's verbosity.
     -h or --help         Show this help text.
 
@@ -297,30 +314,46 @@ docker_pull_or_build() {
 		args+=(--quiet)
 	fi
 
-	# Pull the image
-	# If custom image name is used, it is pulled pull by docker_run()
-	if [ "$project_image" ] && [ ! "$project_custom_img_name" ] ; then
-		args+=("$cqfd_image")
+	# Pull the image (since 5.8)
+	if [ "$COMPAT" -ge 58 ]; then
+		# If custom image name is used, it is pulled pull by docker_run()
+		if [ "$project_image" ] && [ ! "$project_custom_img_name" ] ; then
+			args+=("$cqfd_image")
 
-		debug executing: "${cqfd_docker[@]}" pull "${args[@]}"
-		"${cqfd_docker[@]}" pull "${args[@]}"
-		return
+			debug executing: "${cqfd_docker[@]}" pull "${args[@]}"
+			"${cqfd_docker[@]}" pull "${args[@]}"
+			return
+		fi
 	fi
 
-	# Append extra args from the .cqfdrc [build] section
-	if [ "$build_docker_build_args" ]; then
-		local array
-		# shellcheck disable=SC2162
-		read -a array <<<"$build_docker_build_args"
-		args+=("${array[@]}")
+	# Append extra args not preserving whitespaces (until 5.4)
+	if [ "$COMPAT" -lt 55 ]; then
+		# Append extra args from $CQFD_EXTRA_BUILD_ARGS
+		if [ "$CQFD_EXTRA_BUILD_ARGS" ]; then
+			local array
+			# shellcheck disable=SC2162
+			read -a array <<<"$CQFD_EXTRA_BUILD_ARGS"
+			args+=("${array[@]}")
+		fi
 	fi
 
-	# Append extra args from $CQFD_EXTRA_BUILD_ARGS
-	if [ "$CQFD_EXTRA_BUILD_ARGS" ]; then
-		local array
-		# shellcheck disable=SC2162
-		read -a array <<<"$CQFD_EXTRA_BUILD_ARGS"
-		args+=("${array[@]}")
+	# Append extra args preserving whitespaces (since 5.5)
+	if [ "$COMPAT" -ge 55 ]; then
+		# Append extra args from the .cqfdrc [build] section
+		if [ "$build_docker_build_args" ]; then
+			local array
+			# shellcheck disable=SC2162
+			read -a array <<<"$build_docker_build_args"
+			args+=("${array[@]}")
+		fi
+
+		# Append extra args from $CQFD_EXTRA_BUILD_ARGS
+		if [ "$CQFD_EXTRA_BUILD_ARGS" ]; then
+			local array
+			# shellcheck disable=SC2162
+			read -a array <<<"$CQFD_EXTRA_BUILD_ARGS"
+			args+=("${array[@]}")
+		fi
 	fi
 
 	# Name the resulting image
@@ -414,20 +447,38 @@ docker_run() {
 		fi
 	fi
 
-	# Append extra args from the .cqfdrc [build] section
-	if [ "$build_docker_run_args" ]; then
-		local array
-		# shellcheck disable=SC2162
-		read -a array <<<"$build_docker_run_args"
-		args+=("${array[@]}")
+	# Append extra args not preserving whitespaces (until 5.4)
+	if [ "$COMPAT" -lt 55 ]; then
+		# Append extra args from the [build] section
+		if [ "$build_docker_run_args" ]; then
+			# shellcheck disable=SC2206
+			args+=($build_docker_run_args)
+		fi
+
+		# Append extra args from $CQFD_EXTRA_RUN_ARGS
+		if [ "$CQFD_EXTRA_RUN_ARGS" ]; then
+			# shellcheck disable=SC2206
+			args+=($CQFD_EXTRA_RUN_ARGS)
+		fi
 	fi
 
-	# Append extra args from $CQFD_EXTRA_RUN_ARGS
-	if [ "$CQFD_EXTRA_RUN_ARGS" ]; then
-		local array
-		# shellcheck disable=SC2162
-		read -a array <<<"$CQFD_EXTRA_RUN_ARGS"
-		args+=("${array[@]}")
+	# Append extra args preserving whitespaces (since 5.5)
+	if [ "$COMPAT" -ge 55 ]; then
+		# Append extra args from the .cqfdrc [build] section
+		if [ "$build_docker_run_args" ]; then
+			local array
+			# shellcheck disable=SC2162
+			read -a array <<<"$build_docker_run_args"
+			args+=("${array[@]}")
+		fi
+
+		# Append extra args from $CQFD_EXTRA_RUN_ARGS
+		if [ "$CQFD_EXTRA_RUN_ARGS" ]; then
+			local array
+			# shellcheck disable=SC2162
+			read -a array <<<"$CQFD_EXTRA_RUN_ARGS"
+			args+=("${array[@]}")
+		fi
 	fi
 
 	# Give access to all host devices
@@ -945,6 +996,10 @@ while [ $# -gt 0 ]; do
 		;;
 	version|-v|--version)
 		echo "$VERSION"
+		exit
+		;;
+	--compatibility)
+		echo "$COMPAT"
 		exit
 		;;
 	--verbose)

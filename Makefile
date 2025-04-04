@@ -1,6 +1,7 @@
 # Makefile for cqfd6
 
 PREFIX?=/usr/local
+COMPAT?=$(shell bash cqfd --compatibility)
 
 .PHONY: all help doc install uninstall test tests check
 
@@ -19,8 +20,8 @@ doc: cqfd.1.gz cqfdrc.5.gz
 
 install:
 	install -d $(DESTDIR)$(PREFIX)/bin/
-	install -m 0755 cqfd $(DESTDIR)$(PREFIX)/bin/cqfd6
-	ln -sf cqfd6 $(DESTDIR)$(PREFIX)/bin/cqfd
+	install -m 0755 cqfd $(DESTDIR)$(PREFIX)/bin/cqfd$(COMPAT)
+	ln -sf cqfd$(COMPAT) $(DESTDIR)$(PREFIX)/bin/cqfd
 	install -d $(DESTDIR)$(PREFIX)/share/doc/cqfd6/
 	install -m 0644 AUTHORS CHANGELOG.md LICENSE README.md $(DESTDIR)$(PREFIX)/share/doc/cqfd6/
 	if [ -e cqfd.1.gz ]; then \
@@ -62,7 +63,7 @@ user-%:
 	$(MAKE) $* PREFIX=$$HOME/.local
 
 test tests:
-	@$(MAKE) -C tests GIT_DIR=$(CURDIR)/.git
+	@$(MAKE) -C tests GIT_DIR=$(CURDIR)/.git CQFD_COMPAT=$(COMPAT)
 
 check:
 	shellcheck cqfd
