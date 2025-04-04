@@ -23,6 +23,7 @@ set -o pipefail
 
 PROGNAME=$(basename "$0")
 VERSION=6
+CQDF_COMPAT="${CQFD_COMPAT:-57}"
 cqfd_user="${USER:-builder}"
 cqfd_user_home="${HOME:-/home/$cqfd_user}"
 cqfd_shell="${CQFD_SHELL:-/bin/bash}"
@@ -44,29 +45,12 @@ Options:
     -w <directory>       Use directory as working directory (default parent of
                          .cqfd).
     -C <directory>       Change to the specified working directory.
+    -c <args>            Append args to the default command string.
     -b <flavor_name>     Target a specific build flavor.
     -q                   Turn on quiet mode.
     -v or --version      Show version.
     --verbose            Increase the script's verbosity.
     -h or --help         Show this help text.
-
-Commands:
-    init                 Initialize project build container.
-    deinit               Deinitialize project build container.
-    ls                   List build containers.
-    gc                   Cleanup unused build containers.
-    exec cmd [args]      Run argument(s) inside build container.
-    flavors              List flavors from config file to stdout.
-    run [cmdstring]      Run argument(s) inside build container.
-    release [cmdstring]  Run argument(s) and release software.
-    shell [shargs]       Run shell command inside build container.
-    help                 Show this help text.
-
-    By default, the 'run' command is assumed, with the default
-    command string configured in your .cqfdrc (see build.command).
-
-Command options for run / release:
-    -c <args>            Append args to the default command string.
 
     cqfd is Copyright (C) 2015-2025 Savoir-faire Linux, Inc.
 
@@ -935,15 +919,35 @@ load_config() {
 	fi
 }
 
+has_to_concatenate=false
 has_to_release=false
-has_alternate_command=false
 while [ $# -gt 0 ]; do
 	case "$1" in
 	help|-h|--help)
+		if [ "$1" = "help" ] && [ "${CQFD_COMPAT:-57}" -gt 56 ]; then
+			break
+		fi
+
+		# Display a warning message if using deprecated command
+		if [ "$1" = "help" ]; then
+			warn "command $1 is deprecated," \
+			     "please consider the option --$1 instead."
+		fi
+
 		usage
 		exit
 		;;
 	version|-v|--version)
+		if [ "$1" = "version" ] && [ "${CQFD_COMPAT:-57}" -gt 56 ]; then
+			break
+		fi
+
+		# Display a warning message if using deprecated command
+		if [ "$1" = "version" ]; then
+			warn "command $1 is deprecated," \
+			     "please consider the option --$1 instead."
+		fi
+
 		echo "$VERSION"
 		exit
 		;;
@@ -951,7 +955,18 @@ while [ $# -gt 0 ]; do
 		export CQFD_DEBUG=true
 		export BUILDKIT_PROGRESS=plain
 		;;
-	init)
+	init|--init)
+		if [ "$1" = "init" ] && [ "${CQFD_COMPAT:-57}" -gt 56 ]; then
+			break
+		fi
+
+		# Display a warning message if using deprecated command
+		if [ "$1" = "init" ]; then
+			warn "command $1 is deprecated," \
+			     "please consider the option --$1 instead:"
+			echo "               cqfd --$1" >&2
+		fi
+
 		load_config "$flavor"
 		docker_pull_or_build
 		exit
@@ -971,7 +986,18 @@ while [ $# -gt 0 ]; do
 		prune
 		exit
 		;;
-	flavors)
+	flavors|--flavors)
+		if [ "$1" = "flavors" ] && [ "${CQFD_COMPAT:-57}" -gt 56 ]; then
+			break
+		fi
+
+		# Display a warning message if using deprecated command
+		if [ "$1" = "flavors" ]; then
+			warn "command $1 is deprecated," \
+			     "please consider the option --$1 instead:"
+			echo "               cqfd --$1" >&2
+		fi
+
 		load_config
 		echo "$build_flavors"
 		exit
@@ -996,6 +1022,9 @@ while [ $# -gt 0 ]; do
 		shift
 		cd "$1"
 		;;
+	-c)
+		has_to_concatenate=true
+		;;
 	-q)
 		quiet=true
 		export BUILDKIT_PROGRESS=quiet
@@ -1004,22 +1033,35 @@ while [ $# -gt 0 ]; do
 		has_to_release=true
 		;;
 	exec)
-		shift
-		if [ "$#" -lt 1 ]; then
-			usage
-			die "exec: Missing arguments!"
-		fi
-		load_config "$flavor"
-		command_string="${*@Q}"
-		docker_run "$command_string"
-		exit
-		;;
-	run|release)
-		if [ "$1" = "release" ]; then
-			has_to_release=true
+		if [ "${CQFD_COMPAT:-57}" -gt 56 ]; then
+			break
 		fi
 
+		# Display a warning message if using command exec
 		shift
+		warn "command exec is deprecated," \
+		     "please consider the command instead:"
+		echo "               cqfd ${*@Q}" >&2
+		break
+		;;
+	run|release)
+		if [ "${CQFD_COMPAT:-57}" -gt 56 ]; then
+			break
+		fi
+
+		# Display a warning message if using command run
+		if [ "$1" = "run" ]; then
+			shift
+			warn "command run is useless," \
+			     "please consider the command instead:"
+			echo "               cqfd ${*@Q}" >&2
+		elif [ "$1" = "release" ]; then
+			shift
+			warn "command release is deprecated," \
+			     "please consider the option --release instead:"
+			echo "               cqfd --release ${*@Q}" >&2
+			has_to_release=true
+		fi
 
 		# No more args? run default command
 		[ "$#" -eq 0 ] && break
@@ -1027,30 +1069,29 @@ while [ $# -gt 0 ]; do
 		# -c appends following args to the default command
 		if [ "$1" = "-c" ]; then
 			shift
-
-			if [ "$#" -lt 1 ]; then
-				usage
-				die "run -c: Missing arguments!"
-			fi
+			has_to_concatenate=true
+		fi
+		break
+		;;
+	shell)
+		if [ "${CQFD_COMPAT:-57}" -gt 56 ]; then
 			break
 		fi
 
-		# Run alternate command
-		has_alternate_command=true
+		# Display a warning message if using command shell
+		shift
+		warn "command shell is deprecated," \
+		     "please consider the command instead:"
+		echo "               cqfd 'sh' ${*@Q}" >&2
+
+		set -- sh "$@"
 		break
 		;;
-	sh|ash|dash|bash|ksh|zsh|csh|tcsh|fish|shell)
-		if [ "$1" != "shell" ]; then
-			cqfd_shell="$1"
-		fi
-		shift
-		load_config "$flavor"
-		command_string="$cqfd_shell"
-		if [ "$#" -gt 0 ]; then
-			command_string+=" ${*@Q}"
-		fi
-		docker_run "$command_string"
-		exit
+	?*)
+		#echo "Unknown command: $1" >&2
+		#usage
+		#exit 1
+		break
 		;;
 	*)
 		usage
@@ -1060,23 +1101,19 @@ while [ $# -gt 0 ]; do
 	shift
 done
 
-load_config "$flavor"
-
-if ! $has_alternate_command && [ -n "$*" ] && [ -z "$build_command" ]; then
-	warn ".cqfdrc: Missing or empty build.command property!"
+if $has_to_init; then
+	load_config "$flavor"
 fi
 
-if $has_alternate_command; then
-	build_command="$*"
-elif [ -n "$*" ]; then
-	build_command+=" $*"
+if $has_to_concatenate; then
+	read -a argv <<<"$build_cmd"
+	set -- "${argv[@]}" "$@"
+elif [ "$#" -eq 0 ]; then
+	read -a argv <<<"${build_cmd:-sh}"
+	set -- "${argv[@]}"
 fi
 
-if [ -z "$build_command" ]; then
-	die ".cqfdrc: Missing or empty build.command property!"
-fi
-
-docker_run "$build_command"
+docker_run "${*@Q}"
 
 if $has_to_release; then
 	make_archive
