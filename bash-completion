@@ -112,7 +112,7 @@ _cqfd() {
 	fi
 
 	local opts="-C --directory -w --working-directory -d --cqfd-directory -f --cqfdrc-file -b --build -q --quiet --reinit --release --platform"
-	local cmds="--init --deinit --ls --gc --flavors --exec --run --shell -v --version -h --help"
+	local cmds="--init --deinit --ls --gc --flavors --exec --run --shell -v --version --compatibility -h --help"
 	COMPREPLY=( $(compgen -W "$cmds $opts" -- "$cur") )
 } &&
 complete -F _cqfd cqfd linux-amd64-cqfd linux-arm-cqfd linux-arm64-cqfd linux-ppc64le-cqfd linux-riscv64-cqfd linux-s390x-cqfd cqfd6

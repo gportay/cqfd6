@@ -21,8 +21,24 @@
 set -e
 set -o pipefail
 
+compat() {
+	local compat
+
+	compat="$0"
+	compat="${compat##*/}"
+	compat="${compat#*cqfd}"
+	if [[ ! "$compat" ]]
+	then
+		# shellcheck disable=SC2034
+		IFS=. read -r M m _ <<<"$1"
+		compat="$M"
+	fi
+	echo "$compat"
+}
+
 PROGNAME=$(basename "$0")
 VERSION=6
+COMPAT="${CQFD_COMPAT:-$(compat "$VERSION")}"
 cqfd_user="${USER:-builder}"
 cqfd_home="${HOME:-/home/$cqfd_user}"
 cqfd_shell="${CQFD_SHELL:-/bin/sh}"
@@ -61,6 +77,7 @@ Options:
                          Target a specific build flavor.
     -q or --quiet        Turn on quiet mode.
     -v or --version      Show version.
+    --compatibility      Show compatibility level.
     --verbose            Increase the script's verbosity.
     -h or --help         Show this help text.
 
@@ -125,7 +142,8 @@ warn_deprecated_command() {
 	local cmd
 
 	# Deprecated command messages disabled
-	if [ "$CQFD_NO_DEPRECATED_COMMAND_WARNING" = true ]; then
+	if [ "$CQFD_NO_DEPRECATED_COMMAND_WARNING" = true ] || \
+	   [ "$COMPAT" -lt 6 ]; then
 		return
 	fi
 
@@ -1045,6 +1063,7 @@ load_config() {
 	fi
 }
 
+debug Compatibility level "$COMPAT"
 has_to_init=false
 has_to_release=false
 while [ $# -gt 0 ]; do
@@ -1089,6 +1108,10 @@ while [ $# -gt 0 ]; do
 
 		# Output version
 		echo "$VERSION"
+		exit
+		;;
+	--compatibility)
+		echo "$COMPAT"
 		exit
 		;;
 	--verbose)
