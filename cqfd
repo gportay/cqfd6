@@ -45,6 +45,7 @@ cqfd_shell="${CQFD_SHELL:-/bin/bash}"
 # shellcheck disable=SC2162
 read -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
 cqfd_docker_gid="${CQFD_DOCKER_GID:-0}"
+cqfd_dockerfile="${CQFD_DOCKERFILE:-Dockerfile}"
 cqfd_cachedir="${CQFD_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/cqfd}"
 
 ## usage() - print usage
@@ -565,14 +566,8 @@ docker_run() {
 		args+=(--volume /var/run/docker.sock:/var/run/docker.sock)
 	fi
 
-	# Bind mount the project directory
-	local workdir
-	if ! workdir="$(realpath "$build_workdir")" ||
-	   [ ! -d "$workdir" ]; then
-		die "$build_workdir: Missing or not a directory!"
-	fi
-	cqfd_user_cwd="$workdir"
-	args+=(--volume "$cqfd_user_cwd:$cqfd_user_cwd")
+	# Bind mount the worktree directory
+	args+=(--volume "$worktree:$worktree")
 
 	# Create and bind mount the entrypoint
 	tmp_entrypoint=$(mktemp /tmp/cqfd-entrypoint.XXXXXX)
@@ -763,10 +758,20 @@ exec su $cqfd_user -p -c "\$1"
 EOF
 }
 
-## locate_project_dir() - locate directory with .cqfd upwards
-# stdout: the path to the .cqfd parent directory
-locate_project_dir() {
-	local search_dir
+# locate_config() - locate config file upwards
+# stdout: the path to the cqfdfile
+locate_config() {
+	if [ "$CQFD_CONFIG_FILE" ]; then
+		realpath "$CQFD_CONFIG_FILE"
+		return
+	fi
+#	local search_dir="${cqfdrc%/*}"
+#	if [[ "$search_dir" != "$cqfdrc" ]]; then
+#		realpath "$search_dir"
+#		return
+#	fi
+#
+	local search_dir="$PWD"
 
 	if [ -n "$CQFD_DIR" ]; then
 		realpath "$CQFD_DIR/.."
@@ -775,10 +780,13 @@ locate_project_dir() {
 
 	search_dir="$PWD"
 	while [ "$search_dir" != "/" ]; do
-		if [ -d "$search_dir/.cqfd" ]; then
-			realpath "$search_dir"
-			return
-		fi
+		for file in cqfdfile Cqfdfile .cqfdrc .cqfd/config; do
+			if [ -f "$search_dir/$file" ]; then
+				realpath "$search_dir/$file"
+				return 0
+			fi
+		done
+
 		search_dir="$(readlink -f "$search_dir"/..)"
 	done
 
@@ -788,39 +796,14 @@ locate_project_dir() {
 ## load_config() - load build settings from cqfdrc
 # $1: optional "flavor" of the build, is a suffix of command
 load_config() {
-	# get the project directory
-	local project_dir
-	if ! project_dir=$(locate_project_dir); then
-		die ".cqfd: Missing project directory!"
+	local config
+	if ! config="$(locate_config)"; then
+		die "Not a cqfd project"
 	fi
 
-	local workdir
-	workdir="${CQFD_WORKDIR:-$PWD}"
-	# make an absolute path and check if it is a directory
-	if ! workdir="$(realpath "$workdir")" || \
-	   [ ! -d "$workdir" ]; then
-		die ".cqfd: Missing or not a directory!"
-	fi
-
-	local cqfddir
-	cqfddir="${CQFD_DIR:-$project_dir/.cqfd}"
-	# make an absolute path and check if it is a directory
-	if ! cqfddir="$(realpath "$cqfddir")" || \
-	   [ ! -d "$cqfddir" ]; then
-		die ".cqfd: Missing or not a directory!"
-	fi
-
-	local cqfdrc
-	cqfdrc="${CQFDRC_FILE:-$project_dir/.cqfdrc}"
-	# make an absolute path and check if it is a file
-	if ! cqfdrc="$(realpath "$cqfdrc")" || \
-	   [ ! -f "$cqfdrc" ]; then
-		die ".cqfdrc: Missing or not a file!"
-	fi
-
-	# parse cqfdrc file
-	if ! cfg_parser "$cqfdrc"; then
-		die ".cqfdrc: Invalid ini-file!"
+	worktree="${config%/*}"
+	if ! cfg_parser "$config"; then
+		die "Invalid ini-file!"
 	fi
 
 	# generate dynamically the list of flavors based on the names of shell
@@ -941,7 +924,15 @@ load_config() {
 
 		# set default Dockerfile if dockerfile= unspecified
 		if [ -z "$build_dockerfile" ]; then
-			build_dockerfile="$cqfddir/${build_distro:-docker}/Dockerfile"
+			for dir in "$worktree/.cqfd/${distro:-docker}" "$PWD"; do
+				if [ -e "$dir/Dockerfile" ]; then
+					build_dockerfile="$dir/Dockerfile"
+					break
+				fi
+			done
+			if [ -z "$build_dockerfile" ]; then
+				die "Missing Dockerfile!"
+			fi
 		fi
 		# the Dockerfile does not exist
 		if ! cqfd_dockerfile="$(cd "$project_dir" && \
