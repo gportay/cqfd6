@@ -1024,26 +1024,32 @@ has_to_release=false
 while [ $# -gt 0 ]; do
 	case "$1" in
 	help|-h|--help)
+		# Shift command
 		cqfd_command="$1"
 		shift
 
+		# Check arguments
 		if [ "$cqfd_command" = help ] && [ "$#" -gt 0 ]; then
 			usage
 			die "$cqfd_command: Take no argument!"
 		fi
 
+		# Output usage
 		usage
 		exit
 		;;
 	version|-v|--version)
+		# Shift command
 		cqfd_command="$1"
 		shift
 
+		# Check arguments
 		if [ "$cqfd_command" = version ] && [ "$#" -gt 0 ]; then
 			usage
 			die "$cqfd_command: Take no argument!"
 		fi
 
+		# Output version
 		echo "$VERSION"
 		exit
 		;;
@@ -1052,72 +1058,92 @@ while [ $# -gt 0 ]; do
 		export BUILDKIT_PROGRESS=plain
 		;;
 	init|--init)
+		# Shift command
 		cqfd_command="$1"
 		shift
 
+		# Check arguments
 		if [ "$#" -gt 0 ]; then
 			usage
 			die "$cqfd_command: Take no argument!"
 		fi
 
+		# Setup build
 		load_config "$flavor"
 
+		# Pull or build image
 		docker_pull_or_build
 		exit
 		;;
 	deinit|--deinit)
+		# Shift command
 		cqfd_command="$1"
 		shift
 
+		# Check arguments
 		if [ "$#" -gt 0 ]; then
 			usage
 			die "$cqfd_command: Take no argument!"
 		fi
 
+		# Setup build
 		load_config "$flavor"
 
+		# Remove image
 		docker_rmi
 		exit
 		;;
 	ls|--ls)
+		# Shift command
 		cqfd_command="$1"
 		shift
 
+		# Check arguments
 		if [ "$#" -gt 0 ]; then
 			usage
 			die "$cqfd_command: Take no argument!"
 		fi
 
+		# Setup build
 		load_config "$flavor"
 
+		# List images
 		list
 		exit
 		;;
 	gc|--gc)
+		# Shift command
 		cqfd_command="$1"
 		shift
 
+		# Check arguments
 		if [ "$#" -gt 0 ]; then
 			usage
 			die "$cqfd_command: Take no argument!"
 		fi
 
+		# Setup build
 		load_config "$flavor"
 
+		# Remove unused images
 		prune
 		exit
 		;;
 	flavors|--flavors)
+		# Shift command
 		cqfd_command="$1"
 		shift
 
+		# Check arguments
 		if [ "$#" -gt 0 ]; then
 			usage
 			die "$cqfd_command: Take no argument!"
 		fi
 
+		# Setup build
 		load_config
 
+		# List flavors
 		echo "$project_flavors"
 		exit
 		;;
@@ -1156,31 +1182,40 @@ while [ $# -gt 0 ]; do
 		CQFD_PLATFORM="$1"
 		;;
 	exec|--exec)
+		# Shift command
 		cqfd_command="$1"
 		shift
 
+		# Check arguments
 		if [ "$#" -lt 1 ]; then
 			usage
 			die "$cqfd_command: Missing arguments!"
 		fi
 
+		# Setup build
 		load_config "$flavor"
 
+		# Run alternate command
 		build_command="${*@Q}"
 		break
 		;;
 	run|--run|release)
+		# Shift command
 		cqfd_command="$1"
 		shift
 
-		# Has to release
+		# Display a warning message if using command release
 		if [ "$cqfd_command" = "release" ]; then
-			has_to_release=true
 			if [ "$#" -gt 0 ]; then
 				warn "command $cqfd_command shall not support argument(s)," \
 				     "please consider the command --run instead:"
 				echo "               cqfd --$cqfd_command --run ${*@Q}" >&2
 			fi
+		fi
+
+		# Check arguments
+		if [ "$cqfd_command" = "release" ]; then
+			has_to_release=true
 		fi
 
 		# Setup build
@@ -1191,10 +1226,12 @@ while [ $# -gt 0 ]; do
 		       break
 		fi
 
-		# -c appends following args to the default command
+		# Appends following args to the default command
 		if [ "$1" = "-c" ]; then
+			# Shift argument
 			shift
 
+			# Check arguments
 			if [ "$#" -lt 1 ]; then
 				usage
 				die "$cqfd_command -c: Missing arguments!"
@@ -1204,6 +1241,7 @@ while [ $# -gt 0 ]; do
 				warn ".cqfdrc: Missing or empty build.command property!"
 			fi
 
+			# Run default command with extra arguments
 			build_command+=" $*"
 
 			# Display a warning message if using run -c with multiple arguments
@@ -1228,15 +1266,19 @@ while [ $# -gt 0 ]; do
 		break
 		;;
 	shell|--shell)
+		# Shift command
 		cqfd_command="$1"
 		shift
 
+		# Check arguments
 		if [ "$1" = "shell" ] || [ "$1" = "--shell" ]; then
 			cqfd_shell="$cqfd_command"
 		fi
 
+		# Setup build
 		load_config "$flavor"
 
+		# Run alternate command
 		build_command="$cqfd_shell"
 		if [ "$#" -gt 0 ]; then
 			build_command+=" ${*@Q}"
@@ -1252,10 +1294,13 @@ while [ $# -gt 0 ]; do
 		die "$1: Invalid option!"
 		;;
 	*)
+		# Shift command
 		cqfd_command="$1"
 
+		# Setup build
 		load_config "$flavor"
 
+		# Run alternate command
 		build_command="${*@Q}"
 		break
 		;;
