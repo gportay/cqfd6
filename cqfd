@@ -629,20 +629,26 @@ has_to_release=false
 while [ $# -gt 0 ]; do
 	case "$1" in
 	help|-h|--help)
-		if [ "$1" = help ] && [ "$#" -gt 1 ]; then
-			usage
-			die "help: Take no argument!"
-		fi
+		cqfd_command="$1"
 		shift
+
+		if [ "$cqfd_command" = help ] && [ "$#" -gt 0 ]; then
+			usage
+			die "$cqfd_command: Take no argument!"
+		fi
+
 		usage
 		exit
 		;;
 	version|-v|--version)
-		if [ "$1" = version ] && [ "$#" -gt 1 ]; then
-			usage
-			die "version: Take no argument!"
-		fi
+		cqfd_command="$1"
 		shift
+
+		if [ "$cqfd_command" = version ] && [ "$#" -gt 0 ]; then
+			usage
+			die "$cqfd_command: Take no argument!"
+		fi
+
 		echo "$VERSION"
 		exit
 		;;
@@ -651,22 +657,30 @@ while [ $# -gt 0 ]; do
 		export BUILDKIT_PROGRESS=plain
 		;;
 	init)
+		cqfd_command="$1"
 		shift
+
 		if [ "$#" -gt 0 ]; then
 			usage
-			die "init: Take no argument!"
+			die "$cqfd_command: Take no argument!"
 		fi
+
 		load_config "$flavor"
+
 		docker_build
 		exit
 		;;
 	flavors)
+		cqfd_command="$1"
 		shift
+
 		if [ "$#" -gt 0 ]; then
 			usage
-			die "flavors: Too many arguments!"
+			die "$cqfd_command: Take no argument!"
 		fi
+
 		load_config
+
 		echo "$build_flavors"
 		exit
 		;;
@@ -696,21 +710,24 @@ while [ $# -gt 0 ]; do
 	exec)
 		cqfd_command="$1"
 		shift
+
 		if [ "$#" -lt 1 ]; then
 			usage
-			die "exec: Missing arguments!"
+			die "$cqfd_command: Missing arguments!"
 		fi
+
 		load_config "$flavor"
+
 		build_command="${*@Q}"
 		break
 		;;
 	run|release)
 		cqfd_command="$1"
-		if [ "$1" = "release" ]; then
+		shift
+
+		if [ "$cqfd_command" = "release" ]; then
 			has_to_release=true
 		fi
-
-		shift
 
 		load_config "$flavor"
 
@@ -725,7 +742,7 @@ while [ $# -gt 0 ]; do
 
 			if [ "$#" -lt 1 ]; then
 				usage
-				die "run -c: Missing arguments!"
+				die "$cqfd_command -c: Missing arguments!"
 			fi
 
 			if [ -z "$build_command" ]; then
@@ -742,11 +759,14 @@ while [ $# -gt 0 ]; do
 		;;
 	sh|ash|dash|bash|ksh|zsh|csh|tcsh|fish|shell)
 		cqfd_command="$1"
-		if [ "$1" != "shell" ]; then
-			cqfd_shell="$1"
-		fi
 		shift
+
+		if [ "$cqfd_command" != "shell" ]; then
+			cqfd_shell="$cqfd_command"
+		fi
+
 		load_config "$flavor"
+
 		build_command="$cqfd_shell"
 		if [ "$#" -gt 0 ]; then
 			build_command+=" ${*@Q}"
