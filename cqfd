@@ -23,13 +23,14 @@ set -o pipefail
 
 PROGNAME=$(basename "$0")
 VERSION=6
-CQDF_COMPAT="${CQFD_COMPAT:-57}"
+CQFD_VERSION=(5 6 1)
 cqfd_user="${USER:-builder}"
 cqfd_user_home="${HOME:-/home/$cqfd_user}"
 cqfd_shell="${CQFD_SHELL:-/bin/bash}"
 # shellcheck disable=SC2162
 read -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
 cqfd_docker_gid="${CQFD_DOCKER_GID:-0}"
+cqfd_dockerfile="${CQFD_DOCKERFILE:-Dockerfile}"
 cqfd_cachedir="${CQFD_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/cqfd}"
 
 ## usage() - print usage
@@ -40,10 +41,9 @@ Usage: $PROGNAME [OPTIONS] [COMMAND] [COMMAND OPTIONS] [ARGUMENTS]
 
 Options:
     --release            Release software.
-    -f <file>            Use file as config file (default .cqfdrc).
-    -d <directory>       Use directory as cqfd directory (default .cqfd).
-    -w <directory>       Use directory as working directory (default parent of
-                         .cqfd).
+    -f <file>            Use file as config file.
+    -d <directory>       Use directory as cqfd directory.
+    -w <directory>       Use directory as working directory.
     -C <directory>       Change to the specified working directory.
     -c <args>            Append args to the default command string.
     -b <flavor_name>     Target a specific build flavor.
@@ -271,6 +271,20 @@ prune() {
 	done
 }
 
+## warn_deprecated_command() - output warning about deprecated command
+# $1 command
+# $2..* 
+warn_deprecated_command() {
+	local cmd
+
+	cmd="$1"
+	warn "command $cmd is useless," \
+	     "please consider the command instead:"
+
+	echo "               ${*@Q}" >&2
+}
+
+
 ## docker_pull_or_build() - initialize build container
 docker_pull_or_build() {
 	local args
@@ -398,7 +412,7 @@ docker_run() {
 		fi
 	fi
 
-	# Append extra args from the .cqfdrc [build] section
+	# Append extra args from the [build] section
 	if [ "$build_docker_run_args" ]; then
 		local array
 		# shellcheck disable=SC2162
@@ -449,7 +463,7 @@ docker_run() {
 		    "CQFD_EXTRA_RUN_ARGS=\"-p <host_port>:<docker_port>\""
 	fi
 
-	# The user may set the user_extra_groups in the .cqfdrc
+	# The user may set the user_extra_groups in the
 	# file to add groups to the user in the container.
 	if [ -n "$build_user_extra_groups" ]; then
 		local group
@@ -693,65 +707,47 @@ exec su $cqfd_user -p -c "\$1"
 EOF
 }
 
-## locate_project_dir() - locate directory with .cqfd upwards
-# stdout: the path to the .cqfd parent directory
-locate_project_dir() {
-	local search_dir
-
-	if [ -n "$CQFD_DIR" ]; then
-		realpath "$CQFD_DIR/.."
+## locate_config() - locate config file upwards
+# stdout: The cqfdfile will be printed on stdout, if found.
+# stdout: the path to the cqfdfile
+locate_config() {
+	if [ "$CQFD_CONFIG_FILE" ]; then
+		realpath "$CQFD_CONFIG_FILE"
 		return
 	fi
 
-	search_dir="$PWD"
+	local search_dir="$PWD"
 	while [ "$search_dir" != "/" ]; do
-		if [ -d "$search_dir/.cqfd" ]; then
-			realpath "$search_dir"
-			return
-		fi
+		for file in cqfdfile Cqfdfile .cqfdrc .cqfd/config; do
+			if [ -f "$search_dir/$file" ]; then
+				realpath "$search_dir/$file"
+				return 0
+			fi
+		done
+
 		search_dir="$(readlink -f "$search_dir"/..)"
 	done
 
 	return 1
 }
 
-## load_config() - load build settings from cqfdrc
-# $1: optional "flavor" of the build, is a suffix of command
+## load_config() - load build settings from config file
+# $1: optional "flavor" of the build, is a suffix of command.
 load_config() {
-	# get the project directory
-	local project_dir
-	if ! project_dir=$(locate_project_dir); then
-		die ".cqfd: Missing project directory!"
+	local config
+	if ! config="$(locate_config)"; then
+		die "Not a cqfd project"
 	fi
 
-	local workdir
-	workdir="${CQFD_WORKDIR:-$PWD}"
-	# make an absolute path and check if it is a directory
-	if ! workdir="$(realpath "$workdir")" || \
-	   [ ! -d "$workdir" ]; then
-		die ".cqfd: Missing or not a directory!"
+	if [ ! -f "$config" ]; then
+		die "Unable to find $config - create it or pick one using 'cqfd -f'"
 	fi
 
-	local cqfddir
-	cqfddir="${CQFD_DIR:-$project_dir/.cqfd}"
-	# make an absolute path and check if it is a directory
-	if ! cqfddir="$(realpath "$cqfddir")" || \
-	   [ ! -d "$cqfddir" ]; then
-		die ".cqfd: Missing or not a directory!"
+	if ! cfg_parser "$config"; then
+		die "$config: Invalid ini-file!"
 	fi
 
-	local cqfdrc
-	cqfdrc="${CQFDRC_FILE:-$project_dir/.cqfdrc}"
-	# make an absolute path and check if it is a file
-	if ! cqfdrc="$(realpath "$cqfdrc")" || \
-	   [ ! -f "$cqfdrc" ]; then
-		die ".cqfdrc: Missing or not a file!"
-	fi
-
-	# parse cqfdrc file
-	if ! cfg_parser "$cqfdrc"; then
-		die ".cqfdrc: Invalid ini-file!"
-	fi
+	worktree="${config%/*}"
 
 	# generate dynamically the list of flavors based on the names of shell
 	# functions reported by the builtin:
@@ -1016,7 +1012,7 @@ while [ $# -gt 0 ]; do
 		;;
 	-f)
 		shift
-		CQFDRC_FILE="$1"
+		CQFD_CONFIG_FILE="$1"
 		;;
 	-C)
 		shift
