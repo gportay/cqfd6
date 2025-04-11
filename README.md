@@ -529,6 +529,45 @@ command, if the above requirements are met on the system:
 
     $ make tests
 
+## The parser
+
+The .ini parser is implemented using a series of bash substitutions that
+transform an .ini-style configuration file into shell instructions. The
+original code was written by Andrés J. Díaz and later improved and
+simplified[1].
+
+In practice, sections are converted into functions whose names are prefixed
+with `cfg_section_`, while properties are translated into variables. The
+resulting code is then evaluated with `eval`, and the section functions are
+executed to set the corresponding properties in the shell environment.
+
+For example:
+
+``` .ini
+# The content of .cqfdrc:
+[project]
+org=savoirfairelinux
+name=cqfd
+
+[build]
+command=/bin/sh
+```
+
+``` sh
+# The generated shell code
+function cfg_section_project {
+    org=savoirfairelinux
+    name=cqfd
+}
+
+function cfg_section_build {
+    command=/bin/sh
+}
+```
+
+_Important_: Shell commands must not be placed inside sections; any code
+present is executed upon section load.
+
 ## Patches
 
 Submit patches at *https://github.com/savoirfairelinux/cqfd/pulls*
@@ -541,3 +580,5 @@ Report bugs at *https://github.com/savoirfairelinux/cqfd/issues*
 
 CQFD stands for "ce qu'il fallait Dockeriser", French for "what needed
 to be Dockerized".
+
+[1]: https://ajdiaz.wordpress.com/2008/02/09/bash-ini-parser/
