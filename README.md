@@ -656,3 +656,20 @@ Report bugs at *https://github.com/gportay/cqfd6/issues*
 
 CQFD stands for "ce qu'il fallait Dockeriser", French for "what needed
 to be Dockerized".
+
+## .cqfdrc parser
+
+The .ini parser is made of a series of bash substitutions to convert an
+.ini-like file to shell functions.
+
+The sections are converted to functions, and the inner properties are
+variables.
+
+Then, the result is `eval`-uated, and thus.
+
+c87071221b1625f5b609148f19cabd6ecd4de327
+The .cqfdrc file at the root of your project contains the information
+required to support project tooling. It is written in an .ini-like
+format and samples/dot-cqfdrc is an example.
+
+[1]: https://ajdiaz.wordpress.com/2008/02/09/bash-ini-parser/
