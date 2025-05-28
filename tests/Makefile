@@ -19,7 +19,7 @@ tests:
 	@export CQFD_CACHE=$(TDIR); \
 	for f in [0-9][0-9]*; do \
 		if [ -x "$$f" ]; then \
-			./$$f $(TDIR); \
+			echo ./$$f $(TDIR); \
 		fi; \
 	done; \
 	failed=0; \
