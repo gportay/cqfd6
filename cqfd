@@ -936,7 +936,9 @@ load_config() {
 }
 
 has_to_release=false
-has_alternate_command=false
+if [ "$#" -eq 0 ]; then
+	config_load
+fi
 while [ $# -gt 0 ]; do
 	case "$1" in
 	help|-h|--help)
@@ -1045,9 +1047,8 @@ while [ $# -gt 0 ]; do
 			die "exec: Missing arguments!"
 		fi
 		load_config "$flavor"
-		command_string="${*@Q}"
-		docker_run "$command_string"
-		exit
+		build_command="${*@Q}"
+		break
 		;;
 	run|release)
 		if [ "$1" = "release" ]; then
@@ -1055,6 +1056,8 @@ while [ $# -gt 0 ]; do
 		fi
 
 		shift
+
+		config_load "$flavor"
 
 		# No more args? run default command
 		[ "$#" -eq 0 ] && break
@@ -1067,11 +1070,17 @@ while [ $# -gt 0 ]; do
 				usage
 				die "run -c: Missing arguments!"
 			fi
+
+			if [ -z "$build_command" ]; then
+				warn "$cqfdrc: Missing or empty build.command property"
+			fi
+
+			build_command+=" $*"
 			break
 		fi
 
 		# Run alternate command
-		has_alternate_command=true
+		build_command="$*"
 		break
 		;;
 	sh|ash|dash|bash|ksh|zsh|csh|tcsh|fish|shell)
@@ -1080,12 +1089,11 @@ while [ $# -gt 0 ]; do
 		fi
 		shift
 		load_config "$flavor"
-		command_string="$cqfd_shell"
+		build_command="$cqfd_shell"
 		if [ "$#" -gt 0 ]; then
-			command_string+=" ${*@Q}"
+			build_command+=" ${*@Q}"
 		fi
-		docker_run "$command_string"
-		exit
+		break
 		;;
 	*)
 		usage
@@ -1094,18 +1102,6 @@ while [ $# -gt 0 ]; do
 	esac
 	shift
 done
-
-load_config "$flavor"
-
-if ! $has_alternate_command && [ -n "$*" ] && [ -z "$build_command" ]; then
-	warn ".cqfdrc: Missing or empty build.command property!"
-fi
-
-if $has_alternate_command; then
-	build_command="$*"
-elif [ -n "$*" ]; then
-	build_command+=" $*"
-fi
 
 if [ -z "$build_command" ]; then
 	die ".cqfdrc: Missing or empty build.command property!"
