@@ -59,8 +59,11 @@ rm -f cqfd-test.tar.xz
 # now use tar_transform=no
 jtest_prepare "archived files NOT at root of tar archive if tar_transform=no"
 echo "tar_transform=no" >>.cqfdrc
-"$cqfd" release
-result="pass"
+if "$cqfd" release; then
+	result="pass"
+else
+	result="fail"
+fi
 for f in $rel_files; do
 	if ! tar tf cqfd-test.tar.xz | grep -q "^$f$"; then
 		result="fail"
@@ -73,8 +76,11 @@ rm -f cqfd-test.tar.xz
 # now use tar_transform=yes
 jtest_prepare "archived files at root of tar archive if tar_transform=yes"
 echo "tar_transform=yes" >>.cqfdrc
-"$cqfd" release
-result="pass"
+if "$cqfd" release; then
+	result="pass"
+else
+	result="fail"
+fi
 for f in $rel_files; do
 	if ! tar tf cqfd-test.tar.xz | grep -q "^$(basename "$f")$"; then
 		result="fail"
@@ -89,23 +95,29 @@ rm -f cqfd-test.tar.xz
 # only for tar archive.
 ################################################################################
 jtest_prepare "symlink files are copied in the tar archive"
-"$cqfd" run ln -s a/cqfd_a.txt link.txt
+result="pass"
+if ! "$cqfd" run ln -s a/cqfd_a.txt link.txt; then
+	jtest_log fatal "cqfd run failed"
+	result="fail"
+fi
 rel_files_link="a/cqfd_a.txt link.txt"
 sed -i '/files=/d' .cqfdrc
 echo "files=\"$rel_files_link\"" >>.cqfdrc
 echo "tar_options=-h" >>.cqfdrc
 
-"$cqfd" release
-result="pass"
+if ! "$cqfd" release; then
+	jtest_log fatal "cqfd release failed"
+	result="fail"
+fi
 tmp_dir=$(mktemp -d)
 if ! tar xf cqfd-test.tar.xz -C "$tmp_dir"; then
+	jtest_log fatal "tar failed"
 	result="fail"
 fi
-
 if [ -L "$tmp_dir"/link.txt ] || ! diff "$tmp_dir"/a/cqfd_a.txt "$tmp_dir"/link.txt; then
+	jtest_log fatal "link.txt is not a symlink or differs from cqfd_a.txt"
 	result="fail"
 fi
-
 jtest_result "$result"
 
 # revert the changes in .cqfdrc file
@@ -225,8 +237,7 @@ rm -f cqfd-%-foobar.tar.xz
 jtest_prepare "build.archive can make a .tar.gz archive"
 # shellcheck disable=SC2016
 sed -i -e '$ s!^archive=.*xz!archive=cqfd-$CTEST.tar.gz!' .cqfdrc
-"$cqfd" release
-if tar ztf "cqfd-$CTEST.tar.gz" &>/dev/null; then
+if "$cqfd" release && tar ztf "cqfd-$CTEST.tar.gz" &>/dev/null; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -239,8 +250,7 @@ rm -f "cqfd-$CTEST.tar.gz"
 jtest_prepare "build.archive can make a .zip archive"
 # shellcheck disable=SC2016
 sed -i -e '$ s!^archive=.*gz!archive=cqfd-$CTEST.zip!' .cqfdrc
-"$cqfd" release
-if unzip -l "cqfd-$CTEST.zip" &>/dev/null; then
+if "$cqfd" release && unzip -l "cqfd-$CTEST.zip" &>/dev/null; then
 	jtest_result pass
 else
 	jtest_result fail
