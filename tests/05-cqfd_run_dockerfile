@@ -22,4 +22,7 @@ fi
 
 # restore Dockerfile
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
-"$cqfd" init
+jtest_log info "restore container"
+if ! "$cqfd" init; then
+	jtest_log fatal "cqfd init failed"
+fi

@@ -19,9 +19,7 @@ pushd "$spaces_dir"/"$spaces_dir2" >/dev/null || exit 1
 
 jtest_prepare "cqfd run from a directory with spaces"
 file="rand.$RANDOM"
-"$cqfd" run touch "$file"
-if [ -f "$file" ]; then
-	rm -f "$file"
+if "$cqfd" run touch "$file" && [ -f "$file" ]; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -30,3 +28,4 @@ fi
 # Teardown
 popd >/dev/null || exit 1
 rm -rf "$spaces_dir"
+rm -f "$file"
