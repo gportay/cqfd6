@@ -107,3 +107,17 @@ else
 		jtest_result fail
 	fi
 fi
+
+cp -f .cqfdrc .cqfdrc.orig
+echo "files=\"shell\"" >>.cqfdrc
+jtest_prepare "cqfd shell should release"
+if "$cqfd" --release shell -c "touch shell" && tar tf cqfd-test.tar.xz | grep -q "^shell$"; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+# cleanup
+rm -f cqfd-test.tar.xz shell
+
+# restore initial .cqfdrc
+mv -f .cqfdrc.orig .cqfdrc
