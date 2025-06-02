@@ -996,38 +996,13 @@ load_config() {
 
 has_to_concatenate=false
 has_to_init=false
-has_to_release=false
 while [ $# -gt 0 ]; do
 	case "$1" in
-	help|-h|--help)
-		# Command is dropped (after 5.6)
-		if [ "$1" = "help" ] && [ "$COMPAT" -gt 56 ]; then
-			break
-		fi
-
-		# Display a warning message if using deprecated command (before
-		# 5.6)
-		if [ "$1" = "help" ]; then
-			warn "command $1 is deprecated," \
-			     "please consider the option --$1 instead."
-		fi
-
+	-h|--help)
 		usage
 		exit
 		;;
-	version|-v|--version)
-		# Command is dropped (after 5.6)
-		if [ "$1" = "version" ] && [ "$COMPAT" -gt 56 ]; then
-			break
-		fi
-
-		# Display a warning message if using deprecated command (before
-		# 5.6)
-		if [ "$1" = "version" ]; then
-			warn "command $1 is deprecated," \
-			     "please consider the option --$1 instead."
-		fi
-
+	-v|--version)
 		echo "$VERSION"
 		exit
 		;;
@@ -1039,20 +1014,7 @@ while [ $# -gt 0 ]; do
 		export CQFD_DEBUG=true
 		export BUILDKIT_PROGRESS=plain
 		;;
-	init|--init)
-		# Command is dropped (after 5.6)
-		if [ "$1" = "init" ] && [ "$COMPAT" -gt 56 ]; then
-			break
-		fi
-
-		# Display a warning message if using deprecated command (before
-		# 5.6)
-		if [ "$1" = "init" ]; then
-			warn "command $1 is deprecated," \
-			     "please consider the option --$1 instead:"
-			echo "               cqfd --$1" >&2
-		fi
-
+	-i|--init)
 		load_config "$flavor"
 		docker_pull_or_build
 		exit
@@ -1072,20 +1034,7 @@ while [ $# -gt 0 ]; do
 		prune
 		exit
 		;;
-	flavors|--flavors)
-		# Command is dropped (after 5.6)
-		if [ "$1" = "flavors" ] && [ "$COMPAT" -gt 56 ]; then
-			break
-		fi
-
-		# Display a warning message if using deprecated command (before
-		# 5.6)
-		if [ "$1" = "flavors" ]; then
-			warn "command $1 is deprecated," \
-			     "please consider the option --$1 instead:"
-			echo "               cqfd --$1" >&2
-		fi
-
+	--flavors)
 		load_config
 		echo "$build_flavors"
 		exit
@@ -1120,69 +1069,10 @@ while [ $# -gt 0 ]; do
 	--reinit)
 		has_to_init=true
 		;;
-	--release)
-		has_to_release=true
-		;;
-	exec)
-		# Command is dropped (after 5.6)
-		if [ "$COMPAT" -gt 56 ]; then
-			break
-		fi
-
-		# Display a warning message if using deprecated command (before
-		# 5.6)
-		shift
-		warn "command exec is deprecated," \
-		     "please consider the command instead:"
-		echo "               cqfd ${*@Q}" >&2
-		break
-		;;
-	run|release)
-		# Command is dropped (after 5.6)
-		if [ "$COMPAT" -gt 56 ]; then
-			break
-		fi
-
-		# Display a warning message if using deprecated command (before
-		# 5.6)
-		if [ "$1" = "run" ]; then
-			shift
-			warn "command run is useless," \
-			     "please consider the command instead:"
-			echo "               cqfd ${*@Q}" >&2
-		elif [ "$1" = "release" ]; then
-			shift
-			warn "command release is deprecated," \
-			     "please consider the option --release instead:"
-			echo "               cqfd --release ${*@Q}" >&2
-			has_to_release=true
-		fi
-
-		# No more args? run default command
-		[ "$#" -eq 0 ] && break
-
-		# -c appends following args to the default command
-		if [ "$1" = "-c" ]; then
-			shift
-			has_to_concatenate=true
-		fi
-		break
-		;;
-	shell)
-		# Command is dropped (after 5.6)
-		if [ "$COMPAT" -gt 56 ]; then
-			break
-		fi
-
-		# Display a warning message if using deprecated command (before
-		# 5.6)
-		shift
-		warn "command shell is deprecated," \
-		     "please consider the command instead:"
-		echo "               cqfd 'sh' ${*@Q}" >&2
-
-		set -- sh "$@"
-		break
+	-r|--release)
+		config_load "$flavor"
+		make_archive
+		exit
 		;;
 	*)
 		break
