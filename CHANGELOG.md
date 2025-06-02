@@ -2,6 +2,8 @@
 
 ## Version 6 (coming soon)
 
+* Lots of fun and fixes
+
 ## Version 5.7.0 (2025-06-27)
 
 * Many tests improvements
