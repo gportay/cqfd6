@@ -25,7 +25,7 @@ fi
 echo "[project]" >>.cqfdrc
 
 jtest_prepare "cqfdrc fails if no name property set in project section"
-if "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing project.org or project.name properties";
+if "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing project.org or project.name properties!";
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
@@ -55,7 +55,7 @@ fi
 echo "[build]" >>.cqfdrc
 
 jtest_prepare "cqfdrc fails if no command property set in build section"
-if "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing or empty build.command property";
+if "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing or empty build.command property!";
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
@@ -70,7 +70,7 @@ else
 fi
 
 jtest_prepare "cqfdrc succeeds even if no command property set in build section using run -c"
-if "$cqfd" run -c true 2>&1 | grep "cqfd: warning: .cqfdrc: Missing or empty build.command property";
+if "$cqfd" run -c true 2>&1 | grep "cqfd: warning: .cqfdrc: Missing or empty build.command property!";
    test "${PIPESTATUS[0]}" -eq 0 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
@@ -80,7 +80,7 @@ fi
 echo "command=true" >>.cqfdrc
 
 jtest_prepare "cqfdrc succeeds if command property set in build section using run -c"
-if "$cqfd" run -c true 2>&1 | grep "cqfd: warning: .cqfdrc: Missing or empty build.command property";
+if "$cqfd" run -c true 2>&1 | grep "cqfd: warning: .cqfdrc: Missing or empty build.command property!";
    test "${PIPESTATUS[0]}" -eq 0 -a "${PIPESTATUS[1]}" -ne 0; then
 	jtest_result pass
 else
