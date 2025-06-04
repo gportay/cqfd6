@@ -954,6 +954,11 @@ while [ $# -gt 0 ]; do
 		export BUILDKIT_PROGRESS=plain
 		;;
 	init)
+		shift
+		if [ "$#" -gt 0 ]; then
+			usage
+			die "init: Too many arguments"
+		fi
 		load_config "$flavor"
 		docker_pull_or_build
 		exit
@@ -974,6 +979,11 @@ while [ $# -gt 0 ]; do
 		exit
 		;;
 	flavors)
+		shift
+		if [ "$#" -gt 0 ]; then
+			usage
+			die "init: Too many arguments"
+		fi
 		load_config
 		echo "$build_flavors"
 		exit
