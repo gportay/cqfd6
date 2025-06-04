@@ -572,12 +572,12 @@ make_archive() {
 
 	eval "files=($release_files)"
 	if [ -z "${files[*]}" ]; then
-		die "No files to archive, check files in .cqfdrc"
+		die ".cqfdrc: Missing or empty build.files property!"
 	fi
 
 	for file in "${files[@]}"; do
 		if [ ! -e "$file" ]; then
-			die "Unable to release: unable to find $file"
+			die "$file: Missing file!"
 		fi
 	done
 
@@ -761,7 +761,7 @@ locate_project_dir() {
 load_config() {
 	# get the project directory
 	if ! cqfd_project_dir=$(locate_project_dir); then
-		die ".cqfd directory not found in directory tree"
+		die ".cqfd: Missing project directory!"
 	fi
 
 	# unless using '-d other_cqfddir', use base directory located above
@@ -775,7 +775,7 @@ load_config() {
 	fi
 
 	if [ ! -f "$cqfdrc" ]; then
-		die "Unable to find .cqfdrc - create it or pick one using 'cqfd -f'"
+		die ".cqfdrc: Missing project file!"
 	fi
 
 	if ! cfg_parser "$cqfdrc"; then
@@ -855,7 +855,7 @@ load_config() {
 
 	dockerfile="$cqfddir/${build_distro:-docker}/Dockerfile"
 	if [ ! -f "$dockerfile" ]; then
-		die "$dockerfile not found"
+		die "$dockerfile: Missing Dockerfile!"
 	fi
 
 	if [ "$project_custom_img_name" ]; then
@@ -988,7 +988,7 @@ while [ $# -gt 0 ]; do
 		;;
 	*)
 		usage
-		die "$1: Invalid command"
+		die "$1: Invalid command!"
 		;;
 	esac
 	shift
@@ -997,7 +997,7 @@ done
 load_config "$flavor"
 
 if ! $has_alternate_command && [ -n "$*" ] && [ -z "$build_command" ]; then
-	warn ".cqfdrc: Missing or empty build.command property"
+	warn ".cqfdrc: Missing or empty build.command property!"
 fi
 
 if $has_alternate_command; then
@@ -1007,7 +1007,7 @@ elif [ -n "$*" ]; then
 fi
 
 if [ -z "$build_command" ]; then
-	die ".cqfdrc: Missing or empty build.command property"
+	die ".cqfdrc: Missing or empty build.command property!"
 fi
 
 docker_run "$build_command"
