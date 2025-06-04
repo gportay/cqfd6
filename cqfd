@@ -940,10 +940,20 @@ has_alternate_command=false
 while [ $# -gt 0 ]; do
 	case "$1" in
 	help|-h|--help)
+		if [ "$1" = help ] && [ "$#" -gt 1 ]; then
+			usage
+			die "help: Take no argument!"
+		fi
+		shift
 		usage
 		exit
 		;;
 	version|-v|--version)
+		if [ "$1" = version ] && [ "$#" -gt 1 ]; then
+			usage
+			die "version: Take no argument!"
+		fi
+		shift
 		echo "$VERSION"
 		exit
 		;;
@@ -952,26 +962,51 @@ while [ $# -gt 0 ]; do
 		export BUILDKIT_PROGRESS=plain
 		;;
 	init)
+		shift
+		if [ "$#" -gt 0 ]; then
+			usage
+			die "init: Take no argument!"
+		fi
 		load_config "$flavor"
 		docker_pull_or_build
 		exit
 		;;
 	deinit)
+		shift
+		if [ "$#" -gt 0 ]; then
+			usage
+			die "deinit: Take no argument!"
+		fi
 		load_config "$flavor"
 		docker_rmi
 		exit
 		;;
 	ls)
+		shift
+		if [ "$#" -gt 0 ]; then
+			usage
+			die "ls: Take no argument!"
+		fi
 		load_config "$flavor"
 		list
 		exit
 		;;
 	gc)
+		shift
+		if [ "$#" -gt 0 ]; then
+			usage
+			die "gc: Take no argument!"
+		fi
 		load_config "$flavor"
 		prune
 		exit
 		;;
 	flavors)
+		shift
+		if [ "$#" -gt 0 ]; then
+			usage
+			die "flavors: Too many arguments!"
+		fi
 		load_config
 		echo "$build_flavors"
 		exit
