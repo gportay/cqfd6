@@ -1,6 +1,7 @@
 # Makefile for cqfd6
 
 PREFIX?=/usr/local
+VERSION?=$(shell bash cqfd --version)
 COMPAT?=$(shell bash cqfd --compatibility)
 
 .PHONY: all help doc install uninstall test tests check
@@ -77,6 +78,8 @@ check:
 
 clean:
 	rm -f cqfd.1.gz cqfdrc.5.gz
+	rm -f *.tar.gz
+	rm -f rpmbuild/SOURCES/*.tar.gz
 
 %.1: %.1.adoc
 	asciidoctor -b manpage -o $@ $<
@@ -87,5 +90,13 @@ clean:
 %.gz: %
 	gzip -c $^ >$@
 
+.PHONY: sources
+sources: cqfd6-$(VERSION).tar.gz rpmbuild/SOURCES/v$(VERSION).tar.gz
+
+rpmbuild/SOURCES/$(VERSION).tar.gz:
+rpmbuild/SOURCES/v%.tar.gz:
+	git archive --prefix cqfd6-$*/ --format tar.gz --output $@ HEAD
+
+cqfd6-$(VERSION).tar.gz:
 %.tar.gz:
 	git archive --prefix $*/ --format tar.gz --output $@ HEAD
