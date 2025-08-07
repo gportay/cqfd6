@@ -527,7 +527,7 @@ docker_run() {
 	local workdir
 	if ! workdir="$(realpath "$build_workdir")" ||
 	   [ ! -d "$workdir" ]; then
-		die "$workdir: Missing or not a directory!"
+		die "$build_workdir: Missing or not a directory!"
 	fi
 	args+=(--volume "$workdir:$workdir")
 
