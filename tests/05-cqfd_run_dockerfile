@@ -2,6 +2,8 @@
 #
 # validate the behavior of run with Dockerfile
 
+set -o pipefail
+
 . "$(dirname "$0")/jtest.inc" "$1"
 cqfd="$TDIR/.cqfd/cqfd"
 
@@ -15,6 +17,16 @@ cat <<EOF >>.cqfd/docker/Dockerfile
 ENTRYPOINT ["false"]
 EOF
 if "$cqfd" init && "$cqfd" run; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+jtest_prepare "cqfd run using a Dockerfile with workdir should success"
+cat <<EOF >>.cqfd/docker/Dockerfile
+WORKDIR /mnt
+EOF
+if "$cqfd" init && "$cqfd" run pwd | grep -q "$PWD"; then
 	jtest_result pass
 else
 	jtest_result fail

@@ -533,14 +533,13 @@ docker_run() {
 		args+=(--volume /var/run/docker.sock:/var/run/docker.sock)
 	fi
 
-	# Bind mount the project directory
+	# Bind mount the project directory set it as working directory
 	local workdir
 	if ! workdir="$(realpath "$build_workdir")" ||
 	   [ ! -d "$workdir" ]; then
 		die "$build_workdir: Missing or not a directory!"
 	fi
-	cqfd_user_cwd="$workdir"
-	args+=(--volume "$cqfd_user_cwd:$cqfd_user_cwd")
+	args+=(--volume "$workdir:$workdir" --workdir "$workdir")
 
 	# Create and bind mount the entrypoint
 	tmp_entrypoint=$(mktemp /tmp/cqfd-entrypoint.XXXXXX)
@@ -660,9 +659,6 @@ test_cmd() {
 test_su_session_command() {
 	su --session-command true >/dev/null 2>&1
 }
-
-# Change to working directory
-cd "$cqfd_user_cwd"
 
 # Check if privileges are already dropped
 uid="\$(id -u)"
