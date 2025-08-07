@@ -25,7 +25,6 @@ PROGNAME=$(basename "$0")
 VERSION=6
 cqfd_user="${USER:-builder}"
 cqfd_user_home="${HOME:-/home/$cqfd_user}"
-cqfd_user_cwd="${PWD:-$cqfd_user_home/src}"
 cqfd_shell="${CQFD_SHELL:-/bin/bash}"
 # shellcheck disable=SC2162
 read -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
@@ -529,7 +528,8 @@ docker_run() {
 	   [ ! -d "$workdir" ]; then
 		die "$build_workdir: Missing or not a directory!"
 	fi
-	args+=(--volume "$workdir:$workdir")
+	cqfd_user_cwd="$workdir"
+	args+=(--volume "$cqfd_user_cwd:$cqfd_user_cwd")
 
 	# Create and bind mount the entrypoint
 	tmp_entrypoint=$(mktemp /tmp/cqfd-entrypoint.XXXXXX)
@@ -756,7 +756,7 @@ load_config() {
 	fi
 
 	local workdir
-	workdir="${CQFD_WORKDIR:-$project_dir}"
+	workdir="${CQFD_WORKDIR:-$PWD}"
 	# make an absolute path and check if it is a directory
 	if ! workdir="$(realpath "$workdir")" || \
 	   [ ! -d "$workdir" ]; then
