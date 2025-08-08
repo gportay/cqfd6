@@ -7,14 +7,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: debian:bookworm
     steps:
     - uses: actions/checkout@v4
       with:
         path: ${{ github.event.repository.name }}
     - name: Install dependencies
       run: |
-        sudo apt-get -y update
-        sudo apt-get -y install asciidoctor bash-completion build-essential debhelper devscripts pkgconf shellcheck
+        apt-get -y update
+        apt-get -y install asciidoctor bash-completion build-essential debhelper devscripts pkgconf shellcheck
     - name: Build package
       run: |
         cd ${{ github.event.repository.name }}
