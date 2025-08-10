@@ -122,6 +122,14 @@ debug() {
 	test -z "$CQFD_DEBUG" || echo "cqfd: debug: $*"
 }
 
+## sanitize(): sanitize name
+# $1: the name to sanitize
+# stdout: the name sanitized
+sanitize() {
+	# shellcheck disable=SC2001
+	sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$1"
+}
+
 ## image_is_running() - checks if image is running
 # $1: the image name to check if running
 image_is_running() {
@@ -138,9 +146,7 @@ images() {
 	local image
 	local images
 
-	# shellcheck disable=SC2001
-	user="$(sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$USER")"
-
+	user="$(sanitize "$USER")"
 	mapfile -t images < <("${cqfd_docker[@]}" images "cqfd_$user\_*" --format "{{.Repository}}")
 	for image in "${images[@]}"; do
 		local symlink
@@ -967,12 +973,10 @@ load_config() {
 			die "$build_dockerfile: Missing Dockerfile!"
 		fi
 
-		# shellcheck disable=SC2001
-		Un=$(sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$USER")
+		Un="$USER"
 		Po="$project_org"
 		Pn="$project_name"
-		# shellcheck disable=SC2001
-		Dp="$(sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$cqfd_platform")"
+		Dp="$cqfd_platform"
 		Dh=$(sha256sum "$cqfd_dockerfile" | cut -b 1-7)
 		DH=$(sha256sum "$cqfd_dockerfile" | cut -b 1-64)
 		Bd="${build_distro:-docker}"
@@ -991,6 +995,7 @@ load_config() {
 			             s!%Dh!'"$Dh"'!g;
 			             s!%DH!'"$DH"'!g;
 			             s!%Bd!'"$Bd"'!g;' <<<"$project_tag")
+		cqfd_image="$(sanitize "$cqfd_image")"
 	fi
 
 	# set the docker gid if the group exists
