@@ -113,6 +113,14 @@ debug() {
 	test -z "$CQFD_DEBUG" || echo "cqfd: debug: $*"
 }
 
+## sanitize() - sanitize name
+# $1: the name to sanitize
+# stdout: the name sanitized
+sanitize() {
+	# shellcheck disable=SC2001
+	sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$1"
+}
+
 ## docker_build() - initialize build container
 docker_build() {
 	local args=()
@@ -621,6 +629,7 @@ load_config() {
 		format_user=$(sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$USER")
 		dockerfile_hash=$(sha256sum "$dockerfile" | cut -b 1-7)
 		docker_img_name="cqfd${format_user:+_$format_user}_${project_org}_${project_name}_${dockerfile_hash}${build_distro:+_$build_distro}"
+		docker_img_name="$(sanitize "$docker_img_name")"
 	fi
 }
 
