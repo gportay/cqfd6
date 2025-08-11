@@ -9,8 +9,7 @@ cqfd="$TDIR/.cqfd/cqfd"
 # 'cqfd version' shall be an accepted command
 ################################################################################
 jtest_prepare "cqfd version shall exit normally"
-TEST=$(mktemp)
-if "$cqfd" version >"$TEST"; then
+if "$cqfd" version >"$TDIR/version"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -21,7 +20,7 @@ fi
 # 'cqfd version' shall produce a version message
 ################################################################################
 jtest_prepare "cqfd version shall produce a version string"
-if grep -qE "^[0-9.]+(-[a-z]+)?\$" "$TEST"; then
+if grep -qE "^[0-9.]+(-[a-z]+)?\$" "$TDIR/version"; then
 	jtest_result pass
 else
 	jtest_log error "not a version message"
@@ -29,4 +28,5 @@ else
 	jtest_result fail
 fi
 
-rm -f "$TEST"
+# cleanup
+rm -f "$TDIR/version"
