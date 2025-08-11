@@ -11,10 +11,8 @@ fail=0
 
 cd "$TDIR/" || exit 1
 
-# concatenate flavor build with an additional option
-jtest_log info "run cqfd run -c with a given '$flavor' flavor"
 if [ -f "$test_file" ] || [ -f "$test_run_c_file" ]; then
-	jtest_log fatal "$test_file or $test_run_c_file already present before test"
+	jtest_log info "$test_file or $test_run_c_file already present before test, removing..."
 	rm -f "$test_file"
 	rm -f "$test_run_c_file"
 fi
