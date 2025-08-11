@@ -10,15 +10,12 @@ cqfd_docker="${CQFD_DOCKER:-docker}"
 
 cd "$TDIR/" || exit 1
 
-cqfdrc_old=$(mktemp)
-cp -f .cqfdrc "$cqfdrc_old"
-dockerfile_old=$(mktemp)
-cp -f .cqfd/docker/Dockerfile "$dockerfile_old"
-
 jtest_prepare "cqfd run docker using host docker daemon"
 if [ "$cqfd_docker" != "docker" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
 else
+	cp -f .cqfdrc .cqfdrc.old
+	cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.old
 	cp -f .cqfd/docker/Dockerfile.doutofd .cqfd/docker/Dockerfile
 	sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='docker run --rm -ti ubuntu:24.04 cat /etc/os-release'," .cqfdrc
 
@@ -27,7 +24,7 @@ else
 	else
 		jtest_result fail
 	fi
+	# restore .cqfdrc and Dockerfile
+	mv -f .cqfdrc.old .cqfdrc
+	mv -f .cqfd/docker/Dockerfile.old .cqfd/docker/Dockerfile
 fi
-
-mv -f "$cqfdrc_old" .cqfdrc
-mv -f "$dockerfile_old" .cqfd/docker/Dockerfile

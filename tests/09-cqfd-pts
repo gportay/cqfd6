@@ -9,8 +9,7 @@ cqfd="$TDIR/.cqfd/cqfd"
 
 cd "$TDIR/" || exit 1
 
-cqfdrc_old=$(mktemp)
-cp -f .cqfdrc "$cqfdrc_old"
+cp -f .cqfdrc .cqfdrc.old
 sed -i -e "/\[build\]/,/^$/s/^command=.*$/command='tty || true'/" .cqfdrc
 
 jtest_prepare "cqfd without redirection should allocate a tty"
@@ -56,4 +55,5 @@ else
 fi
 rm out err
 
-mv -f "$cqfdrc_old" .cqfdrc
+# restore initial .cqfdrc
+mv -f .cqfdrc.old .cqfdrc
