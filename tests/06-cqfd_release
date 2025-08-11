@@ -9,9 +9,6 @@ cqfd="$TDIR/.cqfd/cqfd"
 
 cd "$TDIR/" || exit 1
 
-cqfdrc_old=$(mktemp)
-cp -f .cqfdrc "$cqfdrc_old"
-
 ################################################################################
 # The first invocation has no 'files' parameter defined,
 # hence it should fail
@@ -27,6 +24,7 @@ fi
 # Adding a files section should help
 ################################################################################
 rel_files="a/cqfd_a.txt a/b/c/cqfd_c.txt a/b/cqfd_b.txt"
+cp -f .cqfdrc .cqfdrc.old
 echo "files=\"$rel_files\"" >>.cqfdrc
 jtest_prepare "cqfd release now with a files parameter"
 if "$cqfd" release; then
@@ -310,4 +308,4 @@ fi
 
 # cleanup
 rm -f "tmp.$$" "cqfd-$CTEST.tar.xz"
-mv -f "$cqfdrc_old" .cqfdrc
+mv -f .cqfdrc.old .cqfdrc

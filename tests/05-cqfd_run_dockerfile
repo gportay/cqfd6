@@ -20,7 +20,7 @@ else
 	jtest_result fail
 fi
 
-# restore Dockerfile
+# restore initial Dockerfile
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 jtest_log info "restore container"
 if ! "$cqfd" init; then

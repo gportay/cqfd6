@@ -13,8 +13,7 @@ cd "$TDIR/" || exit 1
 ################################################################################
 # 'cqfd init' with different flavor makes a different container
 ################################################################################
-cqfdrc_old=$(mktemp)
-cp -f .cqfdrc "$cqfdrc_old"
+cp -f .cqfdrc .cqfdrc.old
 sed -i -e "s/\[foo\]/[foo]\ndistro='centos'/" .cqfdrc
 
 jtest_prepare "cqfd init using '$flavor' flavor"
@@ -24,6 +23,8 @@ if "$cqfd" -b "$flavor" init &&
 else
 	jtest_result fail
 fi
+# restore initial .cqfdrc
+mv -f .cqfdrc.old .cqfdrc
 
 ################################################################################
 # 'cqfd init' with invalid flavor should fail
@@ -39,8 +40,6 @@ fi
 ################################################################################
 # 'cqfd init' without flavor generates our regular container
 ################################################################################
-mv -f "$cqfdrc_old" .cqfdrc
-
 jtest_prepare "cqfd init without flavor"
 if "$cqfd" init &&
    "$cqfd" run "grep '^NAME=' /etc/*release" | grep -q 'NAME="Ubuntu"'; then

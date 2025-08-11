@@ -55,5 +55,5 @@ for i in 0 1 2 3; do
 	rm -f "$test_file"
 done
 
-# restore for further tests
+# restore initial .cqfdrc
 mv -f "$confdir"/mycqfdrc .cqfdrc

@@ -10,9 +10,6 @@ cqfd_docker="${CQFD_DOCKER:-docker}"
 
 cd "$TDIR/" || exit 1
 
-cqfdrc_old=$(mktemp)
-cp -f .cqfdrc "$cqfdrc_old"
-
 ################################################################################
 # 'cqfd run' should add extra_groups provided by an environment variable
 ################################################################################
@@ -35,6 +32,7 @@ jtest_prepare "'cqfd run' should add config's extra_groups to the local user"
 if [ "$USER" = "runner" ] || [ "$cqfd_docker" = "podman" ]; then
 	jtest_result skip
 else
+	cp -f .cqfdrc .cqfdrc.old
 	echo 'user_extra_groups="docker newgroup:12345"' >>.cqfdrc
 	output=$("$cqfd" run groups | grep docker | grep newgroup)
 	if [ -n "$output" ]; then
@@ -42,6 +40,6 @@ else
 	else
 		jtest_result fail
 	fi
+	# restore initial .cqfdrc
+	mv -f .cqfdrc.old .cqfdrc
 fi
-
-mv -f "$cqfdrc_old" .cqfdrc
