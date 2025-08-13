@@ -1,6 +1,6 @@
 [project]
-org='savoirfairelinux'
-name='cqfd'
+org='gportay'
+name='cqfd6'
 
 [build]
 command='make doc'
@@ -26,5 +26,5 @@ command='sh make-pkg.sh'
 
 [rpm]
 distro='rpm'
-docker_run_args="--volume $PWD/rpmbuild:$HOME/rpmbuild --volume $PWD/cqfd.spec:$HOME/rpmbuild/SPECS/cqfd.spec"
+docker_run_args="--volume $PWD/rpmbuild:$HOME/rpmbuild --volume $PWD/cqfd6.spec:$HOME/rpmbuild/SPECS/cqfd6.spec"
 command='sh make-rpm.sh'

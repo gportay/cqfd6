@@ -1,5 +1,5 @@
 .debhelper/
 debhelper-build-stamp
-cqfd.substvars
-cqfd/
+cqfd6.substvars
+cqfd6/
 files
