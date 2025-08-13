@@ -1,11 +1,12 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Source: https://github.com/savoirfairelinux/cqfd
-Upstream-Name: cqfd
-Upstream-Contact: Jérôme Oufella <jerome.oufella@savoirfairelinux.com>
+Source: https://github.com/gportay/cqfd6
+Upstream-Name: cqfd6
+Upstream-Contact: Gaël PORTAY <gael.portay@gmail.com>
 
 Files:
  *
-Copyright: Copyright (C) 2015-2025 Savoir-faire Linux, Inc.
+Copyright: Copyright (C) 2016-2017,2023-2025 Gaël PORTAY
+           Copyright (C) 2015-2025 Savoir-faire Linux, Inc.
 License: GPL-3
 
 License: GPL-3

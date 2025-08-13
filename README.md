@@ -1,6 +1,6 @@
-![cqfd logo](./doc/cqfd_logo.png?raw=true)
+![cqfd logo](./doc/cqfd6_logo.png?raw=true)
 
-# What is cqfd ?
+# What are cqfd and cqfd6 ?
 
 cqfd provides a quick and convenient way to run commands in the current
 directory, but within a Docker container defined in a per-project config
@@ -10,13 +10,18 @@ This becomes useful when building an application designed for another
 Linux system, e.g. building an old embedded firmware that only works
 in an older Linux distribution.
 
+cqfd6 is a fork of cqfd fixing several broken things in the upstream project.
+It depreciates the former CLI to modernize it to something much more simple and
+much more common such as the CLI of `sudo`. Moreover, the project need a new
+name, remembering its roots.
+
 # Using cqfd
 
 ## Getting started
 
 Just follow these steps:
 
-* [Install cqfd](#installingremoving-cqfd)
+* [Install cqfd](#installingremoving-cqfd6)
 * Make sure your user is a member of the `docker` group
 * Go into your project's directory
 * Create a `.cqfdrc` file
@@ -390,7 +395,7 @@ workstation:
 
 -  Restart your docker service if you needed to create the group.
 
-## Installing/removing cqfd
+## Installing/removing cqfd6
 
 ### From packages
 
@@ -398,49 +403,49 @@ workstation:
 
 First download the package:
 
-    $ curl https://github.com/savoirfairelinux/cqfd/releases/download/v5.7.0/cqfd-5.7.0-1-any.pkg.tar.zst
+    $ curl https://github.com/gportay/cqfd6/releases/download/v6/cqfd6-6-1-any.pkg.tar.zst
 
 Then, install it using the package manager:
 
-    $ sudo pacman -U ./cqfd-5.7.0-1-any.pkg.tar.zst
+    $ sudo pacman -U ./cqfd6-6-1-any.pkg.tar.zst
 
 _Note_: Uninstall it using the package manager:
 
-    $ sudo pacman -R cqfd
+    $ sudo pacman -R cqfd6
 
 #### Debian or Ubuntu
 
 First download the package:
 
-    $ curl https://github.com/savoirfairelinux/cqfd/releases/download/v5.7.0/cqfd_5.7.0_all.deb
+    $ curl https://github.com/gportay/cqfd6/releases/download/v6/cqfd6_6_all.deb
 
 Then, install it using the package manager:
 
-    $ sudo dpkg -i ./cqfd_5.7.0_all.deb
+    $ sudo dpkg -i ./cqfd6_6_all.deb
 
 _Note_: Uninstall it using the package manager:
 
-    $ sudo dpkg -r cqfd
+    $ sudo dpkg -r cqfd6
 
 #### RedHat Linux or Fedora
 
 First download the package:
 
-    $ curl https://github.com/savoirfairelinux/cqfd/releases/download/v5.7.0/cqfd-5.7.0-1.noarch.rpm
+    $ curl https://github.com/gportay/cqfd6/releases/download/v6/cqfd6-6-1.noarch.rpm
 
 Then, install it using the package manager:
 
-    $ sudo dnf install ./cqfd-5.7.0-1.noarch.rpm
+    $ sudo dnf install ./cqfd6-6-1.noarch.rpm
 
 _Note_: Uninstall it using the package manager:
 
-    $ sudo dnf remove cqfd
+    $ sudo dnf remove cqfd6
 
 ### From source
 
 First clone this repository:
 
-    $ git clone https://github.com/savoirfairelinux/cqfd.git
+    $ git clone https://github.com/gportay/cqfd6.git
 
 Then, install the script and its resources:
 
@@ -456,25 +461,16 @@ variables:
     $ make install PREFIX=/opt
     $ make install PREFIX=/usr DESTDIR=package
 
-### GNU Guix
-
-If you use the [GNU Guix](https://gnu.org/software/guix) package
-manager, you can install `cqfd` via:
-
-```sh
-guix install cqfd
-```
-
 ### Arch Linux or Manjaro
 
 If you use an Arch Linux derivative distribution based on pacman package
-manager, you can build the latest released version of the `cqfd` package via:
+manager, you can build the latest released version of the `cqfd6` package via:
 
 ```sh
 makepkg
 ```
 
-Or, the current unreleased version of the `cqfd-git` package via:
+Or, the current unreleased version of the `cqfd6-git` package via:
 
 ```sh
 makepkg -f PKGBUILD-git
@@ -485,7 +481,7 @@ _Note_: The artefacts are available in the current directory.
 ### Debian or Ubuntu
 
 If you use an Debian derivative distribution based on the dpkg package manager,
-you can build the latest released version of the `cqfd` package via:
+you can build the latest released version of the `cqfd6` package via:
 
 ```sh
 dpkg-buildpackage -us -uc
@@ -496,13 +492,13 @@ _Note_: The artefacts are available in the parent directory.
 ### RedHat Linux or Fedora
 
 If you use a RPM based distribution, you can build the latest released version
-of the `cqfd` package via:
+of the `cqfd6` package via:
 
 ```sh
 rpmdev-setuptree
-cp cqfd.spec ~/rpmbuild/SPECS/
+cp cqfd6.spec ~/rpmbuild/SPECS/
 cd ~/rpmbuild/SPECS
-rpmbuild --undefine=_disable_source_fetch -ba cqfd.spec "$@"
+rpmbuild --undefine=_disable_source_fetch -ba cqfd6.spec "$@"
 cp ~/rpmbuild/SRPMS/*.src.rpm ~/rpmbuild/RPMS/*/*.rpm "$OLDPWD"
 ```
 
@@ -531,11 +527,11 @@ command, if the above requirements are met on the system:
 
 ## Patches
 
-Submit patches at *https://github.com/savoirfairelinux/cqfd/pulls*
+Submit patches at *https://github.com/gportay/cqfd6/pulls*
 
 ## Bugs
 
-Report bugs at *https://github.com/savoirfairelinux/cqfd/issues*
+Report bugs at *https://github.com/gportay/cqfd6/issues*
 
 ## Trivia
 

@@ -1,5 +1,7 @@
 # Changelog for cqfd
 
+## Version 6 (coming soon)
+
 ## Version 5.7.0 (2025-06-27)
 
 * Many tests improvements

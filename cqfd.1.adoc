@@ -1,10 +1,10 @@
 = cqfd(1)
 :doctype: manpage
-:author: Jérôme Oufella
-:email: jerome.oufella@savoirfairelinux.com
+:author: Gaël PORTAY
+:email: gael.portay@gmail.com.com
 :lang: en
 :man manual: C.Q.F.D. Manual
-:man source: C.Q.F.D. Project 5.7.0
+:man source: C.Q.F.D. Project 6
 
 == NAME
 
@@ -223,13 +223,15 @@ binaries honoring that variable run shell commands in your defined container.
 
 == PATCHES
 
-Submit patches at *https://github.com/savoirfairelinux/cqfd/pulls*
+Submit patches at *https://github.com/gportay/cqfd6/pulls*
 
 == BUGS
 
-Report bugs at *https://github.com/savoirfairelinux/cqfd/issues*
+Report bugs at *https://github.com/gportay/cqfd6/issues*
 
 == COPYRIGHT
+
+Copyright (C) 2017,2025 Gaël PORTAY
 
 Copyright (C) 2015-2025 Savoir-faire Linux, Inc.
 

@@ -1,7 +1,7 @@
 = cqfdrc(5)
 :doctype: manpage
-:author: Jérôme Oufella
-:email: jerome.oufella@savoirfairelinux.com
+:author: Gaël PORTAY
+:email: gael.portay@gmail.com
 :lang: en
 :man manual: C.Q.F.D. Manual
 :man source: C.Q.F.D. Project
@@ -165,13 +165,15 @@ _files_, _archive_, _distro_.
 
 == PATCHES
 
-Submit patches at *https://github.com/savoirfairelinux/cqfd/issues*
+Submit patches at *https://github.com/gportay/cqfd6/issues*
 
 == BUGS
 
-Report bugs at *https://github.com/savoirfairelinux/cqfd/issues*
+Report bugs at *https://github.com/gportay/cqfd6/issues*
 
 == COPYRIGHT
+
+Copyright (C) 2017,2025 Gaël PORTAY
 
 Copyright (C) 2015-2025 Savoir-faire Linux, Inc.
 

@@ -1,17 +1,19 @@
-# Maintainer: Jérôme Oufella <jerome.oufella@savoirfairelinux.com>
+# Maintainer: Gaël PORTAY <gael.portay@gmail.com>
 
-pkgname=cqfd
-pkgver=5.7.0
+pkgname=cqfd6
+pkgver=6
 pkgrel=1
 pkgdesc='Wrap commands in controlled Docker containers using docker.'
 arch=(any)
-url="https://github.com/savoirfairelinux/$pkgname"
+url="https://github.com/gportay/$pkgname"
 license=(GPL-3.0-only)
 depends=(bash)
 makedepends=(asciidoctor bash-completion)
 checkdepends=(shellcheck)
-source=("$pkgname-$pkgver.tar.gz::https://github.com/savoirfairelinux/$pkgname/archive/v$pkgver.tar.gz")
+source=("$pkgname-$pkgver.tar.gz::https://github.com/gportay/$pkgname/archive/v$pkgver.tar.gz")
 sha256sums=(SKIP)
+provides=(cqfd)
+conflicts=(cqfd)
 
 build() {
 	cd "$pkgname-$pkgver"
