@@ -1013,6 +1013,7 @@ while [ $# -gt 0 ]; do
 		;;
 	-q)
 		quiet=true
+		export BUILDKIT_PROGRESS=quiet
 		;;
 	--release)
 		has_to_release=true
