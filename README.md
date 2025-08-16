@@ -293,14 +293,14 @@ defined container.
 
 Example:
 
-    fred@host:~/project$ cat get-container-pretty-name.sh 
+    fred@host:~/project$ cat get-container-pretty-name.sh
     #!/usr/bin/env -S cqfd shell
     if ! test -e /.dockerenv; then
         exit 1
     fi
     source /etc/os-release
     echo "$PRETTY_NAME"
-    fred@host:~/projet$ ./get-container-pretty-name.sh 
+    fred@host:~/projet$ ./get-container-pretty-name.sh
     Debian GNU/Linux 12 (bookworm)
 
 ### Use cqfd as a standard shell for binaries
