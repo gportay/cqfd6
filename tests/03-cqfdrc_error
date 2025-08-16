@@ -9,7 +9,7 @@ cqfd="$TDIR/.cqfd/cqfd"
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfdrc .cqfdrc.old
+cp -f .cqfdrc .cqfdrc.orig
 
 echo -n "" >.cqfdrc
 
@@ -86,7 +86,7 @@ else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.old .cqfdrc
+cp -f .cqfdrc.orig .cqfdrc
 echo "foo	=bar" >>.cqfdrc
 
 jtest_prepare "cqfdrc with tabulation before should pass"
@@ -96,7 +96,7 @@ else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.old .cqfdrc
+cp -f .cqfdrc.orig .cqfdrc
 echo "foo=	bar" >>.cqfdrc
 
 jtest_prepare "cqfdrc with tabulation after should pass"
@@ -106,7 +106,7 @@ else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.old .cqfdrc
+cp -f .cqfdrc.orig .cqfdrc
 echo "foo =bar" >>.cqfdrc
 
 jtest_prepare "cqfdrc with space before should pass"
@@ -116,7 +116,7 @@ else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.old .cqfdrc
+cp -f .cqfdrc.orig .cqfdrc
 echo "foo= bar" >>.cqfdrc
 
 jtest_prepare "cqfdrc with space after should pass"
@@ -127,4 +127,4 @@ else
 fi
 
 # restore initial .cqfdrc
-mv -f .cqfdrc.old .cqfdrc
+mv -f .cqfdrc.orig .cqfdrc

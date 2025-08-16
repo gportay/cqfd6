@@ -24,7 +24,7 @@ fi
 # Adding a files section should help
 ################################################################################
 rel_files="a/cqfd_a.txt a/b/c/cqfd_c.txt a/b/cqfd_b.txt"
-cp -f .cqfdrc .cqfdrc.old
+cp -f .cqfdrc .cqfdrc.orig
 echo "files=\"$rel_files\"" >>.cqfdrc
 jtest_prepare "cqfd release now with a files parameter"
 if "$cqfd" release; then
@@ -309,4 +309,4 @@ fi
 
 # cleanup
 rm -f "tmp.$$" "cqfd-$CTEST.tar.xz"
-mv -f .cqfdrc.old .cqfdrc
+mv -f .cqfdrc.orig .cqfdrc
