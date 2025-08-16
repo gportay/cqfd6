@@ -107,12 +107,12 @@ if ! "$cqfd" release; then
 	jtest_log fatal "cqfd release failed"
 	result="fail"
 fi
-tmp_dir=$(mktemp -d)
-if ! tar xf cqfd-test.tar.xz -C "$tmp_dir"; then
+mkdir "$TDIR/output"
+if ! tar xf cqfd-test.tar.xz -C "$TDIR/output"; then
 	jtest_log fatal "tar failed"
 	result="fail"
 fi
-if [ -L "$tmp_dir"/link.txt ] || ! diff "$tmp_dir"/a/cqfd_a.txt "$tmp_dir"/link.txt; then
+if [ -L "$TDIR/output/link.txt" ] || ! diff "$TDIR/output/a/cqfd_a.txt" "$TDIR/output/link.txt"; then
 	jtest_log fatal "link.txt is not a symlink or differs from cqfd_a.txt"
 	result="fail"
 fi
@@ -124,8 +124,9 @@ sed -i '/tar_options=/d' .cqfdrc
 sed -i '/files=/d' .cqfdrc
 echo "files=\"$rel_files\"" >>.cqfdrc
 
+# cleanup
 rm -f cqfd-test.tar.xz
-rm -rf "$tmp_dir"
+rm -rf "$TDIR/output"
 
 ################################################################################
 # Now test adding an archive filename template to the config
