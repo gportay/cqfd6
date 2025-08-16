@@ -116,7 +116,8 @@ debug() {
 
 ## docker_build() - initialize build container
 docker_build() {
-	local args=()
+	local args
+	args=()
 
 	# Suppress the build output
 	if [ "$quiet" ]; then
