@@ -343,7 +343,8 @@ image_exists_locally() {
 
 ## docker_rmi() - remove build container
 docker_rmi() {
-	local args=()
+	local args
+	args=()
 
 	# Check if image is running
 	if image_is_running "$docker_img_name"; then
