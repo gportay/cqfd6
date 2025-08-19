@@ -135,6 +135,9 @@ another container or another build command.
 
 == ENVIRONMENT VARIABLES
 
+*CQFD_WORKDIR*::
+	Directory used as working directory (default parent of _.cqfd_).
+
 *CQFD_DIR*::
 	Directory used as cqfd directory (default _.cqfd_).
 

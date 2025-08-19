@@ -11,6 +11,7 @@ tests: CQFD_NO_USER_GIT_CONFIG =
 tests: CQFD_BIND_DOCKER_SOCK =
 tests: CQFD_DOCKER_GID =
 tests: CQFD_SHELL =
+tests: CQFD_WORKDIR =
 tests: CQFD_DIR =
 tests: CQFDRC_FILE =
 tests:

@@ -780,10 +780,8 @@ load_config() {
 		die ".cqfd: Missing project directory!"
 	fi
 
-	# unless using '-w other_workdir', use base directory located above
-	if ! $has_custom_workdir; then
-		workdir="$project_dir"
-	fi
+	local workdir
+	workdir="${CQFD_WORKDIR:-$project_dir}"
 	# make an absolute path and check if it is a directory
 	if ! workdir="$(realpath "$workdir")" || \
 	   [ ! -d "$workdir" ]; then
@@ -947,7 +945,6 @@ load_config() {
 	fi
 }
 
-has_custom_workdir=false
 has_to_release=false
 has_alternate_command=false
 while [ $# -gt 0 ]; do
@@ -993,8 +990,7 @@ while [ $# -gt 0 ]; do
 		;;
 	-w)
 		shift
-		has_custom_workdir=true
-		workdir="$1"
+		CQFD_WORKDIR="$1"
 		;;
 	-d)
 		shift
