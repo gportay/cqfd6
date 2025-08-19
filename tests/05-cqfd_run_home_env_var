@@ -77,7 +77,7 @@ fi
 # directory.
 ################################################################################
 jtest_prepare "the user's home in passwd == \$HOME"
-if [ "${cqfd_docker[-1]}" = "podman" ]; then
+if [ "${cqfd_docker[0]}" = "sudo" ] || [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
 	passwd_home=$("$cqfd" run "grep ^$(whoami): /etc/passwd |cut -d: -f6")
