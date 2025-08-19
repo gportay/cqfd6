@@ -255,6 +255,9 @@ The following environment variables are supported by cqfd to provide
 the user with extra flexibility during his day-to-day development
 tasks:
 
+`CQFD_WORKDIR`: directory used as working directory (default parent of
+`.cqfd`).
+
 `CQFD_DIR`: directory used as cqfd directory (default `.cqfd`).
 
 `CQFDRC_FILE`: file as config file (default `.cqfdrc`).
