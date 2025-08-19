@@ -358,7 +358,7 @@ docker_rmi() {
 
 	# Check if image is running
 	if image_is_running "$cqfd_image"; then
-		die "$cqfd_image: Image busy"
+		die "$cqfd_image: Image busy!"
 	fi
 
 	# Append extra args from the .cqfdrc [build] section
@@ -838,13 +838,9 @@ load_config() {
 	# build section's 'flavors' parameter.
 	local flavor="$1"
 	if [ -n "$flavor" ]; then
-		if grep -qw "$flavor" <<< "${flavors[*]}"; then
-			# load the [$flavor] section
-			if ! cfg_section_"$flavor" 2>/dev/null; then
-				die ".cqfdrc: Missing $flavor section!"
-			fi
-		else
-			die "flavor \"$flavor\" not found in flavors list"
+		# load the [$flavor] section
+		if ! cfg_section_"$flavor" 2>/dev/null; then
+			die ".cqfdrc: Missing $flavor section!"
 		fi
 	fi
 
