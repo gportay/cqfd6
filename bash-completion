@@ -33,15 +33,15 @@ _cqfd() {
 		COMPREPLY=( $( compgen -W "linux/amd64 linux/arm/v6 linux/arm/v7 linux/arm64 linux/ppc64le linux/riscv64 linux/s390x" -- "$cur" ) )
 		return
 		;;
-	-C|-w|-d)
+	-C|--directory|-w|--working-directory|-d|--cqfd-directory)
 		_filedir -d
 		return
 		;;
-	-f)
+	-f|--cqfdrc-file)
 		_filedir
 		return
 		;;
-	-b)
+	-b|--build)
 		local flavors cqfdrc=.cqfdrc
 		# before we scan for flavors, see if a cqfdrc name was
 		# specified with -f
@@ -99,7 +99,7 @@ _cqfd() {
 		return
 	fi
 
-	local opts="-C -w -d -f -b -q --reinit --release --platform -v --version -h --help"
+	local opts="-C --directory -w --working-directory -d --cqfd-directory -f --cqfdrc-file -b --build -q --quiet --reinit --release --platform -v --version -h --help"
 	if [[ "$cur" == -* ]]; then
 		COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
 		return

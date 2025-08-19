@@ -342,8 +342,8 @@ the cqfd group in the container.
 The `-c` option set immediately after the command run allows appending the
 command of a cqfd run for temporary developments:
 
-    $ cqfd -b centos7 run -c "clean"
-    $ cqfd -b centos7 run -c "TRACING=1"
+    $ cqfd --build centos7 run -c "clean"
+    $ cqfd --build centos7 run -c "TRACING=1"
 
 ### Running a shell in the container
 
@@ -438,7 +438,7 @@ Examples:
     $ cqfd init
     $ cqfd exec uname -m
     x86_64
-    $ cqfd -b arm64 exec uname -m
+    $ cqfd --build arm64 exec uname -m
     aarch64
 
 ### Key files and directories
@@ -460,28 +460,28 @@ The `.cqfdrc` file defines the cqfd project information and the build command.
 It is controlled by the `-f` option or the `CQFDRC_FILE` environment variable.
 
 All these files and directories are interpreted relative to the current working
-directory if specified with a relative path. Additionally, the `-C` option
-changes the working directory, meaning that these files and directories are
-then relative to the new working directory.
+directory if specified with a relative path. Additionally, the `--directory`
+option changes the working directory, meaning that these files and directories
+are then relative to the new working directory.
 
 In some cases, you may want to use alternate cqfd filenames and/or an external
 directory. The following options allow you to control cqfd configuration files:
 
-To change the current working directory, use the `-C` option:
+To change the current working directory, use the `--directory` option:
 
-    $ cqfd -C external/directory
+    $ cqfd --directory external/directory
 
-To specify an alternate cqfd directory, use the `-d` option:
+To specify an alternate cqfd directory, use the `--cqfd-directory` option:
 
-    $ cqfd -d cqfd_alt
+    $ cqfd --cqfd-directory cqfd_alt
 
-To specify an alternate cqfdrc file, use the `-f` option:
+To specify an alternate cqfdrc file, use the `--cqfdrc-file` option:
 
-    $ cqfd -f cqfdrc_alt
+    $ cqfd --cqfdrc-file cqfdrc_alt
 
-To specify an alternate working directory, use the `-w` option:
+To specify an alternate working directory, use the `--working-directory` option:
 
-    $ cqfd -w ..
+    $ cqfd --working-directory ..
 
 These options can be combined, for example to use out-of-tree cqfd files if
 these files cannot be commit to the project.
@@ -497,7 +497,7 @@ Example:
 
     3 directories, 2 files
     ~/src$ cd buildroot
-    ~/src/buildroot$ cqfd -w . -d ../out-of-tree-cqfd-files/cqfd -f ../out-of-tree-cqfd-files/cqfdrc
+    ~/src/buildroot$ cqfd --working-directory . --cqfd-directory ../out-of-tree-cqfd-files/cqfd --cqfdrc-file ../out-of-tree-cqfd-files/cqfdrc
     # or sourcing enviroment from a file
     ~/src/buildroot$ cat environment
     export CQFD_WORKDIR=.
