@@ -551,6 +551,7 @@ load_config() {
 	# functions reported by the builtin:
 	#  - the cfg_section_ prefix is stripped
 	#  - the build and project sections are stripped
+	local flavors
 	mapfile -t flavors < <(compgen -A function -X '!cfg_section_*')
 	flavors=("${flavors[@]/cfg_section_/}")
 	for i in "${!flavors[@]}"; do
