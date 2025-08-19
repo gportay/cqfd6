@@ -77,22 +77,22 @@ Command options for run:
 *--platform TARGET*::
 	Set target platform.
 
-*-f FILE*::
+*-f* or *--cqfdrc-file FILE*::
 	Use file as config file (default _.cqfdrc_).
 
-*-d DIR*::
+*-d* or *--cqfd-directory DIR*::
 	Use directory as cqfd directory (default _.cqfd_).
 
-*-w DIR*::
+*-w* or *--working-directory DIR*::
 	Use directory as working directory (default parent of _.cqfd_).
 
-*-C DIR*::
+*-C* or *--directory DIR*::
 	Change to the specified working directory.
 
-*-b STRING*::
+*-b* or *--build STRING*::
 	Target a specific build flavor.
 
-*-q*::
+*-q* or *--quiet*::
 	Turn on quiet mode.
 
 *-v* or *--version*::
@@ -228,8 +228,8 @@ another container or another build command.
 The _-c_ option set immediately after the command run allows appending the
 command of a cqfd run for temporary developments.
 
-	$ cqfd -b centos7 run -c "clean"
-	$ cqfd -b centos7 run -c "TRACING=1"
+	$ cqfd --build centos7 run -c "clean"
+	$ cqfd --build centos7 run -c "TRACING=1"
 
 === RUNNING A SHELL IN THE CONTAINER
 

@@ -41,13 +41,18 @@ Options:
     --reinit             Reinitialize build container.
     --release            Release software.
     --platform <target>  Set target platform.
-    -f <file>            Use file as config file (default .cqfdrc).
-    -d <directory>       Use directory as cqfd directory (default .cqfd).
+    -f or --cqfdrc-file <file>
+                         Use file as config file (default .cqfdrc).
+    -d or --cqfd-directory <directory>
+                         Use directory as cqfd directory (default .cqfd).
+    -w or --working-directory <directory>
     -w <directory>       Use directory as working directory (default parent of
                          .cqfd).
-    -C <directory>       Change to the specified working directory.
-    -b <flavor_name>     Target a specific build flavor.
-    -q                   Turn on quiet mode.
+    -C or --directory <directory>
+                         Change to the specified working directory.
+    -b or --build <flavor_name>
+                         Target a specific build flavor.
+    -q or --quiet        Turn on quiet mode.
     -v or --version      Show version.
     --verbose            Increase the script's verbosity.
     -h or --help         Show this help text.
@@ -1095,27 +1100,27 @@ while [ $# -gt 0 ]; do
 		echo "$build_flavors"
 		exit
 		;;
-	-b)
+	-b|--build)
 		shift
 		flavor="$1"
 		;;
-	-w)
+	-w|--working-directory)
 		shift
 		CQFD_WORKDIR="$1"
 		;;
-	-d)
+	-d|--cqfd-directory)
 		shift
 		CQFD_DIR="$1"
 		;;
-	-f)
+	-f|--cqfdrc-file)
 		shift
 		CQFDRC_FILE="$1"
 		;;
-	-C)
+	-C|--directory)
 		shift
 		cd "$1"
 		;;
-	-q)
+	-q|--quiet)
 		quiet=true
 		export BUILDKIT_PROGRESS=quiet
 		;;
