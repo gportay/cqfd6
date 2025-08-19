@@ -863,6 +863,8 @@ load_config() {
 	project_tag="$tag"
 	# shellcheck disable=SC2154
 	project_image="$image"
+	# shellcheck disable=SC2128
+	project_flavors="$flavors"
 
 	# check for [project] org and name properties are set and are not empty
 	if [ -z "$project_org" ] || [ -z "$project_name" ]; then
@@ -884,8 +886,6 @@ load_config() {
 		fi
 	fi
 
-	# shellcheck disable=SC2128
-	build_flavors="$flavors"
 	# shellcheck disable=SC2154
 	build_workdir="$workdir"
 	# shellcheck disable=SC2154
@@ -1097,7 +1097,7 @@ while [ $# -gt 0 ]; do
 			die "flavors: Too many arguments!"
 		fi
 		load_config
-		echo "$build_flavors"
+		echo "$project_flavors"
 		exit
 		;;
 	-b|--build)

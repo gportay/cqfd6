@@ -121,6 +121,10 @@ and right after a section.
 
 `name`: a short, lowercase name for the project.
 
+`flavors` (optional): the list of build flavors (see below). Each flavor has
+its own command just like `build.command`. This property is now automatically
+deduced from the flavors sections of `.cqfdrc`.
+
 `build_context` (optional): a directory to pass as the build context
 to Docker. This should be specified relatively to where `cqfd` is
 invoked.  For example, it can be set to `.`, to use the current
@@ -183,10 +187,6 @@ default, cqfd uses `"docker"`, and `.cqfd/docker/Dockerfile` is used.
 should be a member of in the container. You can either use the `group:gid`
 format, or simply specify the `group` name if it exists either in the host or
 inside the docker image.
-
-`flavors` (optional): the list of build flavors (see below). Each flavor has
-its own command just like `build.command`. This property is now automatically
-deduced from the flavors sections of `.cqfdrc`.
 
 `dockerfile` (optional): the path to the `Dockerfile`. The path is relative to
 the project directory (i.e. the parent directory of `.cqfd`). By default, cqfd
