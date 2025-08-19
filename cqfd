@@ -559,6 +559,8 @@ load_config() {
 			unset 'flavors[$i]'
 		fi
 	done
+	# shellcheck disable=SC2178
+	flavors="${flavors[*]}"
 
 	# load the [project] section
 	if ! cfg_section_project 2>/dev/null; then
@@ -584,8 +586,6 @@ load_config() {
 		die "$cqfd_dircqfdrc: Missing build section!"
 	fi
 
-	build_flavors="${flavors[*]}"
-
 	# build parameters may be overriden by a flavor defined in the
 	# build section's 'flavors' parameter.
 	local flavor="$1"
@@ -596,6 +596,8 @@ load_config() {
 		fi
 	fi
 
+	# shellcheck disable=SC2128
+	build_flavors="$flavors"
 	# shellcheck disable=SC2154
 	build_command="$command"
 	# shellcheck disable=SC2154
