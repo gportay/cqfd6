@@ -263,9 +263,9 @@ tasks:
 `CQFDRC_FILE`: file as config file (default `.cqfdrc`).
 
 `CQFD_DOCKER`: program used to invoke `docker` client.
-For example, to use docker if not in the docker group, it can be set like:
+For example, to use podman, it can be set like:
 ```
-docker='sudo docker'
+CQFD_DOCKER='podman' cqfd
 ```
 
 `CQFD_EXTRA_RUN_ARGS`: A space-separated list of additional
