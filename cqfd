@@ -575,6 +575,8 @@ load_config() {
 	project_build_context="$build_context"
 	# shellcheck disable=SC2154
 	project_custom_img_name="$custom_img_name"
+	# shellcheck disable=SC2128
+	project_flavors="$flavors"
 
 	# check for [project] org and name properties are set and are not empty
 	if [ -z "$project_org" ] || [ -z "$project_name" ]; then
@@ -596,8 +598,6 @@ load_config() {
 		fi
 	fi
 
-	# shellcheck disable=SC2128
-	build_flavors="$flavors"
 	# shellcheck disable=SC2154
 	build_command="$command"
 	# shellcheck disable=SC2154
@@ -660,7 +660,7 @@ while [ $# -gt 0 ]; do
 		;;
 	flavors)
 		load_config
-		echo "$build_flavors"
+		echo "$project_flavors"
 		exit
 		;;
 	-b)
