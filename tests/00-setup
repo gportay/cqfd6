@@ -2,7 +2,7 @@
 #
 # validate the behavior with skelton bring up
 
-. "$(dirname "$0")"/jtest.inc "$1"
+. "$(dirname "$0")/jtest.inc" "$1"
 mkdir -p "$TDIR/.cqfd/docker"
 cp -a ../cqfd "$TDIR/.cqfd/"
 cp -a test_data/. "$TDIR/."
