@@ -912,6 +912,12 @@ load_config() {
 		cqfd_platform="$native"
 	fi
 
+	# warn if using legacy variable distro
+	if [ -n "$build_distro" ]; then
+		warn "distro is deprecated, use dockerfile to set path to" \
+		     "the Dockerfile."
+	fi
+
 	# warn if using legacy variable custom_img_name
 	if [ -n "$project_custom_img_name" ]; then
 		warn "custom_img_name is deprecated, use either tag to name" \

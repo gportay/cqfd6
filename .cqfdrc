@@ -16,15 +16,15 @@ files='CHANGELOG.md \
        cqfd'
 
 [deb]
-distro='deb'
+dockerfile='.cqfd/deb/Dockerfile'
 docker_run_args="--volume $HOME:$HOME"
 command='sh make-deb.sh'
 
 [pkg]
-distro='pkg'
+dockerfile='.cqfd/pkg/Dockerfile'
 command='sh make-pkg.sh'
 
 [rpm]
-distro='rpm'
+dockerfile='.cqfd/rpm/Dockerfile'
 docker_run_args="--volume $PWD/rpmbuild:$HOME/rpmbuild --volume $PWD/cqfd6.spec:$HOME/rpmbuild/SPECS/cqfd6.spec"
 command='sh make-rpm.sh'
