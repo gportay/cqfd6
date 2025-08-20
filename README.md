@@ -400,6 +400,37 @@ Finally, test the build container:
     $ cqfd exec uname -m
     aarch64
 
+Additionally, cqfd supports the option `--platform TARGET`, the environment
+variable `CQFD_PLATFORM`, and the build property `platform=` to set the desired
+platform dynamically.
+
+Examples:
+
+    $ cqfd --platform linux/arm64 init
+    $ cqfd --platform linux/arm64 exec uname -m
+    aarch64
+
+    $ export CQFD_PLATFORM="linux/arm64"
+    $ cqfd init
+    $ cqfd exec uname -m
+    aarch64
+
+    $ cat .cqfdrc
+    [project]
+    org='fooinc'
+    name='multi-platform'
+
+    [arm64]
+    platform='linux/arm64'
+
+    [build]
+    command='uname -a'
+    $ cqfd init
+    $ cqfd exec uname -m
+    x86_64
+    $ cqfd -b arm64 exec uname -m
+    aarch64
+
 ### Key files and directories
 
 cqfd project uses three key files and directories.

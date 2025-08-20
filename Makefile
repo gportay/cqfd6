@@ -21,6 +21,9 @@ install:
 	install -d $(DESTDIR)$(PREFIX)/bin/
 	install -m 0755 cqfd $(DESTDIR)$(PREFIX)/bin/cqfd6
 	ln -sf cqfd6 $(DESTDIR)$(PREFIX)/bin/cqfd
+	for i in linux-amd64 linux-arm linux-arm64 linux-ppc64le linux-riscv64 linux-s390x; do \
+		ln -sf cqfd6 $(DESTDIR)$(PREFIX)/bin/$$i-cqfd; \
+	done
 	install -d $(DESTDIR)$(PREFIX)/share/doc/cqfd6/
 	install -m 0644 AUTHORS CHANGELOG.md LICENSE README.md $(DESTDIR)$(PREFIX)/share/doc/cqfd6/
 	if [ -e cqfd.1.gz ]; then \
