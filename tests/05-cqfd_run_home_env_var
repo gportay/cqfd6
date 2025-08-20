@@ -18,7 +18,7 @@ cd "$TDIR/" || exit 1
 ################################################################################
 jtest_prepare "run cqfd sets HOME environment variable for the local user"
 # shellcheck disable=SC2016
-output=$("$cqfd" run 'echo -n $HOME')
+output="$("$cqfd" run 'echo -n $HOME')"
 if [ "$output" = "$HOME" ]; then
 	jtest_result pass
 else
@@ -33,8 +33,8 @@ jtest_prepare "run doesn't override HOME env when set via CQFD_EXTRA_RUN_ARGS"
 val1="value-$RANDOM"
 val2="value-$RANDOM"
 # shellcheck disable=SC2016
-output=$(CQFD_EXTRA_RUN_ARGS="-e FOO=$val1 -e HOME=$val2" \
-	"$cqfd" run 'echo -n $FOO $HOME' | grep value)
+output="$(CQFD_EXTRA_RUN_ARGS="-e FOO=$val1 -e HOME=$val2" \
+          "$cqfd" run 'echo -n $FOO $HOME' | grep value)"
 if [ "$output" = "$val1 $val2" ]; then
 	jtest_result pass
 else
@@ -48,8 +48,8 @@ fi
 jtest_prepare "run doesn't override HOME env when the only entry in CQFD_EXTRA_RUN_ARGS"
 val1="value-$RANDOM"
 # shellcheck disable=SC2016
-output=$(CQFD_EXTRA_RUN_ARGS="-e HOME=$val1" \
-	"$cqfd" run 'echo -n $FOO $HOME' | grep value)
+output="$(CQFD_EXTRA_RUN_ARGS="-e HOME=$val1" \
+          "$cqfd" run 'echo -n $FOO $HOME' | grep value)"
 if [ "$output" = "$val1" ]; then
 	jtest_result pass
 else
@@ -64,8 +64,8 @@ jtest_prepare "run doesn't confuse JAVA_HOME and the like with HOME"
 val1="value-$RANDOM"
 val2="value-$RANDOM"
 # shellcheck disable=SC2016
-output=$(CQFD_EXTRA_RUN_ARGS="-e JAVA_HOME=$val1 -e HOME=$val2" \
-	"$cqfd" run 'echo -n $JAVA_HOME $HOME' | grep value)
+output="$(CQFD_EXTRA_RUN_ARGS="-e JAVA_HOME=$val1 -e HOME=$val2" \
+          "$cqfd" run 'echo -n $JAVA_HOME $HOME' | grep value)"
 if [ "$output" = "$val1 $val2" ]; then
 	jtest_result pass
 else
@@ -101,7 +101,7 @@ cat .cqfdrc.orig - <<EOF >.cqfdrc
 docker_run_args="--env FOO=$val1 --env HOME=$val2"
 EOF
 # shellcheck disable=SC2016
-output=$("$cqfd" run 'echo -n $FOO $HOME' | grep value)
+output="$("$cqfd" run 'echo -n $FOO $HOME' | grep value)"
 if [ "$output" = "$val1 $val2" ]; then
 	jtest_result pass
 else
@@ -118,7 +118,7 @@ cat .cqfdrc.orig - <<EOF >.cqfdrc
 docker_run_args="--env HOME=$val1"
 EOF
 # shellcheck disable=SC2016
-output=$("$cqfd" run 'echo -n $FOO $HOME' | grep value)
+output="$("$cqfd" run 'echo -n $FOO $HOME' | grep value)"
 if [ "$output" = "$val1" ]; then
 	jtest_result pass
 else
@@ -136,7 +136,7 @@ cat .cqfdrc.orig - <<EOF >.cqfdrc
 docker_run_args="--env JAVA_HOME=$val1 --env HOME=$val2"
 EOF
 # shellcheck disable=SC2016
-output=$("$cqfd" run 'echo -n $JAVA_HOME $HOME' | grep value)
+output="$("$cqfd" run 'echo -n $JAVA_HOME $HOME' | grep value)"
 if [ "$output" = "$val1 $val2" ]; then
 	jtest_result pass
 else
