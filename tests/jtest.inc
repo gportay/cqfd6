@@ -150,7 +150,7 @@ jtest_result()
 		skip) status=$(_colorize yellow2 "SKIP") ;;
 	esac
 
-	jtest_log info "result: $_jtest_current: $status"
+	jtest_log info "result: \"$_jtest_current\": $status"
 	unset _jtest_current
 }
 
