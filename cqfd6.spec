@@ -47,6 +47,12 @@ make check
 %license %{_datadir}/doc/%{name}/LICENSE
 %{_bindir}/{%name}
 %{_bindir}/cqfd
+%{_bindir}/linux-amd64-cqfd
+%{_bindir}/linux-arm-cqfd
+%{_bindir}/linux-arm64-cqfd
+%{_bindir}/linux-ppc64le-cqfd
+%{_bindir}/linux-riscv64-cqfd
+%{_bindir}/linux-s390x-cqfd
 %{_datadir}/bash-completion/completions/%{name}
 %{_datadir}/%{name}/samples/Dockerfile.focalFossa.android34
 %{_datadir}/%{name}/samples/Dockerfile.focalFossa.nodejs20x

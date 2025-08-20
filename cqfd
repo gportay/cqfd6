@@ -39,6 +39,7 @@ Usage: $PROGNAME [OPTIONS] [COMMAND] [COMMAND OPTIONS] [ARGUMENTS]
 
 Options:
     --release            Release software.
+    --platform <target>  Set target platform.
     -f <file>            Use file as config file (default .cqfdrc).
     -d <directory>       Use directory as cqfd directory (default .cqfd).
     -w <directory>       Use directory as working directory (default parent of
@@ -295,6 +296,11 @@ docker_pull_or_build() {
 	# Suppress the build output
 	if [ "$quiet" ]; then
 		args+=(--quiet)
+	fi
+
+	# Set platform is not native
+	if [ "$cqfd_platform" != "$native" ]; then
+		args+=(--platform "$cqfd_platform")
 	fi
 
 	# Pull the image
@@ -770,6 +776,40 @@ load_config() {
 		die ".cqfdrc: Invalid ini-file!"
 	fi
 
+	# deduce native platform from system
+	local machine
+	machine="$(uname -m)"
+	case "$machine" in
+	x86_64)
+		native="linux/amd64"
+		;;
+	aarch64)
+		native="linux/arm64"
+		;;
+	*)
+		native="linux/$machine"
+		;;
+	esac
+
+	# deduce target platform from filename (i.e. linux-amd64-cqfd)
+	local target
+	target=
+	if [[ "$PROGNAME" =~ ^(.+)-cqfd$ ]]; then
+		target="${BASH_REMATCH[1]}"
+		target="${target//-/\/}"
+	fi
+
+	# set default platform from CQFD_PLATFORM is set
+	platform="$CQFD_PLATFORM"
+	# or from filename
+	if [ ! "$platform" ]; then
+		platform="$target"
+	fi
+	# or default to native
+	if [ ! "$platform" ]; then
+		platform="$native"
+	fi
+
 	# generate dynamically the list of flavors based on the names of shell
 	# functions reported by the builtin:
 	#  - the cfg_section_ prefix is stripped
@@ -830,6 +870,8 @@ load_config() {
 	# shellcheck disable=SC2154
 	build_command="$command"
 	# shellcheck disable=SC2154
+	build_platform="$platform"
+	# shellcheck disable=SC2154
 	build_dockerfile="$dockerfile"
 	# shellcheck disable=SC2154
 	build_docker_build_args="$docker_build_args"
@@ -847,6 +889,12 @@ load_config() {
 	release_transform="$tar_transform"
 	# shellcheck disable=SC2154
 	release_tar_opts="$tar_options"
+
+	# set native if platform= unspecified
+	cqfd_platform="$build_platform"
+	if [ ! "$cqfd_platform" ]; then
+		cqfd_platform="$native"
+	fi
 
 	# warn if using legacy variable custom_img_name
 	if [ -n "$project_custom_img_name" ]; then
@@ -871,12 +919,23 @@ load_config() {
 		fi
 	fi
 
+	# set default platform if platform= unspecified
+	cqfd_platform="$build_platform"
+	# using 
+	if [ ! "$cqfd_platform" ]; then
+		cqfd_platform="$target"
+	fi
+	if [ ! "$cqfd_platform" ]; then
+		cqfd_platform="$native"
+	fi
+
 	# set default image if image= unspecified
 	cqfd_image="$project_image"
 	if [ ! "$cqfd_image" ]; then
 		local Un
 		local Po
 		local Pn
+		local Dp
 		local Dh
 		local DH
 		local Bd
@@ -896,12 +955,14 @@ load_config() {
 		Un=$(sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$USER")
 		Po="$project_org"
 		Pn="$project_name"
+		# shellcheck disable=SC2001
+		Dp="$(sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$cqfd_platform")"
 		Dh=$(sha256sum "$cqfd_dockerfile" | cut -b 1-7)
 		DH=$(sha256sum "$cqfd_dockerfile" | cut -b 1-64)
 		Bd="${build_distro:-docker}"
 		# set default tag if tag= unspecified
 		if ! [ "$project_tag" ]; then
-			project_tag="cqfd_%Un_%Po_%Pn_%Dh"
+			project_tag="cqfd_%Un_%Po_%Pn_%Dp_%Dh"
 			if [ "$build_distro" ]; then
 				project_tag+="_%Bd"
 			fi
@@ -910,6 +971,7 @@ load_config() {
 		cqfd_image=$(sed -e 's!%Un!'"$Un"'!g;
 			             s!%Po!'"$Po"'!g;
 			             s!%Pn!'"$Pn"'!g;
+			             s!%Dp!'"$Dp"'!g;
 			             s!%Dh!'"$Dh"'!g;
 			             s!%DH!'"$DH"'!g;
 			             s!%Bd!'"$Bd"'!g;' <<<"$project_tag")
@@ -1002,6 +1064,10 @@ while [ $# -gt 0 ]; do
 		;;
 	--release)
 		has_to_release=true
+		;;
+	--platform)
+		shift
+		CQFD_PLATFORM="$1"
 		;;
 	exec)
 		cqfd_command="$1"
