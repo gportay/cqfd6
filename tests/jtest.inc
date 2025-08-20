@@ -125,7 +125,7 @@ jtest_log()
 jtest_prepare()
 {
 	[ -n "$1" ] || return 1
-	jtest_log notice "preparing \"$1\""
+	jtest_log notice "preparing: \"$1\""
 	_jtest_current="$1"
 }
 
