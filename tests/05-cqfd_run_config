@@ -4,7 +4,7 @@
 
 . "$(dirname "$0")/jtest.inc" "$1"
 cqfd="$TDIR/.cqfd/cqfd"
-confdir=$TDIR/.config/dir
+confdir="$TDIR/.config/dir"
 flavor="foo"
 
 cd "$TDIR/" || exit 1
