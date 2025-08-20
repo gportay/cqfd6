@@ -75,7 +75,7 @@ _jtest_trap_error()
 _jtest_trap_exit()
 {
 	if [ -n "$_jtest_current" ]; then
-		jtest_log fatal 'crashed during "'"$_jtest_current"'"'
+		jtest_log fatal "crashed during \"$_jtest_current\""
 		jtest_result fail
 	fi
 
@@ -125,7 +125,7 @@ jtest_log()
 jtest_prepare()
 {
 	[ -n "$1" ] || return 1
-	jtest_log notice 'preparing "'"$1"'"'
+	jtest_log notice "preparing \"$1\""
 	_jtest_current="$1"
 }
 
