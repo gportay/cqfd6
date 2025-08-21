@@ -328,10 +328,6 @@ docker_run() {
 }
 
 ## make_archive() - create a release package
-# Note: the --transform option passed to tar allows to move all the
-# specified files at the root of the archive. Therefore, you shouldn't
-# include two files with the same name in the list of files to
-# archive.
 make_archive() {
 	local tar_opts
 	local files
