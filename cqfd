@@ -611,7 +611,7 @@ make_archive() {
 	esac
 }
 
-## make_entrypoint - generate in-container entrypoint
+## make_entrypoint() - generate in-container entrypoint
 # $1: the path to the entrypoint
 make_entrypoint() {
 	cat >"$1" <<EOF
