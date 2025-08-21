@@ -118,7 +118,7 @@ debug() {
 	test -z "$CQFD_DEBUG" || echo "cqfd: debug: $*"
 }
 
-## image_is_running() checks if image is running
+## image_is_running() - checks if image is running
 # $1: the image name to check if running
 image_is_running() {
 	local ids
@@ -345,7 +345,7 @@ docker_pull_or_build() {
 	ln -sf "$file" "$cqfd_cachedir/${cqfd_docker[-1]}/$hash/$cqfd_image"
 }
 
-## image_exists_locally() checks if image exists in the local image store
+## image_exists_locally() - checks if image exists in the local image store
 # $1: the image name to check
 image_exists_locally() {
 	"${cqfd_docker[@]}" image inspect "$1" &>/dev/null
@@ -535,7 +535,7 @@ docker_run() {
 	"${cqfd_docker[@]}" run "${args[@]}"
 }
 
-## make_archive() create a release package
+## make_archive() - create a release package
 make_archive() {
 	local tar_opts
 	local files
