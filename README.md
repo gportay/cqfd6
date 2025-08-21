@@ -464,27 +464,27 @@ directory if specified with a relative path. Additionally, the `-C` option
 changes the working directory, meaning that these files and directories are
 then relative to the new working directory.
 
-In some conditions you may want to use alternate cqfd filenames and / or an
-external working directory. These options can be used to control the cqfd
-configuration files:
+In some cases, you may want to use alternate cqfd filenames and/or an external
+directory. The following options allow you to control cqfd configuration files:
 
-The current working directory can be changed using the `-C` option:
+To change the current working directory, use the `-C` option:
 
     $ cqfd -C external/directory
 
-An alternate cqfd directory can be specified with the `-d` option:
+To specify an alternate cqfd directory, use the `-d` option:
 
     $ cqfd -d cqfd_alt
 
-An alternate cqfdrc file can be specified with the `-f` option:
+To specify an alternate cqfdrc file, use the `-f` option:
 
     $ cqfd -f cqfdrc_alt
 
-An alternate working directory can be specified with the `-w` option:
+To specify an alternate working directory, use the `-w` option:
 
     $ cqfd -w ..
 
-These options can be combined together.
+These options can be combined, for example to use out-of-tree cqfd files if
+these files cannot be commit to the project.
 
 Example:
 
