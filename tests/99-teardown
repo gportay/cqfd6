@@ -10,7 +10,7 @@ cqfd="$TDIR/.cqfd/cqfd"
 cd "$TDIR/" || exit 1
 
 ################################################################################
-# Ensure all build containers are"Outdated"
+# Ensure all build containers are "Outdated"
 ################################################################################
 for i in .cqfd/*/Dockerfile; do
 	test -e "$i" || continue
