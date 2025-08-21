@@ -418,13 +418,28 @@ An alternate working directory can be specified with the `-w` option:
 
     $ cqfd -w ..
 
-These options can be combined together:
+These options can be combined together.
 
-    $ cqfd -C external/directory -w .. -d cqfd_alt -f cqfdrc_alt
-    $ # cqfd will use:
-    $ #  - cqfd working directory: external
-    $ #  - cqfd directory: external/directory/cqfd_alt
-    $ #  - cqfdrc file: external/directory/cqfdrc_alt
+Example:
+
+    ~/src$ tree out-of-tree-cqfd-files/
+    out-of-tree-cqfd-files/
+    ├── cqfd
+    │   └── docker
+    │       └── Dockerfile
+    └── cqfdrc
+
+    3 directories, 2 files
+    ~/src$ cd buildroot
+    ~/src/buildroot$ cqfd -w . -d ../out-of-tree-cqfd-files/cqfd -f ../out-of-tree-cqfd-files/cqfdrc
+    # or sourcing enviroment from a file
+    ~/src/buildroot$ cat environment
+    export CQFD_WORKDIR=.
+    export CQFD_DIR=../out-of-tree-cqfd-files/cqfd
+    export CQFDRC_FILE=../out-of-tree-cqfd-files/cqfdrc
+    ~/src/buildroot$ source environment
+    ~/src/buildroot$ cqfd
+    (...)
 
 ## Build Container Environment
 
