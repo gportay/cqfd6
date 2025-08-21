@@ -375,7 +375,28 @@ Example:
        uninstall: Remove script, doc and resources
        tests:     Run functional tests
 
-### Other command-line options
+### Key files and directories
+
+cqfd project uses three key files and directories.
+
+The `.cqfd` directory contains the `Dockerfile`s, organized in a specific
+hierarchy. Each build container file is located and accessed according to the
+`distro` build property: `.cqfd/$distro/Dockerfile`. This `.cqfd` directory is
+controlled by the `-d` option or the `CQFD_DIR` environment variable.
+
+The `.cqfd` directory mainly serves to locate the root of the cqfd project. The
+root directory is the parent of the `.cqfd` directory, and it is referred to as
+the *project* or *working* directory. This directory is bind-mounted into the
+build container and is controlled by the `-w` option or the `CQFD_WORKDIR`
+environment variable.
+
+The `.cqfdrc` file defines the cqfd project information and the build command.
+It is controlled by the `-f` option or the `CQFDRC_FILE` environment variable.
+
+All these files and directories are interpreted relative to the current working
+directory if specified with a relative path. Additionally, the `-C` option
+changes the working directory, meaning that these files and directories are
+then relative to the new working directory.
 
 In some conditions you may want to use alternate cqfd filenames and / or an
 external working directory. These options can be used to control the cqfd
