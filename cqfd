@@ -31,7 +31,8 @@ cqfd_shell="${CQFD_SHELL:-/bin/bash}"
 cqfd_docker_gid="${CQFD_DOCKER_GID:-0}"
 cqfd_docker="${CQFD_DOCKER:-docker}"
 
-## usage() - print usage on stdout
+## usage() - print usage
+# stdout: the usage
 usage() {
 	cat <<EOF
 Usage: $PROGNAME [OPTIONS] [COMMAND] [COMMAND OPTIONS] [ARGUMENTS]
