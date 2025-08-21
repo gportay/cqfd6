@@ -10,6 +10,14 @@ This becomes useful when building an application designed for another
 Linux system, e.g. building an old embedded firmware that only works
 in an older Linux distribution.
 
+cqfd uses containers and introduced the concept of build containers to define a
+container specifically configured with all the software required to build the
+project. Simply install the necessary packages in the container file, and cqfd
+makes you feel at home by adding your user and mounting your project workspace
+into the build container. In short, cqfd makes it easy to build the image and
+execute commands in a fresh container, with only a few lightweight, per-project
+static configuration files.
+
 # Using cqfd
 
 ## Getting started
