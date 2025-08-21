@@ -381,7 +381,7 @@ In some conditions you may want to use alternate cqfd filenames and / or an
 external working directory. These options can be used to control the cqfd
 configuration files:
 
-The working directory can be changed using the `-C` option:
+The current working directory can be changed using the `-C` option:
 
     $ cqfd -C external/directory
 
@@ -393,10 +393,15 @@ An alternate cqfdrc file can be specified with the `-f` option:
 
     $ cqfd -f cqfdrc_alt
 
+An alternate working directory can be specified with the `-w` option:
+
+    $ cqfd -w ..
+
 These options can be combined together:
 
-    $ cqfd -C external/directory -d cqfd_alt -f cqfdrc_alt
+    $ cqfd -C external/directory -w .. -d cqfd_alt -f cqfdrc_alt
     $ # cqfd will use:
+    $ #  - cqfd working directory: external
     $ #  - cqfd directory: external/directory/cqfd_alt
     $ #  - cqfdrc file: external/directory/cqfdrc_alt
 
