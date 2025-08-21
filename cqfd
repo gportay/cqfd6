@@ -396,18 +396,6 @@ docker_rmi() {
 }
 
 ## docker_run() - run command string in build container
-# A few implementation details:
-#
-# - The user executing the command string inside the container is
-#   named after $cqfd_user, with the same uid/gid as your user to keep
-#   filesystem permissions in sync.
-#
-# - Your project's source directory is always mapped to $cqfd_user_cwd
-#
-# - Your ~/.ssh directory is mapped to ~$cqfd_user/.ssh to provide
-#   access to the ssh keys (your build may pull authenticated git
-#   repos for example).
-#
 # $1: the command string to run
 docker_run() {
 	local args
