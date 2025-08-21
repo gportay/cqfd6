@@ -154,7 +154,7 @@ docker_build() {
 	"$cqfd_docker" build "${args[@]}"
 }
 
-## image_exists_locally(): checks if image exists in the local image store
+## image_exists_locally() - checks if image exists in the local image store
 # $1: the image name to check
 image_exists_locally() {
 	"$cqfd_docker" image inspect "$1" &>/dev/null
@@ -322,7 +322,7 @@ docker_run() {
 	"$cqfd_docker" run "${args[@]}"
 }
 
-## make_archive(): create a release package
+## make_archive() - create a release package
 # Note: the --transform option passed to tar allows to move all the
 # specified files at the root of the archive. Therefore, you shouldn't
 # include two files with the same name in the list of files to
