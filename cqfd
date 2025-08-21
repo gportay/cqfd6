@@ -395,7 +395,7 @@ docker_rmi() {
 	fi
 }
 
-## docker_run() - run command in configured container
+## docker_run() - run command string in build container
 # A few implementation details:
 #
 # - The user executing the command string inside the container is
@@ -408,7 +408,7 @@ docker_rmi() {
 #   access to the ssh keys (your build may pull authenticated git
 #   repos for example).
 #
-# $1: the command string to execute as $cqfd_user
+# $1: the command string to run
 docker_run() {
 	local args
 	args=()
