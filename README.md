@@ -16,7 +16,9 @@ project. Simply install the necessary packages in the container file, and cqfd
 makes you feel at home by adding your user and mounting your project workspace
 into the build container. In short, cqfd makes it easy to build the image and
 execute commands in a fresh container, with only a few lightweight, per-project
-static configuration files.
+static configuration files. As the cherry on top, cqfd can also build the
+project for different architectures thanks to multi-platform images and
+emulation.
 
 cqfd6 is a fork of cqfd fixing several broken things in the upstream project.
 It depreciates the former CLI to modernize it to something much more simple and
@@ -374,6 +376,29 @@ Example:
        install:   Install script, doc and resources
        uninstall: Remove script, doc and resources
        tests:     Run functional tests
+
+### Multi-platform
+
+Docker supports multi-platform images; such images can run on multiple
+platforms (amd64, arm64, etc.). Therefore, cqfd takes advantage of this
+to build and run containers for different architectures thanks to QEMU and
+binfmt on Linux.
+
+Example:
+
+First, specify the desired platform in the `Dockerfile`, as shown below:
+
+    FROM --platform=linux/arm64 ubuntu:24.04
+    (...)
+
+Then, initialize the image:
+
+    $ cqfd init
+
+Finally, test the build container:
+
+    $ cqfd exec uname -m
+    aarch64
 
 ### Key files and directories
 
