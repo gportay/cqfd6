@@ -8,9 +8,9 @@ files='CHANGELOG.md \
        AUTHORS \
        LICENSE \
        README.md \
-       samples/Dockerfile.trusty.nodejs5x \
+       samples/Dockerfile.focalFossa.nodejs20x \
        samples/dot-cqfdrc \
-       samples/Dockerfile.trusty.android23 \
+       samples/Dockerfile.focalFossa.android34 \
        cqfdrc.5.gz \
        cqfd.1.gz \
        cqfd'
