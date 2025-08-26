@@ -399,6 +399,7 @@ make_archive() {
 		zip -q -9 -r "$release_archive" "${files[@]}"
 		;;
 	*)
+		die "$release_archive: Invalid format!"
 		;;
 	esac
 }

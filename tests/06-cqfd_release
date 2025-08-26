@@ -298,6 +298,18 @@ else
 	jtest_result pass
 fi
 
+################################################################################
+# Using a non-supported format in archive= should fail
+################################################################################
+jtest_prepare "cqfd resolves globs in build.files"
+# shellcheck disable=SC2016
+sed -i -e 's!^archive=.*$!archive=cqfd-$CTEST.tar.zst!' .cqfdrc
+if ! "$cqfd" release; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
 # cleanup
 rm -f "tmp.$$" "cqfd-$CTEST.tar.xz"
 mv -f "$cqfdrc_old" .cqfdrc
