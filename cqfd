@@ -306,6 +306,22 @@ docker_pull_or_build() {
 	# Pull the image
 	# If custom image name is used, it is pulled pull by docker_run()
 	if [ "$project_image" ] && [ ! "$project_custom_img_name" ] ; then
+		# Append extra args from the .cqfdrc [build] section
+		if [ "$build_docker_pull_args" ]; then
+			local array
+			# shellcheck disable=SC2162
+			read -a array <<<"$build_docker_pull_args"
+			args+=("${array[@]}")
+		fi
+
+		# Append extra args from $CQFD_EXTRA_PULL_ARGS
+		if [ "$CQFD_EXTRA_PULL_ARGS" ]; then
+			local array
+			# shellcheck disable=SC2162
+			read -a array <<<"$CQFD_EXTRA_PULL_ARGS"
+			args+=("${array[@]}")
+		fi
+
 		args+=("$cqfd_image")
 
 		debug executing: "${cqfd_docker[@]}" pull "${args[@]}"
