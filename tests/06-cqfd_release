@@ -306,7 +306,29 @@ if ! grep -q '^.cqfdrc$' "tmp.$$" ||
 else
 	jtest_result pass
 fi
+rm -f "cqfd-$CTEST.tar.xz"
+rm -f "tmp.$$"
 
-# cleanup
-rm -f "tmp.$$" "cqfd-$CTEST.tar.xz"
+################################################################################
+# Using option --release should succeed
+################################################################################
+# shellcheck disable=SC2016
+sed -i -e 's!^archive=.*$!archive=cqfd-$CTEST.tar.xz!' .cqfdrc
+sed -i -e 's!^files=.*$!files=".cqfd/cqfd"!' .cqfdrc
+jtest_prepare "cqfd release with option --release"
+if "$cqfd" --release; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+jtest_prepare "default orgname-project.tar archive is generated"
+if tar tf "cqfd-$CTEST.tar.xz" &>/dev/null; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+rm -f "cqfd-$CTEST.tar.xz"
+
+# restore initial .cqfdrc
 mv -f .cqfdrc.orig .cqfdrc

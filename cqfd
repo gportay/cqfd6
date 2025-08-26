@@ -936,9 +936,6 @@ load_config() {
 }
 
 has_to_release=false
-if [ "$#" -eq 0 ]; then
-	load_config
-fi
 while [ $# -gt 0 ]; do
 	case "$1" in
 	help|-h|--help)
@@ -1006,6 +1003,7 @@ while [ $# -gt 0 ]; do
 		has_to_release=true
 		;;
 	exec)
+		cqfd_command="$1"
 		shift
 		if [ "$#" -lt 1 ]; then
 			usage
@@ -1016,6 +1014,7 @@ while [ $# -gt 0 ]; do
 		break
 		;;
 	run|release)
+		cqfd_command="$1"
 		if [ "$1" = "release" ]; then
 			has_to_release=true
 		fi
@@ -1049,6 +1048,7 @@ while [ $# -gt 0 ]; do
 		break
 		;;
 	sh|ash|dash|bash|ksh|zsh|csh|tcsh|fish|shell)
+		cqfd_command="$1"
 		if [ "$1" != "shell" ]; then
 			cqfd_shell="$1"
 		fi
@@ -1067,6 +1067,10 @@ while [ $# -gt 0 ]; do
 	esac
 	shift
 done
+
+if [ -z "$cqfd_command" ]; then
+	load_config "$flavor"
+fi
 
 if [ -z "$build_command" ]; then
 	die ".cqfdrc: Missing or empty build.command property!"
