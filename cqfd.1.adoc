@@ -59,6 +59,9 @@ Command options for run:
 
 == OPTIONS
 
+*--release*::
+	Release software.
+
 *-f FILE*::
 	Use file as config file (default _.cqfdrc_).
 
@@ -110,11 +113,11 @@ removed.
 
 === RELEASE
 
-The _release_ command behaves exactly like _run_, but creates a release tarball
-for your project additionally. The release files (as specified in your
-*cqfdrc(5)*) will be included inside the release archive.
+The _--release_ option creates a release tarball for your project additionally.
+The release files (as specified in your *cqfdrc(5)*) will be included inside
+the release archive.
 
-	$ cqfd release
+	$ cqfd --release
 
 The resulting release file is then called according to the archive template,
 which defaults to _%Po-%Pn.tar.xz_.
