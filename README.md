@@ -202,6 +202,12 @@ For example, to attempt to pull newer version of the image, it can be set like:
 docker_build_args='--pull=true'
 ```
 
+`docker_pull_args` (optional): arguments used to invoke `docker pull`.
+For example, to not skip image verification, it can be set like:
+```
+docker_pull_args='--disable-content-trust=false'
+```
+
 `docker_run_args` (optional): arguments used to invoke `docker run`.
 For example, to share networking with the host, it can be set like:
 ```
@@ -296,6 +302,11 @@ See 'docker run --help'.
 docker-build options to be append to the building image.
 Format is the same as (and passed to) docker-build’s options.
 See 'docker build --help'.
+
+`CQFD_EXTRA_PULL_ARGS`: A space-separated list of additional
+docker-pull options to be append to the pulled image.
+Format is the same as (and passed to) docker-pull’s options.
+See 'docker pull --help'.
 
 `CQFD_EXTRA_RMI_ARGS`: A space-separated list of additional
 docker-rmi options to be append to the removed image.

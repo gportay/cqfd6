@@ -97,6 +97,9 @@ line, and right after a section.
 *docker_build_args (optional)*::
 	Arguments used to invoke _docker build_.
 
+*docker_pull_args (optional)*::
+	Arguments used to invoke _docker build_.
+
 *docker_run_args (optional)*::
 	Arguments used to invoke _docker run_.
 

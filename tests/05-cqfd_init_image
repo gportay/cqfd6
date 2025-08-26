@@ -42,6 +42,21 @@ else
 	jtest_result fail
 fi
 
+jtest_prepare "cqfd init with CQFD_EXTRA_PULL_ARGS"
+if CQFD_EXTRA_BUILD_ARGS="--disable-content-trust=false" "$cqfd" init; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+jtest_prepare "run cqfd with docker_pull_args in config"
+sed '/\[build\]/adocker_build_args="--disable-content-trust=false"' .cqfdrc
+if "$cqfd" init; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
 ################################################################################
 # Restore initial .cqfdrc and Dockerfile
 ################################################################################
