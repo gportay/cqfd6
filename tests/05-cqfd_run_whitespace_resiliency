@@ -15,7 +15,7 @@ cd "$TDIR/" || exit 1
 ################################################################################
 jtest_prepare "run cqfd with an option containing whitespace in CQFD_EXTRA_RUN_ARGS"
 if CQFD_EXTRA_RUN_ARGS="-e FOO=bar\ baz" \
-	"$cqfd" run env | grep "FOO=bar baz"; then
+   "$cqfd" run env | grep "FOO=bar baz"; then
 	jtest_result pass
 else
 	jtest_result fail
