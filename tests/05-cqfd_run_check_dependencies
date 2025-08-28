@@ -73,7 +73,10 @@ fi
 # restore initial Dockerfile
 ################################################################################
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
-jtest_log info "restore container"
+
+################################################################################
+# restore container
+################################################################################
 if ! "$cqfd" init; then
-	jtest_log error "cqfd init failed"
+	jtest_log error "restore container failed"
 fi

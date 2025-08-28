@@ -98,3 +98,4 @@ fi
 mv "$extdir/cqfdrc" .cqfdrc
 mv "$extdir/cqfd" .cqfd
 rmdir -p "$extdir"
+cqfd="$TDIR/.cqfd/cqfd"
