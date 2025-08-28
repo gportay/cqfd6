@@ -30,4 +30,9 @@ else
 	# restore .cqfdrc and Dockerfile
 	mv -f .cqfdrc.orig .cqfdrc
 	mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
+
+	# restore container
+	if ! "$cqfd" init; then
+		jtest_log error "restore container failed"
+	fi
 fi
