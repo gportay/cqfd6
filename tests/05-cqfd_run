@@ -27,7 +27,8 @@ for i in 0 1; do
 	fi
 
 	# at the end of either test, $test_file is populated
-	if grep -qw "cqfd" "$test_file"; then
+	# shellcheck disable=SC2181
+	if [ "$?" -eq 0 ] && grep -qw "cqfd" "$test_file"; then
 		jtest_result pass
 	else
 		jtest_log fatal "$test_file not present after test"

@@ -263,8 +263,8 @@ for flav in foo bar; do
 	filename="cqfd-$flav.tar.xz"
 	jtest_prepare "release for flavor $flav creates $filename"
 
-	"$cqfd" -b "$flav" release
-	if tar tf "$filename" &>/dev/null; then
+	if "$cqfd" -b "$flav" release && \
+	   tar tf "$filename" &>/dev/null; then
 		jtest_result pass
 	else
 		jtest_result fail
