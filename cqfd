@@ -861,7 +861,7 @@ load_config() {
 
 	# check for [project] org and name properties are set and are not empty
 	if [ -z "$project_org" ] || [ -z "$project_name" ]; then
-		die ".cqfdrc: Missing project.org or project.name properties"
+		die ".cqfdrc: Missing project.org or project.name properties!"
 	fi
 
 	# load the [build] section
