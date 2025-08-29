@@ -58,7 +58,7 @@ _cqfd() {
 		fi
 		return
 		;;
-	init|deinit|ls|flavors|release|-v|version|-h|help)
+	init|deinit|ls|gc|flavors|release|-v|version|-h|help)
 		return
 		;;
 	esac
