@@ -43,6 +43,9 @@ Linux distribution.
 *shell [sh_arguments]*::
 	Run shell command inside build container.
 
+*version*::
+	Show version.
+
 *help*::
 	Show this help text.
 
