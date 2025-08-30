@@ -62,6 +62,7 @@ Commands:
     run [cmdstring]      Run argument(s) inside build container.
     release              Release software.
     shell [shargs]       Run shell command inside build container.
+    version              Show version.
     help                 Show this help text.
 
     By default, the 'run' command is assumed, with the default
