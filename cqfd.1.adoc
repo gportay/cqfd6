@@ -37,19 +37,19 @@ Linux distribution.
 *gc*::
 	Cleanup unused build containers.
 
-*exec program [arguments]*::
+*exec PROGRAM [ARGUMENTS]*::
 	Run command inside build container.
 
 *flavors*::
 	List flavors from config file to stdout.
 
-*run [command_string]*::
+*run [COMMAND_STRING]*::
 	Run command string inside build container.
 
 *release*::
 	Release software.
 
-*shell [sh_arguments]*::
+*--shell [SH_ARGUMENTS]*::
 	Run shell command inside build container.
 
 *version*::
@@ -63,7 +63,7 @@ configured in your _.cqfdrc_ (see build.command).
 
 Command options for run:
 
-*-c argument_string*::
+*-c ARGUMENT_STRING*::
 	Append argument string to the default command string.
 
 == OPTIONS
