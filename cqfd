@@ -25,7 +25,7 @@ PROGNAME=$(basename "$0")
 VERSION=6
 cqfd_user="${USER:-builder}"
 cqfd_user_home="${HOME:-/home/$cqfd_user}"
-cqfd_shell="${CQFD_SHELL:-/bin/bash}"
+cqfd_shell="${CQFD_SHELL:-/bin/sh}"
 # shellcheck disable=SC2162
 read -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
 cqfd_docker_gid="${CQFD_DOCKER_GID:-0}"
