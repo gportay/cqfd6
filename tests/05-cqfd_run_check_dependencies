@@ -41,7 +41,7 @@ jtest_prepare "cqfd run with satisfied command useradd and groupadd requirements
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if "$cqfd" init && CQFD_SHELL=/bin/sh "$cqfd" --verbose run true; then
+	if "$cqfd" init && "$cqfd" --verbose run true; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -60,7 +60,7 @@ jtest_prepare "cqfd run with satisfied command shell requirements"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if "$cqfd" init && "$cqfd" --verbose run true; then
+	if "$cqfd" init && CQFD_SHELL=/bin/bash "$cqfd" --verbose run true; then
 		jtest_result pass
 	else
 		jtest_result fail

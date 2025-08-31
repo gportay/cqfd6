@@ -2,5 +2,5 @@
 if ! [ -e /.dockerenv ] && ! [ -e /run/.containerenv ]; then
 	exit 1
 fi
-source /etc/os-release
+. /etc/os-release
 echo "$PRETTY_NAME"
