@@ -17,7 +17,7 @@ cp -f .cqfdrc .cqfdrc.orig
 sed -i -e "s/\[foo\]/[foo]\ndistro='centos'/" .cqfdrc
 
 jtest_prepare "cqfd init using '$flavor' flavor"
-if "$cqfd" -b "$flavor" init &&
+if "$cqfd" -b "$flavor" init && \
    "$cqfd" -b "$flavor" run "grep '^NAME=' /etc/*release" | grep -q 'NAME="CentOS Linux"'; then
 	jtest_result pass
 else
