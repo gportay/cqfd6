@@ -982,10 +982,7 @@ load_config() {
 		Bd="${build_distro:-docker}"
 		# set default tag if tag= unspecified
 		if ! [ "$project_tag" ]; then
-			project_tag="cqfd_%Un_%Po_%Pn_%Dp_%Dh"
-			if [ "$build_distro" ]; then
-				project_tag+="_%Bd"
-			fi
+			project_tag="cqfd_%Un_%Po_%Pn_%Dp_%Bd_%Dh"
 		fi
 		# shellcheck disable=SC2001
 		cqfd_image=$(sed -e 's!%Un!'"$Un"'!g;
