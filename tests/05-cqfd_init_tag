@@ -22,44 +22,45 @@ cp -f cqfdrc-tag .cqfdrc
 # 'cqfd init' creates image with tag
 ################################################################################
 random="$RANDOM$RANDOM"
-tag="cqfd-%Un-%Po-%Pn-%Bd-%Dh-$random"
+tag="%Un-%Po-%Pn-%Bd-%Dh-$random"
 sed -i -e "s!^tag=.*\$!tag='$tag'!" .cqfdrc
 # shellcheck disable=SC2001
 un="$(sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$USER")"
 dh="$(sha256sum .cqfd/docker/Dockerfile | cut -b 1-7)"
-image="cqfd-$un-cqfd-test-docker-$dh-$random"
-if "${cqfd_docker[@]}" inspect "$image" &>/dev/null; then
-	jtest_log info "${cqfd_docker[-1]} registry contains image named: $image, removing..."
-	"${cqfd_docker[@]}" rmi "$image"
+image="cqfd_${un}_$un-cqfd-test-docker-$dh-$random"
+if "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
+	jtest_log info "${cqfd_docker[-1]} registry contains image named: $image:$dh, removing..."
+	"${cqfd_docker[@]}" rmi "$image:$dh"
 fi
 
-jtest_prepare "cqfd init with tag $tag builds templated image $image"
+jtest_prepare "cqfd init with tag $tag builds templated image $image:$dh"
 if "$cqfd" init && \
-   "${cqfd_docker[@]}" inspect "$image" &>/dev/null; then
+   "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
-"${cqfd_docker[@]}" rmi "$image"
+"${cqfd_docker[@]}" rmi "$image:$dh"
 
-tag="cqfd-%Un-%Po-%Pn-%Bd-%DH-$random"
+tag="%Un-%Po-%Pn-%Bd-%DH-$random"
 sed -i -e "s!^tag=.*\$!tag='$tag'!" .cqfdrc
 dh="$(sha256sum .cqfd/centos/Dockerfile | cut -b 1-64)"
-image="cqfd-$un-cqfd-test-centos-$dh-$random"
-if "${cqfd_docker[@]}" inspect "$image" &>/dev/null; then
-	jtest_log info "${cqfd_docker[-1]} registry contains image named: $image, removing..."
-	"${cqfd_docker[@]}" rmi "$image"
+image="cqfd_${un}_$un-cqfd-test-centos-$dh-$random"
+dh="$(sha256sum .cqfd/centos/Dockerfile | cut -b 1-7)"
+if "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
+	jtest_log info "${cqfd_docker[-1]} registry contains image named: $image:$dh, removing..."
+	"${cqfd_docker[@]}" rmi "$image:$dh"
 fi
 
-jtest_prepare "cqfd init with tag $tag and distro build templated image $image"
+jtest_prepare "cqfd init with tag $tag and distro build templated image $image:$dh"
 sed -i -e "s/\[build\]/[build]\ndistro='centos'/" .cqfdrc
 if "$cqfd" init && \
-   "${cqfd_docker[@]}" inspect "$image" &>/dev/null; then
+   "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
-"${cqfd_docker[@]}" rmi "$image"
+"${cqfd_docker[@]}" rmi "$image:$dh"
 
 ################################################################################
 # Restore initial .cqfdrc and Dockerfile
