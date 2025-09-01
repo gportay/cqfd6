@@ -21,7 +21,7 @@ done
 # 'cqfd ls' should list build containers
 ################################################################################
 jtest_prepare "cqfd ls lists the build containers"
-if "$cqfd" ls | grep "^cqfd_$USER\_cqfd_test_";
+if "$cqfd" ls | grep "^cqfd-$USER-cqfd-test-";
    test "${PIPESTATUS[0]}" -eq 0 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
@@ -43,7 +43,7 @@ fi
 # 'cqfd ls' should not list the build containers
 ################################################################################
 jtest_prepare "cqfd ls lists no build containers"
-if ! "$cqfd" ls | grep "^cqfd_$USER\_cqfd_test_" && \
+if ! "$cqfd" ls | grep "^cqfd-$USER-cqfd-test-" && \
    test "${PIPESTATUS[0]}" -eq 0 -a "${PIPESTATUS[1]}" -eq 1; then
 	jtest_result pass
 else

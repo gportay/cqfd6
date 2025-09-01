@@ -152,7 +152,7 @@ images() {
 	local images
 
 	user="$(sanitize "$USER")"
-	mapfile -t images < <("${cqfd_docker[@]}" images "cqfd_$user\_*" --format "{{.Repository}}:{{.Tag}}")
+	mapfile -t images < <("${cqfd_docker[@]}" images "cqfd-$user-*" --format "{{.Repository}}:{{.Tag}}")
 	for image in "${images[@]}"; do
 		local symlink
 
@@ -981,7 +981,7 @@ load_config() {
 		Bd="${build_distro:-docker}"
 		# set default tag if tag= unspecified
 		if ! [ "$project_tag" ]; then
-			project_tag="%Po_%Pn_%Dp_%Bd"
+			project_tag="%Po-%Pn-%Dp-%Bd-%Dh"
 		fi
 		# shellcheck disable=SC2001
 		cqfd_image=$(sed -e 's!%Un!'"$Un"'!g;
@@ -991,7 +991,7 @@ load_config() {
 			             s!%Dh!'"$Dh"'!g;
 			             s!%DH!'"$DH"'!g;
 			             s!%Bd!'"$Bd"'!g;' <<<"$project_tag")
-		cqfd_image="$(sanitize "cqfd_${Un}_$cqfd_image:$Dh")"
+		cqfd_image="$(sanitize "cqfd-$Un-$cqfd_image:$Dh")"
 	fi
 
 	# set the docker gid if the group exists
