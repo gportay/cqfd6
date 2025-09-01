@@ -127,7 +127,7 @@ debug() {
 # stdout: the name sanitized
 sanitize() {
 	# shellcheck disable=SC2001
-	sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$1"
+	sed 's/[^0-9a-zA-Z:\-]/_/g' <<<"$1"
 }
 
 ## image_is_running() - checks if image is running
@@ -147,14 +147,13 @@ images() {
 	local images
 
 	user="$(sanitize "$USER")"
-	mapfile -t images < <("${cqfd_docker[@]}" images "cqfd_$user\_*" --format "{{.Repository}}")
+	mapfile -t images < <("${cqfd_docker[@]}" images "cqfd_$user\_*" --format "{{.Repository}}:{{.Tag}}")
 	for image in "${images[@]}"; do
 		local symlink
 
 		# Remove registry if any
 		image="${image##*/}"
 		for symlink in "$cqfd_cachedir/${cqfd_docker[-1]}"/*/"$image"; do
-			local array
 			local hash
 			local status
 			local dockerfile
@@ -164,13 +163,8 @@ images() {
 				continue
 			fi
 
-			# Split components to extract the Dockerfile hash
-			IFS=_ read -r -a array <<<"${symlink##*/cqfd_"$user"_}"
-			array=(cqfd "$user" "${array[@]}")
-			hash="${array[-1]}"
-			if [ "${#array[@]}" -gt 5 ]; then
-				hash="${array[-2]}"
-			fi
+			# Extract the Dockerfile hash
+			hash="${image%:*}"
 
 			# Get the Dockerfile path to compute the hash
 			dockerfile="<none>"
@@ -982,7 +976,7 @@ load_config() {
 		Bd="${build_distro:-docker}"
 		# set default tag if tag= unspecified
 		if ! [ "$project_tag" ]; then
-			project_tag="cqfd_%Un_%Po_%Pn_%Dp_%Bd_%Dh"
+			project_tag="%Po_%Pn_%Dp_%Bd_%Dh"
 		fi
 		# shellcheck disable=SC2001
 		cqfd_image=$(sed -e 's!%Un!'"$Un"'!g;
@@ -992,7 +986,7 @@ load_config() {
 			             s!%Dh!'"$Dh"'!g;
 			             s!%DH!'"$DH"'!g;
 			             s!%Bd!'"$Bd"'!g;' <<<"$project_tag")
-		cqfd_image="$(sanitize "$cqfd_image")"
+		cqfd_image="$(sanitize "cqfd_${Un}_$cqfd_image:$Dh")"
 	fi
 
 	# set the docker gid if the group exists
