@@ -121,6 +121,14 @@ sanitize() {
 	sed 's/[^0-9a-zA-Z:\-]/_/g' <<<"$1"
 }
 
+## image_is_running() - checks if image is running
+# $1: the image name to check if running
+image_is_running() {
+	local ids
+	mapfile -t ids < <("${cqfd_docker[@]}" ps --filter "ancestor=$1" --filter status=running --quiet)
+	test "${#ids[@]}" -gt 0
+}
+
 ## docker_build() - initialize build container
 docker_build() {
 	local args=()
@@ -628,7 +636,7 @@ load_config() {
 		# shellcheck disable=SC2001
 		format_user=$(sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$USER")
 		dockerfile_hash=$(sha256sum "$dockerfile" | cut -b 1-7)
-		docker_img_name="cqfd${format_user:+_$format_user}_${project_org}_${project_name}_${build_distro:-docker}:$dockerfile_hash"
+		docker_img_name="cqfd${format_user:+-$format_user}-$project_org-$project_name-${build_distro:-docker}:$dockerfile_hash"
 		docker_img_name="$(sanitize "$docker_img_name")"
 	fi
 }

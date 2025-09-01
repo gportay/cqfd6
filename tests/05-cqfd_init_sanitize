@@ -16,7 +16,7 @@ cp -f .cqfdrc .cqfdrc.orig
 # 'cqfd init' creates image with invalid user name should pass
 ################################################################################
 dockerfile_hash="$(sha256sum .cqfd/docker/Dockerfile | cut -b 1-7)"
-image="cqfd_user_invalid_cqfd_test_docker"
+image="cqfd-user_invalid-cqfd-test-docker"
 if "$cqfd_docker" inspect "$image" &>/dev/null; then
 	jtest_log info "$cqfd_docker registry contains image named: $image:$dockerfile_hash, removing..."
 	"$cqfd_docker" rmi "$image:$dockerfile_hash"
