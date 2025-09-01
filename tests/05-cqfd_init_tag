@@ -27,7 +27,7 @@ sed -i -e "s!^tag=.*\$!tag='$tag'!" .cqfdrc
 # shellcheck disable=SC2001
 un="$(sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$USER")"
 dh="$(sha256sum .cqfd/docker/Dockerfile | cut -b 1-7)"
-image="cqfd_${un}_$un-cqfd-test-docker-$dh-$random"
+image="cqfd-$un-$un-cqfd-test-docker-$dh-$random"
 if "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	jtest_log info "${cqfd_docker[-1]} registry contains image named: $image:$dh, removing..."
 	"${cqfd_docker[@]}" rmi "$image:$dh"
@@ -45,7 +45,7 @@ fi
 tag="%Un-%Po-%Pn-%Bd-%DH-$random"
 sed -i -e "s!^tag=.*\$!tag='$tag'!" .cqfdrc
 dh="$(sha256sum .cqfd/centos/Dockerfile | cut -b 1-64)"
-image="cqfd_${un}_$un-cqfd-test-centos-$dh-$random"
+image="cqfd-$un-$un-cqfd-test-centos-$dh-$random"
 dh="$(sha256sum .cqfd/centos/Dockerfile | cut -b 1-7)"
 if "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	jtest_log info "${cqfd_docker[-1]} registry contains image named: $image:$dh, removing..."
