@@ -130,9 +130,9 @@ removed.
 
 === RELEASE
 
-The _--release_ option creates a release tarball for your project additionally.
-The release files (as specified in your *cqfdrc(5)*) will be included inside
-the release archive.
+The _--release_ option creates a release tarball for your project. The release
+files (as specified in your *cqfdrc(5)*) will be included inside the release
+archive.
 
 	$ cqfd --release
 
