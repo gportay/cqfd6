@@ -50,7 +50,7 @@ Options:
                          .cqfd).
     -C or --directory <directory>
                          Change to the specified working directory.
-    -b or --build <flavor_name>
+    -b or --build <flavor>
                          Target a specific build flavor.
     -q or --quiet        Turn on quiet mode.
     -v or --version      Show version.
