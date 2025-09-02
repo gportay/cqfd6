@@ -50,7 +50,7 @@ else
 fi
 
 jtest_prepare "run cqfd with docker_pull_args in config"
-sed '/\[build\]/adocker_build_args="--disable-content-trust=false"' .cqfdrc
+sed '/\[build\]/adocker_build_args="--disable-content-trust=false"' -i .cqfdrc
 if "$cqfd" init; then
 	jtest_result pass
 else
