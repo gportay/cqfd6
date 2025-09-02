@@ -35,12 +35,15 @@ Just follow these steps:
 * [Install cqfd](#installingremoving-cqfd6)
 * Go into your project's directory
 * Create a `.cqfdrc` file
-* Create a Dockerfile and save it as `.cqfd/docker/Dockerfile`
+* Create a `Dockerfile` and save it as `.cqfd/docker/Dockerfile`
 * Run `cqfd --init`
 
-Examples are available in the `samples/` directory.
+cqfd run itself to build the documention or to release packages; see in-tree
+[.cqfdrc](.cqfdrc) file and [.cqfd](.cqfd) directory.
 
-`cqfd` will use the provided Dockerfile to create a normalized runtime
+Additional examples are available in the [samples](samples) directory.
+
+`cqfd` will use the provided `Dockerfile` to create a normalized runtime
 build environment for your project.
 
 > ⚠️ Warning
