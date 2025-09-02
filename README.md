@@ -33,7 +33,6 @@ eXperimentation*.
 Just follow these steps:
 
 * [Install cqfd](#installingremoving-cqfd6)
-* Make sure your user is a member of the `docker` group
 * Go into your project's directory
 * Create a `.cqfdrc` file
 * Create a Dockerfile and save it as `.cqfd/docker/Dockerfile`
