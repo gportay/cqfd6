@@ -694,8 +694,10 @@ while [ $# -gt 0 ]; do
 
 		load_config "$flavor"
 
-		# No more args? run default command
-		[ "$#" -eq 0 ] && break
+		# Run default command
+		if [ "$#" -eq 0 ]; then
+		       break
+		fi
 
 		# -c appends following args to the default command
 		if [ "$1" = "-c" ]; then
