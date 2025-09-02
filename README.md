@@ -61,15 +61,15 @@ build command as configured in `.cqfdrc`, use:
 Alternatively, you may want to specify a single custom command to be executed
 from inside the build container.
 
-    $ cqfd --exec make clean
+    $ cqfd make clean
 
 Or custom commands composed with shell grammar:
 
-    $ cqfd --shell -c "make linux-dirclean && make foobar-dirclean"
+    $ cqfd sh -c "make linux-dirclean && make foobar-dirclean"
 
 Or run a shell script with arguments:
 
-    $ cqfd --shell ./build.sh debug
+    $ cqfd sh ./build.sh debug
 
 When `cqfd` is running, the current directory is mounted by Docker as a volume.
 As a result, all the build artefacts generated inside the build container are
@@ -152,34 +152,23 @@ refer to [cqfdrc(5)](cqfdrc.5.adoc).
 
 ## Using cqfd in an advanced way
 
-### Appending extra arguments to the build command
-
-The `-c` option set immediately after the command `--run` allows appending the
-command of a `cqfd --run` for temporary developments:
-
-    $ cqfd --build centos7 --run -c "clean"
-    $ cqfd --build centos7 --run -c "TRACING=1"
-
 ### Running a shell in the build container
 
-You can use the `shell` command to quickly pop a shell in your build container.
-The shell to be launched (default `/bin/sh`) can be customized using the
-`CQFD_SHELL` environment variable.
+You can pop an interactive shell in your build container.
 
 Example:
 
-    fred@host:~/project$ cqfd --shell
+    fred@host:~/project$ cqfd bash
     fred@container:~/project$
 
 ### Use cqfd as an interpreter for shell script
 
-You can use the `--shell` command to write a shell script and run it in your
-build container.
+You can write a shell script and run it in your build container.
 
 Example:
 
     fred@host:~/project$ cat get-container-pretty-name.sh
-    #!/usr/bin/env -S cqfd --shell
+    #!/usr/bin/env -S cqfd sh
     if ! test -e /.dockerenv; then
         exit 1
     fi
@@ -190,12 +179,12 @@ Example:
 
 ### Use cqfd as a standard shell for binaries
 
-You can even use the `--shell` command to use it as a standard `$SHELL` so
-binaries honoring that variable run shell commands in your build container.
+You can even use `cqfd` as a standard `$SHELL` so binaries honoring that
+variable run shell commands in your build container.
 
 Example:
 
-    fred@host:~/project$ make SHELL="cqfd --shell"
+    fred@host:~/project$ make SHELL="cqfd sh"
     Available make targets:
        help:      This help message
        install:   Install script, doc and resources
@@ -227,7 +216,7 @@ Then, initialize the image:
 
 Finally, test the build container:
 
-    $ cqfd --exec uname -m
+    $ cqfd uname -m
     aarch64
 
 Additionally, `cqfd` supports the option `--platform TARGET`, the environment
@@ -237,12 +226,12 @@ platform dynamically.
 Examples:
 
     $ cqfd --platform linux/arm64 --init
-    $ cqfd --platform linux/arm64 --exec uname -m
+    $ cqfd --platform linux/arm64 uname -m
     aarch64
 
     $ export CQFD_PLATFORM="linux/arm64"
     $ cqfd --init
-    $ cqfd --exec uname -m
+    $ cqfd uname -m
     aarch64
 
     $ cat .cqfdrc
@@ -256,9 +245,9 @@ Examples:
     [build]
     command='uname -a'
     $ cqfd --init
-    $ cqfd --exec uname -m
+    $ cqfd uname -m
     x86_64
-    $ cqfd --build arm64 --exec uname -m
+    $ cqfd --build arm64 uname -m
     aarch64
 
 ## Key files and directories
