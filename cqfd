@@ -1147,10 +1147,10 @@ while [ $# -gt 0 ]; do
 		# Has to release
 		if [ "$cqfd_command" = "release" ]; then
 			has_to_release=true
-			if [ "$#" -gt 1 ]; then
+			if [ "$#" -gt 0 ]; then
 				warn "command release shall not support argument(s)," \
-				     "please consider the command run -c instead:"
-				echo "               cqfd --release run $*" >&2
+				     "please consider the command run instead:"
+				echo "               cqfd --release run ${*@Q}" >&2
 			fi
 		fi
 
