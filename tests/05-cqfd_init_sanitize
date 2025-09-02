@@ -6,21 +6,36 @@ set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"
 cqfd="$TDIR/.cqfd/cqfd"
+read -r -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
+if [ "$CQFD_RUN_WITH_SUDO" = true ]; then
+	cqfd_docker=(sudo "${cqfd_docker[@]}")
+fi
 
 cd "$TDIR/" || exit 1
 
 cp -f .cqfdrc .cqfdrc.orig
-cat .cqfdrc
 
 ################################################################################
 # 'cqfd init' creates image with invalid user name should pass
 ################################################################################
+dh="$(sha256sum .cqfd/docker/Dockerfile | cut -b 1-7)"
+image="cqfd-user_invalid-cqfd-test-linux_amd64-docker-$dh"
+if uname -m | grep -q aarch64; then
+	image="cqfd-user_invalid-cqfd-test-linux_arm64-docker-$dh"
+fi
+if "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
+	jtest_log info "${cqfd_docker[-1]} registry contains image named: $image:$dh, removing..."
+	"${cqfd_docker[@]}" rmi "$image:$dh"
+fi
+
 jtest_prepare "cqfd init creates image with invalid user name"
-if USER="user@invalid" "$cqfd" init; then
+if USER="user@invalid" "$cqfd" init && \
+   "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
+"${cqfd_docker[@]}" rmi "$image:$dh"
 
 ################################################################################
 # 'cqfd init' creates image with invalid character in project.org should pass
