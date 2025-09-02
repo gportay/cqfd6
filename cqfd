@@ -944,16 +944,6 @@ load_config() {
 		fi
 	fi
 
-	# set default platform if platform= unspecified
-	cqfd_platform="$build_platform"
-	# using 
-	if [ ! "$cqfd_platform" ]; then
-		cqfd_platform="$target"
-	fi
-	if [ ! "$cqfd_platform" ]; then
-		cqfd_platform="$native"
-	fi
-
 	# set default image if image= unspecified
 	cqfd_image="$project_image"
 	if [ ! "$cqfd_image" ]; then
