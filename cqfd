@@ -46,7 +46,7 @@ Options:
     -d or --cqfd-directory <directory>
                          Use directory as cqfd directory (default .cqfd).
     -w or --working-directory <directory>
-    -w <directory>       Use directory as working directory (default parent of
+                         Use directory as working directory (default parent of
                          .cqfd).
     -C or --directory <directory>
                          Change to the specified working directory.
