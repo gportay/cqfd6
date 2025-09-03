@@ -222,7 +222,7 @@ another container or another build command.
 
 === APPENDING TO THE BUILD COMMAND
 
-The _-c_ option set immediately after the command --run allows appending the
+The _-c_ option sets immediately after the command --run allows appending the
 command of a cqfd --run for temporary developments.
 
 	$ cqfd --build centos7 --run -c "clean"
