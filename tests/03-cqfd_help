@@ -13,7 +13,6 @@ if "$cqfd" help >"$TDIR/usage"; then
 	jtest_result pass
 else
 	jtest_result fail
-	rm -f "$TDIR/usage"
 fi
 
 ################################################################################
