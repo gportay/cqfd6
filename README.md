@@ -67,7 +67,7 @@ Or run a shell script with arguments:
 
 When `cqfd` is running, the current directory is mounted by Docker
 as a volume. As a result, all the build artefacts generated inside the
-container are still accessible in this directory after the container
+build container are still accessible in this directory after the build container
 has been stopped and removed.
 
 ### Release
@@ -84,7 +84,7 @@ template, which defaults to `%Po-%Pn.tar.xz`.
 ### Flavors
 
 Flavors are used to create alternate build scenarios. For example, to
-use another container or another build command.
+use another build container or another build command.
 
 ## The .cqfdrc file
 
@@ -178,7 +178,7 @@ default, cqfd uses `"docker"`, and `.cqfd/docker/Dockerfile` is used.
 `distro` is *deprecated*, use `dockerfile` to set the path to the `Dockerfile`.
 
 `user_extra_groups` (optional): a space-separated list of groups the user
-should be a member of in the container. You can either use the `group:gid`
+should be a member of in the build container. You can either use the `group:gid`
 format, or simply specify the `group` name if it exists either in the host or
 inside the docker image.
 
@@ -294,7 +294,7 @@ CQFD_DOCKER='podman' cqfd
 ```
 
 `CQFD_EXTRA_RUN_ARGS`: A space-separated list of additional
-docker-run options to be append to the starting container.
+docker-run options to be append to the starting build container.
 Format is the same as (and passed to) docker-run’s options.
 See 'docker run --help'.
 
@@ -314,24 +314,24 @@ Format is the same as (and passed to) docker-rmi’s options.
 See 'docker rmi --help'.
 
 `CQFD_NO_SSH_CONFIG`: Set to `true` to disable forwarding the global
-`/etc/ssh` configurations to the container. This may be required if
+`/etc/ssh` configurations to the build container. This may be required if
 the host's `ssh` configuration is not compatible with the `ssh`
-version within the container.
+version within the build container.
 
 `CQFD_NO_USER_SSH_CONFIG`: Set to `true` to disable forwarding
-the user's `~/.ssh` configuration to the container.
+the user's `~/.ssh` configuration to the build container.
 
 `CQFD_NO_USER_GIT_CONFIG`: Set to `true` to disable forwarding
-the user's `~/.gitconfig` configuration to the container.
+the user's `~/.gitconfig` configuration to the build container.
 
 `CQFD_NO_SSH_AUTH_SOCK`: Set to `true` to disable forwarding the
-SSH authentication socket to the container.
+SSH authentication socket to the build container.
 
 `CQFD_BIND_DOCKER_SOCK`: Set to `true` to enable forwarding the
-docker socket to the container.
+docker socket to the build container.
 
 `CQFD_DOCKER_GID`: The gid of the docker group in host to map to
-the cqfd group in the container.
+the cqfd group in the build container.
 
 `CQFD_RUN_WITH_SUDO`: Set to ``true`` to run `$CQFD_DOCKER` with
 `sudo`.
@@ -346,9 +346,9 @@ command of a cqfd --run for temporary developments:
     $ cqfd --build centos7 --run -c "clean"
     $ cqfd --build centos7 --run -c "TRACING=1"
 
-### Running a shell in the container
+### Running a shell in the build container
 
-You can use the `shell` command to quickly pop a shell in your defined
+You can use the `shell` command to quickly pop a shell in your build
 container. The shell to be launched (default `/bin/sh`) can be customized using
 the `CQFD_SHELL` environment variable.
 
@@ -360,7 +360,7 @@ Example:
 ### Use cqfd as an interpreter for shell script
 
 You can use the `--shell` command to write a shell script and run it in your
-defined container.
+build container.
 
 Example:
 
@@ -377,7 +377,7 @@ Example:
 ### Use cqfd as a standard shell for binaries
 
 You can even use the `--shell` command to use it as a standard `$SHELL` so
-binaries honoring that variable run shell commands in your defined container.
+binaries honoring that variable run shell commands in your build container.
 
 Example:
 
@@ -510,12 +510,12 @@ Example:
 
 ## Build Container Environment
 
-When cqfd runs, a docker container is launched as the environment in
+When cqfd runs, a build container is launched as the environment in
 which to run the *command*.  Within this environment, commands are run
 as the same user as the one invoking cqfd (with a fallback to the
 'builder' user in case it cannot be determined). So that this user has
 access to local files, the current working directory is mapped to
-the same location inside the container.
+the same location inside the build container.
 
 ### SSH Handling
 
@@ -538,7 +538,7 @@ bash: no job control in this shell
 ```
 
 To work around this limitation, cqfd will use `sudo(8)` when it is
-available in the container instead. The user is responsible for
+available in the build container instead. The user is responsible for
 including it in the related Dockerfile.
 
 ## Remove images
