@@ -124,6 +124,11 @@ warn() {
 warn_deprecated_command() {
 	local cmd
 
+	# Deprecated command messages disabled
+	if [ "$CQFD_NO_DEPRECATED_COMMAND_WARNING" = true ]; then
+		return
+	fi
+
 	cmd="$1"
 	shift
 	warn "command $cmd is deprecated," \

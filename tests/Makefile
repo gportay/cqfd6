@@ -1,5 +1,6 @@
 .PHONY: tests check
 
+tests: export CQFD_NO_DEPRECATED_COMMAND_WARNING = true
 tests: CQFD_DOCKER =
 tests: CQFD_EXTRA_RUN_ARGS =
 tests: CQFD_EXTRA_BUILD_ARGS =
