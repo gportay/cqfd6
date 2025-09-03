@@ -147,7 +147,9 @@ Flavors from a `.cqfdrc` file can be listed using the `flavors` argument.
 For a more thorough description of the `.cqfdrc` configuration file, please
 refers to [cqfdrc(5)](cqfdrc.5.adoc).
 
-### Appending to the build command
+## Using cqfd in an advanced way
+
+### Appending extra arguments to the build command
 
 The `-c` option sets immediately after the command `--run` allows appending the
 command of a `cqfd --run` for temporary developments:
@@ -202,7 +204,7 @@ Example:
 For a more thorough description of the `cqfd` commands, options, and
 environment variables, please refers to [cqfd(1)](cqfd.1.adoc).
 
-### Multi-platform
+## Multi-platform
 
 Docker supports multi-platform images; such images can run on multiple
 platforms (`amd64`, `arm64`, etc.). Therefore, `cqfd` takes advantage of this
@@ -256,7 +258,7 @@ Examples:
     $ cqfd --build arm64 --exec uname -m
     aarch64
 
-### Key files and directories
+## Key files and directories
 
 cqfd project uses three key files and directories.
 
@@ -335,14 +337,15 @@ working directory is mapped to the same location inside the build container.
 
 The local `~/.ssh` directory is also mapped to the corresponding directory in
 the build container. This effectively enables SSH agent forwarding so a build
-can, for example, pull authenticated git repos.
+can, for example, pull authenticated git repositories.
 
 ### Terminal job control
 
 When `cqfd` runs a command as the unprivileged user that called it in the first
 place, `su(1)` is used to run the command. This brings a limitation for
 processes that require a controlling terminal (such as an interactive shell),
-as `su` will prevent the command executed from having one.
+as `su` will prevent the command executed from having one on very old version
+os `su` ([see][0b69ccba9000b9298c8f0b39416884c697b50a38]).
 
 ```
 $ cqfd bash
@@ -501,7 +504,7 @@ Podman may be used instead of Docker, but with limited functionalities, for
 example when dealing with extra groups.
 
 To use `podman` instead of `docker`, you can set in your environment, like your
-`.bashrc`, `.profile` or `.zshrc`:
+`.profile`, `.bashrc` or `.zshrc`:
 
 ```bash
 export CQFD_DOCKER="podman"
@@ -568,3 +571,4 @@ CQFD stands for "ce qu'il fallait Dockeriser", French for "what needed
 to be Dockerized".
 
 [1]: https://ajdiaz.wordpress.com/2008/02/09/bash-ini-parser/
+[0b69ccba9000b9298c8f0b39416884c697b50a38]: https://github.com/gportay/cqfd6/commit/0b69ccba9000b9298c8f0b39416884c697b50a38
