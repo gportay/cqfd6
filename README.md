@@ -340,7 +340,7 @@ the cqfd group in the build container.
 
 ### Appending to the build command
 
-The `-c` option set immediately after the command `--run` allows appending the
+The `-c` option sets immediately after the command `--run` allows appending the
 command of a `cqfd --run` for temporary developments:
 
     $ cqfd --build centos7 --run -c "clean"
