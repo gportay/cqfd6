@@ -65,7 +65,7 @@ _cqfd() {
 		done
 
 		if [ -e "$cqfdrc" ]; then
-			flavors=$(cqfd -f $cqfdrc flavors)
+			flavors=$(cqfd -f $cqfdrc --flavors)
 			COMPREPLY=( $(compgen -W "$flavors" -- "$cur") )
 		fi
 		return
