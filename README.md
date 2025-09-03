@@ -44,8 +44,7 @@ in-tree files [.cqfdrc](.cqfdrc), the [.cqfd](.cqfd) directory, and the three
 cqfd shell scripts — [make-deb.sh](make-deb.sh), [make-pkg.sh](make-pkg.sh),
 and [make-rpm.sh](make-rpm.sh) — provide good examples of how to set up a
 project and add custom scripting. Additional examples can be found in the
-[cqfdrc(5)](cqfdrc.5.adoc#examples) man page and the [samples](samples)
-directory.
+[samples](samples) directory.
 
 `cqfd` will use the provided `Dockerfile` to create a normalized runtime build
 environment for your project.
