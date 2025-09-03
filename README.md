@@ -139,8 +139,6 @@ section, referencing other sections named following flavor's name.
 A flavor will typically redefine some keys of the build section: `command`,
 `files`, `archive`, `distro`.
 
-Flavors from a `.cqfdrc` file can be listed using the `flavors` argument.
-
 ### Manual page
 
 For a more thorough description of the `.cqfdrc` configuration file, please

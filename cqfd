@@ -864,6 +864,12 @@ load_config() {
 	# shellcheck disable=SC2128
 	project_flavors="$flavors"
 
+	# warn if using legacy variable flavors
+	if [ -n "$project_flavors" ]; then
+		warn "flavors is deprecated, the flavors are now automatically" \
+		     "deduced from the flavors sections of .cqfdrc."
+	fi
+
 	# check for [project] org and name properties are set and are not empty
 	if [ -z "$project_org" ] || [ -z "$project_name" ]; then
 		die ".cqfdrc: Missing project.org or project.name properties!"
