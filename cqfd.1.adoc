@@ -56,10 +56,10 @@ Linux distribution.
 *--shell [SH_ARGUMENTS]*::
 	Run shell command inside build container.
 
-By default, the _run_ command is assumed, with the default command string
+By default, the _--run_ command is assumed, with the default command string
 configured in your _.cqfdrc_ (see build.command).
 
-Command options for run:
+Command options for --run:
 
 *-c ARGUMENT_STRING*::
 	Append argument string to the default command string.
@@ -111,15 +111,15 @@ build command as configured in *cqfdrc(5)*, use:
 Alternatively, you may want to specify a single custom command to be executed
 from inside the build container.
 
-	$ cqfd exec make clean
+	$ cqfd --exec make clean
 
 Or custom commands composed with shell grammar:
 
-	$ cqfd shell -c "make linux-dirclean && make foobar-dirclean"
+	$ cqfd --shell -c "make linux-dirclean && make foobar-dirclean"
 
 Or run a shell script with arguments:
 
-	$ cqfd shell ./build.sh debug
+	$ cqfd --shell ./build.sh debug
 
 When *cqfd(1)* is running, the current directory is mounted by Docker as a
 volume. As a result, all the build artefacts generated inside the container are
@@ -222,11 +222,11 @@ another container or another build command.
 
 === APPENDING TO THE BUILD COMMAND
 
-The _-c_ option set immediately after the command run allows appending the
-command of a cqfd run for temporary developments.
+The _-c_ option set immediately after the command --run allows appending the
+command of a cqfd --run for temporary developments.
 
-	$ cqfd --build centos7 run -c "clean"
-	$ cqfd --build centos7 run -c "TRACING=1"
+	$ cqfd --build centos7 --run -c "clean"
+	$ cqfd --build centos7 --run -c "TRACING=1"
 
 === RUNNING A SHELL IN THE CONTAINER
 
@@ -234,7 +234,7 @@ You can use the _shell_ command to quickly pop a shell in your defined
 container. The shell to be launched (default _/bin/sh_) can be customized using
 the _CQFD_SHELL_ environment variable.
 
-	fred@host:~/project$ cqfd shell
+	fred@host:~/project$ cqfd --shell
 	fred@container:~/project$
 
 === USE CQFD AS AN INTERPRETER FOR SHELL SCRIPT
@@ -243,7 +243,7 @@ You can use the _shell_ command to write a shell script and run it in your
 defined container.
 
 	fred@host:~/project$ cat get-container-pretty-name.sh
-	#!/usr/bin/env -S cqfd shell
+	#!/usr/bin/env -S cqfd --shell
 	if ! test -e /.dockerenv; then
 		exit 1
 	fi
@@ -257,7 +257,7 @@ defined container.
 You can even use the _shell_ command to use it as a standard _$SHELL_ so
 binaries honoring that variable run shell commands in your defined container.
 
-	fred@host:~/project$ make SHELL="cqfd shell"
+	fred@host:~/project$ make SHELL="cqfd --shell"
 	Available make targets:
 	   help:      This help message
 	   install:   Install script, doc and resources
