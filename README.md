@@ -553,14 +553,7 @@ To use cqfd, ensure the following requirements are satisfied on your
 workstation:
 
 -  Bash
-
 -  Docker
-
--  A `docker` group in your /etc/group
-
--  Your username is a member of the `docker` group
-
--  Restart your docker service if you needed to create the group.
 
 ## Installing/removing cqfd6
 
