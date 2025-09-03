@@ -3,12 +3,11 @@
 # What are cqfd and cqfd6 ?
 
 cqfd provides a quick and convenient way to run commands in the current
-directory, but within a Docker container defined in a per-project config
-file.
+directory, but within a Docker container defined in a per-project config file.
 
-This becomes useful when building an application designed for another
-Linux system, e.g. building an old embedded firmware that only works
-in an older Linux distribution.
+This becomes useful when building an application designed for another Linux
+system, e.g. building an old embedded firmware that only works in an older
+Linux distribution.
 
 cqfd uses containers and introduced the concept of build containers to define a
 container specifically configured with all the software required to build the
@@ -48,20 +47,20 @@ project and add custom scripting. Additional examples can be found in the
 [cqfdrc(5)](cqfdrc.5.adoc#examples) man page and the [samples](samples)
 directory.
 
-`cqfd` will use the provided `Dockerfile` to create a normalized runtime
-build environment for your project.
+`cqfd` will use the provided `Dockerfile` to create a normalized runtime build
+environment for your project.
 
 ## Using cqfd on a daily basis
 
 ### Regular builds
 
-To build your project from the configured build environment with the
-default build command as configured in `.cqfdrc`, use:
+To build your project from the configured build environment with the default
+build command as configured in `.cqfdrc`, use:
 
     $ cqfd
 
-Alternatively, you may want to specify a single custom command to be
-executed from inside the build container.
+Alternatively, you may want to specify a single custom command to be executed
+from inside the build container.
 
     $ cqfd --exec make clean
 
@@ -73,10 +72,10 @@ Or run a shell script with arguments:
 
     $ cqfd --shell ./build.sh debug
 
-When `cqfd` is running, the current directory is mounted by Docker
-as a volume. As a result, all the build artefacts generated inside the
-build container are still accessible in this directory after the build container
-has been stopped and removed.
+When `cqfd` is running, the current directory is mounted by Docker as a volume.
+As a result, all the build artefacts generated inside the build container are
+still accessible in this directory after the build container has been stopped
+and removed.
 
 ### Release
 
@@ -86,19 +85,19 @@ archive.
 
     $ cqfd --release
 
-The resulting release file is then called according to the archive
-template, which defaults to `%Po-%Pn.tar.xz`.
+The resulting release file is then called according to the archive template,
+which defaults to `%Po-%Pn.tar.xz`.
 
 ### Flavors
 
-Flavors are used to create alternate build scenarios. For example, to
-use another build container or another build command.
+Flavors are used to create alternate build scenarios. For example, to use
+another build container or another build command.
 
 ## The .cqfdrc file
 
 The `.cqfdrc` file at the root of your project contains the information
-required to support project tooling. It is written in an .ini-like
-format and `samples/dot-cqfdrc` is an example.
+required to support project tooling. It is written in an .ini-like format and
+`samples/dot-cqfdrc` is an example.
 
 Here is a sample `.cqfdrc` file:
 
@@ -113,19 +112,18 @@ Here is a sample `.cqfdrc` file:
 
 ### Comments
 
-The `.cqfdrc` file supports Unix shell comments; the words after the character `#`
-are ignored up to the end of line. A comment cannot be set in the first line,
-and right after a section.
+The `.cqfdrc` file supports Unix shell comments; the words after the character
+`#` are ignored up to the end of line. A comment cannot be set in the first
+line, and right after a section.
 
 ### Using build flavors
 
-In some cases, it may be desirable to build the project using
-variations of the build and release methods (for example a debug
-build). This is made possible in `cqfd` with the build flavors feature.
+In some cases, it may be desirable to build the project using variations of the
+build and release methods (for example a debug build). This is made possible in
+`cqfd` with the build flavors feature.
 
-In the `.cqfdrc` file, one or more flavors may be listed in the
-`[build]` section, referencing other sections named following
-flavor's name.
+In the `.cqfdrc` file, one or more flavors may be listed in the `[build]`
+section, referencing other sections named following flavor's name.
 
     [centos7]
     command='make CENTOS=1'
@@ -139,8 +137,8 @@ flavor's name.
     command='make'
     files='myprogram'
 
-A flavor will typically redefine some keys of the build section:
-command, files, archive, distro.
+A flavor will typically redefine some keys of the build section: `command`,
+`files`, `archive`, `distro`.
 
 Flavors from a `.cqfdrc` file can be listed using the `flavors` argument.
 
@@ -159,9 +157,9 @@ command of a `cqfd --run` for temporary developments:
 
 ### Running a shell in the build container
 
-You can use the `shell` command to quickly pop a shell in your build
-container. The shell to be launched (default `/bin/sh`) can be customized using
-the `CQFD_SHELL` environment variable.
+You can use the `shell` command to quickly pop a shell in your build container.
+The shell to be launched (default `/bin/sh`) can be customized using the
+`CQFD_SHELL` environment variable.
 
 Example:
 
@@ -296,7 +294,8 @@ To specify an alternate cqfdrc file, use the `--cqfdrc-file` option:
 
     $ cqfd --cqfdrc-file cqfdrc_alt
 
-To specify an alternate working directory, use the `--working-directory` option:
+To specify an alternate working directory, use the `--working-directory`
+option:
 
     $ cqfd --working-directory ..
 
@@ -326,26 +325,24 @@ Example:
 
 ## Build Container Environment
 
-When `cqfd` runs, a build container is launched as the environment in
-which to run the `command`.  Within this environment, commands are run
-as the same user as the one invoking `cqfd` (with a fallback to the
-'builder' user in case it cannot be determined). So that this user has
-access to local files, the current working directory is mapped to
-the same location inside the build container.
+When `cqfd` runs, a build container is launched as the environment in which to
+run the `command`.  Within this environment, commands are run as the same user
+as the one invoking `cqfd` (with a fallback to the 'builder' user in case it
+cannot be determined). So that this user has access to local files, the current
+working directory is mapped to the same location inside the build container.
 
 ### SSH Handling
 
-The local `~/.ssh` directory is also mapped to the corresponding
-directory in the build container. This effectively enables SSH agent
-forwarding so a build can, for example, pull authenticated git repos.
+The local `~/.ssh` directory is also mapped to the corresponding directory in
+the build container. This effectively enables SSH agent forwarding so a build
+can, for example, pull authenticated git repos.
 
 ### Terminal job control
 
-When `cqfd` runs a command as the unprivileged user that called it in
-the first place, `su(1)` is used to run the command. This brings a
-limitation for processes that require a controlling terminal (such as
-an interactive shell), as `su` will prevent the command executed
-from having one.
+When `cqfd` runs a command as the unprivileged user that called it in the first
+place, `su(1)` is used to run the command. This brings a limitation for
+processes that require a controlling terminal (such as an interactive shell),
+as `su` will prevent the command executed from having one.
 
 ```
 $ cqfd bash
@@ -353,15 +350,15 @@ bash: cannot set terminal process group (-1): Inappropriate ioctl for device
 bash: no job control in this shell
 ```
 
-To work around this limitation, `cqfd` will use `sudo(8)` when it is
-available in the build container instead. The user is responsible for
-including it in the related `Dockerfile`.
+To work around this limitation, `cqfd` will use `sudo(8)` when it is available
+in the build container instead. The user is responsible for including it in the
+related `Dockerfile`.
 
 ## Remove images
 
-Running `cqfd --init` creates and names a new Docker image each
-time the `Dockerfile` is modified, which may lead to a large number of
-unused images that are not automatically purged.
+Running `cqfd --init` creates and names a new Docker image each time the
+`Dockerfile` is modified, which may lead to a large number of unused images
+that are not automatically purged.
 
 To remove the image associated with the current version of the `Dockerfile`,
 use:
@@ -500,11 +497,11 @@ directories.
 
 ## Using podman
 
-Podman may be used instead of Docker, but with limited functionalities,
-for example when dealing with extra groups.
+Podman may be used instead of Docker, but with limited functionalities, for
+example when dealing with extra groups.
 
-To use `podman` instead of `docker`, you can set in your environment,
-like your `.bashrc`, `.profile` or `.zshrc`:
+To use `podman` instead of `docker`, you can set in your environment, like your
+`.bashrc`, `.profile` or `.zshrc`:
 
 ```bash
 export CQFD_DOCKER="podman"
@@ -513,8 +510,8 @@ export PODMAN_USERNS="keep-id"
 
 ## Testing cqfd (for developers)
 
-The codebase contains tests which can be invoked using the following
-command, if the above requirements are met on the system:
+The codebase contains tests which can be invoked using the following command,
+if the above requirements are met on the system:
 
     $ make tests
 
