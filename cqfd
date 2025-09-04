@@ -196,7 +196,7 @@ images() {
 			fi
 
 			# Extract the Dockerfile hash
-			hash="${image%:*}"
+			hash="${image#*:}"
 
 			# Get the Dockerfile path to compute the hash
 			dockerfile="<none>"
