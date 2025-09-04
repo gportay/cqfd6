@@ -841,7 +841,7 @@ load_config() {
 	# deduce target platform from filename (i.e. linux-amd64-cqfd)
 	local target
 	target=
-	if [[ "$PROGNAME" =~ ^(.+)-cqfd$ ]]; then
+	if [[ "$PROGNAME" =~ ^(.+)-cqfd([0-9]+)?$ ]]; then
 		target="${BASH_REMATCH[1]}"
 		target="${target//-/\/}"
 	fi
