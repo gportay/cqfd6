@@ -1261,21 +1261,15 @@ while [ $# -gt 0 ]; do
 		shift
 
 		# Display a warning message if using command run
-		if [ "$cqfd_command" = "run" ]; then
+		if [ "$cqfd_command" = "run" ] && [ "$#" -le 1 ]; then
 			warn_deprecated_command "$cqfd_command" \
 				cqfd "--$cqfd_command" "${*@Q}"
 		fi
 
 		# Display a warning message if using command release
-		if [ "$cqfd_command" = "release" ]; then
-			if [ "$#" -gt 0 ]; then
-				warn "command $cqfd_command shall not support argument(s)."
-				warn_deprecated_command "$cqfd_command" \
-					cqfd "--$cqfd_command" --run "${*@Q}"
-			else
-				warn_deprecated_command "$cqfd_command" \
-					cqfd "--$cqfd_command"
-			fi
+		if [ "$cqfd_command" = "release" ] && [ "$#" -eq 0 ]; then
+			warn_deprecated_command "$cqfd_command" \
+				cqfd "--$cqfd_command"
 		fi
 
 		# Check arguments
@@ -1310,12 +1304,15 @@ while [ $# -gt 0 ]; do
 			build_command+=" $*"
 
 			# Display a warning message if using -c with multiple arguments
-			if [ "$cqfd_command" = "release" ] && [ "$#" -gt 1 ]; then
-				warn "command $cqfd_command -c shall support a single argument."
+			if [ "$cqfd_command" = "release" ]; then
+				warn "command $cqfd_command shall not support argument(s)."
 				warn_deprecated_command "$cqfd_command" \
 					cqfd "--$cqfd_command" --run -c "\"$*\""
 			elif [ "$cqfd_command" = "run" ] && [ "$#" -gt 1 ]; then
 				warn "command $cqfd_command -c shall support a single argument."
+				warn_deprecated_command "$cqfd_command" \
+					cqfd "--$cqfd_command" -c "\"$*\""
+			elif [ "$cqfd_command" = "run" ]; then
 				warn_deprecated_command "$cqfd_command" \
 					cqfd "--$cqfd_command" -c "\"$*\""
 			fi
@@ -1326,11 +1323,23 @@ while [ $# -gt 0 ]; do
 		build_command="$*"
 
 		# Display a warning message if using run with multiple arguments
-		if [ "$#" -ne 1 ]; then
+		if [ "$cqfd_command" = "run" ] && [ "$#" -gt 1 ]; then
 			warn "command $cqfd_command with multiple arguments is ambigous."
 			warn_deprecated_command "$cqfd_command" \
 				cqfd --exec "${*@Q}" or \
 				cqfd --shell -c "\"${*@Q}\""
+		fi
+
+		# Display a warning message if using release with multiple arguments
+		if [ "$cqfd_command" = "release" ] && [ "$#" -gt 1 ]; then
+			warn "command $cqfd_command with multiple arguments is ambigous."
+			warn_deprecated_command "$cqfd_command" \
+				cqfd "--$cqfd_command" --exec "${*@Q}" or \
+				cqfd "--$cqfd_command" --shell -c "\"${*@Q}\""
+		elif [ "$cqfd_command" = "release" ] && [ "$#" -eq 1 ]; then
+			warn "command $cqfd_command shall not support argument(s)."
+			warn_deprecated_command "$cqfd_command" \
+				cqfd "--$cqfd_command" --run "${*@Q}"
 		fi
 		break
 		;;
