@@ -146,7 +146,12 @@ die() {
 ## debug() - print verbose messages
 # $*: messages shown in the debug message
 debug() {
-	test -z "$CQFD_DEBUG" || echo "cqfd: debug: $*"
+	# Debug messages disabled
+	if [ "$CQFD_DEBUG" != true ]; then
+		return
+	fi
+
+	echo "cqfd: debug: $*"
 }
 
 ## sanitize(): sanitize name
@@ -678,7 +683,12 @@ die() {
 }
 
 debug() {
-	test -z "$CQFD_DEBUG" || echo "debug: \$*"
+	# Debug messages disabled
+	if [ "$CQFD_DEBUG" != true ]; then
+		return
+	fi
+
+	echo "debug: \$*"
 }
 
 test_cmd() {
