@@ -90,6 +90,9 @@ line, and right after a section.
 	specify the _group_ name if it exists either in the host or inside the
 	docker image.
 
+*shell (optional)*::
+	Program used to invoke _shell_ interpreter.
+
 *docker (optional)*::
 	Program used to invoke _docker(1)_ client.
 
@@ -153,7 +156,7 @@ Report bugs at *https://github.com/gportay/cqfd6/issues*
 
 == COPYRIGHT
 
-Copyright (C) 2017,2025 Gaël PORTAY
+Copyright (C) 2017,2025-2026 Gaël PORTAY
 
 Copyright (C) 2015-2025 Savoir-faire Linux, Inc.
 

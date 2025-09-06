@@ -11,6 +11,8 @@ cqfd="$TDIR/.cqfd/cqfd"
 
 cd "$TDIR/" || exit 1
 
+cp -f .cqfdrc .cqfdrc.orig
+
 jtest_prepare "cqfd shell should succeed with no stdin"
 if "$cqfd" shell </dev/null; then
 	jtest_result pass
@@ -24,6 +26,18 @@ if ( ! "$cqfd" shell <<<"tty" ) | grep "not a tty"; then
 else
 	jtest_result fail
 fi
+
+jtest_prepare "cqfd shell should use interpreter set in shell"
+sed '/\[build\]/ashell="/bin/bash"' .cqfdrc.orig >.cqfdrc
+# shellcheck disable=SC2016
+if "$cqfd" bash <<<'printf "$0"' | grep -q "^bash$"; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+# restore .cqfdrc
+mv -f .cqfdrc.orig .cqfdrc
 
 jtest_prepare "cqfd shell should preserve the arguments"
 # shellcheck disable=SC2016
