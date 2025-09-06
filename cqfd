@@ -2,7 +2,7 @@
 #
 # cqfd - a tool to wrap commands in controlled Docker containers
 #
-# Copyright (C) 2016-2017,2023-2025 Gaël PORTAY
+# Copyright (C) 2016-2017,2023-2026 Gaël PORTAY
 #               2015-2025           Savoir-faire Linux, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -956,6 +956,8 @@ load_config() {
 	# shellcheck disable=SC2154
 	build_command="$command"
 	# shellcheck disable=SC2154
+	build_shell="$shell"
+	# shellcheck disable=SC2154
 	build_platform="$platform"
 	# shellcheck disable=SC2154
 	build_docker="$docker"
@@ -977,6 +979,11 @@ load_config() {
 	release_transform="$tar_transform"
 	# shellcheck disable=SC2154
 	release_tar_opts="$tar_options"
+
+	# set shell if shell= is set
+	if [ "$build_shell" ]; then
+		cqfd_shell="$build_shell"
+	fi
 
 	# set docker if docker= is set
 	if [ "$build_docker" ]; then

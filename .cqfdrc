@@ -3,6 +3,7 @@ org='gportay'
 name='cqfd6'
 
 [build]
+shell='/bin/bash'
 command='make doc'
 files='CHANGELOG.md \
        AUTHORS \
