@@ -1075,16 +1075,16 @@ while [ $# -gt 0 ]; do
 		cqfd_command="$1"
 		shift
 
-		# Display a warning message if using deprecated command
-		if [ "$cqfd_command" = "help" ]; then
-			warn_deprecated_command "$cqfd_command" \
-				cqfd "--$cqfd_command"
-		fi
-
 		# Check arguments
 		if [ "$cqfd_command" = help ] && [ "$#" -gt 0 ]; then
 			usage
 			die "$cqfd_command: Take no argument!"
+		fi
+
+		# Display a warning message if using deprecated command
+		if [ "$cqfd_command" = "help" ]; then
+			warn_deprecated_command "$cqfd_command" \
+				cqfd "--$cqfd_command"
 		fi
 
 		# Output usage
@@ -1096,16 +1096,16 @@ while [ $# -gt 0 ]; do
 		cqfd_command="$1"
 		shift
 
-		# Display a warning message if using deprecated command
-		if [ "$cqfd_command" = "version" ]; then
-			warn_deprecated_command "$cqfd_command" \
-				cqfd "--$cqfd_command"
-		fi
-
 		# Check arguments
 		if [ "$cqfd_command" = version ] && [ "$#" -gt 0 ]; then
 			usage
 			die "$cqfd_command: Take no argument!"
+		fi
+
+		# Display a warning message if using deprecated command
+		if [ "$cqfd_command" = "version" ]; then
+			warn_deprecated_command "$cqfd_command" \
+				cqfd "--$cqfd_command"
 		fi
 
 		# Output version
@@ -1125,12 +1125,6 @@ while [ $# -gt 0 ]; do
 		cqfd_command="$1"
 		shift
 
-		# Display a warning message if using deprecated command
-		if [ "$cqfd_command" = "init" ]; then
-			warn_deprecated_command "$cqfd_command" \
-				cqfd "--$cqfd_command"
-		fi
-
 		# Check arguments
 		if [ "$#" -gt 0 ]; then
 			usage
@@ -1139,6 +1133,12 @@ while [ $# -gt 0 ]; do
 
 		# Setup build
 		load_config "$flavor"
+
+		# Display a warning message if using deprecated command
+		if [ "$cqfd_command" = "init" ]; then
+			warn_deprecated_command "$cqfd_command" \
+				cqfd "--$cqfd_command"
+		fi
 
 		# Pull or build image
 		docker_pull_or_build
@@ -1149,12 +1149,6 @@ while [ $# -gt 0 ]; do
 		cqfd_command="$1"
 		shift
 
-		# Display a warning message if using deprecated command
-		if [ "$cqfd_command" = "deinit" ]; then
-			warn_deprecated_command "$cqfd_command" \
-				cqfd "--$cqfd_command"
-		fi
-
 		# Check arguments
 		if [ "$#" -gt 0 ]; then
 			usage
@@ -1163,6 +1157,12 @@ while [ $# -gt 0 ]; do
 
 		# Setup build
 		load_config "$flavor"
+
+		# Display a warning message if using deprecated command
+		if [ "$cqfd_command" = "deinit" ]; then
+			warn_deprecated_command "$cqfd_command" \
+				cqfd "--$cqfd_command"
+		fi
 
 		# Remove image
 		docker_rmi
@@ -1173,12 +1173,6 @@ while [ $# -gt 0 ]; do
 		cqfd_command="$1"
 		shift
 
-		# Display a warning message if using deprecated command
-		if [ "$cqfd_command" = "ls" ]; then
-			warn_deprecated_command "$cqfd_command" \
-				cqfd "--$cqfd_command"
-		fi
-
 		# Check arguments
 		if [ "$#" -gt 0 ]; then
 			usage
@@ -1187,6 +1181,12 @@ while [ $# -gt 0 ]; do
 
 		# Setup build
 		load_config "$flavor"
+
+		# Display a warning message if using deprecated command
+		if [ "$cqfd_command" = "ls" ]; then
+			warn_deprecated_command "$cqfd_command" \
+				cqfd "--$cqfd_command"
+		fi
 
 		# List images
 		list
@@ -1197,12 +1197,6 @@ while [ $# -gt 0 ]; do
 		cqfd_command="$1"
 		shift
 
-		# Display a warning message if using deprecated command
-		if [ "$cqfd_command" = "gc" ]; then
-			warn_deprecated_command "$cqfd_command" \
-				cqfd "--$cqfd_command"
-		fi
-
 		# Check arguments
 		if [ "$#" -gt 0 ]; then
 			usage
@@ -1211,6 +1205,12 @@ while [ $# -gt 0 ]; do
 
 		# Setup build
 		load_config "$flavor"
+
+		# Display a warning message if using deprecated command
+		if [ "$cqfd_command" = "gc" ]; then
+			warn_deprecated_command "$cqfd_command" \
+				cqfd "--$cqfd_command"
+		fi
 
 		# Remove unused images
 		prune
@@ -1221,12 +1221,6 @@ while [ $# -gt 0 ]; do
 		cqfd_command="$1"
 		shift
 
-		# Display a warning message if using deprecated command
-		if [ "$cqfd_command" = "flavors" ]; then
-			warn_deprecated_command "$cqfd_command" \
-				cqfd "--$cqfd_command"
-		fi
-
 		# Check arguments
 		if [ "$#" -gt 0 ]; then
 			usage
@@ -1235,6 +1229,12 @@ while [ $# -gt 0 ]; do
 
 		# Setup build
 		load_config
+
+		# Display a warning message if using deprecated command
+		if [ "$cqfd_command" = "flavors" ]; then
+			warn_deprecated_command "$cqfd_command" \
+				cqfd "--$cqfd_command"
+		fi
 
 		# List flavors
 		echo "$project_flavors"
@@ -1279,11 +1279,6 @@ while [ $# -gt 0 ]; do
 		cqfd_command="$1"
 		shift
 
-		# Display a warning message if using deprecated command
-		if [ "$cqfd_command" = "exec" ]; then
-			warn_deprecated_command "$cqfd_command" cqfd "${*@Q}"
-		fi
-
 		# Check arguments
 		if [ "$#" -lt 1 ]; then
 			usage
@@ -1293,6 +1288,11 @@ while [ $# -gt 0 ]; do
 		# Setup build
 		load_config "$flavor"
 
+		# Display a warning message if using deprecated command
+		if [ "$cqfd_command" = "exec" ]; then
+			warn_deprecated_command "$cqfd_command" cqfd "${*@Q}"
+		fi
+
 		# Run alternate command
 		build_command="${*@Q}"
 		break
@@ -1301,6 +1301,14 @@ while [ $# -gt 0 ]; do
 		# Shift command
 		cqfd_command="$1"
 		shift
+
+		# Check arguments
+		if [ "$cqfd_command" = "release" ]; then
+			has_to_release=true
+		fi
+
+		# Setup build
+		load_config "$flavor"
 
 		# Display a warning message if using command run
 		if [ "$cqfd_command" = "run" ] && [ "$#" -le 1 ]; then
@@ -1313,14 +1321,6 @@ while [ $# -gt 0 ]; do
 			warn_deprecated_command "$cqfd_command" \
 				cqfd "--$cqfd_command"
 		fi
-
-		# Check arguments
-		if [ "$cqfd_command" = "release" ]; then
-			has_to_release=true
-		fi
-
-		# Setup build
-		load_config "$flavor"
 
 		# Run default command
 		if [ "$#" -eq 0 ]; then
@@ -1390,12 +1390,6 @@ while [ $# -gt 0 ]; do
 		cqfd_command="$1"
 		shift
 
-		# Display a warning message if using deprecated command
-		if [ "$cqfd_command" = "shell" ]; then
-			warn_deprecated_command "$cqfd_command" cqfd \
-				"$cqfd_shell" "${*@Q}"
-		fi
-
 		# Check arguments
 		if [ "$1" = "shell" ] || [ "$1" = "--shell" ]; then
 			cqfd_shell="$cqfd_command"
@@ -1403,6 +1397,12 @@ while [ $# -gt 0 ]; do
 
 		# Setup build
 		load_config "$flavor"
+
+		# Display a warning message if using deprecated command
+		if [ "$cqfd_command" = "shell" ]; then
+			warn_deprecated_command "$cqfd_command" cqfd \
+				"$cqfd_shell" "${*@Q}"
+		fi
 
 		# Run alternate command
 		build_command="$cqfd_shell"
