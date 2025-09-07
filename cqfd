@@ -1437,6 +1437,11 @@ while [ $# -gt 0 ]; do
 		die "$1: Invalid option!"
 		;;
 	*)
+		if [ "$COMPAT" -lt 6 ]; then
+			usage
+			die "$1: Invalid command!"
+		fi
+
 		# Shift command
 		cqfd_command="$1"
 
