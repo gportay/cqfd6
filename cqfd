@@ -1280,7 +1280,9 @@ while [ $# -gt 0 ]; do
 		shift
 
 		# Display a warning message if using deprecated command
-		warn_deprecated_command "$cqfd_command" cqfd "${*@Q}"
+		if [ "$cqfd_command" = "exec" ]; then
+			warn_deprecated_command "$cqfd_command" cqfd "${*@Q}"
+		fi
 
 		# Check arguments
 		if [ "$#" -lt 1 ]; then
