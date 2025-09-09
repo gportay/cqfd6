@@ -352,7 +352,7 @@ docker_pull_or_build() {
 		args+=(--quiet)
 	fi
 
-	# Set platform is not native
+	# Set platform if not native
 	if [ "$cqfd_platform" != "$native" ]; then
 		args+=(--platform "$cqfd_platform")
 	fi
