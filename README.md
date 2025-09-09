@@ -154,7 +154,7 @@ refers to [cqfdrc(5)](cqfdrc.5.adoc).
 
 ### Appending extra arguments to the build command
 
-The `-c` option sets immediately after the command `--run` allows appending the
+The `-c` option set immediately after the command `--run` allows appending the
 command of a `cqfd --run` for temporary developments:
 
     $ cqfd --build centos7 --run -c "clean"
