@@ -91,10 +91,10 @@ line, and right after a section.
 	docker image.
 
 *shell (optional)*::
-	Program used to invoke _shell_ interpreter.
+	The program used to invoke _shell_ command.
 
 *docker (optional)*::
-	Program used to invoke _docker(1)_ client.
+	The program used to invoke _docker(1)_ client.
 
 *dockerfile (optional)*::
 	The path to the _Dockerfile_. The path is relative to the project
@@ -103,16 +103,18 @@ line, and right after a section.
 	unset.
 
 *docker_build_args (optional)*::
-	Arguments used to invoke _docker build_.
+	A space-separated list of extra arguments used to invoke _docker
+	build_.
 
 *docker_pull_args (optional)*::
-	Arguments used to invoke _docker build_.
+	A space-separated list of extra arguments used to invoke _docker
+	build_.
 
 *docker_run_args (optional)*::
-	Arguments used to invoke _docker run_.
+	A space-separated list of extra arguments used to invoke _docker run_.
 
 *docker_rmi_args (optional)*::
-	Arguments used to invoke _docker rmi_.
+	A space-separated list of extra arguments used to invoke _docker rmi_.
 
 ==== CQFD RELEASE
 
