@@ -419,7 +419,7 @@ docker_pull_or_build() {
 	file="$(realpath "$cqfd_dockerfile")"
 	hash="$(sha256sum <<<"$PWD" | cut -b 1-64)"
 	mkdir -p "$cqfd_cachedir/${cqfd_docker[-1]}/$hash"
-	ln -sf "$file" "$cqfd_cachedir/${cqfd_docker[-1]}/$hash/$cqfd_image"
+	ln -sf "$file" "$cqfd_cachedir/${cqfd_docker[-1]}/$hash/${cqfd_image//\//-}"
 }
 
 ## image_exists_locally() - checks if image exists in the local image store
@@ -467,7 +467,7 @@ docker_rmi() {
 		local hash
 		file="$(realpath "$cqfd_dockerfile")"
 		hash="$(sha256sum <<<"$PWD" | cut -b 1-64)"
-		rm --force "$cqfd_cachedir/${cqfd_docker[-1]}/$hash/$cqfd_image"
+		rm --force "$cqfd_cachedir/${cqfd_docker[-1]}/$hash/${cqfd_image//\//-}"
 		rmdir --ignore-fail-on-non-empty "$cqfd_cachedir/${cqfd_docker[-1]}/$hash"
 	fi
 }
