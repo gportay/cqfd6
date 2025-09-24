@@ -174,7 +174,7 @@ debug() {
 	echo "cqfd: debug: $*"
 }
 
-## sanitize(): sanitize name
+## sanitize() - sanitize name
 # $1: the name to sanitize
 # stdout: the name sanitized
 sanitize() {
