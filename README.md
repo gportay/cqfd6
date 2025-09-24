@@ -109,17 +109,17 @@ Here is a sample `.cqfdrc` file:
     files='README.FOOINC output/images/sdcard.img'
     archive='cqfd-%Gh.tar.xz'
 
-Note: The property and its value must be stick to the equal sign, without using
-whitespaces since cqfd6: i.e. `foo =	bar` is invalid.
+Note: The property and its value must not have whitespace around the equal sign
+since cqfd6: i.e. `foo =	bar` is invalid.
 
 ### Comments
 
-The `.cqfdrc` file supports Unix shell comments; the words after the character
-`#` are ignored up to the end of line. A comment cannot be set in the first
-line, and right after a section.
+The `.cqfdrc` file supports Unix shell comments: words after the character `#`
+are ignored to the end of the line. A comment cannot appear on the first line
+or immediately after a section header.
 
-Note: The traditional .ini comment, i.e. words after the character `;` is not
-supported anymore since cqfd6.
+Note: The traditional .ini comment is not supported anymore in cqfd6: i.e. words
+after the character `;`
 
 ### Using build flavors
 
