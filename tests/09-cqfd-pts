@@ -47,7 +47,7 @@ else
 fi
 rm out
 
-jtest_prepare "cqfd without allocated pty should redirect stdout and stderr to distinct entpoints"
+jtest_prepare "cqfd without allocated pty should redirect stdout and stderr to distinct endpoints"
 if "$cqfd" >out 2>err && grep 'stdout' out && grep 'stderr' err; then
 	jtest_result pass
 else
