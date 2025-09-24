@@ -379,7 +379,7 @@ To list all created images, use:
 
     $ cqfd --ls
 
-To purge all unused images across all user projects on the system, use:
+To collect all unused images across all user projects on the system, use:
 
     $ cqfd --gc
 

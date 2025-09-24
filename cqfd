@@ -190,10 +190,10 @@ image_is_running() {
 	test "${#ids[@]}" -gt 0
 }
 
-## images() - list images
+## docker_images() - list images
 # stdout: the tag, the status, the path to Dockerfile, the Dockerfile hash and
 #         the image hash
-images() {
+docker_images() {
 	local user
 	local image
 	local images
@@ -247,17 +247,17 @@ images() {
 	done
 }
 
-## list() - list images
+## list_images() - list images
 # stdout: the tag, the status, and the path to Dockerfile, with header and
 #         aligned columns
-list() {
+list_images() {
 	local image
 	local images
 	local maxtag
 
 	# Output header and look for the max tag length of images
 	maxtag=""
-	mapfile -t images < <(images)
+	mapfile -t images < <(docker_images)
 	for image in "${images[@]}"; do
 		local tag
 
@@ -279,15 +279,15 @@ list() {
 	done
 }
 
-## prune() - remove deleted and outdated images
-prune() {
+## collect_images() - remove deleted and outdated images
+collect_images() {
 	local tags
 	local image
 	local images
 	local symlink
 
 	# List unused images
-	mapfile -t images < <(images)
+	mapfile -t images < <(docker_images)
 	for image in "${images[@]}"; do
 		local tag
 		local status
@@ -1189,7 +1189,7 @@ while [ $# -gt 0 ]; do
 		fi
 
 		# List images
-		list
+		list_images
 		exit
 		;;
 	gc|--gc)
@@ -1213,7 +1213,7 @@ while [ $# -gt 0 ]; do
 		fi
 
 		# Remove unused images
-		prune
+		collect_images
 		exit
 		;;
 	flavors|--flavors)
