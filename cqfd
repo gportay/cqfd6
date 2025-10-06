@@ -285,8 +285,10 @@ collect_images() {
 	local image
 	local images
 	local symlink
+	local symlinks
 
 	# List unused images
+	tags=()
 	mapfile -t images < <(docker_images)
 	for image in "${images[@]}"; do
 		local tag
@@ -301,6 +303,7 @@ collect_images() {
 	done
 
 	# Remove unused images if any
+	echo "Removing images..."
 	if [ "${#tags[@]}" -gt 0 ]; then
 		local args=()
 
@@ -323,8 +326,11 @@ collect_images() {
 		# Remove image
 		"${cqfd_docker[@]}" rmi --force "${args[@]}" "${tags[@]}"
 	fi
+	echo "Total ${#tags[*]} image(s) removed."
 
-	# Consolidate the database
+	# Consolidate the database symlinks
+	echo "Consolidating database symlinks..."
+	symlinks=()
 	for symlink in "$cqfd_cachedir/${cqfd_docker[-1]}"/*/*; do
 		local tag
 
@@ -333,12 +339,16 @@ collect_images() {
 		fi
 
 		# Remove if symlink is broken or if image does not exist
-		tag="${symlink##*/}"
+		link="${symlink##*/}"
+		tag="${link//-/\/}"
 		if [ ! -e "$symlink" ] || ! image_exists_locally "$tag"; then
 			rm "$symlink"
 			rmdir --ignore-fail-on-non-empty "${symlink%/*}"
+			echo "Unlinked: $link"
+			symlinks+=("$link")
 		fi
 	done
+	echo "Total ${#symlinks[*]} symlink(s) removed."
 }
 
 ## docker_pull_or_build() - initialize build container
