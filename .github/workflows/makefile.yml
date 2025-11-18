@@ -8,15 +8,18 @@ on:
     branches: [ "master", "main" ]
 
 jobs:
-  build:
-
+  lint:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
 
     - name: Run linting
       run: make check
+
+  test-docker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
 
     - name: Setup binfmt
       run: docker run --privileged --rm tonistiigi/binfmt --install all
@@ -24,8 +27,24 @@ jobs:
     - name: Run tests for docker
       run: make tests
 
+  test-podman:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup binfmt
+      run: docker run --privileged --rm tonistiigi/binfmt --install all
+
     - name: Run tests for podman
       run: make CQFD_DOCKER=podman PODMAN_USERNS="keep-id" tests
+
+  test-docker-sudo:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup binfmt
+      run: docker run --privileged --rm tonistiigi/binfmt --install all
 
     - name: Run tests for docker using sudo
       run: make CQFD_DOCKER="sudo docker" tests
