@@ -703,6 +703,9 @@ docker_run() {
 	# Cleanup container after exit
 	args+=(--rm)
 
+	# Forward signals and reap processes
+	args+=(--init)
+
 	# Log nothing
 	args+=(--log-driver=none)
 
