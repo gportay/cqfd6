@@ -304,7 +304,7 @@ prune() {
 	if [ "${#tags[@]}" -gt 0 ]; then
 		local args=()
 
-		# Append extra args from the .cqfdrc [build] section
+		# Append extra arguments from the .cqfdrc [build] section
 		if [ "$build_docker_rmi_args" ]; then
 			local array
 			# shellcheck disable=SC2162
@@ -312,7 +312,7 @@ prune() {
 			args+=("${array[@]}")
 		fi
 
-		# Append extra args from $CQFD_EXTRA_RMI_ARGS
+		# Append extra arguments from $CQFD_EXTRA_RMI_ARGS
 		if [ "$CQFD_EXTRA_RMI_ARGS" ]; then
 			local array
 			# shellcheck disable=SC2162
@@ -360,7 +360,7 @@ docker_pull_or_build() {
 	# Pull the image
 	# If custom image name is used, it is pulled pull by docker_run()
 	if [ "$project_image" ] && [ ! "$project_custom_img_name" ] ; then
-		# Append extra args from the .cqfdrc [build] section
+		# Append extra arguments from the .cqfdrc [build] section
 		if [ "$build_docker_pull_args" ]; then
 			local array
 			# shellcheck disable=SC2162
@@ -368,7 +368,7 @@ docker_pull_or_build() {
 			args+=("${array[@]}")
 		fi
 
-		# Append extra args from $CQFD_EXTRA_PULL_ARGS
+		# Append extra arguments from $CQFD_EXTRA_PULL_ARGS
 		if [ "$CQFD_EXTRA_PULL_ARGS" ]; then
 			local array
 			# shellcheck disable=SC2162
@@ -383,7 +383,7 @@ docker_pull_or_build() {
 		return
 	fi
 
-	# Append extra args from the .cqfdrc [build] section
+	# Append extra arguments from the .cqfdrc [build] section
 	if [ "$build_docker_build_args" ]; then
 		local array
 		# shellcheck disable=SC2162
@@ -391,7 +391,7 @@ docker_pull_or_build() {
 		args+=("${array[@]}")
 	fi
 
-	# Append extra args from $CQFD_EXTRA_BUILD_ARGS
+	# Append extra arguments from $CQFD_EXTRA_BUILD_ARGS
 	if [ "$CQFD_EXTRA_BUILD_ARGS" ]; then
 		local array
 		# shellcheck disable=SC2162
@@ -438,7 +438,7 @@ docker_rmi() {
 		die "$cqfd_image: Image busy!"
 	fi
 
-	# Append extra args from the .cqfdrc [build] section
+	# Append extra arguments from the .cqfdrc [build] section
 	if [ "$build_docker_rmi_args" ]; then
 		local array
 		# shellcheck disable=SC2162
@@ -446,7 +446,7 @@ docker_rmi() {
 		args+=("${array[@]}")
 	fi
 
-	# Append extra args from $CQFD_EXTRA_RMI_ARGS
+	# Append extra arguments from $CQFD_EXTRA_RMI_ARGS
 	if [ "$CQFD_EXTRA_RMI_ARGS" ]; then
 		local array
 		# shellcheck disable=SC2162
@@ -490,7 +490,7 @@ docker_run() {
 		fi
 	fi
 
-	# Append extra args from the .cqfdrc [build] section
+	# Append extra arguments from the .cqfdrc [build] section
 	if [ "$build_docker_run_args" ]; then
 		local array
 		# shellcheck disable=SC2162
@@ -498,7 +498,7 @@ docker_run() {
 		args+=("${array[@]}")
 	fi
 
-	# Append extra args from $CQFD_EXTRA_RUN_ARGS
+	# Append extra arguments from $CQFD_EXTRA_RUN_ARGS
 	if [ "$CQFD_EXTRA_RUN_ARGS" ]; then
 		local array
 		# shellcheck disable=SC2162
