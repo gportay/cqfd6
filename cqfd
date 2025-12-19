@@ -1302,7 +1302,7 @@ while [ $# -gt 0 ]; do
 		cqfd_command="$1"
 		shift
 
-		# Check arguments
+		# Check command
 		if [ "$cqfd_command" = "release" ]; then
 			has_to_release=true
 		fi
