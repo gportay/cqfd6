@@ -1390,8 +1390,8 @@ while [ $# -gt 0 ]; do
 		cqfd_command="$1"
 		shift
 
-		# Check arguments
-		if [ "$1" = "shell" ] || [ "$1" = "--shell" ]; then
+		# Check command
+		if [ "$cqfd_command" != "shell" ] && [ "$cqfd_command" != "--shell" ]; then
 			cqfd_shell="$cqfd_command"
 		fi
 
