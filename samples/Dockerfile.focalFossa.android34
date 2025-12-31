@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: GPL-3.0
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (c) 2025 Savoir faire linux
 # This Dockerfile is based on https://github.com/faberNovel/docker-android
 # See full text of the GPLv3 license: https://www.gnu.org/licenses/gpl-3.0.txt
