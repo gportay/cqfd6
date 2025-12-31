@@ -332,7 +332,6 @@ collect_images() {
 			continue
 		fi
 
-
 		# Remove if symlink is broken or if image does not exist
 		tag="${symlink##*/}"
 		if [ ! -e "$symlink" ] || ! image_exists_locally "$tag"; then
