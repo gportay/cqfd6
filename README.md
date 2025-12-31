@@ -186,7 +186,7 @@ Example:
     source /etc/os-release
     echo "$PRETTY_NAME"
     fred@host:~/projet$ ./get-container-pretty-name.sh
-    Debian GNU/Linux 12 (bookworm)
+    Debian GNU/Linux 13 (trixie)
 
 ### Use cqfd as a standard shell for binaries
 
