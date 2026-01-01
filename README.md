@@ -20,9 +20,9 @@ project for different architectures thanks to multi-platform images and
 emulation.
 
 cqfd6 is a fork of cqfd fixing several broken things in the upstream project.
-It depreciates the former CLI to modernize it to something much more simple and
-much more common such as the CLI of `sudo`. Moreover, the project need a new
-name, remembering its roots. Meanwhile, cqfd6 is for *CQFD Sudo Interface
+It deprecates the former CLI to modernize it to something much simpler and much
+more common such as the CLI of `sudo`. Moreover, the project needs a new name,
+remembering its roots. Meanwhile, cqfd6 is for *CQFD Sudo Interface
 eXperimentation*.
 
 # Using cqfd
@@ -109,11 +109,17 @@ Here is a sample `.cqfdrc` file:
     files='README.FOOINC output/images/sdcard.img'
     archive='cqfd-%Gh.tar.xz'
 
+Note: The property and its value must not have whitespace around the equal sign
+since cqfd6: i.e. `foo =	bar` is invalid.
+
 ### Comments
 
-The `.cqfdrc` file supports Unix shell comments; the words after the character
-`#` are ignored up to the end of line. A comment cannot be set in the first
-line, and right after a section.
+The `.cqfdrc` file supports Unix shell comments: words after the character `#`
+are ignored to the end of the line. A comment cannot appear on the first line
+or immediately after a section header.
+
+Note: The traditional .ini comment is not supported anymore in cqfd6: i.e. words
+after the character `;`
 
 ### Using build flavors
 
@@ -142,13 +148,13 @@ A flavor will typically redefine some keys of the build section: `command`,
 ### Manual page
 
 For a more thorough description of the `.cqfdrc` configuration file, please
-refers to [cqfdrc(5)](cqfdrc.5.adoc).
+refer to [cqfdrc(5)](cqfdrc.5.adoc).
 
 ## Using cqfd in an advanced way
 
 ### Appending extra arguments to the build command
 
-The `-c` option sets immediately after the command `--run` allows appending the
+The `-c` option set immediately after the command `--run` allows appending the
 command of a `cqfd --run` for temporary developments:
 
     $ cqfd --build centos7 --run -c "clean"
@@ -299,7 +305,7 @@ option:
     $ cqfd --working-directory ..
 
 These options can be combined, for example to use out-of-tree cqfd files if
-these files cannot be commit to the project.
+these files cannot be committed to the project.
 
 Example:
 
@@ -313,7 +319,7 @@ Example:
     3 directories, 2 files
     ~/src$ cd buildroot
     ~/src/buildroot$ cqfd --working-directory . --cqfd-directory ../out-of-tree-cqfd-files/cqfd --cqfdrc-file ../out-of-tree-cqfd-files/cqfdrc
-    # or sourcing enviroment from a file
+    # or sourcing environment from a file
     ~/src/buildroot$ cat environment
     export CQFD_WORKDIR=.
     export CQFD_DIR=../out-of-tree-cqfd-files/cqfd
@@ -373,7 +379,7 @@ To list all created images, use:
 
     $ cqfd --ls
 
-To purge all unused images across all user projects on the system, use:
+To collect all unused images across all user projects on the system, use:
 
     $ cqfd --gc
 
