@@ -584,8 +584,8 @@ docker_run() {
 	fi
 
 	if [ "$CQFD_NO_SSH_AUTH_SOCK" != true ] && [ "$SSH_AUTH_SOCK" ] && [ -S "$SSH_AUTH_SOCK" ]; then
-		args+=(--volume "$SSH_AUTH_SOCK:$cqfd_home/.sockets/ssh")
-		args+=(--env "SSH_AUTH_SOCK=$cqfd_home/.sockets/ssh")
+		args+=(--volume "$SSH_AUTH_SOCK:$SSH_AUTH_SOCK")
+		args+=(--env "SSH_AUTH_SOCK=$SSH_AUTH_SOCK")
 	fi
 
 	if [ "$CQFD_NO_USER_GIT_CONFIG" != true ] && [ -f "$cqfd_home/.gitconfig" ]; then
