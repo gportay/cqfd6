@@ -116,6 +116,7 @@ cfg_parser() {
 	mapfile -t ini <"$1"                                 # convert to line-array
 	ini=("${ini[@]//[/\\[}")                             # escape [
 	ini=("${ini[@]//]/\\]}")                             # escape ]
+	# Remove comments with ; tabs, and spaces up to cqfd6 (not included)
 	if [ "$COMPAT" -lt 6 ]; then
 		ini=("${ini[@]//;*/}")                       # remove comments with ;
 		ini=("${ini[@]/$'\t'=/=}")                   # remove tabs before =
@@ -143,7 +144,8 @@ warn() {
 warn_deprecated_command() {
 	local cmd
 
-	# Deprecated command messages disabled
+	# Deprecated command messages disabled explicitly or not supported
+	# before cqfd6 (not included)
 	if [ "$CQFD_NO_DEPRECATED_COMMAND_WARNING" = true ] || \
 	   [ "$COMPAT" -lt 6 ]; then
 		return
@@ -1437,6 +1439,7 @@ while [ $# -gt 0 ]; do
 		die "$1: Invalid option!"
 		;;
 	*)
+		# Commands are supported up to cqfd6 (not included)
 		if [ "$COMPAT" -lt 6 ]; then
 			usage
 			die "$1: Invalid command!"
