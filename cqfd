@@ -575,23 +575,31 @@ docker_run() {
 		args+=(--env "HOME=$cqfd_home")
 	fi
 
+	# Bind mount SSH all user-specific configuration and authentication
+	# information
 	if [ "$CQFD_NO_USER_SSH_CONFIG" != true ] && [ -d "$cqfd_home/.ssh" ]; then
 		args+=(--volume "$cqfd_home/.ssh:$cqfd_home/.ssh")
 	fi
 
+	# Bind mount SSH systemwide configuration and authentication
+	# information
 	if [ "$CQFD_NO_SSH_CONFIG" != true ] && [ -d /etc/ssh ]; then
 		args+=(--volume /etc/ssh:/etc/ssh)
 	fi
 
+	# Bind mount the Unix-domain socket used to communicate with the SSH
+	# agent
 	if [ "$CQFD_NO_SSH_AUTH_SOCK" != true ] && [ "$SSH_AUTH_SOCK" ] && [ -S "$SSH_AUTH_SOCK" ]; then
 		args+=(--volume "$SSH_AUTH_SOCK:$SSH_AUTH_SOCK")
 		args+=(--env "SSH_AUTH_SOCK=$SSH_AUTH_SOCK")
 	fi
 
+	# Bind mount the git global configuration file
 	if [ "$CQFD_NO_USER_GIT_CONFIG" != true ] && [ -f "$cqfd_home/.gitconfig" ]; then
 		args+=(--volume "$cqfd_home/.gitconfig:$cqfd_home/.gitconfig")
 	fi
 
+	# Bind mount the docker socket in daemon mode
 	if [ "$CQFD_BIND_DOCKER_SOCK" = true ] && [ -S /var/run/docker.sock ]; then
 		args+=(--volume /var/run/docker.sock:/var/run/docker.sock)
 	fi
