@@ -46,7 +46,7 @@ mkdir -p "$_libdir/docker/cli-plugins"
 ln -sf ../../../../..%{_dockerlibdir}/cli-plugins/docker-cqfd "$_libdir/docker/cli-plugins/docker-cqfd"
 
 
-%postun
+%preun
 _libdir=$(rpm --eval '%%{_libdir}')
 rm -f "$_libdir/docker/cli-plugins/docker-cqfd"
 
