@@ -53,6 +53,9 @@ uninstall:
 		$(DESTDIR)$(PREFIX)/share/man/man5/cqfdrc.5.gz \
 		$(DESTDIR)$(PREFIX)/share/doc/cqfd6 \
 		$(DESTDIR)$(PREFIX)/share/cqfd6
+	for i in linux-amd64 linux-arm linux-arm64 linux-ppc64le linux-riscv64 linux-s390x; do \
+		rm -f $(DESTDIR)$(PREFIX)/bin/$$i-cqfd; \
+	done
 	completionsdir=$${COMPLETIONSDIR:-$$(pkg-config --define-variable=prefix=$(PREFIX) \
 	                                                --define-variable=datadir=$(PREFIX)/share \
 	                                                --variable=completionsdir \
