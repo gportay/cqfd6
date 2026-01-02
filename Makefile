@@ -1,8 +1,8 @@
 # Makefile for cqfd6
 
-PREFIX?=/usr/local
-VERSION?=$(shell bash cqfd --version)
-COMPAT?=$(shell bash cqfd --compatibility)
+PREFIX ?= /usr/local
+VERSION ?= $(shell bash cqfd --version)
+COMPAT ?= $(shell bash cqfd --compatibility)
 
 .PHONY: all help doc install uninstall test tests check clean maintainer-clean
 
