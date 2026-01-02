@@ -1,5 +1,5 @@
 #!/bin/sh
-# See deb-postrm(5).
+# See deb-prerm(5).
 
 set -e
 
