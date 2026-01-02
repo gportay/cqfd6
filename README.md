@@ -21,9 +21,7 @@ emulation.
 
 cqfd6 is a fork of cqfd fixing several broken things in the upstream project.
 It deprecates the former CLI to modernize it to something much simpler and much
-more common such as the CLI of `sudo`. Moreover, the project needs a new name,
-remembering its roots. Meanwhile, cqfd6 is for *CQFD Sudo Interface
-eXperimentation*.
+more common such as the CLI of `sudo`.
 
 # Using cqfd
 
@@ -561,6 +559,8 @@ Report bugs at *https://github.com/gportay/cqfd6/issues*
 
 CQFD stands for "ce qu'il fallait Dockeriser", French for "what needed
 to be Dockerized".
+
+SIX stands for *Sudo Interface eXperimentation*.
 
 [1]: https://ajdiaz.wordpress.com/2008/02/09/bash-ini-parser/
 [0b69ccba9000b9298c8f0b39416884c697b50a38]: https://github.com/gportay/cqfd6/commit/0b69ccba9000b9298c8f0b39416884c697b50a38

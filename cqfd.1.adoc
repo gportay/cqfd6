@@ -1,10 +1,10 @@
-= cqfd(1)
+= cqfd6(1)
 :doctype: manpage
 :author: Gaël PORTAY
 :email: gael.portay@gmail.com.com
 :lang: en
-:man manual: C.Q.F.D. Manual
-:man source: C.Q.F.D. Project 6
+:man manual: C.Q.F.D. S.I.X. Manual
+:man source: C.Q.F.D. S.I.X. Project 6
 
 == NAME
 
@@ -205,6 +205,8 @@ the Free Software Foundation, version 3.
 
 CQFD stands for "ce qu'il fallait Dockeriser", French for "what needed to be
 Dockerized".
+
+SIX stands for *Sudo Interface eXperimentation*.
 
 == SEE ALSO
 

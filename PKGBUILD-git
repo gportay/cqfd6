@@ -12,8 +12,7 @@ makedepends=(asciidoctor bash-completion git)
 checkdepends=(shellcheck)
 source=("$pkgname::git+https://github.com/gportay/${pkgname%-git}.git")
 sha256sums=(SKIP)
-provides=(cqfd)
-conflicts=(cqfd)
+install="$pkgname.install"
 
 pkgver() {
 	cd "$srcdir/$pkgname"

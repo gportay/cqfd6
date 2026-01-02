@@ -14,8 +14,6 @@ BuildRequires:  shellcheck
 BuildRequires:  pkgconfig(bash-completion)
 Requires:       bash
 Requires:       docker
-Provides:       cqfd = %{version}-%{release}
-Obsoletes:      cqfd <= %{version}-%{release}
 
 %description
 Wrap commands in controlled Docker containers using docker.
@@ -44,11 +42,21 @@ make check
 _libdir=$(rpm --eval '%%{_libdir}')
 mkdir -p "$_libdir/docker/cli-plugins"
 ln -sf ../../../../..%{_dockerlibdir}/cli-plugins/docker-cqfd "$_libdir/docker/cli-plugins/docker-cqfd"
+if [ $1 -eq 1 ]; then
+    alternatives --install /usr/bin/cqfd cqfd /usr/bin/cqfd6 20
+    alternatives --install /usr/share/man/man1/cqfd.1.gz cqfd.1.gz /usr/share/man/man1/cqfd6.1.gz 20
+    alternatives --install /usr/share/man/man5/cqfdrc.5.gz cqfdrc.5.gz /usr/share/man/man5/cqfdrc6.5.gz 20
+fi
 
 
 %preun
 _libdir=$(rpm --eval '%%{_libdir}')
 rm -f "$_libdir/docker/cli-plugins/docker-cqfd"
+if [ $1 -eq 0 ]; then
+    alternatives --remove cqfdrc.5.gz /usr/share/man/man5/cqfdrc6.5.gz
+    alternatives --remove cqfd.1.gz /usr/share/man/man1/cqfd6.1.gz
+    alternatives --remove cqfd /usr/bin/cqfd6
+fi
 
 
 %files
@@ -57,7 +65,6 @@ rm -f "$_libdir/docker/cli-plugins/docker-cqfd"
 %doc %{_datadir}/doc/%{name}/README.md
 %license %{_datadir}/doc/%{name}/LICENSE
 %{_bindir}/{%name}
-%{_bindir}/cqfd
 %{_bindir}/linux-amd64-cqfd6
 %{_bindir}/linux-arm-cqfd6
 %{_bindir}/linux-arm64-cqfd6
@@ -69,8 +76,8 @@ rm -f "$_libdir/docker/cli-plugins/docker-cqfd"
 %{_datadir}/%{name}/samples/Dockerfile.focalFossa.android34
 %{_datadir}/%{name}/samples/Dockerfile.focalFossa.nodejs20x
 %{_datadir}/%{name}/samples/dot-cqfdrc
-%{_datadir}/man/man1/cqfd.1.gz
-%{_datadir}/man/man5/cqfdrc.5.gz
+%{_datadir}/man/man1/cqfd6.1.gz
+%{_datadir}/man/man5/cqfdrc6.5.gz
 
 %changelog
 * Wed Aug 13 2025 Gaël PORTAY <gael.portay@gmail.com> - 6-1

@@ -11,4 +11,11 @@ remove)
   ;;
 esac
 
+update-alternatives \
+  --remove cqfdrc.5.gz /usr/share/man/man5/cqfdrc6.5.gz
+update-alternatives \
+  --remove cqfd.1.gz /usr/share/man/man1/cqfd6.1.gz
+update-alternatives \
+  --remove cqfd /usr/bin/cqfd6
+
 #DEBHELPER#

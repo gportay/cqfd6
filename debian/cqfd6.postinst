@@ -12,4 +12,11 @@ configure)
   ;;
 esac
 
+update-alternatives \
+  --install /usr/bin/cqfd cqfd /usr/bin/cqfd6 20
+update-alternatives \
+  --install /usr/share/man/man1/cqfd.1.gz cqfd.1.gz /usr/share/man/man1/cqfd6.1.gz 20
+update-alternatives \
+  --install /usr/share/man/man5/cqfdrc.5.gz cqfdrc.5.gz /usr/share/man/man5/cqfdrc6.5.gz 20
+
 #DEBHELPER#

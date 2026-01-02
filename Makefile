@@ -23,7 +23,6 @@ install: DOCKERLIBDIR ?= $(PREFIX)/lib/docker
 install:
 	install -d $(DESTDIR)$(PREFIX)/bin/
 	install -m 0755 cqfd $(DESTDIR)$(PREFIX)/bin/cqfd$(COMPAT)
-	ln -sf cqfd$(COMPAT) $(DESTDIR)$(PREFIX)/bin/cqfd
 	for i in linux-amd64 linux-arm linux-arm64 linux-ppc64le linux-riscv64 linux-s390x; do \
 		ln -sf cqfd6 $(DESTDIR)$(PREFIX)/bin/$$i-cqfd6; \
 	done
@@ -32,11 +31,11 @@ install:
 	install -m 0644 AUTHORS CHANGELOG.md LICENSE README.md $(DESTDIR)$(PREFIX)/share/doc/cqfd6/
 	if [ -e cqfd.1.gz ]; then \
 		install -d $(DESTDIR)$(PREFIX)/share/man/man1/; \
-		install -m 644 cqfd.1.gz $(DESTDIR)$(PREFIX)/share/man/man1/; \
+		install -m 644 cqfd.1.gz $(DESTDIR)$(PREFIX)/share/man/man1/cqfd6.1.gz; \
 	fi
 	if [ -e cqfdrc.5.gz ]; then \
 		install -d $(DESTDIR)$(PREFIX)/share/man/man5/; \
-		install -m 644 cqfdrc.5.gz $(DESTDIR)$(PREFIX)/share/man/man5/; \
+		install -m 644 cqfdrc.5.gz $(DESTDIR)$(PREFIX)/share/man/man5/cqfdrc6.5.gz; \
 	fi
 	install -d $(DESTDIR)$(PREFIX)/share/cqfd6/samples/
 	install -m 0644 samples/* $(DESTDIR)$(PREFIX)/share/cqfd6/samples/
@@ -52,10 +51,9 @@ install:
 uninstall: DOCKERLIBDIR ?= $(PREFIX)/lib/docker
 uninstall:
 	rm -rf $(DESTDIR)$(PREFIX)/bin/cqfd6 \
-		$(DESTDIR)$(PREFIX)/bin/cqfd \
 	        $(DESTDIR)$(DOCKERLIBDIR)/cli-plugins/docker-cqfd \
-		$(DESTDIR)$(PREFIX)/share/man/man1/cqfd.1.gz \
-		$(DESTDIR)$(PREFIX)/share/man/man5/cqfdrc.5.gz \
+		$(DESTDIR)$(PREFIX)/share/man/man1/cqfd6.1.gz \
+		$(DESTDIR)$(PREFIX)/share/man/man5/cqfdrc6.5.gz \
 		$(DESTDIR)$(PREFIX)/share/doc/cqfd6 \
 		$(DESTDIR)$(PREFIX)/share/cqfd6
 	for i in linux-amd64 linux-arm linux-arm64 linux-ppc64le linux-riscv64 linux-s390x; do \

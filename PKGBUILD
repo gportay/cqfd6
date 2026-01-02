@@ -12,8 +12,7 @@ makedepends=(asciidoctor bash-completion)
 checkdepends=(shellcheck)
 source=("$pkgname-$pkgver.tar.gz::https://github.com/gportay/$pkgname/archive/v$pkgver.tar.gz")
 sha256sums=(SKIP)
-provides=(cqfd)
-conflicts=(cqfd)
+install="$pkgname.install"
 
 build() {
 	cd "$pkgname-$pkgver"
