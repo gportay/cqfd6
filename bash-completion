@@ -36,7 +36,7 @@ _get_cmd() {
 	done
 }
 
-_cqfd() {
+_cqfd6() {
 	local cur prev words cword
 	_init_completion || return
 
@@ -65,7 +65,7 @@ _cqfd() {
 		done
 
 		if [ -e "$cqfdrc" ]; then
-			flavors=$(CQFD_NO_DEPRECATED_COMMAND_WARNING=true cqfd -f $cqfdrc --flavors)
+			flavors=$(CQFD_NO_DEPRECATED_COMMAND_WARNING=true cqfd6 -f $cqfdrc --flavors)
 			COMPREPLY=( $(compgen -W "$flavors" -- "$cur") )
 		fi
 		return
@@ -115,4 +115,4 @@ _cqfd() {
 	local cmds="--init --deinit --ls --gc --flavors --exec --run --shell -v --version --compatibility -h --help"
 	COMPREPLY=( $(compgen -W "$cmds $opts" -- "$cur") )
 } &&
-complete -F _cqfd cqfd linux-amd64-cqfd6 linux-arm-cqfd6 linux-arm64-cqfd6 linux-ppc64le-cqfd6 linux-riscv64-cqfd6 linux-s390x-cqfd6 cqfd6
+complete -F _cqfd6 cqfd6 linux-amd64-cqfd6 linux-arm-cqfd6 linux-arm64-cqfd6 linux-ppc64le-cqfd6 linux-riscv64-cqfd6 linux-s390x-cqfd6
