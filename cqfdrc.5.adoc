@@ -1,10 +1,10 @@
-= cqfdrc(5)
+= cqfdrc6(5)
 :doctype: manpage
 :author: Gaël PORTAY
 :email: gael.portay@gmail.com
 :lang: en
-:man manual: C.Q.F.D. Manual
-:man source: C.Q.F.D. Project
+:man manual: C.Q.F.D. S.I.X. Manual
+:man source: C.Q.F.D. S.I.X. Project
 
 == NAME
 

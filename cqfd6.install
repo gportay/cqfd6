@@ -1,0 +1,29 @@
+post_install() {
+	echo "Create those symlinks if considering using cqfd6 as cqfd:"
+	echo ""
+	echo "  mkdir -p /usr/local/bin"
+	echo "  ln -s /usr/bin/cqfd6 /usr/local/bin/cqfd"
+	echo ""
+	echo "  mkdir -p /usr/local/share/man/man1"
+	echo "  ln -s /usr/share/man/man1/cqfd6.1.gz /usr/local/share/man/man1/cqfd.1.gz"
+	echo ""
+	echo "  mkdir -p /usr/local/share/man/man5"
+	echo "  ln -s /usr/share/man/man1/cqfdrc6.5.gz /usr/local/share/man/man5/cqfdrc.5.gz"
+}
+
+pre_remove() {
+	echo "Remove those symlinks if any:"
+	echo ""
+	echo "  if [ -L /usr/local/bin/cqfd ]; then"
+	echo "    rm -f /usr/local/bin/cqfd"
+	echo "  fi"
+	echo ""
+	echo "  if [ -L /usr/local/share/man/man1/cqfd.1.g ]; then"
+	echo "    rm -f /usr/local/share/man/man1/cqfd.1.gz"
+	echo "  fi"
+	echo ""
+	echo "  if [ -L /usr/local/share/man/man5/cqfdrc.5.gz ]; then"
+	echo "    rm -f /usr/local/share/man/man5/cqfdrc.5.gz"
+	echo "  fi"
+	echo ""
+}
