@@ -23,7 +23,7 @@ install:
 	install -m 0755 cqfd $(DESTDIR)$(PREFIX)/bin/cqfd$(COMPAT)
 	ln -sf cqfd$(COMPAT) $(DESTDIR)$(PREFIX)/bin/cqfd
 	for i in linux-amd64 linux-arm linux-arm64 linux-ppc64le linux-riscv64 linux-s390x; do \
-		ln -sf cqfd6 $(DESTDIR)$(PREFIX)/bin/$$i-cqfd; \
+		ln -sf cqfd6 $(DESTDIR)$(PREFIX)/bin/$$i-cqfd6; \
 	done
 	install -d $(DESTDIR)$(PREFIX)/share/doc/cqfd6/
 	install -m 0644 AUTHORS CHANGELOG.md LICENSE README.md $(DESTDIR)$(PREFIX)/share/doc/cqfd6/
@@ -54,7 +54,7 @@ uninstall:
 		$(DESTDIR)$(PREFIX)/share/doc/cqfd6 \
 		$(DESTDIR)$(PREFIX)/share/cqfd6
 	for i in linux-amd64 linux-arm linux-arm64 linux-ppc64le linux-riscv64 linux-s390x; do \
-		rm -f $(DESTDIR)$(PREFIX)/bin/$$i-cqfd; \
+		rm -f $(DESTDIR)$(PREFIX)/bin/$$i-cqfd6; \
 	done
 	completionsdir=$${COMPLETIONSDIR:-$$(pkg-config --define-variable=prefix=$(PREFIX) \
 	                                                --define-variable=datadir=$(PREFIX)/share \

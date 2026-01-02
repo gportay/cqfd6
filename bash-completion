@@ -115,4 +115,4 @@ _cqfd() {
 	local cmds="--init --deinit --ls --gc --flavors --exec --run --shell -v --version --compatibility -h --help"
 	COMPREPLY=( $(compgen -W "$cmds $opts" -- "$cur") )
 } &&
-complete -F _cqfd cqfd linux-amd64-cqfd linux-arm-cqfd linux-arm64-cqfd linux-ppc64le-cqfd linux-riscv64-cqfd linux-s390x-cqfd cqfd6
+complete -F _cqfd cqfd linux-amd64-cqfd6 linux-arm-cqfd6 linux-arm64-cqfd6 linux-ppc64le-cqfd6 linux-riscv64-cqfd6 linux-s390x-cqfd6 cqfd6
