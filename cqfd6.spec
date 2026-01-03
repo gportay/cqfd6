@@ -37,6 +37,8 @@ make check
 %install
 %make_install PREFIX=/usr DOCKERLIBDIR=%_libdir/docker
 rm %{buildroot}/usr/share/doc/cqfd6/CHANGELOG.md
+rm %{buildroot}/usr/share/doc/cqfd6/LICENSE
+install -D -m 644 LICENSE %{buildroot}%{_licensedir}/%{name}/LICENSE
 
 
 %post
@@ -63,7 +65,7 @@ fi
 %files
 %doc %{_datadir}/doc/%{name}/AUTHORS
 %doc %{_datadir}/doc/%{name}/README.md
-%license %{_datadir}/doc/%{name}/LICENSE
+%license %{_licensedir}/%{name}/LICENSE
 %{_bindir}/{%name}
 %{_bindir}/linux-amd64-cqfd6
 %{_bindir}/linux-arm-cqfd6
