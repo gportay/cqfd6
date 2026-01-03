@@ -1350,7 +1350,7 @@ while [ $# -gt 0 ]; do
 
 		# Run default command
 		if [ "$#" -eq 0 ]; then
-		       break
+			break
 		fi
 
 		# Append extra arguments to the default command
