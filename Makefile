@@ -4,7 +4,7 @@ PREFIX?=/usr/local
 VERSION?=$(shell bash cqfd --version)
 COMPAT?=$(shell bash cqfd --compatibility)
 
-.PHONY: all help doc install uninstall test tests check
+.PHONY: all help doc install uninstall test tests check clean
 
 all:	help
 
