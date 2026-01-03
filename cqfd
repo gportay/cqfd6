@@ -1353,7 +1353,7 @@ while [ $# -gt 0 ]; do
 		       break
 		fi
 
-		# Append extra args to the default command
+		# Append extra arguments to the default command
 		if [ "$1" = "-c" ]; then
 			# Shift argument
 			shift
