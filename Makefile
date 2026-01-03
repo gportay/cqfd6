@@ -4,7 +4,7 @@ PREFIX?=/usr/local
 VERSION?=$(shell bash cqfd --version)
 COMPAT?=$(shell bash cqfd --compatibility)
 
-.PHONY: all help doc install uninstall test tests check clean
+.PHONY: all help doc install uninstall test tests check clean maintainer-clean
 
 all:	help
 
@@ -82,6 +82,8 @@ check:
 
 clean:
 	rm -f cqfd.1.gz cqfdrc.5.gz
+
+maintainer-clean: clean
 	rm -f *.tar.gz
 	rm -f rpmbuild/SOURCES/*.tar.gz
 
