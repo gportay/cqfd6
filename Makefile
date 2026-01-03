@@ -95,12 +95,15 @@ clean:
 	gzip -c $^ >$@
 
 .PHONY: sources
-sources: cqfd6-$(VERSION).tar.gz rpmbuild/SOURCES/v$(VERSION).tar.gz
+sources: cqfd6-$(VERSION).tar.gz rpmbuild/SOURCES/v$(VERSION).tar.gz FORCE
 
 rpmbuild/SOURCES/$(VERSION).tar.gz:
-rpmbuild/SOURCES/v%.tar.gz:
+rpmbuild/SOURCES/v%.tar.gz: FORCE
 	git archive --prefix cqfd6-$*/ --format tar.gz --output $@ HEAD
 
 cqfd6-$(VERSION).tar.gz:
-%.tar.gz:
+%.tar.gz: FORCE
 	git archive --prefix $*/ --format tar.gz --output $@ HEAD
+
+.PHONY: FORCE
+FORCE:
