@@ -36,6 +36,7 @@ make check
 
 %install
 %make_install PREFIX=/usr DOCKERLIBDIR=%_libdir/docker
+rm %{buildroot}/usr/share/doc/cqfd6/CHANGELOG.md
 
 
 %post
@@ -61,7 +62,6 @@ fi
 
 %files
 %doc %{_datadir}/doc/%{name}/AUTHORS
-%doc %{_datadir}/doc/%{name}/CHANGELOG.md
 %doc %{_datadir}/doc/%{name}/README.md
 %license %{_datadir}/doc/%{name}/LICENSE
 %{_bindir}/{%name}
