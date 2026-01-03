@@ -31,5 +31,6 @@ package() {
 	cd "$pkgname-$pkgver"
 	make DESTDIR="$pkgdir" PREFIX="/usr" install
 	rm -f "$pkgdir/usr/share/doc/$pkgname/CHANGELOG.md"
+	rm -f "$pkgdir/usr/share/doc/$pkgname/LICENSE"
 	install -D -m 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
