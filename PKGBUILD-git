@@ -13,6 +13,7 @@ checkdepends=(shellcheck)
 source=("$pkgname::git+https://github.com/gportay/${pkgname%-git}.git")
 sha256sums=(SKIP)
 install="$pkgname.install"
+changelog=CHANGELOG.md
 
 pkgver() {
 	cd "$srcdir/$pkgname"
