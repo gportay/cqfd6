@@ -1376,9 +1376,6 @@ while [ $# -gt 0 ]; do
 				warn ".cqfdrc: Missing or empty build.command property!"
 			fi
 
-			# Run default command with extra arguments
-			build_command+=" $*"
-
 			# Display a warning message if using -c with multiple arguments
 			if [ "$cqfd_command" = "release" ]; then
 				warn "command $cqfd_command shall not support argument(s)."
@@ -1392,11 +1389,11 @@ while [ $# -gt 0 ]; do
 				warn_deprecated_command "$cqfd_command" \
 					cqfd "--$cqfd_command" -c "\"$*\""
 			fi
+
+			# Run default command with extra arguments
+			build_command+=" $*"
 			break
 		fi
-
-		# Run alternate command
-		build_command="$*"
 
 		# Display a warning message if using run with multiple arguments
 		if [ "$cqfd_command" = "run" ] && [ "$#" -gt 1 ]; then
@@ -1417,6 +1414,9 @@ while [ $# -gt 0 ]; do
 			warn_deprecated_command "$cqfd_command" \
 				cqfd "--$cqfd_command" --run "${*@Q}"
 		fi
+
+		# Run alternate command
+		build_command="$*"
 		break
 		;;
 	shell|--shell)
