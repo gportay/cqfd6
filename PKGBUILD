@@ -13,6 +13,7 @@ checkdepends=(shellcheck)
 source=("$pkgname-$pkgver.tar.gz::https://github.com/gportay/$pkgname/archive/v$pkgver.tar.gz")
 sha256sums=(SKIP)
 install="$pkgname.install"
+changelog=CHANGELOG.md
 
 build() {
 	cd "$pkgname-$pkgver"
