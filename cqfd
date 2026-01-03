@@ -1091,6 +1091,7 @@ load_config() {
 	fi
 }
 
+# Parse arguments
 debug Compatibility level "$COMPAT"
 has_to_init=false
 has_to_release=false
@@ -1348,8 +1349,14 @@ while [ $# -gt 0 ]; do
 				cqfd "--$cqfd_command"
 		fi
 
-		# Run default command
+		# No extra argument given
 		if [ "$#" -eq 0 ]; then
+			# Check for [build] command property is set and not empty
+			if [ -z "$build_command" ]; then
+				die ".cqfdrc: Missing or empty build.command property!"
+			fi
+
+			# Run default command
 			break
 		fi
 
@@ -1364,6 +1371,7 @@ while [ $# -gt 0 ]; do
 				die "$cqfd_command -c: Missing arguments!"
 			fi
 
+			# Check for [build] command property is set and not empty
 			if [ -z "$build_command" ]; then
 				warn ".cqfdrc: Missing or empty build.command property!"
 			fi
@@ -1438,10 +1446,12 @@ while [ $# -gt 0 ]; do
 		break
 		;;
 	--)
+		# Stop parsing argument
 		shift
 		break
 		;;
 	-*)
+		# Option is invalid option
 		usage
 		die "$1: Invalid option!"
 		;;
@@ -1466,20 +1476,26 @@ while [ $# -gt 0 ]; do
 	shift
 done
 
+# No command given
 if [ -z "$cqfd_command" ]; then
+	# Setup build
 	load_config "$flavor"
+
+	# Check for [build] command property is set and not empty
+	if [ -z "$build_command" ]; then
+		die ".cqfdrc: Missing or empty build.command property!"
+	fi
 fi
 
-if [ -z "$build_command" ]; then
-	die ".cqfdrc: Missing or empty build.command property!"
-fi
-
+# Has to pull or build image
 if $has_to_init; then
 	docker_pull_or_build
 fi
 
+# Run command in build container
 docker_run "$build_command"
 
+# Has to release archive
 if $has_to_release; then
 	make_archive
 fi
