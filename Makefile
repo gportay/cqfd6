@@ -4,7 +4,7 @@ PREFIX ?= /usr/local
 VERSION ?= $(shell bash cqfd --version)
 COMPAT ?= $(shell bash cqfd --compatibility)
 
-.PHONY: all help doc install uninstall test tests check clean maintainer-clean
+.PHONY: all help doc install uninstall test tests check clean maintainer-clean sources FORCE
 
 all:	help
 
@@ -94,7 +94,6 @@ maintainer-clean: clean
 %.gz: %
 	gzip -c $^ >$@
 
-.PHONY: sources
 sources: cqfd6-$(VERSION).tar.gz rpmbuild/SOURCES/v$(VERSION).tar.gz FORCE
 
 rpmbuild/SOURCES/$(VERSION).tar.gz:
@@ -105,5 +104,4 @@ cqfd6-$(VERSION).tar.gz:
 %.tar.gz: FORCE
 	git archive --prefix $*/ --format tar.gz --output $@ HEAD
 
-.PHONY: FORCE
 FORCE:
