@@ -14,7 +14,7 @@ cp -f .cqfdrc .cqfdrc.orig
 echo -n "" >.cqfdrc
 
 jtest_prepare "cqfdrc fails if no project section"
-if "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing project section!"; \
+if bash -x "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing project section!"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
@@ -24,7 +24,8 @@ fi
 echo "[project]" >>.cqfdrc
 
 jtest_prepare "cqfdrc fails if no name property set in project section"
-if "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing project.org or project.name properties!"; \
+cat .cqfdrc
+if bash -x "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing project.org or project.name properties!"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
@@ -54,7 +55,8 @@ fi
 echo "[build]" >>.cqfdrc
 
 jtest_prepare "cqfdrc fails if no command property set in build section"
-if "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing or empty build.command property!"; \
+cat .cqfdrc
+if bash -x "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing or empty build.command property!"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
@@ -62,14 +64,15 @@ else
 fi
 
 jtest_prepare "cqfdrc succeeds if project and build sections are set correctly"
-if "$cqfd" init && "$cqfd" run true; then
+cat .cqfdrc
+if bash -x "$cqfd" init && "$cqfd" run true; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "cqfdrc succeeds even if no command property set in build section using run -c"
-if "$cqfd" run -c true 2>&1 | grep "cqfd: warning: .cqfdrc: Missing or empty build.command property!"; \
+if bash -x "$cqfd" run -c true 2>&1 | grep "cqfd: warning: .cqfdrc: Missing or empty build.command property!"; \
    test "${PIPESTATUS[0]}" -eq 0 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
@@ -90,14 +93,7 @@ cp -f .cqfdrc.orig .cqfdrc
 echo "foo	=bar" >>.cqfdrc
 
 jtest_prepare "cqfdrc with tabulation before should pass"
-if CQFD_COMPAT=5 "$cqfd" run true; then
-	jtest_result pass
-else
-	jtest_result fail
-fi
-
-jtest_prepare "cqfdrc with tabulation before should not pass"
-if ! "$cqfd" run true; then
+if "$cqfd" run true; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -107,14 +103,7 @@ cp -f .cqfdrc.orig .cqfdrc
 echo "foo=	bar" >>.cqfdrc
 
 jtest_prepare "cqfdrc with tabulation after should pass"
-if CQFD_COMPAT=5 "$cqfd" run true; then
-	jtest_result pass
-else
-	jtest_result fail
-fi
-
-jtest_prepare "cqfdrc with tabulation after should not pass"
-if ! "$cqfd" run true; then
+if "$cqfd" run true; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -124,14 +113,7 @@ cp -f .cqfdrc.orig .cqfdrc
 echo "foo =bar" >>.cqfdrc
 
 jtest_prepare "cqfdrc with space before should pass"
-if CQFD_COMPAT=5 "$cqfd" run true; then
-	jtest_result pass
-else
-	jtest_result fail
-fi
-
-jtest_prepare "cqfdrc with space before should not pass"
-if ! "$cqfd" run true; then
+if "$cqfd" run true; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -141,14 +123,7 @@ cp -f .cqfdrc.orig .cqfdrc
 echo "foo= bar" >>.cqfdrc
 
 jtest_prepare "cqfdrc with space after should pass"
-if CQFD_COMPAT=5 "$cqfd" run true; then
-	jtest_result pass
-else
-	jtest_result fail
-fi
-
-jtest_prepare "cqfdrc with space after should not pass"
-if ! "$cqfd" run true; then
+if "$cqfd" run true; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -159,6 +134,18 @@ sed -i -e "/[build]/,/^$/s,^command=.*$,command='true; echo \"It works!\"'," .cq
 
 jtest_prepare "cqfdrc does not strip semicolons in command"
 if CQFD_COMPAT=6 "$cqfd" init && CQFD_COMPAT=6 "$cqfd" | grep "It works!" ; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+echo "command=\"echo \\
+	foo=bar \\
+	baz=qnux\"
+" >>.cqfdrc
+
+jtest_prepare "cqfdrc with multiline should pass"
+if $cqfd | grep 'foo=bar baz=qnux'; then
 	jtest_result pass
 else
 	jtest_result fail
