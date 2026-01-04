@@ -903,6 +903,7 @@ load_config() {
 	local flavors
 	mapfile -t flavors < <(compgen -A function -X '!cfg_section_*')
 	flavors=("${flavors[@]/cfg_section_/}")
+	local i
 	for i in "${!flavors[@]}"; do
 		if [[ "${flavors[$i]}" =~ ^(build|project)$ ]]; then
 			unset 'flavors[$i]'
