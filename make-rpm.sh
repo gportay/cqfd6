@@ -1,4 +1,4 @@
-#!/usr/bin/env -S "CQFD_EXTRA_RUN_ARGS=--volume ${PWD}/rpmbuild:${HOME}/rpmbuild --volume ${PWD}/cqfd6.spec:${HOME}/rpmbuild/SPECS/cqfd6.spec" cqfd -b rpm shell
+#!/usr/bin/env -S "CQFD_EXTRA_RUN_ARGS=--volume ${PWD}/rpmbuild:${HOME}/rpmbuild --volume ${PWD}/cqfd6.spec:${HOME}/rpmbuild/SPECS/cqfd6.spec" cqfd -b rpm --shell
 set -e
 rpmdev-setuptree
 cd ~/rpmbuild/SPECS
