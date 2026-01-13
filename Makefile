@@ -15,6 +15,7 @@ help:
 	@echo "   install:   Install script, doc and resources"
 	@echo "   uninstall: Remove script, doc and resources"
 	@echo "   test:      Run functional tests"
+	@echo "   check:     Run analysis tool"
 	@echo "   clean:     Clean temporary files"
 
 doc: cqfd.1.gz cqfdrc.5.gz
