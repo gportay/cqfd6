@@ -1463,7 +1463,7 @@ while [ $# -gt 0 ]; do
 			die "$1: Invalid command!"
 		fi
 
-		# Shift command
+		# Set command
 		cqfd_command="$1"
 
 		# Setup build
