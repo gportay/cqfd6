@@ -171,7 +171,7 @@ warn_deprecated_command() {
 	     "$*"
 }
 
-## die() - exit when an error occured
+## die() - exit when an error occurred
 # $*: messages shown in the error message
 die() {
 	if has_color; then
@@ -1172,7 +1172,7 @@ load_config() {
 		die ".cqfdrc: Missing build section!"
 	fi
 
-	# build parameters may be overriden by a flavor defined in the
+	# build parameters may be overridden by a flavor defined in the
 	# build section's 'flavors' parameter.
 	if [ -n "$1" ]; then
 		if ! source_ini_sections "$1" 2>/dev/null; then
@@ -1636,7 +1636,7 @@ while [ $# -gt 0 ]; do
 
 		# Display a warning message if using run with multiple arguments
 		if [ "$cqfd_command" = "run" ] && [ "$#" -gt 1 ]; then
-			warn "command $cqfd_command with multiple arguments is ambigous."
+			warn "command $cqfd_command with multiple arguments is ambiguous."
 			warn_deprecated_command "$cqfd_command" \
 				cqfd --exec "${*@Q}" or \
 				cqfd --shell -c "\"${*@Q}\""
@@ -1644,7 +1644,7 @@ while [ $# -gt 0 ]; do
 
 		# Display a warning message if using release with multiple arguments
 		if [ "$cqfd_command" = "release" ] && [ "$#" -gt 1 ]; then
-			warn "command $cqfd_command with multiple arguments is ambigous."
+			warn "command $cqfd_command with multiple arguments is ambiguous."
 			warn_deprecated_command "$cqfd_command" \
 				cqfd "--$cqfd_command" --exec "${*@Q}" or \
 				cqfd "--$cqfd_command" --shell -c "\"${*@Q}\""
