@@ -21,6 +21,55 @@ if [ -z "$BASH_VERSION" ]; then
 	}
 fi
 
+#
+# Stolen and hacked from bash-completion (bash_completion)
+#
+# SPDX-FileCopyrightText: The Bash Completion Maintainers
+#
+# SPDX-License-Identifier: GPL-2.0-only
+#
+# The function _get_first_arg_2() is a merge of the two helper functions
+# _get_first_arg() and _count_args() from the bash-completion sources.
+#
+# This function returns the first argument, excluding options
+# @param $1 chars  Characters out of $COMP_WORDBREAKS which should
+#     NOT be considered word breaks. See __reassemble_comp_words_by_ref.
+# @param $2 glob   Options whose following argument should not be counted
+# @param $3 glob   Options that should be counted as args
+_get_first_arg_2()
+{
+	local i cword words
+	__reassemble_comp_words_by_ref "${1-}" words cword
+
+	arg=
+	for ((i = 1; i < cword; i++)); do
+		# shellcheck disable=SC2053
+		if [[ ${words[i]} != -* && ${words[i - 1]} != ${2-} || \
+		   ${words[i]} == ${3-} ]]; then
+			arg=${COMP_WORDS[i]}
+			break
+		fi
+	done
+}
+
+# This function returns the compatibility
+_get_compat() {
+	local i
+
+	compat="${COMP_WORDS[0]}"
+	compat="${compat##*/}"
+	compat="${compat#*cqfd}"
+	if [[ ! "$compat" ]]; then
+		compat=5
+	fi
+	for ((i = 1; i < COMP_CWORD - 1; i++)); do
+		if [[ ${COMP_WORDS[i]} == --compatibility ]]; then
+			compat="${COMP_WORDS[$i+1]}"
+			break
+		fi
+	done
+}
+
 # This function returns the command
 _get_cmd() {
 	local i
@@ -75,48 +124,73 @@ _cqfd6() {
 		;;
 	esac
 
-	local cmd
-	_get_cmd
-	if [[ "$cmd" =~ ^--(exec|run)$ ]]; then
-		for ((i = 1; i < cword; i++)); do
-			if [[ ${words[i]} == "$cmd" ]]; then
-				if (( i + 1 == cword )); then
-					break
-				elif [[ ${words[i+1]} == -c ]]; then
+	local compat
+	_get_compat
+	if ((compat < 6)); then
+		local cmd
+		_get_cmd
+		if [[ "$cmd" =~ ^--(exec|run)$ ]]; then
+			for ((i = 1; i < cword; i++)); do
+				if [[ ${words[i]} == "$cmd" ]]; then
+					if (( i + 1 == cword )); then
+						break
+					elif [[ ${words[i+1]} == -c ]]; then
+						((i++))
+					fi
 					((i++))
+					_command_offset "$i"
+					return
 				fi
-				((i++))
-				_command_offset "$i"
-				return
-			fi
-		done
+			done
 
-		if [[ "$cmd" == --exec ]]; then
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -c -- "$cur"))
-		else
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -c -W "-c" -- "$cur"))
+			if [[ "$cmd" == --exec ]]; then
+				# shellcheck disable=SC2207
+				COMPREPLY=($(compgen -c -- "$cur"))
+			else
+				# shellcheck disable=SC2207
+				COMPREPLY=($(compgen -c -W "-c" -- "$cur"))
+			fi
+			return
+		elif [[ "$cmd" == --shell ]]; then
+			for ((i = 1; i < cword; i++)); do
+				if [[ ${words[i]} == "$cmd" ]]; then
+					((i++))
+					break
+				fi
+			done
 		fi
+
+		local opts="-C --directory -w --working-directory -d --cqfd-directory -f --cqfdrc-file -b --build -q --quiet --reinit --release --platform"
+		local cmds="--init --deinit --ls --gc --flavors --exec --run --shell -v --version --compatibility -h --help"
+		# shellcheck disable=SC2207
+		COMPREPLY=($(compgen -W "$cmds $opts" -- "$cur"))
 		return
-	elif [[ "$cmd" == --shell ]]; then
+	fi
+
+	local args
+	_count_args "" "@(--compatibility)"
+	if ((args > 1)); then
+		local arg
+		_get_first_arg_2 "" "@(--compatibility)"
 		for ((i = 1; i < cword; i++)); do
-			if [[ ${words[i]} == "$cmd" ]]; then
-				((i++))
+			if [[ "${words[i]}" == "$arg" ]]; then
 				break
 			fi
 		done
 
-		COMP_WORDS=("${SHELL:-/bin/sh}" "${COMP_WORDS[@]:$i}" "$cur")
-		COMP_LINE="${COMP_WORDS[*]}"
-		COMP_POINT="${#COMP_LINE}"
-		_command_offset 0
+		_command_offset "$i"
+		return 
+	fi
+
+	if [[ "$cur" == -* ]]; then
+		local opts="-C --directory -w --working-directory -d --cqfd-directory -f --cqfdrc-file -b --build -q --quiet --reinit --release --platform"
+		local cmds="--init --deinit --ls --gc --flavors -v --version --compatibility -h --help"
+		# shellcheck disable=SC2207
+		COMPREPLY=($(compgen -W "$cmds $opts" -- "$cur"))
 		return
 	fi
 
-	local opts="-C --directory -w --working-directory -d --cqfd-directory -f --cqfdrc-file -b --build -q --quiet --reinit --release --platform"
-	local cmds="--init --deinit --ls --gc --flavors --exec --run --shell -v --version --compatibility -h --help"
 	# shellcheck disable=SC2207
-	COMPREPLY=($(compgen -W "$cmds $opts" -- "$cur"))
+	COMPREPLY=($(compgen -c -- "$cur"))
 } &&
 complete -F _cqfd6 cqfd6 linux-amd64-cqfd6 linux-arm-cqfd6 linux-arm64-cqfd6 linux-ppc64le-cqfd6 linux-riscv64-cqfd6 linux-s390x-cqfd6
