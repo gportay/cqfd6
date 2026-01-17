@@ -1,6 +1,6 @@
 #
-# Copyright (C) 2017,2023,2025 Gaël PORTAY
-#               2017-2025      Savoir-faire Linux, Inc.
+# Copyright (C) 2017,2023,2025-2026 Gaël PORTAY
+#               2017-2025           Savoir-faire Linux, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,8 +22,6 @@ if [ -z "$BASH_VERSION" ]; then
 fi
 
 # This function returns the command
-# @param $1 chars  Characters out of $COMP_WORDBREAKS which should
-#     NOT be considered word breaks. See __reassemble_comp_words_by_ref.
 _get_cmd() {
 	local i
 
