@@ -55,7 +55,7 @@ _cqfd6() {
 		local flavors cqfdrc=.cqfdrc
 		# before we scan for flavors, see if a cqfdrc name was
 		# specified with -f
-		for ((i=1; i < cword; i++)); do
+		for ((i = 1; i < cword; i++)); do
 			if [[ ${words[i]} == -f ]]; then
 				# eval for tilde expansion
 				eval "cqfdrc=(\"${words[i+1]}\")"
@@ -76,7 +76,7 @@ _cqfd6() {
 	local cmd
 	_get_cmd
 	if [[ "$cmd" =~ ^--(exec|run)$ ]]; then
-		for ((i=1; i < cword; i++)); do
+		for ((i = 1; i < cword; i++)); do
 			if [[ ${words[i]} == "$cmd" ]]; then
 				if [[ $((i+1)) -eq $cword ]]; then
 					break
@@ -95,7 +95,7 @@ _cqfd6() {
 		fi
 		return
 	elif [[ "$cmd" == --shell ]]; then
-		for ((i=1; i < cword; i++)); do
+		for ((i = 1; i < cword; i++)); do
 			if [[ ${words[i]} == "$cmd" ]]; then
 				((i++))
 				break
