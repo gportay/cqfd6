@@ -73,7 +73,7 @@ _cqfd6() {
 		;;
 	esac
 
-	local cmd=
+	local cmd
 	_get_cmd
 	if [[ "$cmd" =~ ^--(exec|run)$ ]]; then
 		for ((i=1; i < cword; i++)); do
