@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of --deinit with docker extra rmi arguments
+# validate the behavior of --deinit command with docker extra rmi arguments
 
 jtest_prepare "run cqfd --deinit with --force set in CQFD_EXTRA_RMI_ARGS should pass"
 if env CQFD_EXTRA_RMI_ARGS="--force" cqfd --deinit; then

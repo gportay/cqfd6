@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of running docker multi-platform image
+# validate the behavior of running a docker multi-platform image
 
 set -o pipefail
 

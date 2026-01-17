@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of cqfd from subdirectory
+# validate the behavior of cqfd from a subdirectory
 
 set -o pipefail
 

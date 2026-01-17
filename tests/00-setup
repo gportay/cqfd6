@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior with skelton bring up
+# validate the behavior of the skeleton bring-up
 
 jtest_prepare "run cqfd --init without an .cqfd directory should fail"
 if ! cqfd --init; then

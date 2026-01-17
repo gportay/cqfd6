@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of --ls and --gc command to teardown
+# validate the behavior of --ls and --gc commands to teardown
 
 set -o pipefail
 
