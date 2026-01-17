@@ -58,12 +58,12 @@ _cqfd6() {
 		for (( i=0; i < ${#words[@]}; i++ )); do
 			if [[ ${words[i]} == -f ]]; then
 				# eval for tilde expansion
-				eval cqfdrc=( "${words[i+1]}" )
+				eval "cqfdrc=( \"${words[i+1]}\" )"
 			fi
 		done
 
 		if [ -e "$cqfdrc" ]; then
-			flavors=$(CQFD_NO_DEPRECATED_COMMAND_WARNING=true cqfd6 -f $cqfdrc --flavors)
+			flavors=$(CQFD_NO_DEPRECATED_COMMAND_WARNING=true cqfd6 -f "$cqfdrc" --flavors)
 			COMPREPLY=( $(compgen -W "$flavors" -- "$cur") )
 		fi
 		return
