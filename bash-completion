@@ -78,7 +78,7 @@ _cqfd6() {
 	if [[ "$cmd" =~ ^--(exec|run)$ ]]; then
 		for ((i = 1; i < cword; i++)); do
 			if [[ ${words[i]} == "$cmd" ]]; then
-				if [[ $((i+1)) -eq $cword ]]; then
+				if (( i + 1 == cword )); then
 					break
 				elif [[ ${words[i+1]} == -c ]]; then
 					((i++))
