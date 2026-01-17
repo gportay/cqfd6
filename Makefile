@@ -76,6 +76,7 @@ test tests:
 
 check:
 	shellcheck cqfd
+	shellcheck --shell bash bash-completion
 	@$(MAKE) -C tests check
 
 clean:
