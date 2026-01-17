@@ -83,7 +83,8 @@ _cqfd6() {
 				elif [[ ${words[i+1]} == -c ]]; then
 					((i++))
 				fi
-				_command_offset $((i+1))
+				((i++))
+				_command_offset "$i"
 				return
 			fi
 		done
