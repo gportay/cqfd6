@@ -164,5 +164,17 @@ else
 	jtest_result fail
 fi
 
+cp -f .cqfdrc.orig .cqfdrc
+sed -i -e "/[build]/,/^$/s,^command=.*$,command=\"echo \\\\\\
+	foo=bar \\\\\\
+	baz=quux\"," .cqfdrc
+
+jtest_prepare "cqfdrc with multiline should pass"
+if "$cqfd" | grep 'foo=bar baz=quux'; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
 # restore initial .cqfdrc
 mv -f .cqfdrc.orig .cqfdrc
