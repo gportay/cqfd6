@@ -40,7 +40,7 @@ _cqfd6() {
 
 	case $prev in
 	--platform)
-		COMPREPLY=( $( compgen -W "linux/amd64 linux/arm/v6 linux/arm/v7 linux/arm64 linux/ppc64le linux/riscv64 linux/s390x" -- "$cur" ) )
+		COMPREPLY=($(compgen -W "linux/amd64 linux/arm/v6 linux/arm/v7 linux/arm64 linux/ppc64le linux/riscv64 linux/s390x" -- "$cur"))
 		return
 		;;
 	-C|--directory|-w|--working-directory|-d|--cqfd-directory)
@@ -55,16 +55,16 @@ _cqfd6() {
 		local flavors cqfdrc=.cqfdrc
 		# before we scan for flavors, see if a cqfdrc name was
 		# specified with -f
-		for (( i=1; i < cword; i++ )); do
+		for ((i=1; i < cword; i++)); do
 			if [[ ${words[i]} == -f ]]; then
 				# eval for tilde expansion
-				eval "cqfdrc=( \"${words[i+1]}\" )"
+				eval "cqfdrc=(\"${words[i+1]}\")"
 			fi
 		done
 
 		if [ -e "$cqfdrc" ]; then
 			flavors=$(CQFD_NO_DEPRECATED_COMMAND_WARNING=true cqfd6 -f "$cqfdrc" --flavors)
-			COMPREPLY=( $(compgen -W "$flavors" -- "$cur") )
+			COMPREPLY=($(compgen -W "$flavors" -- "$cur"))
 		fi
 		return
 		;;
@@ -76,26 +76,26 @@ _cqfd6() {
 	local cmd=
 	_get_cmd
 	if [[ "$cmd" =~ ^--(exec|run)$ ]]; then
-		for (( i=1; i < cword; i++ )); do
+		for ((i=1; i < cword; i++)); do
 			if [[ ${words[i]} == "$cmd" ]]; then
 				if [[ $((i+1)) -eq $cword ]]; then
 					break
 				elif [[ ${words[i+1]} == -c ]]; then
 					((i++))
 				fi
-				_command_offset $((i + 1))
+				_command_offset $((i+1))
 				return
 			fi
 		done
 
 		if [[ "$cmd" == --exec ]]; then
-			COMPREPLY=( $(compgen -c -- "$cur") )
+			COMPREPLY=($(compgen -c -- "$cur"))
 		else
-			COMPREPLY=( $(compgen -c -W "-c" -- "$cur") )
+			COMPREPLY=($(compgen -c -W "-c" -- "$cur"))
 		fi
 		return
 	elif [[ "$cmd" == --shell ]]; then
-		for (( i=1; i < cword; i++ )); do
+		for ((i=1; i < cword; i++)); do
 			if [[ ${words[i]} == "$cmd" ]]; then
 				((i++))
 				break
@@ -111,6 +111,6 @@ _cqfd6() {
 
 	local opts="-C --directory -w --working-directory -d --cqfd-directory -f --cqfdrc-file -b --build -q --quiet --reinit --release --platform"
 	local cmds="--init --deinit --ls --gc --flavors --exec --run --shell -v --version --compatibility -h --help"
-	COMPREPLY=( $(compgen -W "$cmds $opts" -- "$cur") )
+	COMPREPLY=($(compgen -W "$cmds $opts" -- "$cur"))
 } &&
 complete -F _cqfd6 cqfd6 linux-amd64-cqfd6 linux-arm-cqfd6 linux-arm64-cqfd6 linux-ppc64le-cqfd6 linux-riscv64-cqfd6 linux-s390x-cqfd6
