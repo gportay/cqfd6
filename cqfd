@@ -27,8 +27,7 @@ compat() {
 	compat="$0"
 	compat="${compat##*/}"
 	compat="${compat#*cqfd}"
-	if [[ ! "$compat" ]]
-	then
+	if [[ ! "$compat" ]]; then
 		# shellcheck disable=SC2034
 		IFS=. read -r M m _ <<<"$1"
 		compat="$M"
