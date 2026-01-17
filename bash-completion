@@ -40,6 +40,7 @@ _cqfd6() {
 
 	case $prev in
 	--platform)
+		# shellcheck disable=SC2207
 		COMPREPLY=($(compgen -W "linux/amd64 linux/arm/v6 linux/arm/v7 linux/arm64 linux/ppc64le linux/riscv64 linux/s390x" -- "$cur"))
 		return
 		;;
@@ -64,6 +65,7 @@ _cqfd6() {
 
 		if [ -e "$cqfdrc" ]; then
 			flavors=$(CQFD_NO_DEPRECATED_COMMAND_WARNING=true cqfd6 -f "$cqfdrc" --flavors)
+			# shellcheck disable=SC2207
 			COMPREPLY=($(compgen -W "$flavors" -- "$cur"))
 		fi
 		return
@@ -90,8 +92,10 @@ _cqfd6() {
 		done
 
 		if [[ "$cmd" == --exec ]]; then
+			# shellcheck disable=SC2207
 			COMPREPLY=($(compgen -c -- "$cur"))
 		else
+			# shellcheck disable=SC2207
 			COMPREPLY=($(compgen -c -W "-c" -- "$cur"))
 		fi
 		return
@@ -112,6 +116,7 @@ _cqfd6() {
 
 	local opts="-C --directory -w --working-directory -d --cqfd-directory -f --cqfdrc-file -b --build -q --quiet --reinit --release --platform"
 	local cmds="--init --deinit --ls --gc --flavors --exec --run --shell -v --version --compatibility -h --help"
+	# shellcheck disable=SC2207
 	COMPREPLY=($(compgen -W "$cmds $opts" -- "$cur"))
 } &&
 complete -F _cqfd6 cqfd6 linux-amd64-cqfd6 linux-arm-cqfd6 linux-arm64-cqfd6 linux-ppc64le-cqfd6 linux-riscv64-cqfd6 linux-s390x-cqfd6
