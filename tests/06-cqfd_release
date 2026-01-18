@@ -5,7 +5,7 @@
 set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.cqfd/cqfd"
+cqfd="$TDIR/.local/bin/cqfd"
 
 cd "$TDIR/" || exit 1
 
@@ -326,7 +326,7 @@ fi
 ################################################################################
 # shellcheck disable=SC2016
 sed -i -e 's!^archive=.*$!archive=cqfd-$CTEST.tar.xz!' .cqfdrc
-sed -i -e 's!^files=.*$!files=".cqfd/cqfd"!' .cqfdrc
+sed -i -e 's!^files=.*$!files=".local/bin/cqfd"!' .cqfdrc
 jtest_prepare "cqfd release with option --release"
 if "$cqfd" --release; then
 	jtest_result pass

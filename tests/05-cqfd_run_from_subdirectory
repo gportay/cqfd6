@@ -3,7 +3,7 @@
 # validate the behavior of run from subdirectory
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.cqfd/cqfd"
+cqfd="$TDIR/.local/bin/cqfd"
 
 jtest_prepare "cqfd can run from a project's sub-directory"
 

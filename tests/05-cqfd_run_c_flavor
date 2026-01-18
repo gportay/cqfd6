@@ -3,7 +3,7 @@
 # validate the behavior of run -c command
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.cqfd/cqfd"
+cqfd="$TDIR/.local/bin/cqfd"
 flavor="foo"
 test_file="$flavor"
 test_run_c_file="test_run_c.txt"

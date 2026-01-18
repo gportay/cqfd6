@@ -16,7 +16,8 @@ workdir="workingdir"
 mkdir -p "$workdir"
 mv .cqfd "$workdir/.cqfd"
 mv .cqfdrc "$workdir/.cqfdrc"
-cqfd="$TDIR/$workdir/.cqfd/cqfd"
+cqfd="$TDIR/.local/bin/cqfd"
+
 cd "$workdir" || exit 1
 
 ################################################################################

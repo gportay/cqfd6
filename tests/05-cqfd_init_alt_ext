@@ -14,7 +14,7 @@ extdir="external/dir"
 mkdir -p "$extdir"
 mv .cqfd "$extdir/cqfd"
 mv .cqfdrc "$extdir/cqfdrc"
-cqfd="$TDIR/$extdir/cqfd/cqfd"
+cqfd="$TDIR/.local/bin/cqfd"
 
 ################################################################################
 # 'cqfd init' without local files should fail
@@ -98,4 +98,3 @@ fi
 mv "$extdir/cqfdrc" .cqfdrc
 mv "$extdir/cqfd" .cqfd
 rmdir -p "$extdir"
-cqfd="$TDIR/.cqfd/cqfd"
