@@ -25,7 +25,7 @@ _colorize()
 	# Only colorize a few terminal types
 	# "dumb" is the terminal type in GitHub Actions
 	case "$TERM" in
-	linux*|xterm*|screen*|tmux*|vt102|dumb) ;;
+	linux*|xterm*|screen*|tmux*|vt102|foot|dumb) ;;
 	*) printf "%s" "$text"; return ;;
 	esac
 
