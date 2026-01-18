@@ -10,7 +10,7 @@ cqfd="$TDIR/.local/bin/cqfd"
 cd "$TDIR/" || exit 1
 
 ################################################################################
-# 'cqfd init' with a proper .cqfdrc should pass
+# 'cqfd init' with a proper .cqfdrc file should pass
 ################################################################################
 jtest_prepare "run cqfd init"
 if "$cqfd" init; then

@@ -13,9 +13,9 @@ cqfd="$TDIR/.local/bin/cqfd"
 cd "$TDIR/" || exit 1
 
 ################################################################################
-# running 'cqfd ls' without a proper config should fail
+# running 'cqfd ls' without a proper config file should fail
 ################################################################################
-jtest_prepare "cqfd ls complains without an .cqfdrc"
+jtest_prepare "cqfd ls complains without an .cqfdrc file"
 if ! "$cqfd" ls; then
 	jtest_result pass
 else
@@ -23,9 +23,9 @@ else
 fi
 
 ################################################################################
-# running 'cqfd gc' without a proper config should fail
+# running 'cqfd gc' without a proper config file should fail
 ################################################################################
-jtest_prepare "cqfd gc complains without an .cqfdrc"
+jtest_prepare "cqfd gc complains without an .cqfdrc file"
 if ! "$cqfd" gc; then
 	jtest_result pass
 else
@@ -43,9 +43,9 @@ else
 fi
 
 ################################################################################
-# running 'cqfd init' should fail, as there's an empty config
+# running 'cqfd init' should fail, as there's an empty config file
 ################################################################################
-jtest_prepare "cqfd init complains with an empty .cqfdrc"
+jtest_prepare "cqfd init complains with an empty .cqfdrc file"
 touch "$TDIR/.cqfdrc"
 if ! "$cqfd" init; then
 	jtest_result pass
@@ -56,7 +56,7 @@ fi
 ################################################################################
 # running 'cqfd init' should fail, as there's an incomplete config file
 ################################################################################
-jtest_prepare "cqfd init complains with an incomplete .cqfdrc"
+jtest_prepare "cqfd init complains with an incomplete .cqfdrc file"
 echo '[project]' >"$TDIR/.cqfdrc"
 if ! "$cqfd" init; then
 	jtest_result pass
@@ -65,6 +65,6 @@ else
 fi
 
 ################################################################################
-# finally, for setup, insert a proper testing .cqfdrc
+# finally, for setup, insert a proper testing .cqfdrc file
 ################################################################################
 cat "$TDIR/cqfdrc-test" >"$TDIR/.cqfdrc"
