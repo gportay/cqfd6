@@ -1,7 +1,8 @@
 #!/bin/bash
 #
 # Shell test functions
-# Copyright (C) 2016-2025 Savoir-faire Linux, Inc.
+# Copyright (C) 2016,2023,2025-2026 Gaël PORTAY
+#               2016-2025 Savoir-faire Linux, Inc.
 
 TDIR="$1"
 JTEST_LOGLVL=debug # all debug error fatal info off
@@ -108,16 +109,17 @@ jtest_log()
 	# per-loglevel coloring rules
 	case "$level" in
 	error)
-		color=31 # red
+		color=red
 		;;
 	notice)
-		color='0;33;40' # yellow
+		color=yellow
 		;;
 	*)
 		;;
 	esac
 
-	echo -e "\e[${color}m[$(date +%T)|$level] $*\e[0m"
+	line=$(_colorize "$color" "[$(date +%T)|$level] $*")
+	echo -e "$line\n"
 }
 
 # jtest_prepare() - prepare next test
