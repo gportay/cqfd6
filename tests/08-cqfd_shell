@@ -7,7 +7,7 @@ set -o pipefail
 unset CQFD_SHELL
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.cqfd/cqfd"
+cqfd="$TDIR/.local/bin/cqfd"
 
 cd "$TDIR/" || exit 1
 
@@ -87,7 +87,7 @@ else
 fi
 
 jtest_prepare "cqfd shell is usable as a shell interpreter script"
-if PATH="$TDIR/.cqfd:$PATH"; ./whereami.sh 2>&1 | grep '^Ubuntu .* LTS$'; then
+if PATH="$TDIR/.local/bin:$PATH"; ./whereami.sh 2>&1 | grep '^Ubuntu .* LTS$'; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -97,7 +97,7 @@ jtest_prepare "cqfd shell is usable as a shell interpreter in binaries"
 if ! command -v make 2>/dev/null; then
 	jtest_result skip
 else
-	if PATH="$TDIR/.cqfd:$PATH"; make whereami 2>&1 | grep '^Ubuntu .* LTS$'; then
+	if PATH="$TDIR/.local/bin:$PATH"; make whereami 2>&1 | grep '^Ubuntu .* LTS$'; then
 		jtest_result pass
 	else
 		jtest_result fail

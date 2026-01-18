@@ -3,7 +3,7 @@
 # validate the behavior of run command
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.cqfd/cqfd"
+cqfd="$TDIR/.local/bin/cqfd"
 test_file="a/cqfd_a.txt"
 
 cd "$TDIR/" || exit 1
