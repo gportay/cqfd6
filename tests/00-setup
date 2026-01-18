@@ -47,7 +47,7 @@ else
 fi
 
 ################################################################################
-# running 'cqfd init' should fail, as there's no proper config
+# running 'cqfd init' should fail, as there's no proper config file
 ################################################################################
 jtest_prepare "create a test skeleton in temporary directory"
 if ! "$cqfd" init; then
