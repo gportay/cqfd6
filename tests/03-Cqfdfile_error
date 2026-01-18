@@ -1,0 +1,184 @@
+#!/usr/bin/env bash
+#
+# validate the Cqfdfile syntax
+
+set -o pipefail
+
+. "$(dirname "$0")/jtest.inc" "$1"
+cqfd="$TDIR/.local/bin/cqfd"
+
+cd "$TDIR/" || exit 1
+
+cp -f Cqfdfile Cqfdfile.orig
+
+echo -n "" >Cqfdfile
+
+jtest_prepare "Cqfdfile fails if no project section"
+if "$cqfd" 2>&1 | grep "cqfd: fatal: Cqfdfile: Missing project section!"; \
+   test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+echo "[project]" >>Cqfdfile
+
+jtest_prepare "Cqfdfile fails if no name property set in project section"
+if "$cqfd" 2>&1 | grep "cqfd: fatal: Cqfdfile: Missing project.org or project.name properties!"; \
+   test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+echo "name=test" >>Cqfdfile
+
+jtest_prepare "Cqfdfile fails if no org property set in project section"
+if "$cqfd" 2>&1 | grep "cqfd: fatal: Cqfdfile: Missing project.org or project.name properties"; \
+   test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+echo "org=cqfd" >>Cqfdfile
+
+jtest_prepare "Cqfdfile fails if no build section"
+if "$cqfd" 2>&1 | grep "cqfd: fatal: Cqfdfile: Missing build section!"; \
+   test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+echo "[build]" >>Cqfdfile
+
+jtest_prepare "Cqfdfile fails if no command property set in build section"
+if "$cqfd" 2>&1 | grep "cqfd: fatal: Cqfdfile: Missing or empty build.command property!"; \
+   test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+jtest_prepare "Cqfdfile succeeds if project and build sections are set correctly"
+if "$cqfd" init && "$cqfd" run true; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+jtest_prepare "Cqfdfile succeeds even if no command property set in build section using run -c"
+if "$cqfd" run -c true 2>&1 | grep "cqfd: warning: Cqfdfile: Missing or empty build.command property!"; \
+   test "${PIPESTATUS[0]}" -eq 0 -a "${PIPESTATUS[1]}" -eq 0; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+echo "command=true" >>Cqfdfile
+
+jtest_prepare "Cqfdfile succeeds if command property set in build section using run -c"
+if "$cqfd" run -c true 2>&1 | grep "cqfd: warning: Cqfdfile: Missing or empty build.command property!"; \
+   test "${PIPESTATUS[0]}" -eq 0 -a "${PIPESTATUS[1]}" -ne 0; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+cp -f Cqfdfile.orig Cqfdfile
+echo "foo	=bar" >>Cqfdfile
+
+jtest_prepare "Cqfdfile with tabulation before should pass"
+if "$cqfd" run true; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+cp -f Cqfdfile.orig Cqfdfile
+echo "foo=	bar" >>Cqfdfile
+
+jtest_prepare "Cqfdfile with tabulation after should pass"
+if "$cqfd" run true; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+cp -f Cqfdfile.orig Cqfdfile
+echo "foo =bar" >>Cqfdfile
+
+jtest_prepare "Cqfdfile with space before should pass"
+if "$cqfd" run true; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+cp -f Cqfdfile.orig Cqfdfile
+echo "foo= bar" >>Cqfdfile
+
+jtest_prepare "Cqfdfile with space after should pass"
+if "$cqfd" run true; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+cp -f Cqfdfile.orig Cqfdfile
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"; works!\"'," Cqfdfile
+
+jtest_prepare "Cqfdfile does not strip semicolons in command"
+if "$cqfd" init && "$cqfd" | grep "; works!" ; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+cp -f Cqfdfile.orig Cqfdfile
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"# works!\"'," Cqfdfile
+
+jtest_prepare "Cqfdfile does not strip hash in command"
+if "$cqfd" init && "$cqfd" | grep "# works!" ; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+cp -f Cqfdfile.orig Cqfdfile
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command=\"echo \\\\\\
+	foo=bar \\\\\\
+	baz=quux\"," Cqfdfile
+
+jtest_prepare "Cqfdfile with multiline should pass"
+if "$cqfd" | grep 'foo=bar baz=quux'; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+cp -f Cqfdfile.orig Cqfdfile
+sed -i -e "/\[project\]/,/^$/s,^,; ," Cqfdfile
+
+jtest_prepare "Cqfdfile with ;-commented project section should fail"
+if "$cqfd" 2>&1 | grep "cqfd: fatal: Cqfdfile: Missing project section!"; \
+   test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+cp -f Cqfdfile.orig Cqfdfile
+sed -i -e "/\[build\]/,/^$/s,^,# ," Cqfdfile
+
+jtest_prepare "Cqfdfile with #-commented build section should fail"
+if "$cqfd" 2>&1 | grep "cqfd: fatal: Cqfdfile: Missing build section!"; \
+   test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+# restore initial Cqfdfile
+mv -f Cqfdfile.orig Cqfdfile

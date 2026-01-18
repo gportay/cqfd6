@@ -10,7 +10,7 @@ cqfd="$TDIR/.local/bin/cqfd"
 cd "$TDIR/" || exit 1
 
 ################################################################################
-# 'cqfd init' with a proper .cqfdrc file should pass
+# 'cqfd init' with a proper Cqfdfile file should pass
 ################################################################################
 jtest_prepare "run cqfd init"
 if "$cqfd" init; then
@@ -23,8 +23,8 @@ fi
 # 'cqfd init' with a nonexistent Dockerfile should fail
 ################################################################################
 jtest_prepare "init with a nonexisting dockerfile shall fail"
-cp -f .cqfdrc .cqfdrc.orig
-sed -i -e "s/\[build\]/[build]\ndistro='thisshouldfail'/" .cqfdrc
+cp -f Cqfdfile Cqfdfile.orig
+sed -i -e "s/\[build\]/[build]\ndistro='thisshouldfail'/" Cqfdfile
 if ! "$cqfd" init; then
 	jtest_result pass
 else
@@ -35,14 +35,14 @@ fi
 # 'cqfd init' with a proper Dockerfile should pass
 ################################################################################
 jtest_prepare "run cqfd init with an other Dockerfile"
-sed -i -e "s/thisshouldfail/centos/" .cqfdrc
+sed -i -e "s/thisshouldfail/centos/" Cqfdfile
 if "$cqfd" init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
-# restore initial .cqfdrc
-mv -f .cqfdrc.orig .cqfdrc
+# restore initial Cqfdfile
+mv -f Cqfdfile.orig Cqfdfile
 
 ################################################################################
 # 'cqfd init' with same uid/gid dummy user should pass

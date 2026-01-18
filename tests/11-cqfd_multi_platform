@@ -9,8 +9,8 @@ cqfd="$TDIR/.local/bin/cqfd"
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfdrc .cqfdrc.orig
-cp -f cqfdrc-multi_platform .cqfdrc
+cp -f Cqfdfile Cqfdfile.orig
+cp -f Cqfdfile-multi_platform Cqfdfile
 cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 cp -f .cqfd/docker/Dockerfile.multi_platform .cqfd/docker/Dockerfile
 
@@ -76,8 +76,8 @@ fi
 rm -f linux-amd64-cqfd
 rm -f linux-arm64-cqfd
 
-# restore .cqfdrc and Dockerfile
-mv -f .cqfdrc.orig .cqfdrc
+# restore Cqfdfile and Dockerfile
+mv -f Cqfdfile.orig Cqfdfile
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 # restore container
