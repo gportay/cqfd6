@@ -19,8 +19,10 @@ static configuration files. As the cherry on top, cqfd can also build the
 project for different architectures thanks to multi-platform images and
 emulation.
 
-cqfd6 is a fork of cqfd fixing several broken things in the upstream project.
-It deprecates the former CLI to modernize it to something much simpler and much
+cqfd6 is a fork of cqfd fixing several broken things in the upstream project
+(hazardous .ini parser, no cleaning commands, inconsistant pulling behaviour,
+image naming, ambiguous `run` command and `custom_img_name` property...). It
+deprecates the former CLI to modernize it to something much simpler and much
 more common such as the CLI of `sudo`.
 
 # Using cqfd
