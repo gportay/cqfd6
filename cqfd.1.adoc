@@ -8,29 +8,29 @@
 
 == NAME
 
-cqfd - a tool to wrap commands in controlled Docker containers using docker.
+cqfd6 - a tool to wrap commands in controlled Docker containers using docker.
 
 == SYNOPSIS
 
-*cqfd* [OPTIONS] --init|--deinit
+*cqfd6* [OPTIONS] --init|--deinit
 
-*cqfd* [OPTIONS] --ls|--gc
+*cqfd6* [OPTIONS] --ls|--gc
 
-*cqfd* [OPTIONS] --exec COMMAND [ARGUMENTS]
+*cqfd6* [OPTIONS] --exec COMMAND [ARGUMENTS]
 
-*cqfd* [OPTIONS] --flavors
+*cqfd6* [OPTIONS] --flavors
 
-*cqfd* [OPTIONS] --run [COMMAND_STRING]
+*cqfd6* [OPTIONS] --run [COMMAND_STRING]
 
-*cqfd* [OPTIONS] --run -c ARGUMENT_STRING
+*cqfd6* [OPTIONS] --run -c ARGUMENT_STRING
 
-*cqfd* [OPTIONS] --shell [SHELL_ARGUMENTS]
+*cqfd6* [OPTIONS] --shell [SHELL_ARGUMENTS]
 
-*cqfd* [OPTIONS] [--] [PROGRAM] [ARGUMENTS]
+*cqfd6* [OPTIONS] [--] [PROGRAM] [ARGUMENTS]
 
 == DESCRIPTION
 
-*cqfd(1)* provides a quick and convenient way to run commands in the current
+*cqfd6(1)* provides a quick and convenient way to run commands in the current
 directory, but within a Docker container defined in a per-project config file.
 
 This becomes useful when building an application designed for another Linux
@@ -193,7 +193,7 @@ Report bugs at *https://github.com/gportay/cqfd6/issues*
 
 == COPYRIGHT
 
-Copyright (C) 2017,2025 Gaël PORTAY
+Copyright (C) 2017,2025-2026 Gaël PORTAY
 
 Copyright (C) 2015-2025 Savoir-faire Linux, Inc.
 
@@ -210,4 +210,4 @@ SIX stands for *Sudo Interface eXperimentation*.
 
 == SEE ALSO
 
-*docker-build(1)*, *docker-run(1)*, *Dockerfile(5)*, *cqfdrc(5)*
+*docker-build(1)*, *docker-run(1)*, *Dockerfile(5)*, *cqfdrc6(5)*
