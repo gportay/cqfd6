@@ -154,9 +154,14 @@ debug() {
 prompt_yes() {
 	local yes
 
-	# Return "no" if prompt is disabled or if stdin is not a tty
-	if [ "$CQFD_NO_PROMPT" = true ] || ! [ -t 0 ]; then
+	# Return "no" if assumed no already
+	if [ "$CQFD_PROMPT" = no ]; then
 	       return 1
+	fi
+
+	# Return "yes" if assumed yes already
+	if [[ "$CQFD_PROMPT" = yes ]]; then
+		return
 	fi
 
 	# Prompt message to terminal
@@ -382,10 +387,21 @@ collect_images() {
 		fi
 	done
 
+	# Ask to collect outdated and unused images and to consolidate database
+	message="Do you want to "
+	if [ "${#tags[@]}" -gt 0 ]; then
+		message+="collect ${#tags[*]} outdated and unused images and to "
+	fi
+	message+="consolidate database"
+	if ! prompt_yes "$message?"; then
+		return 1
+	fi
+
 	# Remove unused images if any
-	echo "Removing images..."
 	if [ "${#tags[@]}" -gt 0 ]; then
 		local args=()
+
+		echo "Removing images..."
 
 		# Append extra arguments from the .cqfdrc [build] section
 		if [ "$build_docker_rmi_args" ]; then
@@ -405,8 +421,9 @@ collect_images() {
 
 		# Remove image
 		"${cqfd_docker[@]}" rmi --force "${args[@]}" "${tags[@]}"
+
+		echo "Total ${#tags[*]} image(s) removed."
 	fi
-	echo "Total ${#tags[*]} image(s) removed."
 
 	# Consolidate the database symlinks
 	echo "Consolidating database symlinks..."
