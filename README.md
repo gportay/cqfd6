@@ -37,7 +37,6 @@ Just follow these steps:
 * Create a [.cqfdrc](cqfdrc.5.adoc) file
 * Create a [Dockerfile](https://docs.docker.com/reference/dockerfile/) and save
   it as `.cqfd/docker/Dockerfile`
-* Run `cqfd --init`
 
 The project uses itself to build the documentation or release packages. The
 in-tree files [.cqfdrc](.cqfdrc), the [.cqfd](.cqfd) directory, and the three
@@ -199,16 +198,12 @@ binfmt on Linux.
 
 Example:
 
-First, specify the desired platform in the `Dockerfile`, as shown below:
+Specify the desired platform in the `Dockerfile`, as shown below:
 
     FROM --platform=linux/arm64 ubuntu:24.04
     (...)
 
-Then, initialize the image:
-
-    $ cqfd --init
-
-Finally, test the build container:
+Test the build container:
 
     $ cqfd uname -m
     aarch64
@@ -219,12 +214,10 @@ platform dynamically.
 
 Examples:
 
-    $ cqfd --platform linux/arm64 --init
     $ cqfd --platform linux/arm64 uname -m
     aarch64
 
     $ export CQFD_PLATFORM="linux/arm64"
-    $ cqfd --init
     $ cqfd uname -m
     aarch64
 
@@ -238,7 +231,6 @@ Examples:
 
     [build]
     command='uname -a'
-    $ cqfd --init
     $ cqfd uname -m
     x86_64
     $ cqfd --build arm64 uname -m
@@ -345,9 +337,9 @@ related `Dockerfile`.
 
 ## Remove images
 
-Running `cqfd --init` creates and names a new Docker image each time the
-`Dockerfile` is modified, which may lead to a large number of unused images
-that are not automatically purged.
+Running `cqfd` creates and names a new Docker image each time the `Dockerfile`
+is modified, which may lead to a large number of unused images that are not
+automatically purged.
 
 To remove the image associated with the current version of the `Dockerfile`,
 use:
