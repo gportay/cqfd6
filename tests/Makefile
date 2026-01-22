@@ -19,6 +19,7 @@ tests: CQFDRC_FILE =
 tests:
 	@$(eval TDIR=$(shell mktemp -d /tmp/cqfd-test.XXXXXX))
 	@export CQFD_CACHE=$(TDIR); \
+	export CQFD_NO_PROMPT=true; \
 	for f in [0-9][0-9]*; do \
 		if [ -x "$$f" ]; then \
 			./$$f $(TDIR); \

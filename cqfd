@@ -149,6 +149,25 @@ debug() {
 	echo "cqfd: debug: $*"
 }
 
+## prompt_yes() - prompt message to user
+# $*: message prompted to terminal
+prompt_yes() {
+	local yes
+
+	# Return "no" if prompt is disabled or if stdin is not a tty
+	if [ "$CQFD_NO_PROMPT" = true ] || ! [ -t 0 ]; then
+	       return 1
+	fi
+
+	# Prompt message to terminal
+	printf "%s [%s] " "$*" "yes"
+
+	# Return "no" if user does not answer "yes"
+	if ! read -r yes || [[ "$yes" != "yes" ]]; then
+		return 1
+	fi
+}
+
 ## sanitize() - sanitize name
 # $1: the name to sanitize
 # stdout: the name sanitized
@@ -555,6 +574,9 @@ docker_run() {
 			if ! "${cqfd_docker[@]}" pull "$cqfd_image" &>/dev/null; then
 				die "Custom image couldn't be pulled, please build/upload it first"
 			fi
+		# Ask to (re)init image
+		elif prompt_yes "Do you want to (re)init image?"; then
+			docker_pull_or_build
 		else
 			die "The docker image doesn't exist, launch 'cqfd --init' to create it"
 		fi

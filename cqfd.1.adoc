@@ -140,6 +140,9 @@ Command options for --run:
 	to the removed image. Format is the same as (and passed to)
 	docker-rmi’s options. See 'docker rmi --help'.
 
+*CQFD_NO_PROMPT*::
+	Set to _true_ to disable asking messages to user.
+
 *CQFD_NO_SSH_CONFIG*::
 	Set to _true_ to disable forwarding the global _/etc/ssh_
 	configurations to the build container. This may be required if the host's
