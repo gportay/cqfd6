@@ -77,7 +77,7 @@ Options:
     -q or --quiet        Turn on quiet mode.
     -v or --version      Show version.
     --compatibility      Show compatibility level.
-    --verbose            Increase the script's verbosity.
+    -D or --verbose      Increase the script's verbosity.
     -h or --help         Show this help text.
 
 Commands:
@@ -1198,7 +1198,7 @@ while [ $# -gt 0 ]; do
 		echo "$COMPAT"
 		exit
 		;;
-	--verbose)
+	-D|--verbose)
 		export CQFD_DEBUG=true
 		export BUILDKIT_PROGRESS=plain
 		;;
