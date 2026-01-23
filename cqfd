@@ -77,6 +77,7 @@ Options:
     -q or --quiet        Turn on quiet mode.
     -v or --version      Show version.
     --compatibility      Show compatibility level.
+    -y or --yes          Assume yes if prompting to user.
     -D or --verbose      Increase the script's verbosity.
     -h or --help         Show this help text.
 
@@ -1236,6 +1237,9 @@ while [ $# -gt 0 ]; do
 	--compatibility)
 		echo "$COMPAT"
 		exit
+		;;
+	-y|--yes)
+		export CQFD_PROMPT=yes
 		;;
 	-D|--verbose)
 		export CQFD_DEBUG=true

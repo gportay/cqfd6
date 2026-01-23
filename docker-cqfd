@@ -66,6 +66,7 @@ Options:
   -q, --quiet                            Turn on quiet mode.
   -v, --version                          Show version.
       --compatibility                    Show compatibility level.
+  -y, --yes                              Assume yes if prompting to user.
   -D, --verbose                          Increase the script's verbosity.
   -h, --help                             Show this help text.
 
