@@ -11,7 +11,9 @@ Copyright:
 License: GPL-3+
 
 Files: bash-completion
-Copyright: Copyright (C) 2017,2023,2026 Gaël PORTAY
+Copyright:
+ Copyright (C) 2017,2023,2026 Gaël PORTAY
+ Copyright (C) 2017-2025 Savoir-faire Linux, Inc.
 License: GPL-3+
 
 Files: cqfd
