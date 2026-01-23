@@ -984,8 +984,8 @@ exec su $cqfd_user -p -c "\$1"
 EOF
 }
 
-## locate_project_dir() - locate directory with .cqfd upwards
-# stdout: the path to the .cqfd parent directory
+## locate_project_dir() - locate directory with .cqfdrc (or .cqfd) upwards
+# stdout: the path to the .cqfdrc (or .cqfd directory) parent directory
 locate_project_dir() {
 	local dir 
 
@@ -998,6 +998,12 @@ locate_project_dir() {
 	dir="$PWD"
 	while [ "$dir" != "/" ]; do
 		if [ -d "$dir/.cqfd" ]; then
+			warn ".cqfd is deprecated, move directory content to" \
+			     "the parent directory."
+			realpath "$dir"
+			return
+		fi
+		if [ -e "$dir/.cqfdrc" ]; then
 			realpath "$dir"
 			return
 		fi
@@ -1013,7 +1019,7 @@ load_config() {
 	# get the project directory
 	local project_dir
 	if ! project_dir=$(locate_project_dir); then
-		die ".cqfd: Missing project directory!"
+		die "Not a cqfd project (or any of the parent directories): .cqfdrc"
 	fi
 
 	local workdir
@@ -1029,7 +1035,7 @@ load_config() {
 	# make an absolute path and check if it is a directory
 	if ! cqfddir="$(realpath "$cqfddir")" || \
 	   [ ! -d "$cqfddir" ]; then
-		die ".cqfd: Missing or not a directory!"
+		cqfddir="$workdir"
 	fi
 
 	local cqfdrc
