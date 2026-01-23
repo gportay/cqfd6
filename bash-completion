@@ -161,7 +161,7 @@ _cqfd6() {
 		fi
 
 		local opts="-C --directory -w --working-directory -d --cqfd-directory -f --cqfdrc-file -b --build -q --quiet --reinit --release --platform"
-		local cmds="--init --deinit --ls --gc --flavors --exec --run --shell -v --version --compatibility --verbose -h --help"
+		local cmds="--init --deinit --ls --gc --flavors --exec --run --shell -v --version --compatibility -D --verbose -h --help"
 		# shellcheck disable=SC2207
 		COMPREPLY=($(compgen -W "$cmds $opts" -- "$cur"))
 		return
@@ -184,7 +184,7 @@ _cqfd6() {
 
 	if [[ "$cur" == -* ]]; then
 		local opts="-C --directory -w --working-directory -d --cqfd-directory -f --cqfdrc-file -b --build -q --quiet --reinit --release --platform"
-		local cmds="--init --deinit --ls --gc --flavors -v --version --compatibility --verbose -h --help"
+		local cmds="--init --deinit --ls --gc --flavors -v --version --compatibility -D --verbose -h --help"
 		# shellcheck disable=SC2207
 		COMPREPLY=($(compgen -W "$cmds $opts" -- "$cur"))
 		return
