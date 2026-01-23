@@ -1,4 +1,4 @@
-#!/usr/bin/env -S cqfd6 --build pkg /bin/bash
+#!/usr/bin/env -S cqfd6 --build pkg --yes /bin/bash
 set -e
 makepkg --force --skipchecksums "$@"
 shellcheck --shell=bash --exclude=SC2034,SC2154,SC2164 PKGBUILD
