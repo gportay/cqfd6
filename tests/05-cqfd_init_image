@@ -12,7 +12,7 @@ fi
 
 cd "$TDIR/" || exit 1
 
-mv -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
+mv -f .cqfd .cqfd.orig
 cp -f .cqfdrc .cqfdrc.orig
 cp -f cqfdrc-image .cqfdrc
 
@@ -57,10 +57,10 @@ else
 fi
 
 ################################################################################
-# Restore initial .cqfdrc and Dockerfile
+# Restore initial .cqfdrc and .cqfd
 ################################################################################
 mv -f .cqfdrc.orig .cqfdrc
-mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
+mv -f .cqfd.orig .cqfd
 
 ################################################################################
 # restore container
