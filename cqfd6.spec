@@ -66,7 +66,7 @@ fi
 %doc %{_datadir}/doc/%{name}/AUTHORS
 %doc %{_datadir}/doc/%{name}/README.md
 %license %{_licensedir}/%{name}/LICENSE
-%{_bindir}/{%name}
+%{_bindir}/%{name}
 %{_bindir}/linux-amd64-cqfd6
 %{_bindir}/linux-arm-cqfd6
 %{_bindir}/linux-arm64-cqfd6
