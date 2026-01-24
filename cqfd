@@ -509,11 +509,14 @@ docker_pull_or_build() {
 	# Name the resulting image
 	args+=(--tag "$cqfd_image")
 
+	# Set the Dockerfile
+	args+=(--file "$cqfd_dockerfile")
+
 	# Set the context
 	if [ -z "$project_build_context" ]; then
 		args+=("$(dirname "$cqfd_dockerfile")")
 	else
-		args+=("$project_build_context" --file "$cqfd_dockerfile")
+		args+=("$project_build_context")
 	fi
 
 	# Run command

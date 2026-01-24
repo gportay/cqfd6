@@ -47,6 +47,29 @@ else
 fi
 # cleanup
 rm -Rf subdir/ support/
+cp -f .cqfdrc.orig .cqfdrc
+
+jtest_prepare "cqfd with Containerfile in project directory set in dockerfile should pass"
+echo "FROM ubuntu:16.04" >.cqfd/docker/Containerfile
+sed '/\[build\]/adockerfile=".cqfd/docker/Containerfile"' -i .cqfdrc
+if "$cqfd" init && \
+   "$cqfd" run "grep ^PRETTY_NAME /etc/os-release" | grep -qE "Ubuntu 16.04(.[[:digit:]]+)? LTS"; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+jtest_prepare "cqfd with Containerfile in project directory set in dockerfile and context set in build_context should pass"
+echo "ADD ./cqfdrc-build_context /tmp/" >>.cqfd/docker/Containerfile
+sed '/\[project\]/abuild_context="."' -i .cqfdrc
+if "$cqfd" init && \
+   "$cqfd" run "test -e /tmp/cqfdrc-build_context && grep ^PRETTY_NAME /etc/os-release" | grep -qE "Ubuntu 16.04(.[[:digit:]]+)? LTS"; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+# cleanup
+rm -f .cqfd/docker/Containerfile
 
 # restore .cqfdrc and Dockerfile
 mv -f .cqfdrc.orig .cqfdrc
