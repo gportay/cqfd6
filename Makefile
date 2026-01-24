@@ -83,7 +83,7 @@ check:
 	@$(MAKE) -C tests check
 
 clean:
-	rm -f cqfd.1.gz cqfdrc.5.gz
+	rm -f cqfd.1.gz cqfdrc.5.gz gportay-cqfd6.tar.xz
 
 maintainer-clean: clean
 	rm -f *.tar.gz
