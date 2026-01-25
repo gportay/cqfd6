@@ -895,6 +895,14 @@ fi
 
 # Drop the root privileges and run providing command, using sudo if it exists
 if [ -n "\$has_sudo" ]; then
+	if [ "$CQFD_SUDO_NOPASSWD" = true ]; then
+		# Set user read permission only
+		umask 266
+
+		# Disable password authentication using sudoers(5)
+		echo "$cqfd_user ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers.d/$cqfd_user
+	fi
+
 	debug "Using \"sudo\" to execute command sh -c \"\$1\" as user \"$cqfd_user\""
 	exec sudo -E -u $cqfd_user sh -c "\$1"
 fi
