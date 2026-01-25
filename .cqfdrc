@@ -12,6 +12,7 @@ files='AUTHORS \
        cqfd \
        cqfd.1.gz \
        cqfdrc.5.gz \
+       samples/Dockerfile.Ubuntu:24.04 \
        samples/Dockerfile.Yocto:scarthgap \
        samples/dot-cqfdrc \
 '
