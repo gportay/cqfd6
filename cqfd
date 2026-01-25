@@ -864,7 +864,7 @@ test "\$has_sudo" = 1 || test_su_session_command && has_su_session_command=1
 
 # Add the host's user and group to the container, and adjust ownership
 debug "Creating user $cqfd_user with UID=$UID, GID=${GROUPS[0]}, HOME=$cqfd_home, and SHELL=\$shell"
-groupadd -og "${GROUPS[0]}" -f builders
+groupadd -og "${GROUPS[0]}" -f "$cqfd_user"
 useradd -s "\$shell" -oN -u "$UID" -g "${GROUPS[0]}" -md "$cqfd_home" "$cqfd_user"
 chown "$UID:${GROUPS[0]}" "$cqfd_home"
 

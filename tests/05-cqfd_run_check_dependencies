@@ -136,6 +136,20 @@ else
 fi
 
 ################################################################################
+# cqfd run should now executes as the host user.
+################################################################################
+jtest_prepare "cqfd run execute as the host user"
+if [ "${cqfd_docker[-1]}" = "podman" ]; then
+	jtest_result skip
+else
+	if "$cqfd" run "id -u | grep \"^$UID$\" && id -g | grep \"^$UID$\""; then
+		jtest_result pass
+	else
+		jtest_result fail
+	fi
+fi
+
+################################################################################
 # restore initial Dockerfile
 ################################################################################
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
