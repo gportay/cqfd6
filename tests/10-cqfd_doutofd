@@ -17,7 +17,6 @@ jtest_prepare "cqfd run execute as the host user with the cqfd docker's group"
 if [ "${cqfd_docker[-1]}" != "docker" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
 else
-	"$cqfd" run "id -Gn"
 	if CQFD_BIND_DOCKER_SOCK=true "$cqfd" run "id -Gn | grep cqfd"; then
 		jtest_result pass
 	else
