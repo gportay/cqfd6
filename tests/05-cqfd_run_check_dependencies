@@ -117,6 +117,25 @@ else
 fi
 
 ################################################################################
+# shadow does not create home directory.
+################################################################################
+echo 'RUN sed "/DEFAULT_HOME/s,yes,no," -i /etc/login.defs' >>.cqfd/docker/Dockerfile
+
+################################################################################
+# cqfd run should now creates and own the user directory.
+################################################################################
+jtest_prepare "cqfd run creates and owns the user directory"
+if [ "${cqfd_docker[-1]}" = "podman" ]; then
+	jtest_result skip
+else
+	if "$cqfd" init && CQFD_NO_USER_SSH_CONFIG=true CQFD_NO_USER_GIT_CONFIG=true "$cqfd" run "test -w $HOME"; then
+		jtest_result pass
+	else
+		jtest_result fail
+	fi
+fi
+
+################################################################################
 # restore initial Dockerfile
 ################################################################################
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
