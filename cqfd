@@ -859,6 +859,7 @@ test -n "\$failed" &&
 test "\$has_sudo" = 1 || test_su_session_command && has_su_session_command=1
 
 # Add the host's user and group to the container, and adjust ownership
+debug "Creating user $cqfd_user with UID=$UID, GID=${GROUPS[0]}, HOME=$cqfd_home, and SHELL=\$shell"
 groupadd -og "${GROUPS[0]}" -f builders
 useradd -s "\$shell" -oN -u "$UID" -g "${GROUPS[0]}" -d "$cqfd_home" "$cqfd_user"
 mkdir -p "$cqfd_home"
@@ -869,8 +870,9 @@ for g in ${CQFD_GROUPS[*]}; do
 	group=\$(echo "\$g" | cut -d: -f1)
 	gid=\$(echo "\$g" | cut -d: -f2)
 
+	# Create group with gid
 	if [ -n "\$gid" ]; then
-		# create group with provided id ("name:123")
+		debug "Creating group \$group with GID=\$gid"
 		groupadd -og "\$gid" -f "\$group"
 	fi
 
@@ -879,6 +881,7 @@ done
 
 # Add docker group as cqfd to cqfd_user
 if [ "${cqfd_docker_gid:-0}" -gt 0 ]; then
+	debug "Creating docker group cqfd with GID=$cqfd_docker_gid"
 	groupadd -og "$cqfd_docker_gid" -f cqfd
 	usermod -a -G cqfd $cqfd_user
 fi	
