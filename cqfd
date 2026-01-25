@@ -883,7 +883,7 @@ for g in ${CQFD_GROUPS[*]}; do
 done
 
 # Add docker group as cqfd to cqfd_user
-if [ "${cqfd_docker_gid:-0}" -gt 0 ]; then
+if [ "${cqfd_docker_gid:-0}" -gt 0 ] && [ -S /var/run/docker.sock ]; then
 	debug "Creating docker group cqfd with GID=$cqfd_docker_gid"
 	groupadd -og "$cqfd_docker_gid" -f cqfd
 	usermod -a -G cqfd $cqfd_user
