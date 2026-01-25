@@ -176,6 +176,10 @@ Command options for --run:
 *CQFD_RUN_WITH_SUDO*::
 	Set to _true_ to run _$CQFD_DOCKER_ with _sudo_.
 
+*CQFD_SUDO_NOPASSWD*::
+	Set to _true_ to run all commands without password authentication using
+	_sudo_ in the build container.
+
 == FILES
 
 *.cqfdrc*::
