@@ -139,10 +139,10 @@ fi
 # cqfd run should now executes as the host user.
 ################################################################################
 jtest_prepare "cqfd run execute as the host user"
-if [ "${cqfd_docker[-1]}" = "podman" ]; then
+if [ "${cqfd_docker[-1]}" = "podman" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
 else
-	if "$cqfd" run "id -u | grep \"^$UID$\" && id -g | grep \"^$UID$\""; then
+	if "$cqfd" run id | grep "^uid=$UID($USER) gid=${GROUPS[0]}($USER) groups=$UID($USER)$"; then
 		jtest_result pass
 	else
 		jtest_result fail
