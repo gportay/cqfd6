@@ -92,6 +92,9 @@ character _#_ or _;_ are ignored up to the end of line.
 *shell (optional)*::
 	The program used to invoke _shell_ command.
 
+*path (optional)*::
+	Set the _PATH_ environment variable in the build container.
+
 *docker (optional)*::
 	The program used to invoke _docker(1)_ client.
 
