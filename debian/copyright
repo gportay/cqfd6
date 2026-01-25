@@ -38,6 +38,10 @@ Files: docker-cqfd
 Copyright: Copyright (C) 2024-2026 Gaël PORTAY
 License: GPL-3+
 
+Files: samples/Dockerfile.Ubuntu:24:04
+Copyright: Copyright (c) 2026 Gaël PORTAY
+License: GPL-3+
+
 Files: samples/Dockerfile.Yocto:scarthgap
 Copyright: Copyright (c) 2026 Gaël PORTAY
 License: GPL-3+

@@ -1,0 +1,5 @@
+# Copyright (c) 2026 Gaël PORTAY
+# SPDX-License-Identifier: GPL-3.0-or-later
+FROM ubuntu:24.04
+
+RUN userdel ubuntu
