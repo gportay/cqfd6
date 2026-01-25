@@ -844,6 +844,11 @@ test_su_session_command() {
 	su --session-command true >/dev/null 2>&1
 }
 
+# Set PATH using environ(7)
+if [ "$build_path" ]; then
+	PATH=$build_path
+fi
+
 # Check if privileges are already dropped
 uid="\$(id -u)"
 if [ "\$uid" -ne 0 ]; then
@@ -895,16 +900,34 @@ fi
 
 # Drop the root privileges and run providing command, using sudo if it exists
 if [ -n "\$has_sudo" ]; then
-	if [ "$CQFD_SUDO_NOPASSWD" = true ]; then
-		# Set user read permission only
-		umask 266
+	# Set user read permission only
+	umask 266
 
+	if [ "$CQFD_SUDO_NOPASSWD" = true ]; then
 		# Disable password authentication using sudoers(5)
 		echo "$cqfd_user ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers.d/$cqfd_user
 	fi
 
+	# Set PATH using sudoers(5)
+	if [ "$build_path" ]; then
+		echo "Defaults	secure_path=\"$build_path\"" >>/etc/sudoers.d/$cqfd_user
+	fi
+
 	debug "Using \"sudo\" to execute command sh -c \"\$1\" as user \"$cqfd_user\""
 	exec sudo -E -u $cqfd_user sh -c "\$1"
+fi
+
+# Set PATH using pam_env(8)
+if [ "$build_path" ]; then
+	# Set user read permission only
+	umask 0022
+
+	echo "PATH=\"$build_path\"" >>/etc/environment
+fi
+
+# Set PATH using login.defs(5)
+if [ "$build_path" ]; then
+	sed "/^ENV_\(\|SU\)PATH/s,PATH=.\+,PATH=$build_path," -i /etc/login.defs
 fi
 
 # Or, using su with the option --session-command to create a new session
@@ -1084,6 +1107,8 @@ load_config() {
 	build_distro="$distro"
 	# shellcheck disable=SC2154
 	build_user_extra_groups="$user_extra_groups"
+	# shellcheck disable=SC2154
+	build_path="$path"
 	# shellcheck disable=SC2154
 	release_files="$files"
 	# shellcheck disable=SC2154
