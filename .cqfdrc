@@ -15,6 +15,7 @@ files='AUTHORS \
        samples/Dockerfile.Ubuntu:24.04 \
        samples/Dockerfile.Yocto:scarthgap \
        samples/dot-cqfdrc \
+       samples/dot-cqfdrc.Yocto:scarthgap \
 '
 
 [deb]
