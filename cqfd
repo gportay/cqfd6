@@ -926,7 +926,7 @@ locate_project_dir() {
 		search_dir="$(readlink -f "$search_dir"/..)"
 	done
 
-	return 1
+	echo "$PWD"
 }
 
 ## load_config() - load build settings from cqfdrc
@@ -958,8 +958,24 @@ load_config() {
 	cqfdrc="${CQFDRC_FILE:-$project_dir/.cqfdrc}"
 	# make an absolute path and check if it is a file
 	if ! cqfdrc="$(realpath "$cqfdrc")" || \
-	   [ ! -f "$cqfdrc" ]; then
-		die ".cqfdrc: Missing or not a file!"
+	   [ ! -e "$cqfdrc" ]; then
+		# use Dockerfile as dockerfile
+		dockerfile=".cqfd/docker/Dockerfile"
+		if [ ! -f "$dockerfile" ]; then
+			die "$dockerfile: Missing Dockerfile!"
+		fi
+
+		# run shell as command
+		build_command="$cqfd_shell"
+
+		local Un
+		local Dh
+		# shellcheck disable=SC2001
+		Un=$(sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$USER")
+		Dh=$(sha256sum "$dockerfile" | cut -b 1-7)
+		cqfd_image="cqfd_${Un}_${Dh}"
+
+		return
 	fi
 
 	# parse cqfdrc file
