@@ -77,6 +77,7 @@ fi
 %{_datadir}/%{name}/samples/Dockerfile.Yocto:scarthgap
 %{_datadir}/%{name}/samples/dot-cqfdrc
 %{_datadir}/%{name}/samples/dot-cqfdrc.Yocto:scarthgap
+%{_datadir}/%{name}/samples/dot-cqfdrc.kas:4.5
 %{_datadir}/bash-completion/completions/%{name}
 %{_datadir}/man/man1/cqfd6.1.gz
 %{_datadir}/man/man5/cqfdrc6.5.gz
