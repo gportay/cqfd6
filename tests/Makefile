@@ -31,14 +31,14 @@ tests:
 		cat "$(TDIR)"/.jtest_results; \
 		echo " --------------------"; \
 		if grep -q "FAIL" "$(TDIR)"/.jtest_results; then \
-			failed=1; \
+			failed=$$(grep "FAIL" "$(TDIR)"/.jtest_results | wc -l); \
 		fi; \
 	fi; \
 	if echo $(TDIR) | grep -q "/tmp/cqfd-test\.[0-9a-zA-Z]{6,6}"; then \
 		rm -rf $(TDIR); \
 	fi; \
-	if [ "$$failed" = "1" ]; then \
-		echo "Failures occured"; \
+	if [ "$$failed" -ne "0" ]; then \
+		echo "$$failed failure(s) occured"; \
 		exit 1; \
 	fi
 
