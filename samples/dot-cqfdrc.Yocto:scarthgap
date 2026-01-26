@@ -1,0 +1,8 @@
+[project]
+org='yocto'
+name='scarthgap'
+
+[build]
+shell=bash
+command='. oe-init-build-env && bitbake core-image-minimal'
+files='build/tmp/deploy/images/*/core-image-minimal-*.rootfs.*'
