@@ -20,6 +20,11 @@ required to support project tooling. It is written in an .ini-like format.
 The _.cqfdrc_ file supports Unix shell and .ini comments; the words after the
 character _#_ or _;_ are ignored up to the end of line.
 
+=== THE INCLUDE DIRECTIVE
+
+The include directive causes _cqfd_ to parse a give file, and to include that
+file's contents at the location of the include statement.
+
 === THE PROJECT SECTION
 
 *org*::
