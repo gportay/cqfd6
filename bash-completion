@@ -122,6 +122,11 @@ _cqfd6() {
 	--init|--deinit|--ls|--gc|--flavors|-v|--version|-h|--help)
 		return
 		;;
+	--compatibility)
+		# shellcheck disable=SC2207
+		COMPREPLY=($(compgen -W "5 6" -- "$cur"))
+		return
+		;;
 	esac
 
 	local compat
