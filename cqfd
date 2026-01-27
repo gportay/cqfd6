@@ -247,15 +247,18 @@ docker_images() {
 	done
 }
 
-## source_ini_file() - source ini file to INI* bash arrays
+## source_ini_file_recursive() - source ini file to LIST and INI* bash arrays
 # $1: path to ini file
-source_ini_file() {
+source_ini_file_recursive() {
 	local multiline
 	local section
 	local line
 
-	# Unset former context
-	unset INI "${!INI@}"
+	# The file does not exist
+	if [[ ! -e "$1" ]]; then
+		warn "file \"$1\" does not exist"
+		return 1
+	fi
 
 	# Convert lines to bash array and iterate over lines
 	mapfile -t lines <"$1"
@@ -293,12 +296,38 @@ $line"
 			value="${BASH_REMATCH[3]}"
 			eval "INI__${section^^}__${property^^}${BASH_REMATCH[2]}$value"
 			eval "INI__${section^^}+=('${BASH_REMATCH[1]}')"
+		# Include file
+		elif [[ "$line" =~ ^include[\ \	]+(.+)$ ]]; then
+			# Avoid recursive inclusion
+			for i in "${list[@]}"; do
+				if [ "$i" == "${BASH_REMATCH[1]}" ]; then
+					warn "file \"${BASH_REMATCH[1]}\" recursively included"
+					return 1
+				fi
+			done
+			list+=("$1")
+			if ! source_ini_file_recursive "${BASH_REMATCH[1]}"; then
+				return 1
+			fi
+			unset 'list[-1]'
 		# Return
 		elif [[ "$line" ]]; then
 			warn "line \"$line\" is invalid"
 			return 1
 		fi
 	done
+	LIST+=("$1")
+}
+
+## source_ini_file() - source ini file to LIST and INI* bash arrays
+# $1: path to ini file
+source_ini_file() {
+	local list
+
+	# Unset former context
+	unset LIST INI "${!INI@}"
+
+	source_ini_file_recursive "$1"
 }
 
 ## source_ini_sections() - source sections to environment

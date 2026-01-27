@@ -113,6 +113,11 @@ Here is a sample `.cqfdrc` file:
 The `.cqfdrc` file supports Unix shell and .ini comments: words after the
 character `#` or `;` are ignored to the end of the line.
 
+### Include files
+
+The `include` directive causes _cqfd_ to parse a give file, and to include that
+file's contents at the location of the include statement.
+
 ### Using build flavors
 
 In some cases, it may be desirable to build the project using variations of the
