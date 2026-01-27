@@ -173,10 +173,10 @@ _cqfd6() {
 	fi
 
 	local args
-	_count_args "" "@(--compatibility)"
+	_count_args "" "@(--compatibility|-C|--directory|-w|--working-directory|-d|--cqfd-directory|-f|--cqfdrc-file|-b|--build|--platform)"
 	if ((args > 1)); then
 		local arg
-		_get_first_arg_2 "" "@(--compatibility)"
+		_get_first_arg_2 "" "@(--compatibility|-C|--directory|-w|--working-directory|-d|--cqfd-directory|-f|--cqfdrc-file|-b|--build|--platform)"
 		for ((i = 1; i < cword; i++)); do
 			if [[ "${words[i]}" == "$arg" ]]; then
 				break
