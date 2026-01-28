@@ -13,7 +13,7 @@ fi
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfdrc .cqfdrc.orig
+cp -f Cqfdfile Cqfdfile.orig
 
 ################################################################################
 # 'cqfd init' creates image with invalid user name should pass
@@ -41,7 +41,7 @@ fi
 # 'cqfd init' creates image with invalid character in project.org should pass
 ################################################################################
 jtest_prepare "cqfd init creates image with invalid character in project.org"
-sed -e "s!^org=.*\$!org='savoirfairelinux@invalid'!" .cqfdrc.orig >.cqfdrc
+sed -e "s!^org=.*\$!org='savoirfairelinux@invalid'!" Cqfdfile.orig >Cqfdfile
 if "$cqfd" init; then
 	jtest_result pass
 else
@@ -52,7 +52,7 @@ fi
 # 'cqfd init' creates image with invalid character in project.name should pass
 ################################################################################
 jtest_prepare "cqfd init creates image with invalid character in project.name"
-sed -e "s!^name=.*\$!name='test@invalid'!" .cqfdrc.orig >.cqfdrc
+sed -e "s!^name=.*\$!name='test@invalid'!" Cqfdfile.orig >Cqfdfile
 if "$cqfd" init; then
 	jtest_result pass
 else
@@ -60,6 +60,6 @@ else
 fi
 
 ################################################################################
-# Restore initial .cqfdrc and Dockerfile
+# Restore initial Cqfdfile and Dockerfile
 ################################################################################
-mv -f .cqfdrc.orig .cqfdrc
+mv -f Cqfdfile.orig Cqfdfile

@@ -40,8 +40,8 @@ else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc .cqfdrc.orig
-echo "files=\"exec\"" >>.cqfdrc
+cp -f Cqfdfile Cqfdfile.orig
+echo "files=\"exec\"" >>Cqfdfile
 jtest_prepare "cqfd exec should release"
 if "$cqfd" --release exec touch exec && tar tf cqfd-test.tar.xz | grep -q "^exec$"; then
 	jtest_result pass
@@ -51,5 +51,5 @@ fi
 # cleanup
 rm -f cqfd-test.tar.xz exec
 
-# restore initial .cqfdrc
-mv -f .cqfdrc.orig .cqfdrc
+# restore initial Cqfdfile
+mv -f Cqfdfile.orig Cqfdfile

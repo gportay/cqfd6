@@ -7,14 +7,14 @@ shell='/bin/bash'
 command='make doc'
 files='AUTHORS \
        CHANGELOG.md \
+       Cqfdfile.5.gz \
        LICENSE \
        README.md \
        cqfd \
        cqfd.1.gz \
-       cqfdrc.5.gz \
+       samples/Cqfdfile \
        samples/Dockerfile.focalFossa.android34 \
        samples/Dockerfile.focalFossa.nodejs20x \
-       samples/dot-cqfdrc \
 '
 
 [deb]
