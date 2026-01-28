@@ -127,7 +127,7 @@ else
 fi
 
 cp -f .cqfdrc.orig .cqfdrc
-sed -i -e "/[build]/,/^$/s,^command=.*$,command='true; echo \"It works!\"'," .cqfdrc
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"It works!\"'," .cqfdrc
 
 jtest_prepare "cqfdrc does not strip semicolons in command"
 if "$cqfd" init && "$cqfd" | grep "It works!" ; then
@@ -137,7 +137,7 @@ else
 fi
 
 cp -f .cqfdrc.orig .cqfdrc
-sed -i -e "/[build]/,/^$/s,^command=.*$,command=\"echo \\\\\\
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command=\"echo \\\\\\
 	foo=bar \\\\\\
 	baz=quux\"," .cqfdrc
 
