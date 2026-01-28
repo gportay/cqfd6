@@ -108,7 +108,7 @@ line, and right after a section.
 
 *docker_pull_args (optional)*::
 	A space-separated list of extra arguments used to invoke _docker
-	build_.
+	pull_.
 
 *docker_run_args (optional)*::
 	A space-separated list of extra arguments used to invoke _docker run_.
