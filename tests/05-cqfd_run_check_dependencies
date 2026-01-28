@@ -150,6 +150,20 @@ else
 fi
 
 ################################################################################
+# cqfd run should now executes sudo without authentication.
+################################################################################
+jtest_prepare "cqfd run execute sudo without authentication"
+if [ "${cqfd_docker[-1]}" = "podman" ]; then
+	jtest_result skip
+else
+	if "$cqfd" run "sudo env"; then
+		jtest_result pass
+	else
+		jtest_result fail
+	fi
+fi
+
+################################################################################
 # restore initial Dockerfile
 ################################################################################
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
