@@ -127,10 +127,20 @@ else
 fi
 
 cp -f .cqfdrc.orig .cqfdrc
-sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"It works!\"'," .cqfdrc
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"; works!\"'," .cqfdrc
 
 jtest_prepare "cqfdrc does not strip semicolons in command"
-if "$cqfd" init && "$cqfd" | grep "It works!" ; then
+if "$cqfd" init && "$cqfd" | grep "; works!" ; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+cp -f .cqfdrc.orig .cqfdrc
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"# works!\"'," .cqfdrc
+
+jtest_prepare "cqfdrc does not strip hash in command"
+if "$cqfd" init && "$cqfd" | grep "# works!" ; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -143,6 +153,28 @@ sed -i -e "/\[build\]/,/^$/s,^command=.*$,command=\"echo \\\\\\
 
 jtest_prepare "cqfdrc with multiline should pass"
 if "$cqfd" | grep 'foo=bar baz=quux'; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+cp -f .cqfdrc.orig .cqfdrc
+sed -i -e "/\[project\]/,/^$/s,^,; ," .cqfdrc
+
+jtest_prepare "cqfdrc with ;-commented project section should fail"
+if "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing project section!"; \
+   test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+cp -f .cqfdrc.orig .cqfdrc
+sed -i -e "/\[build\]/,/^$/s,^,# ," .cqfdrc
+
+jtest_prepare "cqfdrc with #-commented build section should fail"
+if "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing build section!"; \
+   test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
 	jtest_result fail
