@@ -110,9 +110,8 @@ Here is a sample `.cqfdrc` file:
 
 ### Comments
 
-The `.cqfdrc` file supports Unix shell comments: words after the character `#`
-are ignored to the end of the line. A comment cannot appear on the first line
-or immediately after a section header.
+The `.cqfdrc` file supports Unix shell and .ini comments: words after the
+character `#` or `;` are ignored to the end of the line.
 
 ### Using build flavors
 
