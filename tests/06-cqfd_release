@@ -174,7 +174,7 @@ jtest_prepare "build.archive can template filenames (Unix timestamp)"
 sed -i -e '$ s!^archive=.*$!archive=cqfd-%Du-$CTEST.tar.xz!' .cqfdrc
 # shellcheck disable=SC2010
 if "$cqfd" release &&
-   ls -1 cqfd-*-foobar.tar.xz | grep "^cqfd-[[:digit:]]\{1,20\}-foobar.tar.xz$" &&
+   ls -1 cqfd-*-foobar.tar.xz | grep -E "^cqfd-[[:digit:]]{1,20}-foobar.tar.xz$" &&
    tar tf cqfd-*-foobar.tar.xz &>/dev/null; then
 	jtest_result pass
 else
