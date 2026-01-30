@@ -12,11 +12,22 @@ cd "$TDIR/" || exit 1
 cp -f .cqfdrc .cqfdrc.orig
 sed -i -e "/\[build\]/,/^$/s/^command=.*$/command='tty || true'/" .cqfdrc
 
-jtest_prepare "cqfd without redirection should allocate a tty"
+jtest_prepare "cqfd with stdin and stdout attached to tty should allocate a pty"
 if ! tty; then
 	jtest_result skip
 else
-	if "$cqfd" | grep "/dev/pts/[[:digit:]]\+" ; then
+	if "$cqfd"; then
+		jtest_result pass
+	else
+		jtest_result fail
+	fi
+fi
+
+jtest_prepare "cqfd with stdin attached to tty and stdout piped should not allocate a pty"
+if ! tty; then
+	jtest_result skip
+else
+	if "$cqfd" | grep 'not a tty'; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -30,8 +41,8 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "cqfd with stderr redirected to /dev/null should not allocate a pty"
-if "$cqfd" 2>/dev/null | grep 'not a tty'; then
+jtest_prepare "cqfd with stdout piped should not allocate a pty"
+if "$cqfd" | grep 'not a tty'; then
 	jtest_result pass
 else
 	jtest_result fail

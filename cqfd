@@ -631,8 +631,8 @@ docker_run() {
 	# Always keep stdin open
 	args+=(--interactive)
 
-	# Allocate a pty if stdin/err are connected to a tty
-	if [ -t 0 ] && [ -t 2 ]; then
+	# Allocate a pty if stdin/out are connected to a tty
+	if [ -t 0 ] && [ -t 1 ]; then
 		args+=(--tty)
 	fi
 
