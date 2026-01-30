@@ -24,14 +24,14 @@ if ! "$cqfd" -b "$flavor" run -c --debug >>"$test_run_c_file"; then
 fi
 
 # at the end of this test, $test_run_c_file is populated
-if ! grep -qw "target 'foo'" "$test_run_c_file"; then
+if ! grep "^Successfully remade target file 'foo'\.$" "$test_run_c_file"; then
 	jtest_log fatal "$test_run_c_file not present after test"
 	fail=1
 	rm -f "$test_run_c_file"
 fi
 
 # at the end of either test, $test_file is populated
-if ! grep -qw "cqfd" "$test_file"; then
+if ! grep "^cqfd$" "$test_file"; then
 	jtest_log fatal "$test_file not present after test"
 	fail=1
 	rm -f "$test_file"
