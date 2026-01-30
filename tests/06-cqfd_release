@@ -80,7 +80,7 @@ else
 	result="fail"
 fi
 for f in $rel_files; do
-	if ! tar tf cqfd-test.tar.xz | grep "^$(basename "$f")$"; then
+	if ! tar tf cqfd-test.tar.xz | grep "^${f##*/}$"; then
 		result="fail"
 	fi
 done
