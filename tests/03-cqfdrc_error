@@ -34,7 +34,7 @@ fi
 echo "name=test" >>.cqfdrc
 
 jtest_prepare "cqfdrc fails if no org property set in project section"
-if "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing project.org or project.name properties"; \
+if "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing project.org or project.name properties!"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
