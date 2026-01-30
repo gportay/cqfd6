@@ -27,7 +27,7 @@ jtest_prepare "cqfd with stdin attached to tty and stdout piped should not alloc
 if ! tty; then
 	jtest_result skip
 else
-	if "$cqfd" | grep "not a tty"; then
+	if "$cqfd" | grep "^not a tty$"; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -35,14 +35,14 @@ else
 fi
 
 jtest_prepare "cqfd with stdin redirected to /dev/null should not allocate a pty"
-if "$cqfd" </dev/null | grep "not a tty"; then
+if "$cqfd" </dev/null | grep "^not a tty$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "cqfd with stdout piped should not allocate a pty"
-if "$cqfd" | grep "not a tty"; then
+if "$cqfd" | grep "^not a tty$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -59,7 +59,7 @@ fi
 rm out
 
 jtest_prepare "cqfd without allocated pty should redirect stdout and stderr to distinct endpoints"
-if "$cqfd" >out 2>err && grep 'stdout' out && grep 'stderr' err; then
+if "$cqfd" >out 2>err && grep '^stdout$' out && grep '^stderr$' err; then
 	jtest_result pass
 else
 	jtest_result fail

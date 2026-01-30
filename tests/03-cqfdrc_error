@@ -14,7 +14,7 @@ cp -f .cqfdrc .cqfdrc.orig
 echo -n "" >.cqfdrc
 
 jtest_prepare "cqfdrc fails if no project section"
-if "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing project section!"; \
+if "$cqfd" 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing project section!$"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
@@ -24,7 +24,7 @@ fi
 echo "[project]" >>.cqfdrc
 
 jtest_prepare "cqfdrc fails if no name property set in project section"
-if "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing project.org or project.name properties!"; \
+if "$cqfd" 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing project.org or project.name properties!$"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
@@ -34,7 +34,7 @@ fi
 echo "name=test" >>.cqfdrc
 
 jtest_prepare "cqfdrc fails if no org property set in project section"
-if "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing project.org or project.name properties!"; \
+if "$cqfd" 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing project.org or project.name properties!$"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
@@ -44,7 +44,7 @@ fi
 echo "org=cqfd" >>.cqfdrc
 
 jtest_prepare "cqfdrc fails if no build section"
-if "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing build section!"; \
+if "$cqfd" 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing build section!$"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
@@ -54,7 +54,7 @@ fi
 echo "[build]" >>.cqfdrc
 
 jtest_prepare "cqfdrc fails if no command property set in build section"
-if "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing or empty build.command property!"; \
+if "$cqfd" 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing or empty build.command property!$"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
@@ -69,7 +69,7 @@ else
 fi
 
 jtest_prepare "cqfdrc succeeds even if no command property set in build section using run -c"
-if "$cqfd" run -c true 2>&1 | grep "cqfd: warning: .cqfdrc: Missing or empty build.command property!"; \
+if "$cqfd" run -c true 2>&1 | grep "^cqfd: warning: .cqfdrc: Missing or empty build.command property!$"; \
    test "${PIPESTATUS[0]}" -eq 0 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
@@ -79,7 +79,7 @@ fi
 echo "command=true" >>.cqfdrc
 
 jtest_prepare "cqfdrc succeeds if command property set in build section using run -c"
-if "$cqfd" run -c true 2>&1 | grep "cqfd: warning: .cqfdrc: Missing or empty build.command property!"; \
+if "$cqfd" run -c true 2>&1 | grep "^cqfd: warning: .cqfdrc: Missing or empty build.command property!$"; \
    test "${PIPESTATUS[0]}" -eq 0 -a "${PIPESTATUS[1]}" -ne 0; then
 	jtest_result pass
 else
@@ -130,7 +130,7 @@ cp -f .cqfdrc.orig .cqfdrc
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"; works!\"'," .cqfdrc
 
 jtest_prepare "cqfdrc does not strip semicolons in command"
-if "$cqfd" init && "$cqfd" | grep "; works!" ; then
+if "$cqfd" init && "$cqfd" | grep "^; works!$" ; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -140,7 +140,7 @@ cp -f .cqfdrc.orig .cqfdrc
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"# works!\"'," .cqfdrc
 
 jtest_prepare "cqfdrc does not strip hash in command"
-if "$cqfd" init && "$cqfd" | grep "# works!" ; then
+if "$cqfd" init && "$cqfd" | grep "^# works!$" ; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -152,7 +152,7 @@ sed -i -e "/\[build\]/,/^$/s,^command=.*$,command=\"echo \\\\\\
 	baz=quux\"," .cqfdrc
 
 jtest_prepare "cqfdrc with multiline should pass"
-if "$cqfd" | grep "foo=bar baz=quux"; then
+if "$cqfd" | grep "^foo=bar baz=quux$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -162,7 +162,7 @@ cp -f .cqfdrc.orig .cqfdrc
 sed -i -e "/\[project\]/,/^$/s,^,; ," .cqfdrc
 
 jtest_prepare "cqfdrc with ;-commented project section should fail"
-if "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing project section!"; \
+if "$cqfd" 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing project section!$"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
@@ -173,7 +173,7 @@ cp -f .cqfdrc.orig .cqfdrc
 sed -i -e "/\[build\]/,/^$/s,^,# ," .cqfdrc
 
 jtest_prepare "cqfdrc with #-commented build section should fail"
-if "$cqfd" 2>&1 | grep "cqfd: fatal: .cqfdrc: Missing build section!"; \
+if "$cqfd" 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing build section!$"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else

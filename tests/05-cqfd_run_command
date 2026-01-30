@@ -45,7 +45,7 @@ done
 jtest_prepare "cqfd run with additional argument, do not preserve the arguments"
 # shellcheck disable=SC2016
 if "$cqfd" run /bin/sh -c 'printf "0=$0,*=$*,#=$#"' zero one two three \
-       | grep "0=sh,\*=,#=0"; \
+       | grep "^0=sh,\*=,#=0$"; \
    test "${PIPESTATUS[0]}" -eq 2; then
 	jtest_result pass
 else

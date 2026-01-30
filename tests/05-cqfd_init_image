@@ -36,7 +36,7 @@ else
 fi
 
 jtest_prepare "cqfd runs pulled image $image from registry"
-if "$cqfd" | grep -E "Ubuntu 16.04(.[[:digit:]]+)? LTS"; then
+if "$cqfd" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
 	jtest_result fail

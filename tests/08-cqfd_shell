@@ -19,7 +19,7 @@ else
 fi
 
 jtest_prepare "cqfd shell should read commands from stdin"
-if ( ! "$cqfd" shell <<<"tty" ) | grep "not a tty"; then
+if ( ! "$cqfd" shell <<<"tty" ) | grep "^not a tty$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -40,7 +40,7 @@ mv -f .cqfdrc.orig .cqfdrc
 jtest_prepare "cqfd shell should preserve the arguments"
 # shellcheck disable=SC2016
 if "$cqfd" shell -c 'printf "0=$0,*=$*,#=$#"' zero one two three \
-       | grep "0=zero,\*=one two three,#=3$"; then
+       | grep "^0=zero,\*=one two three,#=3$"; then
 	jtest_result pass
 else
 	jtest_result fail

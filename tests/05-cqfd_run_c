@@ -33,7 +33,7 @@ test_step1() {
 	fi
 
 	# at the end of this test, $test_run_c_file is populated
-	if ! grep -qw "target 'build'" "$test_run_c_file"; then
+	if ! grep "^Successfully remade target file 'build'\.$" "$test_run_c_file"; then
 		jtest_log fatal "$test_run_c_file not present after test"
 		jtest_result fail
 		rm -f "$test_run_c_file"
@@ -41,7 +41,7 @@ test_step1() {
 	fi
 
 	# at the end of either test, $test_file is populated
-	if grep -qw "cqfd" "$test_file"; then
+	if grep "^cqfd$" "$test_file"; then
 		jtest_result pass
 	else
 		jtest_log fatal "$test_file not present after test"
