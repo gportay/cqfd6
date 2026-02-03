@@ -152,7 +152,7 @@ sed -i -e "/\[build\]/,/^$/s,^command=.*$,command=\"echo \\\\\\
 	baz=quux\"," .cqfdrc
 
 jtest_prepare "cqfdrc with multiline should pass"
-if "$cqfd" | grep 'foo=bar baz=quux'; then
+if "$cqfd" | grep "foo=bar baz=quux"; then
 	jtest_result pass
 else
 	jtest_result fail
