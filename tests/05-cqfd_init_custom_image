@@ -29,7 +29,7 @@ if "${cqfd_docker[@]}" inspect "$custom_img_name" &>/dev/null; then
 fi
 
 jtest_prepare "cqfd pulls image $custom_img_name from registry"
-if "$cqfd" | grep -qE "Ubuntu 16.04(.[[:digit:]]+)? LTS"; then
+if "$cqfd" | grep -E "Ubuntu 16.04(.[[:digit:]]+)? LTS"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -62,7 +62,7 @@ else
 fi
 
 jtest_prepare "cqfd runs created image $custom_img_name"
-if "$cqfd" | grep -qE "Ubuntu 24.04(.[[:digit:]]+)? LTS"; then
+if "$cqfd" | grep -E "Ubuntu 24.04(.[[:digit:]]+)? LTS"; then
 	jtest_result pass
 else
 	jtest_result fail

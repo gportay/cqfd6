@@ -34,8 +34,8 @@ fi
 # 'cqfd run' using default working directory should work
 ################################################################################
 jtest_prepare "cqfd run using default working directory should work"
-if "$cqfd" run "stat -c '%u' ." | grep -q "$UID" && \
-   "$cqfd" run "stat -c '%u' .." | grep -q "0"; then
+if "$cqfd" run "stat -c '%u' ." | grep "$UID" && \
+   "$cqfd" run "stat -c '%u' .." | grep "0"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -45,8 +45,8 @@ fi
 # 'cqfd run' using alternate working directory should work
 ################################################################################
 jtest_prepare "cqfd run using working directory set using -w should work"
-if "$cqfd" -w ".." run "stat -c '%u' ." | grep -q "$UID" && \
-   "$cqfd" -w ".." run "stat -c '%u' .." | grep -q "0"; then
+if "$cqfd" -w ".." run "stat -c '%u' ." | grep "$UID" && \
+   "$cqfd" -w ".." run "stat -c '%u' .." | grep "0"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -66,8 +66,8 @@ fi
 # 'cqfd run' using alternate working directory should work
 ################################################################################
 jtest_prepare "cqfd run using working directory set using CQFD_WORKDIR should work"
-if CQFD_WORKDIR=".." "$cqfd" run "stat -c '%u' ." | grep -q "$UID" && \
-   CQFD_WORKDIR=".." "$cqfd" run "stat -c '%u' .." | grep -q "0"; then
+if CQFD_WORKDIR=".." "$cqfd" run "stat -c '%u' ." | grep "$UID" && \
+   CQFD_WORKDIR=".." "$cqfd" run "stat -c '%u' .." | grep "0"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -78,8 +78,8 @@ fi
 # 'cqfd run' using alternate working directory should work
 ################################################################################
 jtest_prepare "cqfd run using working directory set using CQFD_WORKDIR should work"
-if CQFD_WORKDIR="$PWD/.." "$cqfd" run "stat -c '%u' ." | grep -q "$UID" && \
-   CQFD_WORKDIR="$PWD/.." "$cqfd" run "stat -c '%u' .." | grep -q "0"; then
+if CQFD_WORKDIR="$PWD/.." "$cqfd" run "stat -c '%u' ." | grep "$UID" && \
+   CQFD_WORKDIR="$PWD/.." "$cqfd" run "stat -c '%u' .." | grep "0"; then
 	jtest_result pass
 else
 	jtest_result fail

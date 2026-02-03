@@ -26,7 +26,7 @@ jtest_prepare "cqfd run using a Dockerfile with workdir should success"
 cat <<EOF >>.cqfd/docker/Dockerfile
 WORKDIR /mnt
 EOF
-if "$cqfd" init && "$cqfd" run pwd | grep -q "$PWD"; then
+if "$cqfd" init && "$cqfd" run pwd | grep "$PWD"; then
 	jtest_result pass
 else
 	jtest_result fail

@@ -43,7 +43,7 @@ fi
 cp -f .cqfdrc .cqfdrc.orig
 echo "files=\"exec\"" >>.cqfdrc
 jtest_prepare "cqfd exec should release"
-if "$cqfd" --release exec touch exec && tar tf cqfd-test.tar.xz | grep -q "^exec$"; then
+if "$cqfd" --release exec touch exec && tar tf cqfd-test.tar.xz | grep "^exec$"; then
 	jtest_result pass
 else
 	jtest_result fail

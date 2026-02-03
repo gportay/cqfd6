@@ -28,7 +28,7 @@ fi
 jtest_prepare "cqfd shell should use interpreter set in shell"
 sed '/\[build\]/ashell="/bin/bash"' .cqfdrc.orig >.cqfdrc
 # shellcheck disable=SC2016
-if "$cqfd" bash <<<'printf "$0"' | grep -q "^bash$"; then
+if "$cqfd" bash <<<'printf "$0"' | grep "^bash$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -48,7 +48,7 @@ fi
 
 jtest_prepare "cqfd sh should succeed and use sh"
 # shellcheck disable=SC2016
-if "$cqfd" sh <<<'printf "$0"' | grep -q "^sh$"; then
+if "$cqfd" sh <<<'printf "$0"' | grep "^sh$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -56,7 +56,7 @@ fi
 
 jtest_prepare "cqfd bash should succeed and use bash"
 # shellcheck disable=SC2016
-if "$cqfd" bash <<<'printf "$0"' | grep -q "^bash$"; then
+if "$cqfd" bash <<<'printf "$0"' | grep "^bash$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -64,7 +64,7 @@ fi
 
 jtest_prepare "cqfd dash should succeed and use dash"
 # shellcheck disable=SC2016
-if "$cqfd" dash <<<'printf "$0"' | grep -q "^dash$"; then
+if "$cqfd" dash <<<'printf "$0"' | grep "^dash$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -105,7 +105,7 @@ fi
 cp -f .cqfdrc .cqfdrc.orig
 echo "files=\"shell\"" >>.cqfdrc
 jtest_prepare "cqfd shell should release"
-if "$cqfd" --release shell -c "touch shell" && tar tf cqfd-test.tar.xz | grep -q "^shell$"; then
+if "$cqfd" --release shell -c "touch shell" && tar tf cqfd-test.tar.xz | grep "^shell$"; then
 	jtest_result pass
 else
 	jtest_result fail
