@@ -11,6 +11,35 @@ else
 	jtest_result fail
 fi
 
+# backup Dockerfile
+mv .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
+
+jtest_prepare "run cqfd --init without a Dockerfile should fail"
+if ! cqfd --init; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+jtest_prepare "run cqfd --init with a broken Dockerfile symlink should fail"
+ln -sf Dockerfile.broken .cqfd/docker/Dockerfile
+if ! cqfd --init; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+jtest_prepare "run cqfd --init with a Dockerfile symlink should pass"
+ln -sf Dockerfile.orig .cqfd/docker/Dockerfile
+if cqfd --init; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+# restore Dockerfile
+mv .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
+
 # backup .cqfdrc
 mv .cqfdrc .cqfdrc.orig
 
