@@ -361,7 +361,7 @@ list_images() {
 		local dockerfile
 
 		read -r tag status dockerfile _ <<<"$image"
-		printf "%-${#maxtag}s %-8s %-7s %s\n" "$tag" "$status" "$dockerfile"
+		printf "%-${#maxtag}s %-8s %s\n" "$tag" "$status" "$dockerfile"
 	done
 }
 
