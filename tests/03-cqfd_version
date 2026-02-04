@@ -2,10 +2,6 @@
 #
 # validate the behavior of --version command
 
-. "$(dirname "$0")/jtest.inc" "$1"
-
-cd "$TDIR/" || exit 1
-
 jtest_prepare "run cqfd --version should exit success"
 # shellcheck disable=SC2094
 if cqfd --version >version; then

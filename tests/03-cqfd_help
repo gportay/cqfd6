@@ -2,10 +2,6 @@
 #
 # validate the behavior of --help command
 
-. "$(dirname "$0")/jtest.inc" "$1"
-
-cd "$TDIR/" || exit 1
-
 jtest_prepare "run cqfd --help should exit success"
 if cqfd --help >usage; then
 	jtest_result pass

@@ -2,10 +2,6 @@
 #
 # validate the behavior of run -c command
 
-. "$(dirname "$0")/jtest.inc" "$1"
-
-cd "$TDIR/" || exit 1
-
 jtest_prepare "run cqfd run -c without argument should fail"
 if ! cqfd run -c; then
 	jtest_result pass

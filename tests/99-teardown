@@ -4,10 +4,6 @@
 
 set -o pipefail
 
-. "$(dirname "$0")/jtest.inc" "$1"
-
-cd "$TDIR/" || exit 1
-
 for i in .cqfd/*/Dockerfile; do
 	test -e "$i" || continue
 	echo "RUN echo $EPOCHSECONDS" >>"$i"

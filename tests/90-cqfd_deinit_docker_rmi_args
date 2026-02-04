@@ -2,10 +2,6 @@
 #
 # validate the behavior of --deinit with docker extra rmi arguments
 
-. "$(dirname "$0")/jtest.inc" "$1"
-
-cd "$TDIR/" || exit 1
-
 jtest_prepare "run cqfd --deinit with --force set in CQFD_EXTRA_RMI_ARGS should pass"
 if env CQFD_EXTRA_RMI_ARGS="--force" cqfd --deinit; then
 	jtest_result pass

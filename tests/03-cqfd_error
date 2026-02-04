@@ -2,10 +2,6 @@
 #
 # validate the behavior with erroneous usages
 
-. "$(dirname "$0")/jtest.inc" "$1"
-
-cd "$TDIR/" || exit 1
-
 jtest_prepare "run cqfd with an empty command argument should fail"
 if ! env CQFD_COMPAT=5 cqfd ""; then
 	jtest_result pass

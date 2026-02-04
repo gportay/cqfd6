@@ -4,10 +4,6 @@
 
 set -o pipefail
 
-. "$(dirname "$0")/jtest.inc" "$1"
-
-cd "$TDIR/" || exit 1
-
 workdir="workingdir"
 mkdir -p "$workdir"
 

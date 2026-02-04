@@ -2,10 +2,6 @@
 #
 # validate the behavior with skelton bring up
 
-. "$(dirname "$0")/jtest.inc" "$1"
-
-cd "$TDIR/" || exit 1
-
 jtest_prepare "run cqfd --init without an .cqfd directory should fail"
 if ! cqfd --init; then
 	jtest_result pass

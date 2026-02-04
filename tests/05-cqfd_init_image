@@ -4,13 +4,10 @@
 
 set -o pipefail
 
-. "$(dirname "$0")/jtest.inc" "$1"
 read -r -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
 if [ "$CQFD_RUN_WITH_SUDO" = true ]; then
 	cqfd_docker=(sudo "${cqfd_docker[@]}")
 fi
-
-cd "$TDIR/" || exit 1
 
 # backup .cqfd and .cqfdrc
 mv .cqfd .cqfd.orig

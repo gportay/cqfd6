@@ -2,10 +2,6 @@
 #
 # validate the behavior of --deinit command
 
-. "$(dirname "$0")/jtest.inc" "$1"
-
-cd "$TDIR/" || exit 1
-
 jtest_prepare "run cqfd --deinit with a .cqfdrc file should pass"
 if cqfd --deinit; then
 	jtest_result pass
