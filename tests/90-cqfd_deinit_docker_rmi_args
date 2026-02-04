@@ -7,7 +7,7 @@
 cd "$TDIR/" || exit 1
 
 jtest_prepare "run cqfd --deinit with --force set in CQFD_EXTRA_RMI_ARGS should pass"
-if CQFD_EXTRA_RMI_ARGS="--force" cqfd --deinit; then
+if env CQFD_EXTRA_RMI_ARGS="--force" cqfd --deinit; then
 	jtest_result pass
 else
 	jtest_result fail

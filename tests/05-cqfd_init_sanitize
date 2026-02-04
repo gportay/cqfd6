@@ -25,7 +25,7 @@ if "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 fi
 
 jtest_prepare "run cqfd init with invalid character in USER should create image"
-if USER="user@invalid" cqfd init && \
+if env USER="user@invalid" cqfd init && \
    "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	jtest_result pass
 else

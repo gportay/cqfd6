@@ -34,7 +34,7 @@ else
 fi
 
 jtest_prepare "run cqfd with environment CQFD_PLATFORM should run native docker platform ($native_platform = $native_machine)"
-if CQFD_PLATFORM="$native_platform" cqfd --reinit | grep "^$native_machine$"; then
+if env CQFD_PLATFORM="$native_platform" cqfd --reinit | grep "^$native_machine$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -48,7 +48,7 @@ else
 fi
 
 jtest_prepare "run cqfd with environment CQFD_PLATFORM should run cross docker platform ($cross_platform = $cross_machine)"
-if CQFD_PLATFORM="$cross_platform" cqfd --reinit | grep "^$cross_machine$"; then
+if env CQFD_PLATFORM="$cross_platform" cqfd --reinit | grep "^$cross_machine$"; then
 	jtest_result pass
 else
 	jtest_result fail

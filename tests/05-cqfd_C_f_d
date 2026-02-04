@@ -42,21 +42,21 @@ else
 fi
 
 jtest_prepare "run cqfd from a subdirectory with environments CQFDRC_FILE and CQFD_DIR using relative path to subdirectory should pass"
-if CQFD_DIR=cqfd CQFDRC_FILE=cqfdrc cqfd -C "$extdir" | grep "^$PWD/$extdir$"; then
+if env CQFD_DIR=cqfd CQFDRC_FILE=cqfdrc cqfd -C "$extdir" | grep "^$PWD/$extdir$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "run cqfd with environments CQFDRC_FILE and CQFD_DIR using relative path should pass"
-if CQFD_DIR="$extdir/cqfd" CQFDRC_FILE="$extdir/cqfdrc" cqfd | grep "^$PWD$"; then
+if env CQFD_DIR="$extdir/cqfd" CQFDRC_FILE="$extdir/cqfdrc" cqfd | grep "^$PWD$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "run cqfd from a subdirectory with environments CQFDRC_FILE and CQFD_DIR using absolute path should pass"
-if CQFD_DIR="$PWD/$extdir/cqfd" CQFDRC_FILE="$PWD/$extdir/cqfdrc" cqfd | grep "^$PWD$"; then
+if env CQFD_DIR="$PWD/$extdir/cqfd" CQFDRC_FILE="$PWD/$extdir/cqfdrc" cqfd | grep "^$PWD$"; then
 	jtest_result pass
 else
 	jtest_result fail
