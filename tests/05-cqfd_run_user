@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+#
+# validate the use case of ssh-agent
+
+set -o pipefail
+
+. "$(dirname "$0")/jtest.inc" "$1"
+
+cd "$TDIR/" || exit 1
+
+cp -f .cqfdrc .cqfdrc.orig
+cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
+
+jtest_prepare "cqfd with running host ssh-agent should forward socket to container"
+echo "FROM ubuntu:24.04" >.cqfd/docker/Dockerfile
+echo "RUN apt-get -y update && apt-get -y install openssh-client" >>.cqfd/docker/Dockerfile
+if ! command -v ssh-agent; then
+	jtest_result skip
+else
+	if cqfd init && ssh-agent cqfd run "test -S \$SSH_AUTH_SOCK && env" | grep -E "^SSH_AUTH_SOCK=/tmp/ssh-[[:alnum:]]+/agent\.[[:digit:]]+$"; then
+		jtest_result pass
+	else
+		jtest_result fail
+	fi
+fi
+
+jtest_prepare "cqfd with running host and no private keys added ssh-agent should fail"
+if ! command -v ssh-agent; then
+	jtest_result skip
+else
+	if ! ssh-agent cqfd run "ssh-add -L" 2>&1 | grep "The agent has no identities."; then
+		jtest_result pass
+	else
+		jtest_result fail
+	fi
+fi
+
+jtest_prepare "cqfd with running host and a private key added ssh-agent should pass"
+chmod 600 cqfd-test_ed25519
+if ! command -v ssh-agent; then
+	jtest_result skip
+else
+	if ssh-agent sh -c "ssh-add cqfd-test_ed25519 && exec cqfd run \"ssh-add -L\"" | diff - cqfd-test_ed25519.pub; then
+		jtest_result pass
+	else
+		jtest_result fail
+	fi
+fi
+
+jtest_prepare "cqfd with running host ssh-agent should forward socket to container if CQFD_NO_SSH_AUTH_SOCK=true"
+if ! command -v ssh-agent; then
+	jtest_result skip
+else
+	if ! env CQFD_NO_SSH_AUTH_SOCK=true ssh-agent cqfd run "env" | grep -E "^SSH_AUTH_SOCK=/tmp/ssh-[[:alnum:]]+/agent\.[[:digit:]]+$"; then
+		jtest_result pass
+	else
+		jtest_result fail
+	fi
+fi
+
+# restore .cqfdrc and Dockerfile
+mv -f .cqfdrc.orig .cqfdrc
+mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
+
+# restore container
+if ! cqfd init; then
+	jtest_log error "restore container failed"
+fi
