@@ -5,7 +5,6 @@
 set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 flavor="foo"
 
 cd "$TDIR/" || exit 1
@@ -17,8 +16,8 @@ cp -f .cqfdrc .cqfdrc.orig
 sed -i -e "s/\[foo\]/[foo]\ndistro='centos'/" .cqfdrc
 
 jtest_prepare "cqfd init using '$flavor' flavor"
-if "$cqfd" -b "$flavor" init && \
-   "$cqfd" -b "$flavor" run "grep '^NAME=' /etc/os-release" | grep "^NAME=\"CentOS Linux\"$"; then
+if cqfd -b "$flavor" init && \
+   cqfd -b "$flavor" run "grep '^NAME=' /etc/os-release" | grep "^NAME=\"CentOS Linux\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -31,7 +30,7 @@ mv -f .cqfdrc.orig .cqfdrc
 ################################################################################
 flavorPart="${flavor:0:2}"
 jtest_prepare "cqfd init using part of '$flavor' flavor should fail"
-if ! "$cqfd" -b "$flavorPart" init; then
+if ! cqfd -b "$flavorPart" init; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -41,8 +40,8 @@ fi
 # 'cqfd init' without flavor generates our regular container
 ################################################################################
 jtest_prepare "cqfd init without flavor"
-if "$cqfd" init &&
-   "$cqfd" run "grep '^NAME=' /etc/os-release" | grep "^NAME=\"Ubuntu\"$"; then
+if cqfd init &&
+   cqfd run "grep '^NAME=' /etc/os-release" | grep "^NAME=\"Ubuntu\"$"; then
 	jtest_result pass
 else
 	jtest_result fail

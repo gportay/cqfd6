@@ -3,7 +3,6 @@
 # validate the behavior of run from subdirectory
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 
 jtest_prepare "cqfd can run from a project's sub-directory"
 
@@ -16,7 +15,7 @@ pushd "$sub_dir" >/dev/null || exit 1
 
 # the two paths should be identical
 if p1="$(pwd | strings)" && \
-   p2="$("$cqfd" run pwd | strings)" && \
+   p2="$(cqfd run pwd | strings)" && \
    [ "$p1" = "$p2" ]; then
 	jtest_result pass
 else

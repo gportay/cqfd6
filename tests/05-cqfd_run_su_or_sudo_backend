@@ -5,7 +5,6 @@
 set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 read -r -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
 if [ "$CQFD_RUN_WITH_SUDO" = true ]; then
 	cqfd_docker=(sudo "${cqfd_docker[@]}")
@@ -26,7 +25,7 @@ jtest_prepare "cqfd run with su -c"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if "$cqfd" init && "$cqfd" --verbose run true \
+	if cqfd init && cqfd --verbose run true \
 		| awk -v rc=1 '/Using "su" to execute command/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -46,7 +45,7 @@ jtest_prepare "cqfd run with su --session-command"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if "$cqfd" init && "$cqfd" --verbose run true \
+	if cqfd init && cqfd --verbose run true \
 		| awk -v rc=1 '/Using "su" to execute session command/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -67,7 +66,7 @@ jtest_prepare "cqfd run with sudo"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if "$cqfd" init && "$cqfd" --verbose run true \
+	if cqfd init && cqfd --verbose run true \
 		| awk -v rc=1 '/Using "sudo" to execute command/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -80,6 +79,6 @@ fi
 ################################################################################
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 jtest_log info "restore container"
-if ! "$cqfd" init; then
+if ! cqfd init; then
 	jtest_log fatal "cqfd init failed"
 fi

@@ -3,13 +3,12 @@
 # validate the behavior with erroneous usages
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 
 ################################################################################
 # Running cqfd with an empty argument shall fail
 ################################################################################
 jtest_prepare "run an empty cqfd command-line shall fail"
-if ! "$cqfd" ""; then
+if ! cqfd ""; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -19,7 +18,7 @@ fi
 # Running cqfd with an unknown argument shall fail
 ################################################################################
 jtest_prepare "run a bad cqfd command-line shall fail"
-if ! "$cqfd" invalid_arg_should_fail; then
+if ! cqfd invalid_arg_should_fail; then
 	jtest_result pass
 else
 	jtest_result fail

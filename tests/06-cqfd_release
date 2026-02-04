@@ -5,7 +5,6 @@
 set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 
 cd "$TDIR/" || exit 1
 
@@ -14,7 +13,7 @@ cd "$TDIR/" || exit 1
 # hence it should fail
 ################################################################################
 jtest_prepare "cqfd release fails without files parameter"
-if ! "$cqfd" release; then
+if ! cqfd release; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -27,7 +26,7 @@ rel_files="a/cqfd_a.txt a/b/c/cqfd_c.txt a/b/cqfd_b.txt"
 cp -f .cqfdrc .cqfdrc.orig
 echo "files=\"$rel_files\"" >>.cqfdrc
 jtest_prepare "cqfd release now with a files parameter"
-if "$cqfd" release; then
+if cqfd release; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -57,7 +56,7 @@ rm -f cqfd-test.tar.xz
 # now use tar_transform=no
 jtest_prepare "archived files NOT at root of tar archive if tar_transform=no"
 echo "tar_transform=no" >>.cqfdrc
-if "$cqfd" release; then
+if cqfd release; then
 	result="pass"
 else
 	result="fail"
@@ -74,7 +73,7 @@ rm -f cqfd-test.tar.xz
 # now use tar_transform=yes
 jtest_prepare "archived files at root of tar archive if tar_transform=yes"
 echo "tar_transform=yes" >>.cqfdrc
-if "$cqfd" release; then
+if cqfd release; then
 	result="pass"
 else
 	result="fail"
@@ -94,7 +93,7 @@ rm -f cqfd-test.tar.xz
 ################################################################################
 jtest_prepare "symlink files are copied in the tar archive"
 result="pass"
-if ! "$cqfd" run ln -s a/cqfd_a.txt link.txt; then
+if ! cqfd run ln -s a/cqfd_a.txt link.txt; then
 	jtest_log fatal "cqfd run failed"
 	result="fail"
 fi
@@ -103,7 +102,7 @@ sed -i '/files=/d' .cqfdrc
 echo "files=\"$rel_files_link\"" >>.cqfdrc
 echo "tar_options=-h" >>.cqfdrc
 
-if ! "$cqfd" release; then
+if ! cqfd release; then
 	jtest_log fatal "cqfd release failed"
 	result="fail"
 fi
@@ -136,7 +135,7 @@ export CTEST=foobar
 d3="$(date --rfc-3339='date')"
 # shellcheck disable=SC2016
 echo 'archive=cqfd-%D3-$CTEST.tar.xz' >>.cqfdrc
-if "$cqfd" release && tar tf "cqfd-$d3-foobar.tar.xz" &>/dev/null; then
+if cqfd release && tar tf "cqfd-$d3-foobar.tar.xz" &>/dev/null; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -147,7 +146,7 @@ jtest_prepare "build.archive can template filenames (git short hash of last comm
 # shellcheck disable=SC2016
 sed -i -e '$ s!^archive=.*$!archive=cqfd-%Gh-$CTEST.tar.xz!' .cqfdrc
 # shellcheck disable=SC2010
-if "$cqfd" release &&
+if cqfd release &&
    ls -1 cqfd-*-foobar.tar.xz | grep -E "^cqfd-([[:xdigit:]]{4,40}|unset)-foobar.tar.xz$" &&
    tar tf cqfd-*-foobar.tar.xz &>/dev/null; then
 	jtest_result pass
@@ -160,7 +159,7 @@ jtest_prepare "build.archive can template filenames (git long hash of last commi
 # shellcheck disable=SC2016
 sed -i -e '$ s!^archive=.*$!archive=cqfd-%GH-$CTEST.tar.xz!' .cqfdrc
 # shellcheck disable=SC2010
-if "$cqfd" release &&
+if cqfd release &&
    ls -1 cqfd-*-foobar.tar.xz | grep -E "^cqfd-([[:xdigit:]]{40}|unset)-foobar.tar.xz$" &&
    tar tf cqfd-*-foobar.tar.xz &>/dev/null; then
 	jtest_result pass
@@ -173,7 +172,7 @@ jtest_prepare "build.archive can template filenames (Unix timestamp)"
 # shellcheck disable=SC2016
 sed -i -e '$ s!^archive=.*$!archive=cqfd-%Du-$CTEST.tar.xz!' .cqfdrc
 # shellcheck disable=SC2010
-if "$cqfd" release &&
+if cqfd release &&
    ls -1 cqfd-*-foobar.tar.xz | grep -E "^cqfd-[[:digit:]]{1,20}-foobar.tar.xz$" &&
    tar tf cqfd-*-foobar.tar.xz &>/dev/null; then
 	jtest_result pass
@@ -185,7 +184,7 @@ rm -f cqfd-*-foobar.tar.xz
 jtest_prepare "build.archive can template filenames (current cqfd flavor name unset)"
 # shellcheck disable=SC2016
 sed -i -e '$ s!^archive=.*$!archive=cqfd-%Cf-$CTEST.tar.xz!' .cqfdrc
-if "$cqfd" release && tar tf cqfd--foobar.tar.xz &>/dev/null; then
+if cqfd release && tar tf cqfd--foobar.tar.xz &>/dev/null; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -193,7 +192,7 @@ fi
 rm -f cqfd--foobar.tar.xz
 
 jtest_prepare "build.archive can template filenames (current cqfd flavor name set)"
-if "$cqfd" -b foo release && tar tf cqfd-foo.tar.xz &>/dev/null; then
+if cqfd -b foo release && tar tf cqfd-foo.tar.xz &>/dev/null; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -203,7 +202,7 @@ rm -f cqfd-foo.tar.xz
 jtest_prepare "build.archive can template filenames (value of the project.org configuration key)"
 # shellcheck disable=SC2016
 sed -i -e '$ s!^archive=.*$!archive=cqfd-%Po-$CTEST.tar.xz!' .cqfdrc
-if "$cqfd" release && tar tf cqfd-cqfd-foobar.tar.xz &>/dev/null; then
+if cqfd release && tar tf cqfd-cqfd-foobar.tar.xz &>/dev/null; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -213,7 +212,7 @@ rm -f cqfd-cqfd-foobar.tar.xz
 jtest_prepare "build.archive can template filenames (value of the project.name configuration key)"
 # shellcheck disable=SC2016
 sed -i -e '$ s!^archive=.*$!archive=cqfd-%Pn-$CTEST.tar.xz!' .cqfdrc
-if "$cqfd" release && tar tf cqfd-test-foobar.tar.xz &>/dev/null; then
+if cqfd release && tar tf cqfd-test-foobar.tar.xz &>/dev/null; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -223,7 +222,7 @@ rm -f cqfd-test-foobar.tar.xz
 jtest_prepare "build.archive can template filenames (litteral '%' sign)"
 # shellcheck disable=SC2016
 sed -i -e '$ s!^archive=.*!archive=cqfd-%%-$CTEST.tar.xz!' .cqfdrc
-if "$cqfd" release && tar tf cqfd-%-foobar.tar.xz &>/dev/null; then
+if cqfd release && tar tf cqfd-%-foobar.tar.xz &>/dev/null; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -236,7 +235,7 @@ rm -f cqfd-%-foobar.tar.xz
 jtest_prepare "build.archive can make a .tar.gz archive"
 # shellcheck disable=SC2016
 sed -i -e '$ s!^archive=.*xz$!archive=cqfd-$CTEST.tar.gz!' .cqfdrc
-if "$cqfd" release && tar ztf "cqfd-$CTEST.tar.gz" &>/dev/null; then
+if cqfd release && tar ztf "cqfd-$CTEST.tar.gz" &>/dev/null; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -249,7 +248,7 @@ rm -f "cqfd-$CTEST.tar.gz"
 jtest_prepare "build.archive can make a .zip archive"
 # shellcheck disable=SC2016
 sed -i -e '$ s!^archive=.*gz$!archive=cqfd-$CTEST.zip!' .cqfdrc
-if "$cqfd" release && unzip -l "cqfd-$CTEST.zip" &>/dev/null; then
+if cqfd release && unzip -l "cqfd-$CTEST.zip" &>/dev/null; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -263,7 +262,7 @@ for flav in foo bar; do
 	filename="cqfd-$flav.tar.xz"
 	jtest_prepare "release for flavor $flav creates $filename"
 
-	if "$cqfd" -b "$flav" release && \
+	if cqfd -b "$flav" release && \
 	   tar tf "$filename" &>/dev/null; then
 		jtest_result pass
 	else
@@ -277,7 +276,7 @@ done
 ################################################################################
 jtest_prepare "cqfd fails on missing file in build.files"
 sed -i -e 's!^files=.*$!files="ThisFileDoesNotExist.txt"!' .cqfdrc
-if ! "$cqfd" release; then
+if ! cqfd release; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -291,7 +290,7 @@ jtest_prepare "cqfd resolves globs in build.files"
 sed -i -e 's!^archive=.*$!archive=cqfd-$CTEST.tar.xz!' .cqfdrc
 sed -i -e 's!^files=.*$!files=".cq*rc Ma*"!' .cqfdrc
 # cqfd release must work without error
-if "$cqfd" release; then
+if cqfd release; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -315,7 +314,7 @@ rm -f "tmp.$$"
 jtest_prepare "cqfd resolves globs in build.files"
 # shellcheck disable=SC2016
 sed -i -e 's!^archive=.*$!archive=cqfd-$CTEST.tar.zst!' .cqfdrc
-if ! "$cqfd" release; then
+if ! cqfd release; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -328,7 +327,7 @@ fi
 sed -i -e 's!^archive=.*$!archive=cqfd-$CTEST.tar.xz!' .cqfdrc
 sed -i -e 's!^files=.*$!files=".local/bin/cqfd"!' .cqfdrc
 jtest_prepare "cqfd release with option --release"
-if "$cqfd" --release; then
+if cqfd --release; then
 	jtest_result pass
 else
 	jtest_result fail

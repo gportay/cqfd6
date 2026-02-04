@@ -5,7 +5,6 @@
 set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 read -r -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
 if [ "$CQFD_RUN_WITH_SUDO" = true ]; then
 	cqfd_docker=(sudo "${cqfd_docker[@]}")
@@ -23,7 +22,7 @@ cp -f .cqfd/docker/Dockerfile.missing_dependencies .cqfd/docker/Dockerfile
 # Missing all core dependencies for the launch script
 ################################################################################
 jtest_prepare "cqfd run fails when the Docker image lacks required commands"
-if "$cqfd" init && ! "$cqfd" run; then
+if cqfd init && ! cqfd run; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -41,7 +40,7 @@ jtest_prepare "cqfd run with satisfied command useradd and groupadd requirements
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if "$cqfd" init && "$cqfd" --verbose run true; then
+	if cqfd init && cqfd --verbose run true; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -60,7 +59,7 @@ jtest_prepare "cqfd run with satisfied command shell requirements"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if "$cqfd" init && CQFD_SHELL=/bin/bash "$cqfd" --verbose run true; then
+	if cqfd init && CQFD_SHELL=/bin/bash cqfd --verbose run true; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -74,7 +73,7 @@ jtest_prepare "cqfd run with satisfied command requirements, using su"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if "$cqfd" init && "$cqfd" --verbose run true \
+	if cqfd init && cqfd --verbose run true \
 		| awk -v rc=1 '/Using "su"/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -94,7 +93,7 @@ jtest_prepare "cqfd run with satisfied command requirements, using sudo"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if "$cqfd" init && "$cqfd" --verbose run true \
+	if cqfd init && cqfd --verbose run true \
 		| awk -v rc=1 '/Using "sudo"/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -109,7 +108,7 @@ jtest_prepare "cqfd run creates the user correctly"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if "$cqfd" init && "$cqfd" run "grep \"^$USER:x:$UID:${GROUPS[0]}::$HOME:/bin/sh\$\" /etc/passwd"; then
+	if cqfd init && cqfd run "grep \"^$USER:x:$UID:${GROUPS[0]}::$HOME:/bin/sh\$\" /etc/passwd"; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -128,7 +127,7 @@ jtest_prepare "cqfd run creates and owns the user directory"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if "$cqfd" init && CQFD_NO_USER_SSH_CONFIG=true CQFD_NO_USER_GIT_CONFIG=true "$cqfd" run "test -w $HOME"; then
+	if cqfd init && CQFD_NO_USER_SSH_CONFIG=true CQFD_NO_USER_GIT_CONFIG=true cqfd run "test -w $HOME"; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -142,7 +141,7 @@ jtest_prepare "cqfd run execute as the host user"
 if [ "${cqfd_docker[-1]}" = "podman" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
 else
-	if "$cqfd" run id | grep "^uid=$UID($USER) gid=${GROUPS[0]}($USER) groups=$UID($USER)$"; then
+	if cqfd run id | grep "^uid=$UID($USER) gid=${GROUPS[0]}($USER) groups=$UID($USER)$"; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -157,6 +156,6 @@ mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 ################################################################################
 # restore container
 ################################################################################
-if ! "$cqfd" init; then
+if ! cqfd init; then
 	jtest_log error "restore container failed"
 fi

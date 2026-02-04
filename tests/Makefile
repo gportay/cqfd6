@@ -20,6 +20,13 @@ tests:
 	@$(eval TDIR=$(shell mktemp -d /tmp/cqfd-test.XXXXXX))
 	@export CQFD_CACHE=$(TDIR); \
 	export CQFD_PROMPT=no; \
+	export PATH=$(TDIR)/.local/bin:$(PATH); \
+	mkdir -p "$(TDIR)/.local/bin"; \
+	cp -a ../cqfd "$(TDIR)/.local/bin/cqfd$(CQFD_COMPAT)"; \
+	ln -sf "cqfd$(CQFD_COMPAT)" "$(TDIR)/.local/bin/cqfd"; \
+	ln -sf cqfd $(TDIR)/.local/bin/linux-amd64-cqfd; \
+	ln -sf cqfd $(TDIR)/.local/bin/linux-arm64-cqfd; \
+	cp -a test_data/. "$(TDIR)/."; \
 	for f in [0-9][0-9]*; do \
 		if [ -x "$$f" ]; then \
 			./$$f $(TDIR); \
