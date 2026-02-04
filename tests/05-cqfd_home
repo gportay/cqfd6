@@ -29,7 +29,7 @@ val1="value-$RANDOM"
 val2="value-$RANDOM"
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo -n \$FOO \$HOME'," .cqfdrc.orig >.cqfdrc
 # shellcheck disable=SC2016
-if CQFD_EXTRA_RUN_ARGS="-e FOO=$val1 -e HOME=$val2" cqfd | grep "^$val1 $val2$"; then
+if env CQFD_EXTRA_RUN_ARGS="-e FOO=$val1 -e HOME=$val2" cqfd | grep "^$val1 $val2$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -39,7 +39,7 @@ jtest_prepare "run cqfd with --env HOME in CQFD_EXTRA_RUN_ARGS should set overri
 val1="value-$RANDOM"
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo \$HOME'," .cqfdrc.orig >.cqfdrc
 # shellcheck disable=SC2016
-if CQFD_EXTRA_RUN_ARGS="-e HOME=$val1" cqfd | grep "^$val1$"; then
+if env CQFD_EXTRA_RUN_ARGS="-e HOME=$val1" cqfd | grep "^$val1$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -50,7 +50,7 @@ val1="value-$RANDOM"
 val2="value-$RANDOM"
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo -n \$JAVA_HOME \$HOME'," .cqfdrc.orig >.cqfdrc
 # shellcheck disable=SC2016
-if CQFD_EXTRA_RUN_ARGS="-e JAVA_HOME=$val1 -e HOME=$val2" cqfd | grep "^$val1 $val2$"; then
+if env CQFD_EXTRA_RUN_ARGS="-e JAVA_HOME=$val1 -e HOME=$val2" cqfd | grep "^$val1 $val2$"; then
 	jtest_result pass
 else
 	jtest_result fail

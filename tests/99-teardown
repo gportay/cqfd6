@@ -22,7 +22,7 @@ else
 fi
 
 jtest_prepare "run cqfd --gc should collect unused build containers"
-if CQFD_PROMPT=yes cqfd --gc && ( ! cqfd --ls | grep -E "^cqfd-$USER-.+[[:blank:]]+(Deleted|Outdated)[[:blank:]][[:alnum:]/.-]+$" && \
+if env CQFD_PROMPT=yes cqfd --gc && ( ! cqfd --ls | grep -E "^cqfd-$USER-.+[[:blank:]]+(Deleted|Outdated)[[:blank:]][[:alnum:]/.-]+$" && \
 	           test "${PIPESTATUS[0]}" -eq 0 -a "${PIPESTATUS[1]}" -eq 1 ); then
 	jtest_result pass
 else

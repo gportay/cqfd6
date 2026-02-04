@@ -21,14 +21,14 @@ else
 fi
 
 jtest_prepare "run cqfd with --env in CQFD_EXTRA_RUN_ARGS should set environment variables"
-if CQFD_EXTRA_RUN_ARGS="--env FOO=foo --env BAR=bar" cqfd | grep "^foo bar$"; then
+if env CQFD_EXTRA_RUN_ARGS="--env FOO=foo --env BAR=bar" cqfd | grep "^foo bar$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "run cqfd with --env containing whitespaces in CQFD_EXTRA_RUN_ARGS should set environment variables and preserve whitespaces"
-if CQFD_EXTRA_RUN_ARGS="--env FOO=foo\ foobar --env BAR=bar" cqfd | grep "^foo foobar bar$"; then
+if env CQFD_EXTRA_RUN_ARGS="--env FOO=foo\ foobar --env BAR=bar" cqfd | grep "^foo foobar bar$"; then
 	jtest_result pass
 else
 	jtest_result fail

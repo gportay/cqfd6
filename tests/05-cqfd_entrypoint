@@ -46,7 +46,7 @@ jtest_prepare "run cqfd without CQFD_SHELL command should fail"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if ! CQFD_SHELL=/bin/bash cqfd --reinit --verbose; then
+	if ! env CQFD_SHELL=/bin/bash cqfd --reinit --verbose; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -58,7 +58,7 @@ echo 'RUN apk add bash' >>.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if CQFD_SHELL=/bin/bash cqfd --reinit --verbose; then
+	if env CQFD_SHELL=/bin/bash cqfd --reinit --verbose; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -108,7 +108,7 @@ sed -e "/\[build\]/,/^$/s,^command=.*$,command='test -w $HOME'," .cqfdrc.orig >.
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if CQFD_NO_USER_SSH_CONFIG=true CQFD_NO_USER_GIT_CONFIG=true cqfd --reinit; then
+	if env CQFD_NO_USER_SSH_CONFIG=true CQFD_NO_USER_GIT_CONFIG=true cqfd --reinit; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -143,7 +143,7 @@ jtest_prepare "run cqfd with CQFD_SUDO_NOPASSWD should execute sudo without auth
 if [ "${cqfd_docker[-1]}" = "podman" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
 else
-	if CQFD_SUDO_NOPASSWD=true cqfd </dev/null; then
+	if env CQFD_SUDO_NOPASSWD=true cqfd </dev/null; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -156,7 +156,7 @@ if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
 	if umask="$(cqfd)" && \
-	   umask_nopasswd="$(CQFD_SUDO_NOPASSWD=true cqfd)" && \
+	   umask_nopasswd="$(env CQFD_SUDO_NOPASSWD=true cqfd)" && \
 	   [ "$umask" = "$umask_nopasswd" ]; then
 		jtest_result pass
 	else

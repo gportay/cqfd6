@@ -19,7 +19,7 @@ else
 fi
 
 jtest_prepare "run cqfd init with ARG in Dockerfile and with --build-arg in CQFD_EXTRA_BUILD_ARGS should pass"
-if CQFD_EXTRA_BUILD_ARGS="--build-arg FOO=foo --no-cache" cqfd init; then
+if env CQFD_EXTRA_BUILD_ARGS="--build-arg FOO=foo --no-cache" cqfd init; then
 	jtest_result pass
 else
 	jtest_result fail
