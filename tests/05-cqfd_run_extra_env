@@ -3,7 +3,6 @@
 # validate the behavior of run command with extra run environment variable
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 
 cd "$TDIR/" || exit 1
 
@@ -16,7 +15,7 @@ val1="value-$RANDOM"
 val2="value-$RANDOM"
 # shellcheck disable=SC2016
 if output="$(CQFD_EXTRA_RUN_ARGS="-e FOO=$val1 -e BAR=$val2" \
-	     "$cqfd" run 'echo -n $FOO $BAR' | grep value)" && \
+	     cqfd run 'echo -n $FOO $BAR' | grep value)" && \
    [ "$output" = "$val1 $val2" ]; then
 	jtest_result pass
 else

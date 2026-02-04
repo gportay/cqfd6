@@ -5,7 +5,6 @@
 set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 read -r -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
 if [ "$CQFD_RUN_WITH_SUDO" = true ]; then
 	cqfd_docker=(sudo "${cqfd_docker[@]}")
@@ -34,7 +33,7 @@ if "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 fi
 
 jtest_prepare "cqfd init with tag $tag builds templated image $image:$dh"
-if "$cqfd" init && \
+if cqfd init && \
    "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	jtest_result pass
 else
@@ -54,7 +53,7 @@ fi
 
 jtest_prepare "cqfd init with tag $tag and distro build templated image $image:$dh"
 sed -i -e "s/\[build\]/[build]\ndistro='centos'/" .cqfdrc
-if "$cqfd" init && \
+if cqfd init && \
    "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	jtest_result pass
 else

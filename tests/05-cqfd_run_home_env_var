@@ -5,7 +5,6 @@
 set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 read -r -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
 if [ "$CQFD_RUN_WITH_SUDO" = true ]; then
 	cqfd_docker=(sudo "${cqfd_docker[@]}")
@@ -18,7 +17,7 @@ cd "$TDIR/" || exit 1
 ################################################################################
 jtest_prepare "run cqfd sets HOME environment variable for the local user"
 # shellcheck disable=SC2016
-if output="$("$cqfd" run 'echo -n $HOME')" && \
+if output="$(cqfd run 'echo -n $HOME')" && \
    [ "$output" = "$HOME" ]; then
 	jtest_result pass
 else
@@ -34,7 +33,7 @@ val1="value-$RANDOM"
 val2="value-$RANDOM"
 # shellcheck disable=SC2016
 if output="$(CQFD_EXTRA_RUN_ARGS="-e FOO=$val1 -e HOME=$val2" \
-             "$cqfd" run 'echo -n $FOO $HOME' | grep value)" && \
+             cqfd run 'echo -n $FOO $HOME' | grep value)" && \
    [ "$output" = "$val1 $val2" ]; then
 	jtest_result pass
 else
@@ -49,7 +48,7 @@ jtest_prepare "run doesn't override HOME env when the only entry in CQFD_EXTRA_R
 val1="value-$RANDOM"
 # shellcheck disable=SC2016
 if output="$(CQFD_EXTRA_RUN_ARGS="-e HOME=$val1" \
-             "$cqfd" run 'echo -n $FOO $HOME' | grep value)" && \
+             cqfd run 'echo -n $FOO $HOME' | grep value)" && \
    [ "$output" = "$val1" ]; then
 	jtest_result pass
 else
@@ -65,7 +64,7 @@ val1="value-$RANDOM"
 val2="value-$RANDOM"
 # shellcheck disable=SC2016
 if output="$(CQFD_EXTRA_RUN_ARGS="-e JAVA_HOME=$val1 -e HOME=$val2" \
-             "$cqfd" run 'echo -n $JAVA_HOME $HOME' | grep value)" && \
+             cqfd run 'echo -n $JAVA_HOME $HOME' | grep value)" && \
    [ "$output" = "$val1 $val2" ]; then
 	jtest_result pass
 else
@@ -80,8 +79,8 @@ jtest_prepare "the user's home in passwd == \$HOME"
 if [ "${cqfd_docker[0]}" = "sudo" ] || [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if passwd_home=$("$cqfd" run "grep ^$(whoami): /etc/passwd |cut -d: -f6") && \
-	   user_home=$("$cqfd" run "echo \$HOME") && \
+	if passwd_home=$(cqfd run "grep ^$(whoami): /etc/passwd |cut -d: -f6") && \
+	   user_home=$(cqfd run "echo \$HOME") && \
 	   [ "$passwd_home" = "$user_home" ]; then
 		jtest_result pass
 	else
@@ -101,7 +100,7 @@ cat .cqfdrc.orig - <<EOF >.cqfdrc
 docker_run_args="--env FOO=$val1 --env HOME=$val2"
 EOF
 # shellcheck disable=SC2016
-if output="$("$cqfd" run 'echo -n $FOO $HOME' | grep value)" && \
+if output="$(cqfd run 'echo -n $FOO $HOME' | grep value)" && \
    [ "$output" = "$val1 $val2" ]; then
 	jtest_result pass
 else
@@ -118,7 +117,7 @@ cat .cqfdrc.orig - <<EOF >.cqfdrc
 docker_run_args="--env HOME=$val1"
 EOF
 # shellcheck disable=SC2016
-if output="$("$cqfd" run 'echo -n $FOO $HOME' | grep value)" && \
+if output="$(cqfd run 'echo -n $FOO $HOME' | grep value)" && \
    [ "$output" = "$val1" ]; then
 	jtest_result pass
 else
@@ -136,7 +135,7 @@ cat .cqfdrc.orig - <<EOF >.cqfdrc
 docker_run_args="--env JAVA_HOME=$val1 --env HOME=$val2"
 EOF
 # shellcheck disable=SC2016
-if output="$("$cqfd" run 'echo -n $JAVA_HOME $HOME' | grep value)" && \
+if output="$(cqfd run 'echo -n $JAVA_HOME $HOME' | grep value)" && \
    [ "$output" = "$val1 $val2" ]; then
 	jtest_result pass
 else

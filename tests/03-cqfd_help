@@ -3,13 +3,12 @@
 # validate the behavior of help command
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 
 ################################################################################
 # 'cqfd help' shall be an accepted command
 ################################################################################
 jtest_prepare "cqfd help shall exit normally"
-if "$cqfd" help >"$TDIR/usage"; then
+if cqfd help >"$TDIR/usage"; then
 	jtest_result pass
 else
 	jtest_result fail

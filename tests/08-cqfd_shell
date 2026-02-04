@@ -5,21 +5,20 @@
 set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 
 cd "$TDIR/" || exit 1
 
 cp -f .cqfdrc .cqfdrc.orig
 
 jtest_prepare "cqfd shell should succeed with no stdin"
-if "$cqfd" shell </dev/null; then
+if cqfd shell </dev/null; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "cqfd shell should read commands from stdin"
-if ( ! "$cqfd" shell <<<"tty" ) | grep "^not a tty$"; then
+if ( ! cqfd shell <<<"tty" ) | grep "^not a tty$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -28,7 +27,7 @@ fi
 jtest_prepare "cqfd shell should use interpreter set in shell"
 sed '/\[build\]/ashell="/bin/bash"' .cqfdrc.orig >.cqfdrc
 # shellcheck disable=SC2016
-if "$cqfd" bash <<<'printf "$0"' | grep "^bash$"; then
+if cqfd bash <<<'printf "$0"' | grep "^bash$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -39,7 +38,7 @@ mv -f .cqfdrc.orig .cqfdrc
 
 jtest_prepare "cqfd shell should preserve the arguments"
 # shellcheck disable=SC2016
-if "$cqfd" shell -c 'printf "0=$0,*=$*,#=$#"' zero one two three \
+if cqfd shell -c 'printf "0=$0,*=$*,#=$#"' zero one two three \
        | grep "^0=zero,\*=one two three,#=3$"; then
 	jtest_result pass
 else
@@ -48,7 +47,7 @@ fi
 
 jtest_prepare "cqfd sh should succeed and use sh"
 # shellcheck disable=SC2016
-if "$cqfd" sh <<<'printf "$0"' | grep "^sh$"; then
+if cqfd sh <<<'printf "$0"' | grep "^sh$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -56,7 +55,7 @@ fi
 
 jtest_prepare "cqfd bash should succeed and use bash"
 # shellcheck disable=SC2016
-if "$cqfd" bash <<<'printf "$0"' | grep "^bash$"; then
+if cqfd bash <<<'printf "$0"' | grep "^bash$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -64,21 +63,21 @@ fi
 
 jtest_prepare "cqfd dash should succeed and use dash"
 # shellcheck disable=SC2016
-if "$cqfd" dash <<<'printf "$0"' | grep "^dash$"; then
+if cqfd dash <<<'printf "$0"' | grep "^dash$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "cqfd shell is usable to run shell script"
-if "$cqfd" shell ./whereami.sh 2>&1 | grep "^Ubuntu .* LTS$"; then
+if cqfd shell ./whereami.sh 2>&1 | grep "^Ubuntu .* LTS$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "cqfd bash is usable to run shell script"
-if "$cqfd" bash ./whereami.sh 2>&1 | grep "^Ubuntu .* LTS$"; then
+if cqfd bash ./whereami.sh 2>&1 | grep "^Ubuntu .* LTS$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -105,7 +104,7 @@ fi
 cp -f .cqfdrc .cqfdrc.orig
 echo "files=\"shell\"" >>.cqfdrc
 jtest_prepare "cqfd shell should release"
-if "$cqfd" --release shell -c "touch shell" && tar tf cqfd-test.tar.xz | grep "^shell$"; then
+if cqfd --release shell -c "touch shell" && tar tf cqfd-test.tar.xz | grep "^shell$"; then
 	jtest_result pass
 else
 	jtest_result fail

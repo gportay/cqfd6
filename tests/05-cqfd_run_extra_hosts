@@ -3,13 +3,12 @@
 # validate the behavior of run command with extra hosts in run environment variable
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 getent_cmd="getent hosts 1.2.3.4"
 
 cd "$TDIR/" || exit 1
 
 jtest_prepare "run cqfd without extra hosts"
-if ! output="$("$cqfd" run "$getent_cmd")" && [ "$output" = "" ]; then
+if ! output="$(cqfd run "$getent_cmd")" && [ "$output" = "" ]; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -17,7 +16,7 @@ fi
 
 jtest_prepare "run cqfd with extra hosts"
 if output="$(CQFD_EXTRA_RUN_ARGS="--add-host testhost:1.2.3.4" \
-          "$cqfd" run "$getent_cmd")" && \
+          cqfd run "$getent_cmd")" && \
    [[ "$output" == *"1.2.3.4"*"testhost"* ]]; then
 	jtest_result pass
 else
@@ -28,7 +27,7 @@ jtest_prepare "run cqfd with docker_run_args in config"
 # setup -- add the docker_run_args option to config
 sed '/\[build\]/adocker_run_args="--add-host testhost:1.2.3.4"'\
     -i "$TDIR/.cqfdrc"
-if output="$("$cqfd" run "$getent_cmd")" && \
+if output="$(cqfd run "$getent_cmd")" && \
    [[ "$output" == *"1.2.3.4"*"testhost"* ]]; then
 	jtest_result pass
 else

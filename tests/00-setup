@@ -3,11 +3,6 @@
 # validate the behavior with skelton bring up
 
 . "$(dirname "$0")/jtest.inc" "$1"
-mkdir -p "$TDIR/.local/bin"
-cp -a ../cqfd "$TDIR/.local/bin/cqfd$CQFD_COMPAT"
-ln -sf "cqfd$CQFD_COMPAT" "$TDIR/.local/bin/cqfd"
-cp -a test_data/. "$TDIR/."
-cqfd="$TDIR/.local/bin/cqfd"
 
 cd "$TDIR/" || exit 1
 
@@ -15,7 +10,7 @@ cd "$TDIR/" || exit 1
 # running 'cqfd init' without a proper config directory should fail
 ################################################################################
 jtest_prepare "cqfd init complains without an .cqfd directory"
-if ! "$cqfd" init; then
+if ! cqfd init; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -30,7 +25,7 @@ mv cqfd .cqfd
 # running 'cqfd ls' without a proper config file should fail
 ################################################################################
 jtest_prepare "cqfd ls complains without an .cqfdrc file"
-if ! "$cqfd" ls; then
+if ! cqfd ls; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -40,7 +35,7 @@ fi
 # running 'cqfd gc' without a proper config file should fail
 ################################################################################
 jtest_prepare "cqfd gc complains without an .cqfdrc file"
-if ! "$cqfd" gc; then
+if ! cqfd gc; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -50,7 +45,7 @@ fi
 # running 'cqfd init' should fail, as there's no proper config file
 ################################################################################
 jtest_prepare "create a test skeleton in temporary directory"
-if ! "$cqfd" init; then
+if ! cqfd init; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -61,7 +56,7 @@ fi
 ################################################################################
 jtest_prepare "cqfd init complains with an empty .cqfdrc file"
 touch "$TDIR/.cqfdrc"
-if ! "$cqfd" init; then
+if ! cqfd init; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -72,7 +67,7 @@ fi
 ################################################################################
 jtest_prepare "cqfd init complains with an incomplete .cqfdrc file"
 echo '[project]' >"$TDIR/.cqfdrc"
-if ! "$cqfd" init; then
+if ! cqfd init; then
 	jtest_result pass
 else
 	jtest_result fail

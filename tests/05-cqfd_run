@@ -3,7 +3,6 @@
 # validate the behavior of run command
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 test_file="a/cqfd_a.txt"
 
 cd "$TDIR/" || exit 1
@@ -20,10 +19,10 @@ for i in 0 1; do
 
 	if [ "$i" = "1" ]; then
 		jtest_prepare "running \"cqfd run\" makes it run"
-		"$cqfd" run
+		cqfd run
 	else
 		jtest_prepare "running \"cqfd\" with no argument makes it run"
-		"$cqfd"
+		cqfd
 	fi
 
 	# at the end of either test, $test_file is populated
@@ -46,7 +45,7 @@ done
 jtest_prepare "Modifying the Dockerfile should require running 'cqfd init' again"
 dockerfile=.cqfd/docker/Dockerfile
 echo "RUN echo $RANDOM" >>"$dockerfile"
-if ! "$cqfd" run; then
+if ! cqfd run; then
 	jtest_result pass
 else
 	jtest_result fail

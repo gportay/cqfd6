@@ -5,7 +5,6 @@
 set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 read -r -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
 if [ "$CQFD_RUN_WITH_SUDO" = true ]; then
 	cqfd_docker=(sudo "${cqfd_docker[@]}")
@@ -17,7 +16,7 @@ jtest_prepare "cqfd run execute as the host user with the cqfd docker's group"
 if [ "${cqfd_docker[-1]}" != "docker" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
 else
-	if CQFD_BIND_DOCKER_SOCK=true "$cqfd" run "id -Gn" | grep -w cqfd; then
+	if CQFD_BIND_DOCKER_SOCK=true cqfd run "id -Gn" | grep -w cqfd; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -33,7 +32,7 @@ else
 	cp -f .cqfd/docker/Dockerfile.doutofd .cqfd/docker/Dockerfile
 	sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='docker run --rm ubuntu:24.04 cat /etc/os-release'," .cqfdrc
 
-	if "$cqfd" init && CQFD_BIND_DOCKER_SOCK=true "$cqfd" | grep -E "^PRETTY_NAME=\"Ubuntu 24.04(.[[:digit:]]+)? LTS\"$"; then
+	if cqfd init && CQFD_BIND_DOCKER_SOCK=true cqfd | grep -E "^PRETTY_NAME=\"Ubuntu 24.04(.[[:digit:]]+)? LTS\"$"; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -43,7 +42,7 @@ else
 	mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 	# restore container
-	if ! "$cqfd" init; then
+	if ! cqfd init; then
 		jtest_log error "restore container failed"
 	fi
 fi

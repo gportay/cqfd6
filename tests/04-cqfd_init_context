@@ -3,7 +3,6 @@
 # validate the behavior of project.build_context
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 
 cd "$TDIR/" || exit 1
 
@@ -11,8 +10,8 @@ cd "$TDIR/" || exit 1
 # 'cqfd init' without context should fail the context
 ################################################################################
 jtest_prepare "cqfd init without using build_context"
-if "$cqfd" init && \
-   "$cqfd" run "! test -e /tmp/cqfdrc-build_context"; then
+if cqfd init && \
+   cqfd run "! test -e /tmp/cqfdrc-build_context"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -29,8 +28,8 @@ cp -f cqfdrc-build_context .cqfdrc
 # 'cqfd init' with context changes the context
 ################################################################################
 jtest_prepare "cqfd init using build_context"
-if "$cqfd" init && \
-   "$cqfd" run "test -e /tmp/cqfdrc-build_context"; then
+if cqfd init && \
+   cqfd run "test -e /tmp/cqfdrc-build_context"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -45,6 +44,6 @@ mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 ################################################################################
 # restore container
 ################################################################################
-if ! "$cqfd" init; then
+if ! cqfd init; then
 	jtest_log error "restore container failed"
 fi

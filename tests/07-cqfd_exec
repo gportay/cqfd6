@@ -5,26 +5,25 @@
 set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 
 cd "$TDIR/" || exit 1
 
 jtest_prepare "cqfd exec with no argument should fail"
-if ! "$cqfd" exec; then
+if ! cqfd exec; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "cqfd exec with argument should succeed"
-if "$cqfd" exec true; then
+if cqfd exec true; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "cqfd exec should return same status"
-if "$cqfd" exec exit 10;
+if cqfd exec exit 10;
    test "$?" -eq 10; then
 	jtest_result pass
 else
@@ -33,7 +32,7 @@ fi
 
 jtest_prepare "cqfd exec should preserve the arguments"
 # shellcheck disable=SC2016
-if "$cqfd" exec /bin/sh -c 'printf "0=$0,*=$*,#=$#"' zero one two three \
+if cqfd exec /bin/sh -c 'printf "0=$0,*=$*,#=$#"' zero one two three \
        | grep "^0=zero,\*=one two three,#=3$"; then
 	jtest_result pass
 else
@@ -43,7 +42,7 @@ fi
 cp -f .cqfdrc .cqfdrc.orig
 echo "files=\"exec\"" >>.cqfdrc
 jtest_prepare "cqfd exec should release"
-if "$cqfd" --release exec touch exec && tar tf cqfd-test.tar.xz | grep "^exec$"; then
+if cqfd --release exec touch exec && tar tf cqfd-test.tar.xz | grep "^exec$"; then
 	jtest_result pass
 else
 	jtest_result fail

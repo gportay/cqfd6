@@ -3,7 +3,6 @@
 # validate the behavior of dockerfile
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 
 cd "$TDIR/" || exit 1
 
@@ -13,8 +12,8 @@ mv -f .cqfdrc .cqfdrc.orig
 jtest_prepare "cqfd with Dockerfile in project directory set in dockerfile should pass"
 echo "FROM ubuntu:16.04" >Dockerfile
 sed '/\[build\]/adockerfile="Dockerfile"' .cqfdrc.orig >.cqfdrc
-if "$cqfd" init && \
-   "$cqfd" run "grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
+if cqfd init && \
+   cqfd run "grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -22,7 +21,7 @@ fi
 
 jtest_prepare "cqfd from a subdirectory with Dockerfile in project directory set in dockerfile should pass"
 mkdir -p subdir
-if "$cqfd" -C subdir run "grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
+if cqfd -C subdir run "grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -32,15 +31,15 @@ jtest_prepare "cqfd with Dockerfile in a subdirectory of the project directory s
 mkdir -p support/docker
 mv Dockerfile support/docker/Dockerfile
 sed '/\[build\]/adockerfile="support/docker/Dockerfile"' .cqfdrc.orig >.cqfdrc
-if "$cqfd" init && \
-   "$cqfd" run "grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
+if cqfd init && \
+   cqfd run "grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "cqfd from a subdirectory with Dockerfile in a subdirectory of the project directory set in dockerfile should pass"
-if "$cqfd" -C subdir run "grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
+if cqfd -C subdir run "grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -52,8 +51,8 @@ cp -f .cqfdrc.orig .cqfdrc
 jtest_prepare "cqfd with Containerfile in project directory set in dockerfile should pass"
 echo "FROM ubuntu:16.04" >.cqfd/docker/Containerfile
 sed '/\[build\]/adockerfile=".cqfd/docker/Containerfile"' -i .cqfdrc
-if "$cqfd" init && \
-   "$cqfd" run "grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
+if cqfd init && \
+   cqfd run "grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -62,8 +61,8 @@ fi
 jtest_prepare "cqfd with Containerfile in project directory set in dockerfile and context set in build_context should pass"
 echo "ADD ./cqfdrc-build_context /tmp/" >>.cqfd/docker/Containerfile
 sed '/\[project\]/abuild_context="."' -i .cqfdrc
-if "$cqfd" init && \
-   "$cqfd" run "test -e /tmp/cqfdrc-build_context && grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
+if cqfd init && \
+   cqfd run "test -e /tmp/cqfdrc-build_context && grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -76,6 +75,6 @@ mv -f .cqfdrc.orig .cqfdrc
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 # restore container
-if ! "$cqfd" init; then
+if ! cqfd init; then
 	jtest_log error "restore container failed"
 fi

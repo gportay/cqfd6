@@ -5,7 +5,6 @@
 set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 read -r -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
 if [ "$CQFD_RUN_WITH_SUDO" = true ]; then
 	cqfd_docker=(sudo "${cqfd_docker[@]}")
@@ -28,7 +27,7 @@ if "${cqfd_docker[@]}" inspect "$image" &>/dev/null; then
 fi
 
 jtest_prepare "cqfd init pulls image $image from registry"
-if "$cqfd" init && \
+if cqfd init && \
    "${cqfd_docker[@]}" inspect "$image" &>/dev/null; then
 	jtest_result pass
 else
@@ -36,14 +35,14 @@ else
 fi
 
 jtest_prepare "cqfd runs pulled image $image from registry"
-if "$cqfd" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
+if cqfd | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "cqfd init with CQFD_EXTRA_PULL_ARGS"
-if CQFD_EXTRA_BUILD_ARGS="--disable-content-trust=false" "$cqfd" init; then
+if CQFD_EXTRA_BUILD_ARGS="--disable-content-trust=false" cqfd init; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -51,7 +50,7 @@ fi
 
 jtest_prepare "run cqfd with docker_pull_args in config"
 sed '/\[build\]/adocker_build_args="--disable-content-trust=false"' -i .cqfdrc
-if "$cqfd" init; then
+if cqfd init; then
 	jtest_result pass
 else
 	jtest_result fail

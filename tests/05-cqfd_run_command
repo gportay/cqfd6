@@ -5,7 +5,6 @@
 set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"
-cqfd="$TDIR/.local/bin/cqfd"
 test_file="file.$RANDOM"
 
 cd "$TDIR/" || exit 1
@@ -26,10 +25,10 @@ for i in 0 1; do
 
 	if [ "$i" = "0" ]; then
 		jtest_prepare "cqfd run \"touch somefile\" creates the file"
-		"$cqfd" run "touch $test_file"
+		cqfd run "touch $test_file"
 	else
 		jtest_prepare "cqfd run touch somefile (no quotes) creates the file"
-		"$cqfd" run touch "$test_file"
+		cqfd run touch "$test_file"
 	fi
 
 	# shellcheck disable=SC2181
@@ -44,7 +43,7 @@ done
 
 jtest_prepare "cqfd run with additional argument, do not preserve the arguments"
 # shellcheck disable=SC2016
-if "$cqfd" run /bin/sh -c 'printf "0=$0,*=$*,#=$#"' zero one two three \
+if cqfd run /bin/sh -c 'printf "0=$0,*=$*,#=$#"' zero one two three \
        | grep "^0=sh,\*=,#=0$"; \
    test "${PIPESTATUS[0]}" -eq 2; then
 	jtest_result pass
