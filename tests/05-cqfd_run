@@ -2,10 +2,6 @@
 #
 # validate the behavior of run command
 
-. "$(dirname "$0")/jtest.inc" "$1"
-
-cd "$TDIR/" || exit 1
-
 jtest_prepare "run cqfd run with run without arguments should pass"
 # shellcheck disable=SC2181
 if cqfd run && test -e a/cqfd_a.txt; then

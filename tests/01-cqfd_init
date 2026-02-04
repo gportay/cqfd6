@@ -4,10 +4,6 @@
 
 set -o pipefail
 
-. "$(dirname "$0")/jtest.inc" "$1"
-
-cd "$TDIR/" || exit 1
-
 jtest_prepare "run cqfd --init with a .cqfdrc file should pass"
 if cqfd --init; then
 	jtest_result pass

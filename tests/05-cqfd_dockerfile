@@ -2,10 +2,6 @@
 #
 # validate the behavior of dockerfile
 
-. "$(dirname "$0")/jtest.inc" "$1"
-
-cd "$TDIR/" || exit 1
-
 # backup Dockerfile and .cqfdrc
 mv .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 mv .cqfdrc .cqfdrc.orig

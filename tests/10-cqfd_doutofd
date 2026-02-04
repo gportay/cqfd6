@@ -4,13 +4,10 @@
 
 set -o pipefail
 
-. "$(dirname "$0")/jtest.inc" "$1"
 read -r -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
 if [ "$CQFD_RUN_WITH_SUDO" = true ]; then
 	cqfd_docker=(sudo "${cqfd_docker[@]}")
 fi
-
-cd "$TDIR/" || exit 1
 
 jtest_prepare "run cqfd should execute as the host user with the cqfd docker group"
 if [ "${cqfd_docker[-1]}" != "docker" ] || ! getent group docker | grep -q "$USER"; then

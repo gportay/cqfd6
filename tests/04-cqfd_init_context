@@ -2,10 +2,6 @@
 #
 # validate the behavior of project.build_context
 
-. "$(dirname "$0")/jtest.inc" "$1"
-
-cd "$TDIR/" || exit 1
-
 # backup .cqfdrc
 mv .cqfdrc .cqfdrc.orig
 

@@ -30,7 +30,7 @@ tests:
 	cp -a test_data/. "$(TDIR)/."; \
 	for f in [0-9][0-9]*; do \
 		if [ -x "$$f" ]; then \
-			./$$f $(TDIR); \
+			bash -c "cd $(TDIR) && . $(CURDIR)/jtest.inc $(TDIR) && . $(CURDIR)/$$f"; \
 		fi; \
 	done; \
 	failed=0; \
