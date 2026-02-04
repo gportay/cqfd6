@@ -32,7 +32,7 @@ fi
 # 'cqfd gc' should collects the build containers
 ################################################################################
 jtest_prepare "cqfd gc collects all unused build containers"
-if CQFD_PROMPT=yes "$cqfd" gc && ( ! "$cqfd" ls | grep -E "^cqfd-.+[[:blank:]]+(Deleted|Outdated)[[:blank:]][[:alnum:]/.-]$" && \
+if CQFD_PROMPT=yes "$cqfd" gc && ( ! "$cqfd" ls | grep -E "^cqfd-.+[[:blank:]]+(Deleted|Outdated)[[:blank:]][[:alnum:]/.-]+$" && \
 	           test "${PIPESTATUS[0]}" -eq 0 -a "${PIPESTATUS[1]}" -eq 1 ); then
 	jtest_result pass
 else
