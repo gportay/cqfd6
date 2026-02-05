@@ -929,6 +929,8 @@ fi
 
 # Drop the root privileges and run providing command, using sudo if it exists
 if [ -n "\$has_sudo" ]; then
+	umask=\$(umask)
+
 	# Set user read permission only
 	umask 0266
 
@@ -942,16 +944,24 @@ if [ -n "\$has_sudo" ]; then
 		echo "Defaults	secure_path=\"$build_path\"" >>/etc/sudoers.d/$cqfd_user
 	fi
 
+	umask "\$umask"
+	unset umask
+
 	debug "Using \"sudo\" to execute command sh -c \"\$1\" as user \"$cqfd_user\""
 	exec sudo -E -u $cqfd_user sh -c "\$1"
 fi
 
 # Set PATH using pam_env(8)
 if [ "$build_path" ]; then
+	umask=\$(umask)
+
 	# Set user read permission only
 	umask 0022
 
 	echo "PATH=\"$build_path\"" >>/etc/environment
+
+	umask "\$umask"
+	unset umask
 fi
 
 # Set PATH using login.defs(5)
