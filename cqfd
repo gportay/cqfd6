@@ -46,6 +46,11 @@ read -a cqfd_docker <<<"${CQFD_DOCKER:-docker}"
 cqfd_docker_gid="${CQFD_DOCKER_GID:-0}"
 cqfd_cachedir="${CQFD_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/cqfd}"
 
+## is_legacy_cqfd() - checks if older than cqfd6
+is_legacy() {
+	test "$COMPAT" -lt 6
+}
+
 ## usage() - print usage
 # stdout: the usage
 usage() {
@@ -121,7 +126,7 @@ warn_deprecated_command() {
 	# Deprecated command messages disabled explicitly or not supported
 	# before cqfd6 (not included)
 	if [ "$CQFD_NO_DEPRECATED_COMMAND_WARNING" = true ] || \
-	   [ "$COMPAT" -lt 6 ]; then
+	   is_legacy; then
 		return
 	fi
 
@@ -1236,6 +1241,11 @@ has_to_release=false
 while [ $# -gt 0 ]; do
 	case "$1" in
 	help|-h|--help)
+		# Not a legacy feature
+		if [[ ! "$1" =~ ^-- ]] && ! is_legacy; then
+			break
+		fi
+
 		# Shift command
 		cqfd_command="$1"
 		shift
@@ -1257,6 +1267,11 @@ while [ $# -gt 0 ]; do
 		exit
 		;;
 	version|-v|--version)
+		# Not a legacy feature
+		if [[ ! "$1" =~ ^-- ]] && ! is_legacy; then
+			break
+		fi
+
 		# Shift command
 		cqfd_command="$1"
 		shift
@@ -1289,6 +1304,11 @@ while [ $# -gt 0 ]; do
 		export BUILDKIT_PROGRESS=plain
 		;;
 	init|--init)
+		# Not a legacy feature
+		if [[ ! "$1" =~ ^-- ]] && ! is_legacy; then
+			break
+		fi
+
 		# Shift command
 		cqfd_command="$1"
 		shift
@@ -1313,6 +1333,11 @@ while [ $# -gt 0 ]; do
 		exit
 		;;
 	deinit|--deinit)
+		# Not a legacy feature
+		if [[ ! "$1" =~ ^-- ]] && ! is_legacy; then
+			break
+		fi
+
 		# Shift command
 		cqfd_command="$1"
 		shift
@@ -1337,6 +1362,11 @@ while [ $# -gt 0 ]; do
 		exit
 		;;
 	ls|--ls)
+		# Not a legacy feature
+		if [[ ! "$1" =~ ^-- ]] && ! is_legacy; then
+			break
+		fi
+
 		# Shift command
 		cqfd_command="$1"
 		shift
@@ -1361,6 +1391,11 @@ while [ $# -gt 0 ]; do
 		exit
 		;;
 	gc|--gc)
+		# Not a legacy feature
+		if [[ ! "$1" =~ ^-- ]] && ! is_legacy; then
+			break
+		fi
+
 		# Shift command
 		cqfd_command="$1"
 		shift
@@ -1385,6 +1420,11 @@ while [ $# -gt 0 ]; do
 		exit
 		;;
 	flavors|--flavors)
+		# Not a legacy feature
+		if [[ ! "$1" =~ ^-- ]] && ! is_legacy; then
+			break
+		fi
+
 		# Shift command
 		cqfd_command="$1"
 		shift
@@ -1443,6 +1483,11 @@ while [ $# -gt 0 ]; do
 		CQFD_PLATFORM="$1"
 		;;
 	exec|--exec)
+		# Not a legacy feature
+		if ! is_legacy; then
+			break
+		fi
+
 		# Shift command
 		cqfd_command="$1"
 		shift
@@ -1466,6 +1511,11 @@ while [ $# -gt 0 ]; do
 		break
 		;;
 	run|--run|release)
+		# Not a legacy feature
+		if ! is_legacy; then
+			break
+		fi
+
 		# Shift command
 		cqfd_command="$1"
 		shift
@@ -1561,6 +1611,11 @@ while [ $# -gt 0 ]; do
 		break
 		;;
 	shell|--shell)
+		# Not a legacy feature
+		if ! is_legacy; then
+			break
+		fi
+
 		# Shift command
 		cqfd_command="$1"
 		shift
@@ -1597,20 +1652,14 @@ while [ $# -gt 0 ]; do
 		die "$1: Invalid option!"
 		;;
 	*)
-		# Commands are supported up to cqfd6 (not included)
-		if [ "$COMPAT" -lt 6 ]; then
-			usage
-			die "$1: Invalid command!"
+		# Not a legacy feature
+		if ! is_legacy; then
+			break
 		fi
 
-		# Set command
-		cqfd_command="$1"
-
-		# Setup build
-		load_config "$flavor"
-
-		# Run alternate command
-		build_command="${*@Q}"
+		# Commands are supported up to cqfd6 (not included)
+		usage
+		die "$1: Invalid command!"
 		break
 		;;
 	esac
@@ -1621,6 +1670,12 @@ done
 if [ -z "$cqfd_command" ]; then
 	# Setup build
 	load_config "$flavor"
+
+	# Not a legacy feature
+	if ! is_legacy; then
+		# Run alternate command
+		build_command="${*@Q}"
+	fi
 
 	# Check for [build] command property is set and not empty
 	if [ -z "$build_command" ]; then
