@@ -929,23 +929,26 @@ fi
 
 # Drop the root privileges and run providing command, using sudo if it exists
 if [ -n "\$has_sudo" ]; then
-	umask=\$(umask)
+	# Create sudoers(5) file
+	if [ "$CQFD_SUDO_NOPASSWD" = true ] || [ "$build_path" ]; then
+		# Set user read permission only
+		umask=\$(umask)
+		umask 0266
 
-	# Set user read permission only
-	umask 0266
-
-	if [ "$CQFD_SUDO_NOPASSWD" = true ]; then
 		# Disable password authentication using sudoers(5)
-		echo "$cqfd_user ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers.d/$cqfd_user
-	fi
+		if [ "$CQFD_SUDO_NOPASSWD" = true ]; then
+			echo "$cqfd_user ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers.d/$cqfd_user
+		fi
 
-	# Set PATH using sudoers(5)
-	if [ "$build_path" ]; then
-		echo "Defaults	secure_path=\"$build_path\"" >>/etc/sudoers.d/$cqfd_user
-	fi
+		# Set PATH using sudoers(5)
+		if [ "$build_path" ]; then
+			echo "Defaults	secure_path=\"$build_path\"" >>/etc/sudoers.d/$cqfd_user
+		fi
 
-	umask "\$umask"
-	unset umask
+		# Restore umask
+		umask "\$umask"
+		unset umask
+	fi
 
 	debug "Using \"sudo\" to execute command sh -c \"\$1\" as user \"$cqfd_user\""
 	exec sudo -E -u $cqfd_user sh -c "\$1"
@@ -953,13 +956,13 @@ fi
 
 # Set PATH using pam_env(8)
 if [ "$build_path" ]; then
+	# Set user read and write permissions only
 	umask=\$(umask)
-
-	# Set user read permission only
 	umask 0022
 
 	echo "PATH=\"$build_path\"" >>/etc/environment
 
+	# Restore umask
 	umask "\$umask"
 	unset umask
 fi

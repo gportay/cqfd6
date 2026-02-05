@@ -177,6 +177,22 @@ else
 fi
 
 ################################################################################
+# cqfd run should preserve umask no matter what CQFD_SUDO_NOPASSWD value.
+################################################################################
+jtest_prepare "cqfd run using sudo preserves umask"
+if [ "${cqfd_docker[-1]}" = "podman" ]; then
+	jtest_result skip
+else
+	if umask="$(cqfd run "umask")" && \
+	   umask_nopasswd="$(CQFD_SUDO_NOPASSWD=true cqfd run "umask")" && \
+	   [ "$umask" = "$umask_nopasswd" ]; then
+		jtest_result pass
+	else
+		jtest_result fail
+	fi
+fi
+
+################################################################################
 # restore initial Dockerfile
 ################################################################################
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
