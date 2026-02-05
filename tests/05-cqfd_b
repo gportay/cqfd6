@@ -4,11 +4,11 @@
 
 set -o pipefail
 
-# backup .cqfdrc
-mv .cqfdrc .cqfdrc.orig
+# backup Cqfdfile
+mv Cqfdfile Cqfdfile.orig
 
-sed -e "/\[foo\]/,/^$/s,^command=.*$,command='grep ^NAME /etc/os-release'," .cqfdrc.orig >.cqfdrc
-sed -e "s/\[foo\]/[foo]\ndistro='fedora'/" -i .cqfdrc
+sed -e "/\[foo\]/,/^$/s,^command=.*$,command='grep ^NAME /etc/os-release'," Cqfdfile.orig >Cqfdfile
+sed -e "s/\[foo\]/[foo]\ndistro='fedora'/" -i Cqfdfile
 
 jtest_prepare "run cqfd with build flavor should pass"
 if cqfd -b foo | grep "^NAME=\"Fedora Linux\"$"; then
@@ -32,15 +32,15 @@ else
 fi
 
 jtest_prepare "run cqfd --flavors with flavors should list flavors set in flavors"
-sed -e "/\[project\]/aflavors='bar'" -i .cqfdrc
+sed -e "/\[project\]/aflavors='bar'" -i Cqfdfile
 if cqfd --flavors | grep "^bar$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-# restore .cqfdrc
-mv .cqfdrc.orig .cqfdrc
+# restore Cqfdfile
+mv Cqfdfile.orig Cqfdfile
 
 # restore container
 if ! cqfd init; then

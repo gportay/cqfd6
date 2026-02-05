@@ -38,7 +38,7 @@ system, e.g. building an old embedded firmware that only works in an older
 Linux distribution.
 
 By default, the _--run_ command is assumed, with the default command string
-configured in your _.cqfdrc_ (see build.command).
+configured in your _Cqfdfile_ (see build.command).
 If a program is given instead of a command, the _--exec_ command is assumed.
 
 == COMMANDS
@@ -78,8 +78,9 @@ If a program is given instead of a command, the _--exec_ command is assumed.
 *--platform TARGET*::
 	Set target platform.
 
-*-f* or *--cqfdrc-file FILE*::
-	Use file as config file (default _.cqfdrc_).
+*-f* or *--cqfdfile FILE*::
+	Use file as config file (default _Cqfdfile_).
+	_--cqfdrc-file_ is a *deprecated* alias.
 
 *-d* or *--cqfd-directory DIR*::
 	Use directory as cqfd directory (default _.cqfd_).
@@ -118,8 +119,8 @@ If a program is given instead of a command, the _--exec_ command is assumed.
 *CQFD_DIR*::
 	Directory used as cqfd directory (default _.cqfd_).
 
-*CQFDRC_FILE*::
-	File used as config file (default _.cqfdrc_).
+*CQFDFILE*::
+	File used as config file (default _Cqfdfile_).
 
 *CQFD_DOCKER*::
 	Program used to invoke the _docker_ client.
@@ -190,8 +191,8 @@ If a program is given instead of a command, the _--exec_ command is assumed.
 
 == FILES
 
-*.cqfdrc*::
-	Project information config file (see *cqfdrc(5)*).
+*Cqfdfile*::
+	Project information config file (see *Cqfdfile(5)*).
 
 *.cqfd*::
 	Project data directory.
@@ -226,4 +227,4 @@ SIX stands for *Sudo Interface eXperimentation*.
 
 == SEE ALSO
 
-*docker-build(1)*, *docker-run(1)*, *Dockerfile(5)*, *cqfdrc6(5)*
+*docker-build(1)*, *docker-run(1)*, *Dockerfile(5)*, *Cqfdfile6(5)*

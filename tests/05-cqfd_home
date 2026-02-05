@@ -9,11 +9,11 @@ if [ "$CQFD_RUN_WITH_SUDO" = true ]; then
 	cqfd_docker=(sudo "${cqfd_docker[@]}")
 fi
 
-# backup .cqfdrc
-mv .cqfdrc .cqfdrc.orig
+# backup Cqfdfile
+mv Cqfdfile Cqfdfile.orig
 
 jtest_prepare "run cqfd should set user's HOME environment variable"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo \$HOME'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo \$HOME'," Cqfdfile.orig >Cqfdfile
 # shellcheck disable=SC2016
 if cqfd | grep "^$HOME$"; then
 	jtest_result pass
@@ -24,7 +24,7 @@ fi
 jtest_prepare "run cqfd with --env in CQFD_EXTRA_RUN_ARGS including HOME should set overriden HOME environment variable"
 val1="value-$RANDOM"
 val2="value-$RANDOM"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo -n \$FOO \$HOME'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo -n \$FOO \$HOME'," Cqfdfile.orig >Cqfdfile
 # shellcheck disable=SC2016
 if env CQFD_EXTRA_RUN_ARGS="-e FOO=$val1 -e HOME=$val2" cqfd | grep "^$val1 $val2$"; then
 	jtest_result pass
@@ -34,7 +34,7 @@ fi
 
 jtest_prepare "run cqfd with --env HOME in CQFD_EXTRA_RUN_ARGS should set overriden HOME environment variable"
 val1="value-$RANDOM"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo \$HOME'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo \$HOME'," Cqfdfile.orig >Cqfdfile
 # shellcheck disable=SC2016
 if env CQFD_EXTRA_RUN_ARGS="-e HOME=$val1" cqfd | grep "^$val1$"; then
 	jtest_result pass
@@ -45,7 +45,7 @@ fi
 jtest_prepare "run cqfd with --env in CQFD_EXTRA_RUN_ARGS including JAVA_HOME and HOME should set overriden HOME environment variable"
 val1="value-$RANDOM"
 val2="value-$RANDOM"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo -n \$JAVA_HOME \$HOME'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo -n \$JAVA_HOME \$HOME'," Cqfdfile.orig >Cqfdfile
 # shellcheck disable=SC2016
 if env CQFD_EXTRA_RUN_ARGS="-e JAVA_HOME=$val1 -e HOME=$val2" cqfd | grep "^$val1 $val2$"; then
 	jtest_result pass
@@ -54,7 +54,7 @@ else
 fi
 
 jtest_prepare "run cqfd should set home directory to passwd file"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='grep -E \"^$USER:x:[[:digit:]]+:[[:digit:]]+:.*:\$HOME:/bin/sh$\" /etc/passwd'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='grep -E \"^$USER:x:[[:digit:]]+:[[:digit:]]+:.*:\$HOME:/bin/sh$\" /etc/passwd'," Cqfdfile.orig >Cqfdfile
 if [ "${cqfd_docker[0]}" = "sudo" ] || [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -68,8 +68,8 @@ fi
 jtest_prepare "run cqfd with --env in docker_run_args including HOME should set overriden HOME environment variable"
 val1="value-$RANDOM"
 val2="value-$RANDOM"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo -n \$FOO \$HOME'," .cqfdrc.orig >.cqfdrc
-sed -e "/\[build\]/adocker_run_args=\"--env FOO=$val1 --env HOME=$val2\"" -i .cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo -n \$FOO \$HOME'," Cqfdfile.orig >Cqfdfile
+sed -e "/\[build\]/adocker_run_args=\"--env FOO=$val1 --env HOME=$val2\"" -i Cqfdfile
 EOF
 # shellcheck disable=SC2016
 if cqfd | grep "^$val1 $val2$"; then
@@ -80,8 +80,8 @@ fi
 
 jtest_prepare "run cqfd with --env HOME in docker_run_args should set overriden HOME environment variable"
 val1="value-$RANDOM"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo \$HOME'," .cqfdrc.orig >.cqfdrc
-sed -e "/\[build\]/adocker_run_args=\"--env HOME=$val1\"" -i .cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo \$HOME'," Cqfdfile.orig >Cqfdfile
+sed -e "/\[build\]/adocker_run_args=\"--env HOME=$val1\"" -i Cqfdfile
 # shellcheck disable=SC2016
 if cqfd | grep "^$val1$"; then
 	jtest_result pass
@@ -92,8 +92,8 @@ fi
 jtest_prepare "run cqfd with --env in docker_run_args including JAVA_HOME and HOME should set overriden HOME environment variable"
 val1="value-$RANDOM"
 val2="value-$RANDOM"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo -n \$JAVA_HOME \$HOME'," .cqfdrc.orig >.cqfdrc
-sed -e "/\[build\]/adocker_run_args=\"--env JAVA_HOME=$val1 --env HOME=$val2\"" -i .cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo -n \$JAVA_HOME \$HOME'," Cqfdfile.orig >Cqfdfile
+sed -e "/\[build\]/adocker_run_args=\"--env JAVA_HOME=$val1 --env HOME=$val2\"" -i Cqfdfile
 # shellcheck disable=SC2016
 if cqfd | grep "^$val1 $val2$"; then
 	jtest_result pass
@@ -101,5 +101,5 @@ else
 	jtest_result fail
 fi
 
-# restore .cqfdrc
-mv .cqfdrc.orig .cqfdrc
+# restore Cqfdfile
+mv Cqfdfile.orig Cqfdfile

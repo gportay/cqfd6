@@ -13,30 +13,30 @@ jtest_prepare "run cqfd should execute as the host user with the cqfd docker gro
 if [ "${cqfd_docker[-1]}" != "docker" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
 else
-	# backup .cqfdrc
-	mv .cqfdrc .cqfdrc.orig
+	# backup Cqfdfile
+	mv Cqfdfile Cqfdfile.orig
 
-	sed -e "/\[build\]/,/^$/s,^command=.*$,command='id -Gn'," .cqfdrc.orig >.cqfdrc
+	sed -e "/\[build\]/,/^$/s,^command=.*$,command='id -Gn'," Cqfdfile.orig >Cqfdfile
 	if env CQFD_BIND_DOCKER_SOCK=true cqfd | grep -w cqfd; then
 		jtest_result pass
 	else
 		jtest_result fail
 	fi
 
-	# restore .cqfdrc
-	mv .cqfdrc.orig .cqfdrc
+	# restore Cqfdfile
+	mv Cqfdfile.orig Cqfdfile
 fi
 
 if [ "${cqfd_docker[-1]}" != "docker" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
 else
-	# backup Dockerfile and .cqfdrc
+	# backup Dockerfile and Cqfdfile
 	mv .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
-	mv .cqfdrc .cqfdrc.orig
+	mv Cqfdfile Cqfdfile.orig
 
 	jtest_prepare "run cqfd with CQFD_BIND_DOCKER_SOCK should run docker using host docker daemon"
 	cp .cqfd/docker/Dockerfile.doutofd .cqfd/docker/Dockerfile
-	sed -e "/\[build\]/,/^$/s,^command=.*$,command='docker run --rm ubuntu:24.04 cat /etc/os-release'," .cqfdrc.orig >.cqfdrc
+	sed -e "/\[build\]/,/^$/s,^command=.*$,command='docker run --rm ubuntu:24.04 cat /etc/os-release'," Cqfdfile.orig >Cqfdfile
 	if env CQFD_BIND_DOCKER_SOCK=true cqfd --reinit | grep -E "^PRETTY_NAME=\"Ubuntu 24.04(.[[:digit:]]+)? LTS\"$"; then
 		jtest_result pass
 	else
@@ -44,15 +44,15 @@ else
 	fi
 
 	jtest_prepare "run cqfd with bind_docker_sock should run docker using host docker daemon"
-	sed -e "/\[build\]/abind_docker_sock='true'" -i .cqfdrc
+	sed -e "/\[build\]/abind_docker_sock='true'" -i Cqfdfile
 	if cqfd --reinit | grep -E "^PRETTY_NAME=\"Ubuntu 24.04(.[[:digit:]]+)? LTS\"$"; then
 		jtest_result pass
 	else
 		jtest_result fail
 	fi
 
-	# restore .cqfdrc and Dockerfile
-	mv .cqfdrc.orig .cqfdrc
+	# restore Cqfdfile and Dockerfile
+	mv Cqfdfile.orig Cqfdfile
 	mv .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 	# restore container

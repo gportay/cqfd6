@@ -9,15 +9,15 @@ if [ "$CQFD_RUN_WITH_SUDO" = true ]; then
 	cqfd_docker=(sudo "${cqfd_docker[@]}")
 fi
 
-# backup Dockerfile and .cqfdrc
+# backup Dockerfile and Cqfdfile
 mv .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
-mv .cqfdrc .cqfdrc.orig
+mv Cqfdfile Cqfdfile.orig
 
 cp .cqfd/docker/Dockerfile.init_custom_image .cqfd/docker/Dockerfile
-cp cqfdrc-custom_image .cqfdrc
+cp Cqfdfile-custom_image Cqfdfile
 
 custom_img_name="ubuntu:16.04"
-sed -e "s!^custom_img_name=.*\$!custom_img_name='$custom_img_name'!" -i .cqfdrc
+sed -e "s!^custom_img_name=.*\$!custom_img_name='$custom_img_name'!" -i Cqfdfile
 if "${cqfd_docker[@]}" inspect "$custom_img_name" &>/dev/null; then
 	jtest_log info "${cqfd_docker[-1]} registry contains image named: $custom_img_name, removing..."
 	if "${cqfd_docker[@]}" rmi "$custom_img_name"; then
@@ -33,7 +33,7 @@ else
 fi
 
 custom_img_name="cqfd_test_custom_image_$RANDOM$RANDOM"
-sed -e "s!^custom_img_name=.*\$!custom_img_name='$custom_img_name'!" -i .cqfdrc
+sed -e "s!^custom_img_name=.*\$!custom_img_name='$custom_img_name'!" -i Cqfdfile
 if "${cqfd_docker[@]}" inspect "$custom_img_name" &>/dev/null; then
 	jtest_log info "${cqfd_docker[-1]} registry contains image named: $custom_img_name, removing..."
 	if "${cqfd_docker[@]}" rmi "$custom_img_name"; then
@@ -67,8 +67,8 @@ if ! "${cqfd_docker[@]}" rmi "$custom_img_name"; then
 	jtest_log error "cleanup image failed"
 fi
 
-# restore .cqfdrc and Dockerfile
-mv .cqfdrc.orig .cqfdrc
+# restore Cqfdfile and Dockerfile
+mv Cqfdfile.orig Cqfdfile
 mv .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 # restore container

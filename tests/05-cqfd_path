@@ -9,12 +9,12 @@ if [ "$CQFD_RUN_WITH_SUDO" = true ]; then
 	cqfd_docker=(sudo "${cqfd_docker[@]}")
 fi
 
-# backup Dockerfile and .cqfdrc
+# backup Dockerfile and Cqfdfile
 mv .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
-mv .cqfdrc .cqfdrc.orig
+mv Cqfdfile Cqfdfile.orig
 
 jtest_prepare "run cqfd run with path and busybox su -c should set PATH"
-sed -e '/\[build\]/apath="/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin"' .cqfdrc.orig >.cqfdrc
+sed -e '/\[build\]/apath="/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin"' Cqfdfile.orig >Cqfdfile
 cat <<EOF >.cqfd/docker/Dockerfile
 FROM alpine:3.20
 RUN apk update && apk upgrade
@@ -34,7 +34,7 @@ jtest_prepare "run cqfd run with busybox su -c should preserve umask"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if umask="$(cqfd --cqfdrc-file .cqfdrc.orig run "umask")" && \
+	if umask="$(cqfd --cqfdfile Cqfdfile.orig run "umask")" && \
 	   umask_path="$(cqfd run "umask")" && \
 	   [ "$umask" = "$umask_path" ]; then
 		jtest_result pass
@@ -61,7 +61,7 @@ jtest_prepare "run cqfd run with su -c should preserve umask"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if umask="$(cqfd --cqfdrc-file .cqfdrc.orig run "sh -c umask")" && \
+	if umask="$(cqfd --cqfdfile Cqfdfile.orig run "sh -c umask")" && \
 	   umask_path="$(cqfd run "sh -c umask")" && \
 	   [ "$umask" = "$umask_path" ]; then
 		jtest_result pass
@@ -88,7 +88,7 @@ jtest_prepare "run cqfd run with su --session-command should preserve umask"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if umask="$(cqfd --cqfdrc-file .cqfdrc.orig run "umask")" && \
+	if umask="$(cqfd --cqfdfile Cqfdfile.orig run "umask")" && \
 	   umask_path="$(cqfd run "umask")" && \
 	   [ "$umask" = "$umask_path" ]; then
 		jtest_result pass
@@ -117,7 +117,7 @@ jtest_prepare "run cqfd run with sudo should preserve umask"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if umask="$(cqfd --cqfdrc-file .cqfdrc.orig run "umask")" && \
+	if umask="$(cqfd --cqfdfile Cqfdfile.orig run "umask")" && \
 	   umask_path="$(cqfd run "umask")" && \
 	   [ "$umask" = "$umask_path" ]; then
 		jtest_result pass
@@ -147,8 +147,8 @@ else
 	fi
 fi
 
-# restore .cqfdrc and Dockerfile
-mv .cqfdrc.orig .cqfdrc
+# restore Cqfdfile and Dockerfile
+mv Cqfdfile.orig Cqfdfile
 mv .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 # restore container
