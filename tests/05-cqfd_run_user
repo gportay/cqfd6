@@ -8,7 +8,7 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfdrc .cqfdrc.orig
+cp -f Cqfdfile Cqfdfile.orig
 cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 
 jtest_prepare "cqfd with running host ssh-agent should forward socket to container"
@@ -58,8 +58,8 @@ else
 	fi
 fi
 
-# restore .cqfdrc and Dockerfile
-mv -f .cqfdrc.orig .cqfdrc
+# restore Cqfdfile and Dockerfile
+mv -f Cqfdfile.orig Cqfdfile
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 # restore container

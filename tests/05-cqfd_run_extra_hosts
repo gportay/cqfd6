@@ -26,7 +26,7 @@ fi
 jtest_prepare "run cqfd with docker_run_args in config"
 # setup -- add the docker_run_args option to config
 sed '/\[build\]/adocker_run_args="--add-host testhost:1.2.3.4"'\
-    -i "$TDIR/.cqfdrc"
+    -i "$TDIR/Cqfdfile"
 if output="$(cqfd run "$getent_cmd")" && \
    [[ "$output" == *"1.2.3.4"*"testhost"* ]]; then
 	jtest_result pass
@@ -35,4 +35,4 @@ else
 fi
 
 # teardown -- clear the docker_run_args option from config
-sed '/\[build\]/{n;d}' -i "$TDIR/.cqfdrc"
+sed '/\[build\]/{n;d}' -i "$TDIR/Cqfdfile"

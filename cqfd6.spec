@@ -48,7 +48,7 @@ ln -sf ../../../../..%{_dockerlibdir}/cli-plugins/docker-cqfd "$_libdir/docker/c
 if [ $1 -eq 1 ]; then
     alternatives --install /usr/bin/cqfd cqfd /usr/bin/cqfd6 20
     alternatives --install /usr/share/man/man1/cqfd.1.gz cqfd.1.gz /usr/share/man/man1/cqfd6.1.gz 20
-    alternatives --install /usr/share/man/man5/cqfdrc.5.gz cqfdrc.5.gz /usr/share/man/man5/cqfdrc6.5.gz 20
+    alternatives --install /usr/share/man/man5/Cqfdfile.5.gz Cqfdfile.5.gz /usr/share/man/man5/Cqfdfile6.5.gz 20
 fi
 
 
@@ -56,7 +56,7 @@ fi
 _libdir=$(rpm --eval '%%{_libdir}')
 rm -f "$_libdir/docker/cli-plugins/docker-cqfd"
 if [ $1 -eq 0 ]; then
-    alternatives --remove cqfdrc.5.gz /usr/share/man/man5/cqfdrc6.5.gz
+    alternatives --remove Cqfdfile.5.gz /usr/share/man/man5/Cqfdfile6.5.gz
     alternatives --remove cqfd.1.gz /usr/share/man/man1/cqfd6.1.gz
     alternatives --remove cqfd /usr/bin/cqfd6
 fi
@@ -73,14 +73,14 @@ fi
 %{_bindir}/linux-ppc64le-cqfd6
 %{_bindir}/linux-riscv64-cqfd6
 %{_bindir}/linux-s390x-cqfd6
+%{_datadir}/%{name}/samples/Cqfdfile
+%{_datadir}/%{name}/samples/Cqfdfile.Yocto:scarthgap
+%{_datadir}/%{name}/samples/Cqfdfile.kas:4.5
 %{_datadir}/%{name}/samples/Dockerfile.Ubuntu:24.04
 %{_datadir}/%{name}/samples/Dockerfile.Yocto:scarthgap
-%{_datadir}/%{name}/samples/dot-cqfdrc
-%{_datadir}/%{name}/samples/dot-cqfdrc.Yocto:scarthgap
-%{_datadir}/%{name}/samples/dot-cqfdrc.kas:4.5
 %{_datadir}/bash-completion/completions/%{name}
 %{_datadir}/man/man1/cqfd6.1.gz
-%{_datadir}/man/man5/cqfdrc6.5.gz
+%{_datadir}/man/man5/Cqfdfile6.5.gz
 %{_dockerlibdir}/cli-plugins/docker-cqfd
 
 %changelog

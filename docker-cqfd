@@ -58,7 +58,7 @@ Options:
       --reinit                           Reinitialize build container.
       --release                          Release software.
       --platform string                  Set target platform.
-  -f, --cqfdrc-file string               Use file as config file (default .cqfdrc).
+  -f, --cqfd-file string                 Use file as config file (default Cqfdfile).
   -d, --cqfd-directory string            Use directory as cqfd directory (default .cqfd).
   -w, --working-directory string         Use directory as working directory (default parent of .cqfd).
   -C, --directory string                 Use the specified working directory.
@@ -80,7 +80,7 @@ Commands:
   --run [list]                           Run argument(s) inside build container.
   --shell [list]                         Run shell command inside build container.
 
-  By default, the 'run' command is assumed, with the default command string configured in your .cqfdrc (see build.command).
+  By default, the 'run' command is assumed, with the default command string configured in your Cqfdfile (see build.command).
 
 Command options for --run:
   -c string                              Append argument string to the default command string.

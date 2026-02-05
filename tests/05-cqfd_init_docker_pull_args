@@ -12,8 +12,8 @@ fi
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfdrc .cqfdrc.orig
-cp -f cqfdrc-image .cqfdrc
+cp -f Cqfdfile Cqfdfile.orig
+cp -f Cqfdfile-image Cqfdfile
 
 jtest_prepare "run cqfd init with CQFD_EXTRA_PULL_ARGS should pass"
 if CQFD_EXTRA_BUILD_ARGS="--disable-content-trust=false" cqfd init; then
@@ -23,15 +23,15 @@ else
 fi
 
 jtest_prepare "run cqfd with docker_pull_args should pass"
-sed '/\[build\]/adocker_build_args="--disable-content-trust=false"' -i .cqfdrc
+sed '/\[build\]/adocker_build_args="--disable-content-trust=false"' -i Cqfdfile
 if cqfd init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-# restore initial .cqfdrc and .cqfd
-mv -f .cqfdrc.orig .cqfdrc
+# restore initial Cqfdfile and .cqfd
+mv -f Cqfdfile.orig Cqfdfile
 
 # restore container
 if ! cqfd init; then

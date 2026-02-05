@@ -13,8 +13,8 @@ fi
 cd "$TDIR/" || exit 1
 
 mv -f .cqfd .cqfd.orig
-cp -f .cqfdrc .cqfdrc.orig
-cp -f cqfdrc-image .cqfdrc
+cp -f Cqfdfile Cqfdfile.orig
+cp -f Cqfdfile-image Cqfdfile
 
 image="ubuntu:16.04"
 if "${cqfd_docker[@]}" inspect "$image" &>/dev/null; then
@@ -39,8 +39,8 @@ else
 	jtest_result fail
 fi
 
-# restore initial .cqfdrc and .cqfd
-mv -f .cqfdrc.orig .cqfdrc
+# restore initial Cqfdfile and .cqfd
+mv -f Cqfdfile.orig Cqfdfile
 mv -f .cqfd.orig .cqfd
 
 # restore container

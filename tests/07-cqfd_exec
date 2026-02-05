@@ -8,7 +8,7 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfdrc .cqfdrc.orig
+cp -f Cqfdfile Cqfdfile.orig
 
 jtest_prepare "run cqfd exec without argument should fail"
 if ! cqfd exec; then
@@ -42,7 +42,7 @@ else
 fi
 
 jtest_prepare "run cqfd exec with option --release should generate cqfd-test.tar.xz tarball archive by default"
-echo "files=\"exec\"" >>.cqfdrc
+echo "files=\"exec\"" >>Cqfdfile
 if cqfd --release exec touch exec && tar tf cqfd-test.tar.xz | grep "^exec$"; then
 	jtest_result pass
 else
@@ -51,5 +51,5 @@ fi
 # cleanup
 rm -f cqfd-test.tar.xz exec
 
-# restore initial .cqfdrc
-mv -f .cqfdrc.orig .cqfdrc
+# restore initial Cqfdfile
+mv -f Cqfdfile.orig Cqfdfile

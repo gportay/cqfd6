@@ -8,10 +8,10 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfdrc .cqfdrc.orig
-sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='grep ^NAME /etc/os-release'," .cqfdrc
-sed -i -e "/\[foo\]/,/^$/s,^command=.*$,command='grep ^NAME /etc/os-release'," .cqfdrc
-sed -i -e "s/\[foo\]/[foo]\ndistro='centos'/" .cqfdrc
+cp -f Cqfdfile Cqfdfile.orig
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='grep ^NAME /etc/os-release'," Cqfdfile
+sed -i -e "/\[foo\]/,/^$/s,^command=.*$,command='grep ^NAME /etc/os-release'," Cqfdfile
+sed -i -e "s/\[foo\]/[foo]\ndistro='centos'/" Cqfdfile
 
 jtest_prepare "run cqfd init with build flavor should pass"
 if cqfd -b foo init && \
@@ -28,8 +28,8 @@ else
 	jtest_result fail
 fi
 
-# restore initial .cqfdrc
-mv -f .cqfdrc.orig .cqfdrc
+# restore initial Cqfdfile
+mv -f Cqfdfile.orig Cqfdfile
 
 # restore container
 if ! cqfd init; then

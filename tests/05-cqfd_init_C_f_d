@@ -9,9 +9,9 @@ cd "$TDIR/" || exit 1
 extdir="external/dir"
 mkdir -p "$extdir"
 mv .cqfd "$extdir/cqfd"
-mv .cqfdrc "$extdir/cqfdrc"
+mv Cqfdfile "$extdir/Cqfdfile"
 
-jtest_prepare "run cqfd init without .cqfdrc file and .cqfd directory should fail"
+jtest_prepare "run cqfd init without Cqfdfile file and .cqfd directory should fail"
 if ! cqfd init; then
 	jtest_result pass
 else
@@ -19,49 +19,49 @@ else
 fi
 
 jtest_prepare "run cqfd init from a subdirectory with options -f and -d using path relative to subdirectory should pass"
-if cqfd -C "$extdir" -d cqfd -f cqfdrc init; then
+if cqfd -C "$extdir" -d cqfd -f Cqfdfile init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "run cqfd init with options -f and -d should pass"
-if cqfd -d "$extdir/cqfd" -f "$extdir/cqfdrc" init; then
+if cqfd -d "$extdir/cqfd" -f "$extdir/Cqfdfile" init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "run cqfd init with options -f and -d using absolute path should pass"
-if cqfd -d "$PWD/$extdir/cqfd" -f "$PWD/$extdir/cqfdrc" init; then
+if cqfd -d "$PWD/$extdir/cqfd" -f "$PWD/$extdir/Cqfdfile" init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "run cqfd init from a subdirectory with environments CQFDRC_FILE and CQFD_DIR using relative path to subdirectory should pass"
-if CQFD_DIR=cqfd CQFDRC_FILE=cqfdrc cqfd -C "$extdir" init; then
+if CQFD_DIR=cqfd CQFDRC_FILE=Cqfdfile cqfd -C "$extdir" init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "run cqfd init with environments CQFDRC_FILE and CQFD_DIR should pass"
-if CQFD_DIR="$extdir/cqfd" CQFDRC_FILE="$extdir/cqfdrc" cqfd init; then
+if CQFD_DIR="$extdir/cqfd" CQFDRC_FILE="$extdir/Cqfdfile" cqfd init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "run cqfd init from a subdirectory with environments CQFDRC_FILE and CQFD_DIR using absolute path should pass"
-if CQFD_DIR="$PWD/$extdir/cqfd" CQFDRC_FILE="$PWD/$extdir/cqfdrc" cqfd init; then
+if CQFD_DIR="$PWD/$extdir/cqfd" CQFDRC_FILE="$PWD/$extdir/Cqfdfile" cqfd init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-# restore .cqfdrc file and .cqfd directory
-mv "$extdir/cqfdrc" .cqfdrc
+# restore Cqfdfile file and .cqfd directory
+mv "$extdir/Cqfdfile" Cqfdfile
 mv "$extdir/cqfd" .cqfd
 
 # cleanup

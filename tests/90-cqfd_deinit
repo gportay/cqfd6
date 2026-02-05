@@ -6,7 +6,7 @@
 
 cd "$TDIR/" || exit 1
 
-jtest_prepare "run cqfd deinit with a proper .cqfdrc should pass"
+jtest_prepare "run cqfd deinit with a proper Cqfdfile should pass"
 if cqfd deinit; then
 	jtest_result pass
 else
@@ -14,8 +14,8 @@ else
 fi
 
 jtest_prepare "run cqfd deinit with a nonexisting Dockerfile should fail"
-cp -f .cqfdrc .cqfdrc.orig
-sed -i -e "s/\[build\]/[build]\ndistro='thisshouldfail'/" .cqfdrc
+cp -f Cqfdfile Cqfdfile.orig
+sed -i -e "s/\[build\]/[build]\ndistro='thisshouldfail'/" Cqfdfile
 if ! cqfd deinit; then
 	jtest_result pass
 else
@@ -23,14 +23,14 @@ else
 fi
 
 jtest_prepare "run cqfd deinit with another Dockerfile should pass"
-sed -i -e "s/thisshouldfail/centos/" .cqfdrc
+sed -i -e "s/thisshouldfail/centos/" Cqfdfile
 if cqfd init && cqfd deinit; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
-# restore cqfdrc
-mv -f .cqfdrc.orig .cqfdrc
+# restore Cqfdfile
+mv -f Cqfdfile.orig Cqfdfile
 
 jtest_prepare "run cqfd deinit with an already deinit'ed image should fail"
 if ! cqfd deinit; then
