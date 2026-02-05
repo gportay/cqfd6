@@ -9,12 +9,12 @@ if [ "$CQFD_RUN_WITH_SUDO" = true ]; then
 	cqfd_docker=(sudo "${cqfd_docker[@]}")
 fi
 
-# backup Dockerfile and .cqfdrc
+# backup Dockerfile and Cqfdfile
 mv .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
-mv .cqfdrc .cqfdrc.orig
+mv Cqfdfile Cqfdfile.orig
 
 cp .cqfd/docker/Dockerfile.missing_dependencies .cqfd/docker/Dockerfile
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='true'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='true'," Cqfdfile.orig >Cqfdfile
 
 jtest_prepare "run cqfd without useradd and groupadd commands should fail"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
@@ -88,7 +88,7 @@ else
 fi
 
 jtest_prepare "run cqfd should create the user"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='grep \"^$USER:x:$UID:${GROUPS[0]}::$HOME:/bin/sh\$\" /etc/passwd'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='grep \"^$USER:x:$UID:${GROUPS[0]}::$HOME:/bin/sh\$\" /etc/passwd'," Cqfdfile.orig >Cqfdfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -101,7 +101,7 @@ fi
 
 jtest_prepare "run cqfd should create and own the user's home directory"
 echo 'RUN sed "/DEFAULT_HOME/s,yes,no," -i /etc/login.defs' >>.cqfd/docker/Dockerfile
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='test -w $HOME'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='test -w $HOME'," Cqfdfile.orig >Cqfdfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -113,7 +113,7 @@ else
 fi
 
 jtest_prepare "run cqfd should execute as the host user"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='id'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='id'," Cqfdfile.orig >Cqfdfile
 if [ "${cqfd_docker[-1]}" = "podman" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
 else
@@ -125,7 +125,7 @@ else
 fi
 
 jtest_prepare "run cqfd should not execute sudo without authentication"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='sudo env'," -i .cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='sudo env'," -i Cqfdfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -148,7 +148,7 @@ else
 fi
 
 jtest_prepare "run cqfd with sudo should preserve umask"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='umask'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='umask'," Cqfdfile.orig >Cqfdfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -201,8 +201,8 @@ else
 	fi
 fi
 
-# restore .cqfdrc and Dockerfile
-mv .cqfdrc.orig .cqfdrc
+# restore Cqfdfile and Dockerfile
+mv Cqfdfile.orig Cqfdfile
 mv .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 # restore container

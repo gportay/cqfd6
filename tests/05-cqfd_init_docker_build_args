@@ -21,19 +21,19 @@ else
 	jtest_result fail
 fi
 
-# backup .cqfdrc
-mv .cqfdrc .cqfdrc.orig
+# backup Cqfdfile
+mv Cqfdfile Cqfdfile.orig
 
 jtest_prepare "run cqfd init with ARG in Dockerfile and with --build-arg in docker_build_args should pass"
-sed -e '/\[build\]/adocker_build_args="--build-arg FOO=foo --no-cache"' .cqfdrc.orig >.cqfdrc
+sed -e '/\[build\]/adocker_build_args="--build-arg FOO=foo --no-cache"' Cqfdfile.orig >Cqfdfile
 if cqfd init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-# restore .cqfdrc and Dockerfile
-mv .cqfdrc.orig .cqfdrc
+# restore Cqfdfile and Dockerfile
+mv Cqfdfile.orig Cqfdfile
 mv .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 # restore container

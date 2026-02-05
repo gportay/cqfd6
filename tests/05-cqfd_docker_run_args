@@ -4,10 +4,10 @@
 
 set -o pipefail
 
-# backup .cqfdrc
-mv .cqfdrc .cqfdrc.orig
+# backup Cqfdfile
+mv Cqfdfile Cqfdfile.orig
 
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo \"\$FOO \$BAR\"'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo \"\$FOO \$BAR\"'," Cqfdfile.orig >Cqfdfile
 
 jtest_prepare "run cqfd without --env in CQFD_EXTRA_RUN_ARGS and docker_run_args should not set environment variables"
 if cqfd | grep "^ $"; then
@@ -31,22 +31,22 @@ else
 fi
 
 jtest_prepare "run cqfd with --env in docker_run_args should set environment variables"
-sed -e '/\[build\]/adocker_run_args="--env FOO=foo --env BAR=bar"' -i .cqfdrc
+sed -e '/\[build\]/adocker_run_args="--env FOO=foo --env BAR=bar"' -i Cqfdfile
 if cqfd | grep "^foo bar$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
-sed -e '/^docker_run_args=/d' -i .cqfdrc
+sed -e '/^docker_run_args=/d' -i Cqfdfile
 
 jtest_prepare "run cqfd with --env containing whitespaces in docker_run_args should set environment variables and preserve whitespaces"
-sed -e '/\[build\]/adocker_run_args="--env FOO=foo\\ foobar --env BAR=bar"' -i .cqfdrc
+sed -e '/\[build\]/adocker_run_args="--env FOO=foo\\ foobar --env BAR=bar"' -i Cqfdfile
 if cqfd | grep "^foo foobar bar$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
-sed -e '/^docker_run_args=/d' -i .cqfdrc
+sed -e '/^docker_run_args=/d' -i Cqfdfile
 
-# restore .cqfdrc
-mv .cqfdrc.orig .cqfdrc
+# restore Cqfdfile
+mv Cqfdfile.orig Cqfdfile

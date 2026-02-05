@@ -4,11 +4,11 @@
 
 set -o pipefail
 
-# backup .cqfdrc
-mv .cqfdrc .cqfdrc.orig
+# backup Cqfdfile
+mv Cqfdfile Cqfdfile.orig
 
 jtest_prepare "run cqfd should forward user's ssh configuration directory to container if it exists"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='test -d $HOME/.ssh'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='test -d $HOME/.ssh'," Cqfdfile.orig >Cqfdfile
 if [ ! -d "$HOME/.ssh" ]; then
 	jtest_result skip
 else
@@ -20,7 +20,7 @@ else
 fi
 
 jtest_prepare "run cqfd with CQFD_NO_USER_SSH_CONFIG=true should not forward user's ssh configuration directory to container"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='! test -d $HOME/.ssh'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='! test -d $HOME/.ssh'," Cqfdfile.orig >Cqfdfile
 if [ ! -d "$HOME/.ssh" ]; then
 	jtest_result skip
 else
@@ -32,7 +32,7 @@ else
 fi
 
 jtest_prepare "run cqfd should forward system's ssh configuration directory to container if it exists"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='test -d /etc/ssh'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='test -d /etc/ssh'," Cqfdfile.orig >Cqfdfile
 if [ ! -d "/etc/ssh" ]; then
 	jtest_result skip
 else
@@ -44,7 +44,7 @@ else
 fi
 
 jtest_prepare "run cqfd with CQFD_NO_SSH_CONFIG=true should not forward system's ssh configuration directory to container"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='! test -d /etc/ssh'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='! test -d /etc/ssh'," Cqfdfile.orig >Cqfdfile
 if [ ! -d "/etc/ssh" ]; then
 	jtest_result skip
 else
@@ -55,5 +55,5 @@ else
 	fi
 fi
 
-# restore .cqfdrc
-mv .cqfdrc.orig .cqfdrc
+# restore Cqfdfile
+mv Cqfdfile.orig Cqfdfile

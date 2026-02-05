@@ -9,10 +9,10 @@ if [ "$CQFD_RUN_WITH_SUDO" = true ]; then
 	cqfd_docker=(sudo "${cqfd_docker[@]}")
 fi
 
-# backup .cqfdrc
-mv .cqfdrc .cqfdrc.orig
+# backup Cqfdfile
+mv Cqfdfile Cqfdfile.orig
 
-cp cqfdrc-image .cqfdrc
+cp Cqfdfile-image Cqfdfile
 
 jtest_prepare "run cqfd init with CQFD_EXTRA_PULL_ARGS should pass"
 if env CQFD_EXTRA_BUILD_ARGS="--disable-content-trust=false" cqfd init; then
@@ -22,15 +22,15 @@ else
 fi
 
 jtest_prepare "run cqfd with docker_pull_args should pass"
-sed -e '/\[build\]/adocker_build_args="--disable-content-trust=false"' -i .cqfdrc
+sed -e '/\[build\]/adocker_build_args="--disable-content-trust=false"' -i Cqfdfile
 if cqfd init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-# restore .cqfdrc
-mv .cqfdrc.orig .cqfdrc
+# restore Cqfdfile
+mv Cqfdfile.orig Cqfdfile
 
 # restore container
 if ! cqfd init; then

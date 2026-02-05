@@ -18,11 +18,11 @@ else
 	jtest_result fail
 fi
 
-# backup .cqfdrc
-mv .cqfdrc .cqfdrc.orig
+# backup Cqfdfile
+mv Cqfdfile Cqfdfile.orig
 
 jtest_prepare "run cqfd --shell should use program set in shell"
-sed -e '/\[build\]/ashell="/bin/bash"' .cqfdrc.orig >.cqfdrc
+sed -e '/\[build\]/ashell="/bin/bash"' Cqfdfile.orig >Cqfdfile
 # shellcheck disable=SC2016
 if cqfd --shell <<<'printf "$0"' | grep "^/bin/bash$"; then
 	jtest_result pass
@@ -30,8 +30,8 @@ else
 	jtest_result fail
 fi
 
-# restore .cqfdrc
-mv .cqfdrc.orig .cqfdrc
+# restore Cqfdfile
+mv Cqfdfile.orig Cqfdfile
 
 jtest_prepare "run cqfd --shell should preserve the arguments"
 # shellcheck disable=SC2016
@@ -68,11 +68,11 @@ else
 	fi
 fi
 
-# backup .cqfdrc
-mv .cqfdrc .cqfdrc.orig
+# backup Cqfdfile
+mv Cqfdfile Cqfdfile.orig
 
 jtest_prepare "run cqfd --shell with option --release should generate cqfd-test.tar.xz tarball archive by default"
-cat .cqfdrc.orig - <<EOF >.cqfdrc
+cat Cqfdfile.orig - <<EOF >Cqfdfile
 files="shell"
 EOF
 if cqfd --release --shell -c "touch shell" && tar tf cqfd-test.tar.xz | grep "^shell$"; then
@@ -83,5 +83,5 @@ fi
 # cleanup
 rm cqfd-test.tar.xz shell
 
-# restore .cqfdrc
-mv .cqfdrc.orig .cqfdrc
+# restore Cqfdfile
+mv Cqfdfile.orig Cqfdfile

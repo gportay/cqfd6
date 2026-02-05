@@ -11,25 +11,25 @@ fi
 
 mv cqfd .cqfd
 
-jtest_prepare "run cqfd --ls without a .cqfdrc file should fail"
+jtest_prepare "run cqfd --ls without a Cqfdfile should fail"
 if ! cqfd --ls; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd --gc without a .cqfdrc file should fail"
+jtest_prepare "run cqfd --gc without a Cqfdfile should fail"
 if ! cqfd --gc; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd --init without a .cqfdrc file should fail"
+jtest_prepare "run cqfd --init without a Cqfdfile should fail"
 if ! cqfd --init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-cp cqfdrc-test .cqfdrc
+cp Cqfdfile-test Cqfdfile

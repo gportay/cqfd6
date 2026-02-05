@@ -9,14 +9,14 @@ if [ "$CQFD_RUN_WITH_SUDO" = true ]; then
 	cqfd_docker=(sudo "${cqfd_docker[@]}")
 fi
 
-# backup .cqfdrc
-mv .cqfdrc .cqfdrc.orig
+# backup Cqfdfile
+mv Cqfdfile Cqfdfile.orig
 
-cp cqfdrc-tag .cqfdrc
+cp Cqfdfile-tag Cqfdfile
 
 random="$RANDOM$RANDOM"
 tag="%Un-%Po-%Pn-%Bd-%Dh-$random"
-sed -e "s!^tag=.*\$!tag='$tag'!" -i .cqfdrc
+sed -e "s!^tag=.*\$!tag='$tag'!" -i Cqfdfile
 # shellcheck disable=SC2001
 un="$(sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$USER")"
 dh="$(sha256sum .cqfd/docker/Dockerfile | cut -b 1-7)"
@@ -41,7 +41,7 @@ if ! "${cqfd_docker[@]}" rmi "$image:$dh"; then
 fi
 
 tag="%Un-%Po-%Pn-%Bd-%DH-$random"
-sed -e "s!^tag=.*\$!tag='$tag'!" -i .cqfdrc
+sed -e "s!^tag=.*\$!tag='$tag'!" -i Cqfdfile
 dh="$(sha256sum .cqfd/fedora/Dockerfile | cut -b 1-64)"
 image="cqfd-$un-$un-cqfd-test-fedora-$dh-$random"
 dh="$(sha256sum .cqfd/fedora/Dockerfile | cut -b 1-7)"
@@ -53,7 +53,7 @@ if "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 fi
 
 jtest_prepare "run cqfd init with tag and distro should build templated image"
-sed -e "s/\[build\]/[build]\ndistro='fedora'/" -i .cqfdrc
+sed -e "s/\[build\]/[build]\ndistro='fedora'/" -i Cqfdfile
 if cqfd init && \
    "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	jtest_result pass
@@ -65,8 +65,8 @@ if ! "${cqfd_docker[@]}" rmi "$image:$dh"; then
 	jtest_log error "cleanup image failed"
 fi
 
-# restore .cqfdrc
-mv .cqfdrc.orig .cqfdrc
+# restore Cqfdfile
+mv Cqfdfile.orig Cqfdfile
 
 # restore container
 if ! cqfd init; then

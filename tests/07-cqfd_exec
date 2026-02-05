@@ -35,11 +35,11 @@ else
 	jtest_result fail
 fi
 
-# backup .cqfdrc
-mv .cqfdrc .cqfdrc.orig
+# backup Cqfdfile
+mv Cqfdfile Cqfdfile.orig
 
 jtest_prepare "run cqfd --exec with option --release should generate cqfd-test.tar.xz tarball archive by default"
-cat .cqfdrc.orig - <<EOF >.cqfdrc
+cat Cqfdfile.orig - <<EOF >Cqfdfile
 files="exec"
 EOF
 if cqfd --release --exec touch exec && tar tf cqfd-test.tar.xz | grep "^exec$"; then
@@ -50,5 +50,5 @@ fi
 # cleanup
 rm cqfd-test.tar.xz exec
 
-# restore .cqfdrc
-mv .cqfdrc.orig .cqfdrc
+# restore Cqfdfile
+mv Cqfdfile.orig Cqfdfile

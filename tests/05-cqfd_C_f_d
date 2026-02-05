@@ -4,66 +4,66 @@
 
 set -o pipefail
 
-# backup .cqfdrc
-mv .cqfdrc .cqfdrc.orig
+# backup Cqfdfile
+mv Cqfdfile Cqfdfile.orig
 
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='pwd'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='pwd'," Cqfdfile.orig >Cqfdfile
 
 extdir="external/dir"
 mkdir -p "$extdir"
 
-# move .cqfd and .cqfdrc
+# move .cqfd and Cqfdfile
 mv .cqfd "$extdir/cqfd"
-mv .cqfdrc "$extdir/cqfdrc"
+mv Cqfdfile "$extdir/Cqfdfile"
 
 jtest_prepare "run cqfd from a subdirectory with options -f and -d using path relative to subdirectory should pass"
-if cqfd -C "$extdir" -d cqfd -f cqfdrc | grep "^$PWD/$extdir$"; then
+if cqfd -C "$extdir" -d cqfd -f Cqfdfile | grep "^$PWD/$extdir$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "run cqfd with options -f and -d using relative path should pass"
-if cqfd -d "$extdir/cqfd" -f "$extdir/cqfdrc" | grep "^$PWD$"; then
+if cqfd -d "$extdir/cqfd" -f "$extdir/Cqfdfile" | grep "^$PWD$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "run cqfd with options -f and -d using absolute path should pass"
-if cqfd -d "$PWD/$extdir/cqfd" -f "$PWD/$extdir/cqfdrc" | grep "^$PWD$"; then
+if cqfd -d "$PWD/$extdir/cqfd" -f "$PWD/$extdir/Cqfdfile" | grep "^$PWD$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd from a subdirectory with environments CQFDRC_FILE and CQFD_DIR using relative path to subdirectory should pass"
-if env CQFD_DIR=cqfd CQFDRC_FILE=cqfdrc cqfd -C "$extdir" | grep "^$PWD/$extdir$"; then
+jtest_prepare "run cqfd from a subdirectory with environments CQFDFILE and CQFD_DIR using relative path to subdirectory should pass"
+if env CQFD_DIR=cqfd CQFDFILE=Cqfdfile cqfd -C "$extdir" | grep "^$PWD/$extdir$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd with environments CQFDRC_FILE and CQFD_DIR using relative path should pass"
-if env CQFD_DIR="$extdir/cqfd" CQFDRC_FILE="$extdir/cqfdrc" cqfd | grep "^$PWD$"; then
+jtest_prepare "run cqfd with environments CQFDFILE and CQFD_DIR using relative path should pass"
+if env CQFD_DIR="$extdir/cqfd" CQFDFILE="$extdir/Cqfdfile" cqfd | grep "^$PWD$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd from a subdirectory with environments CQFDRC_FILE and CQFD_DIR using absolute path should pass"
-if env CQFD_DIR="$PWD/$extdir/cqfd" CQFDRC_FILE="$PWD/$extdir/cqfdrc" cqfd | grep "^$PWD$"; then
+jtest_prepare "run cqfd from a subdirectory with environments CQFDFILE and CQFD_DIR using absolute path should pass"
+if env CQFD_DIR="$PWD/$extdir/cqfd" CQFDFILE="$PWD/$extdir/Cqfdfile" cqfd | grep "^$PWD$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-# moveback .cqfdrc and .cqfd
-mv "$extdir/cqfdrc" .cqfdrc
+# moveback Cqfdfile and .cqfd
+mv "$extdir/Cqfdfile" Cqfdfile
 mv "$extdir/cqfd" .cqfd
 
-# restore .cqfdrc
-mv .cqfdrc.orig .cqfdrc
+# restore Cqfdfile
+mv Cqfdfile.orig Cqfdfile
 
 # cleanup
 rmdir -p "$extdir"

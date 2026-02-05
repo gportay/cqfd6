@@ -9,11 +9,11 @@ if [ "$CQFD_RUN_WITH_SUDO" = true ]; then
 	cqfd_docker=(sudo "${cqfd_docker[@]}")
 fi
 
-# backup .cqfd and .cqfdrc
+# backup .cqfd and Cqfdfile
 mv .cqfd .cqfd.orig
-mv .cqfdrc .cqfdrc.orig
+mv Cqfdfile Cqfdfile.orig
 
-cp cqfdrc-image .cqfdrc
+cp Cqfdfile-image Cqfdfile
 
 image="ubuntu:16.04"
 if "${cqfd_docker[@]}" inspect "$image" &>/dev/null; then
@@ -38,8 +38,8 @@ else
 	jtest_result fail
 fi
 
-# restore .cqfdrc and .cqfd
-mv .cqfdrc.orig .cqfdrc
+# restore Cqfdfile and .cqfd
+mv Cqfdfile.orig Cqfdfile
 mv .cqfd.orig .cqfd
 
 # restore container

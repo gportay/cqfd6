@@ -88,14 +88,14 @@ _cqfd6() {
 		_filedir -d
 		return
 		;;
-	-f|--cqfdrc-file)
+	-f|--cqfdfile)
 		_filedir
 		return
 		;;
 	-b|--build)
 		local flavors cqfd_opts=()
 		# before we list the flavors, forward the options locating the
-		# cqfdrc file, in order; cqfd looks it up as it does to build
+		# Cqfdfile, in order; cqfd looks it up as it does to build
 		for ((i = 1; i + 1 < cword; i++)); do
 			if [[ ${words[i]} == @(-C|--directory|-d|--cqfd-directory|-f|--cqfdrc-file) ]]; then
 				cqfd_opts+=("${words[i]}" "$(dequote "${words[i+1]}")")
@@ -167,7 +167,7 @@ _cqfd6() {
 	fi
 
 	local wordbreaks=":=<>&"
-	local optargs="@(-C|--directory|-w|--working-directory|-d|--cqfd-directory|-f|--cqfdrc-file|-b|--build|--platform)"
+	local optargs="@(-C|--directory|-w|--working-directory|-d|--cqfd-directory|-f|--cqfdfile|-b|--build|--platform)"
 	local args
 	_count_args "$wordbreaks" "$optargs"
 	if ((args > 1)); then

@@ -4,10 +4,10 @@
 
 set -o pipefail
 
-# backup .cqfdrc
-mv .cqfdrc .cqfdrc.orig
+# backup Cqfdfile
+mv Cqfdfile Cqfdfile.orig
 
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='pwd'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='pwd'," Cqfdfile.orig >Cqfdfile
 
 subdir="dir with space/b/c/d/e"
 mkdir -p "$subdir"
@@ -23,11 +23,11 @@ fi
 # cleanup
 cd "$OLDPWD" || exit 1
 
-# restore .cqfdrc
-mv .cqfdrc.orig .cqfdrc
+# restore Cqfdfile
+mv Cqfdfile.orig Cqfdfile
 
-# move Makefile, .cqfd and .cqfdrc
-mv Makefile .cqfd .cqfdrc "$subdir"
+# move Makefile, .cqfd and Cqfdfile
+mv Makefile .cqfd Cqfdfile "$subdir"
 
 cd "$subdir" || exit 1
 
@@ -43,8 +43,8 @@ make clean
 # teardown
 cd "$OLDPWD" || exit 1
 
-# moveback .cqfdrc, .cqfd and Makefile
-mv "$subdir/.cqfdrc" "$subdir/.cqfd" "$subdir/Makefile" .
+# moveback Cqfdfile, .cqfd and Makefile
+mv "$subdir/Cqfdfile" "$subdir/.cqfd" "$subdir/Makefile" .
 
 # cleanup
 rmdir -p "$subdir"

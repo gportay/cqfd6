@@ -4,11 +4,11 @@
 
 set -o pipefail
 
-# backup .cqfdrc
-mv .cqfdrc .cqfdrc.orig
+# backup Cqfdfile
+mv Cqfdfile Cqfdfile.orig
 
 jtest_prepare "run cqfd should forward user's git configuration file to container if it exists"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='test -f $HOME/.gitconfig'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='test -f $HOME/.gitconfig'," Cqfdfile.orig >Cqfdfile
 if [ ! -f "$HOME/.gitconfig" ]; then
 	jtest_result skip
 else
@@ -20,7 +20,7 @@ else
 fi
 
 jtest_prepare "run cqfd with CQFD_NO_USER_GIT_CONFIG=true should not forward user's git configuration file to container"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='! test -f $HOME/.gitconfig'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='! test -f $HOME/.gitconfig'," Cqfdfile.orig >Cqfdfile
 if [ ! -f "$HOME/.gitconfig" ]; then
 	jtest_result skip
 else
@@ -32,7 +32,7 @@ else
 fi
 
 jtest_prepare "run cqfd should forward system's git configuration file to container if it exists"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='test -f /etc/gitconfig'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='test -f /etc/gitconfig'," Cqfdfile.orig >Cqfdfile
 if [ ! -f "/etc/gitconfig" ]; then
 	jtest_result skip
 else
@@ -44,7 +44,7 @@ else
 fi
 
 jtest_prepare "run cqfd with CQFD_NO_SYSTEM_GIT_CONFIG=true should not forward system's git configuration file to container"
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='! test -f /etc/gitconfig'," .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='! test -f /etc/gitconfig'," Cqfdfile.orig >Cqfdfile
 if [ ! -f "/etc/gitconfig" ]; then
 	jtest_result skip
 else
@@ -55,5 +55,5 @@ else
 	fi
 fi
 
-# restore .cqfdrc
-mv .cqfdrc.orig .cqfdrc
+# restore Cqfdfile
+mv Cqfdfile.orig Cqfdfile

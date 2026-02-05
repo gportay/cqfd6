@@ -17,6 +17,6 @@ update-alternatives \
 update-alternatives \
   --install /usr/share/man/man1/cqfd.1.gz cqfd.1.gz /usr/share/man/man1/cqfd6.1.gz 20
 update-alternatives \
-  --install /usr/share/man/man5/cqfdrc.5.gz cqfdrc.5.gz /usr/share/man/man5/cqfdrc6.5.gz 20
+  --install /usr/share/man/man5/Cqfdfile.5.gz Cqfdfile.5.gz /usr/share/man/man5/Cqfdfile6.5.gz 20
 
 #DEBHELPER#
