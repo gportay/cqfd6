@@ -24,7 +24,7 @@ mv cqfd .cqfd
 ################################################################################
 # running 'cqfd ls' without a proper config file should fail
 ################################################################################
-jtest_prepare "cqfd ls complains without an .cqfdrc file"
+jtest_prepare "cqfd ls complains without an Cqfdfile file"
 if ! cqfd ls; then
 	jtest_result pass
 else
@@ -34,7 +34,7 @@ fi
 ################################################################################
 # running 'cqfd gc' without a proper config file should fail
 ################################################################################
-jtest_prepare "cqfd gc complains without an .cqfdrc file"
+jtest_prepare "cqfd gc complains without an Cqfdfile file"
 if ! cqfd gc; then
 	jtest_result pass
 else
@@ -54,8 +54,8 @@ fi
 ################################################################################
 # running 'cqfd init' should fail, as there's an empty config file
 ################################################################################
-jtest_prepare "cqfd init complains with an empty .cqfdrc file"
-touch "$TDIR/.cqfdrc"
+jtest_prepare "cqfd init complains with an empty Cqfdfile file"
+touch "$TDIR/Cqfdfile"
 if ! cqfd init; then
 	jtest_result pass
 else
@@ -65,8 +65,8 @@ fi
 ################################################################################
 # running 'cqfd init' should fail, as there's an incomplete config file
 ################################################################################
-jtest_prepare "cqfd init complains with an incomplete .cqfdrc file"
-echo '[project]' >"$TDIR/.cqfdrc"
+jtest_prepare "cqfd init complains with an incomplete Cqfdfile file"
+echo '[project]' >"$TDIR/Cqfdfile"
 if ! cqfd init; then
 	jtest_result pass
 else
@@ -74,6 +74,6 @@ else
 fi
 
 ################################################################################
-# finally, for setup, insert a proper testing .cqfdrc file
+# finally, for setup, insert a proper testing Cqfdfile file
 ################################################################################
-cat "$TDIR/cqfdrc-test" >"$TDIR/.cqfdrc"
+cat "$TDIR/Cqfdfile-test" >"$TDIR/Cqfdfile"

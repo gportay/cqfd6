@@ -13,14 +13,14 @@ fi
 cd "$TDIR/" || exit 1
 
 mv -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
-cp -f .cqfdrc .cqfdrc.orig
-cp -f cqfdrc-image .cqfdrc
+cp -f Cqfdfile Cqfdfile.orig
+cp -f Cqfdfile-image Cqfdfile
 
 ################################################################################
 # 'cqfd init' pulls image
 ################################################################################
 image="ubuntu:16.04"
-sed -i -e "s!^image=.*\$!image='$image'!" .cqfdrc
+sed -i -e "s!^image=.*\$!image='$image'!" Cqfdfile
 if "${cqfd_docker[@]}" inspect "$image" &>/dev/null; then
 	jtest_log info "${cqfd_docker[-1]} registry contains image named: $image, removing..."
 	"${cqfd_docker[@]}" rmi "$image"
@@ -49,7 +49,7 @@ else
 fi
 
 jtest_prepare "run cqfd with docker_pull_args in config"
-sed '/\[build\]/adocker_build_args="--disable-content-trust=false"' -i .cqfdrc
+sed '/\[build\]/adocker_build_args="--disable-content-trust=false"' -i Cqfdfile
 if cqfd init; then
 	jtest_result pass
 else
@@ -57,9 +57,9 @@ else
 fi
 
 ################################################################################
-# Restore initial .cqfdrc and Dockerfile
+# Restore initial Cqfdfile and Dockerfile
 ################################################################################
-mv -f .cqfdrc.orig .cqfdrc
+mv -f Cqfdfile.orig Cqfdfile
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 ################################################################################

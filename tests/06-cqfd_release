@@ -23,8 +23,8 @@ fi
 # Adding a files section should help
 ################################################################################
 rel_files="a/cqfd_a.txt a/b/c/cqfd_c.txt a/b/cqfd_b.txt"
-cp -f .cqfdrc .cqfdrc.orig
-echo "files=\"$rel_files\"" >>.cqfdrc
+cp -f Cqfdfile Cqfdfile.orig
+echo "files=\"$rel_files\"" >>Cqfdfile
 jtest_prepare "cqfd release now with a files parameter"
 if cqfd release; then
 	jtest_result pass
@@ -55,7 +55,7 @@ rm -f cqfd-test.tar.xz
 
 # now use tar_transform=no
 jtest_prepare "archived files NOT at root of tar archive if tar_transform=no"
-echo "tar_transform=no" >>.cqfdrc
+echo "tar_transform=no" >>Cqfdfile
 if cqfd release; then
 	result="pass"
 else
@@ -67,12 +67,12 @@ for f in $rel_files; do
 	fi
 done
 jtest_result "$result"
-sed -i -e '$ s!^tar_transform=.*$!!' .cqfdrc
+sed -i -e '$ s!^tar_transform=.*$!!' Cqfdfile
 rm -f cqfd-test.tar.xz
 
 # now use tar_transform=yes
 jtest_prepare "archived files at root of tar archive if tar_transform=yes"
-echo "tar_transform=yes" >>.cqfdrc
+echo "tar_transform=yes" >>Cqfdfile
 if cqfd release; then
 	result="pass"
 else
@@ -84,7 +84,7 @@ for f in $rel_files; do
 	fi
 done
 jtest_result "$result"
-sed -i -e '$ s!^tar_transform=.*$!!' .cqfdrc
+sed -i -e '$ s!^tar_transform=.*$!!' Cqfdfile
 rm -f cqfd-test.tar.xz
 
 ################################################################################
@@ -98,9 +98,9 @@ if ! cqfd run ln -s a/cqfd_a.txt link.txt; then
 	result="fail"
 fi
 rel_files_link="a/cqfd_a.txt link.txt"
-sed -i '/files=/d' .cqfdrc
-echo "files=\"$rel_files_link\"" >>.cqfdrc
-echo "tar_options=-h" >>.cqfdrc
+sed -i '/files=/d' Cqfdfile
+echo "files=\"$rel_files_link\"" >>Cqfdfile
+echo "tar_options=-h" >>Cqfdfile
 
 if ! cqfd release; then
 	jtest_log fatal "cqfd release failed"
@@ -117,11 +117,11 @@ if [ -L "$TDIR/output/link.txt" ] || ! diff "$TDIR/output/a/cqfd_a.txt" "$TDIR/o
 fi
 jtest_result "$result"
 
-# revert the changes in .cqfdrc file
+# revert the changes in Cqfdfile file
 rm -f link.txt
-sed -i '/tar_options=/d' .cqfdrc
-sed -i '/files=/d' .cqfdrc
-echo "files=\"$rel_files\"" >>.cqfdrc
+sed -i '/tar_options=/d' Cqfdfile
+sed -i '/files=/d' Cqfdfile
+echo "files=\"$rel_files\"" >>Cqfdfile
 
 # cleanup
 rm -f cqfd-test.tar.xz
@@ -134,7 +134,7 @@ jtest_prepare "build.archive can template filenames (RFC3339 date)"
 export CTEST=foobar
 d3="$(date --rfc-3339='date')"
 # shellcheck disable=SC2016
-echo 'archive=cqfd-%D3-$CTEST.tar.xz' >>.cqfdrc
+echo 'archive=cqfd-%D3-$CTEST.tar.xz' >>Cqfdfile
 if cqfd release && tar tf "cqfd-$d3-foobar.tar.xz" &>/dev/null; then
 	jtest_result pass
 else
@@ -144,7 +144,7 @@ rm -f "cqfd-$d3-foobar.tar.xz"
 
 jtest_prepare "build.archive can template filenames (git short hash of last commit)"
 # shellcheck disable=SC2016
-sed -i -e '$ s!^archive=.*$!archive=cqfd-%Gh-$CTEST.tar.xz!' .cqfdrc
+sed -i -e '$ s!^archive=.*$!archive=cqfd-%Gh-$CTEST.tar.xz!' Cqfdfile
 # shellcheck disable=SC2010
 if cqfd release &&
    ls -1 cqfd-*-foobar.tar.xz | grep -E "^cqfd-([[:xdigit:]]{4,40}|unset)-foobar.tar.xz$" &&
@@ -157,7 +157,7 @@ rm -f cqfd-*-foobar.tar.xz
 
 jtest_prepare "build.archive can template filenames (git long hash of last commit)"
 # shellcheck disable=SC2016
-sed -i -e '$ s!^archive=.*$!archive=cqfd-%GH-$CTEST.tar.xz!' .cqfdrc
+sed -i -e '$ s!^archive=.*$!archive=cqfd-%GH-$CTEST.tar.xz!' Cqfdfile
 # shellcheck disable=SC2010
 if cqfd release &&
    ls -1 cqfd-*-foobar.tar.xz | grep -E "^cqfd-([[:xdigit:]]{40}|unset)-foobar.tar.xz$" &&
@@ -170,7 +170,7 @@ rm -f cqfd-*-foobar.tar.xz
 
 jtest_prepare "build.archive can template filenames (Unix timestamp)"
 # shellcheck disable=SC2016
-sed -i -e '$ s!^archive=.*$!archive=cqfd-%Du-$CTEST.tar.xz!' .cqfdrc
+sed -i -e '$ s!^archive=.*$!archive=cqfd-%Du-$CTEST.tar.xz!' Cqfdfile
 # shellcheck disable=SC2010
 if cqfd release &&
    ls -1 cqfd-*-foobar.tar.xz | grep -E "^cqfd-[[:digit:]]{1,20}-foobar.tar.xz$" &&
@@ -183,7 +183,7 @@ rm -f cqfd-*-foobar.tar.xz
 
 jtest_prepare "build.archive can template filenames (current cqfd flavor name unset)"
 # shellcheck disable=SC2016
-sed -i -e '$ s!^archive=.*$!archive=cqfd-%Cf-$CTEST.tar.xz!' .cqfdrc
+sed -i -e '$ s!^archive=.*$!archive=cqfd-%Cf-$CTEST.tar.xz!' Cqfdfile
 if cqfd release && tar tf cqfd--foobar.tar.xz &>/dev/null; then
 	jtest_result pass
 else
@@ -201,7 +201,7 @@ rm -f cqfd-foo.tar.xz
 
 jtest_prepare "build.archive can template filenames (value of the project.org configuration key)"
 # shellcheck disable=SC2016
-sed -i -e '$ s!^archive=.*$!archive=cqfd-%Po-$CTEST.tar.xz!' .cqfdrc
+sed -i -e '$ s!^archive=.*$!archive=cqfd-%Po-$CTEST.tar.xz!' Cqfdfile
 if cqfd release && tar tf cqfd-cqfd-foobar.tar.xz &>/dev/null; then
 	jtest_result pass
 else
@@ -211,7 +211,7 @@ rm -f cqfd-cqfd-foobar.tar.xz
 
 jtest_prepare "build.archive can template filenames (value of the project.name configuration key)"
 # shellcheck disable=SC2016
-sed -i -e '$ s!^archive=.*$!archive=cqfd-%Pn-$CTEST.tar.xz!' .cqfdrc
+sed -i -e '$ s!^archive=.*$!archive=cqfd-%Pn-$CTEST.tar.xz!' Cqfdfile
 if cqfd release && tar tf cqfd-test-foobar.tar.xz &>/dev/null; then
 	jtest_result pass
 else
@@ -221,7 +221,7 @@ rm -f cqfd-test-foobar.tar.xz
 
 jtest_prepare "build.archive can template filenames (litteral '%' sign)"
 # shellcheck disable=SC2016
-sed -i -e '$ s!^archive=.*!archive=cqfd-%%-$CTEST.tar.xz!' .cqfdrc
+sed -i -e '$ s!^archive=.*!archive=cqfd-%%-$CTEST.tar.xz!' Cqfdfile
 if cqfd release && tar tf cqfd-%-foobar.tar.xz &>/dev/null; then
 	jtest_result pass
 else
@@ -234,7 +234,7 @@ rm -f cqfd-%-foobar.tar.xz
 ################################################################################
 jtest_prepare "build.archive can make a .tar.gz archive"
 # shellcheck disable=SC2016
-sed -i -e '$ s!^archive=.*xz$!archive=cqfd-$CTEST.tar.gz!' .cqfdrc
+sed -i -e '$ s!^archive=.*xz$!archive=cqfd-$CTEST.tar.gz!' Cqfdfile
 if cqfd release && tar ztf "cqfd-$CTEST.tar.gz" &>/dev/null; then
 	jtest_result pass
 else
@@ -247,7 +247,7 @@ rm -f "cqfd-$CTEST.tar.gz"
 ################################################################################
 jtest_prepare "build.archive can make a .zip archive"
 # shellcheck disable=SC2016
-sed -i -e '$ s!^archive=.*gz$!archive=cqfd-$CTEST.zip!' .cqfdrc
+sed -i -e '$ s!^archive=.*gz$!archive=cqfd-$CTEST.zip!' Cqfdfile
 if cqfd release && unzip -l "cqfd-$CTEST.zip" &>/dev/null; then
 	jtest_result pass
 else
@@ -275,7 +275,7 @@ done
 # Using a non-existing file/dir in files= should fail
 ################################################################################
 jtest_prepare "cqfd fails on missing file in build.files"
-sed -i -e 's!^files=.*$!files="ThisFileDoesNotExist.txt"!' .cqfdrc
+sed -i -e 's!^files=.*$!files="ThisFileDoesNotExist.txt"!' Cqfdfile
 if ! cqfd release; then
 	jtest_result pass
 else
@@ -287,8 +287,8 @@ fi
 ################################################################################
 jtest_prepare "cqfd resolves globs in build.files"
 # shellcheck disable=SC2016
-sed -i -e 's!^archive=.*$!archive=cqfd-$CTEST.tar.xz!' .cqfdrc
-sed -i -e 's!^files=.*$!files=".cq*rc Ma*"!' .cqfdrc
+sed -i -e 's!^archive=.*$!archive=cqfd-$CTEST.tar.xz!' Cqfdfile
+sed -i -e 's!^files=.*$!files="Cq*le Ma*"!' Cqfdfile
 # cqfd release must work without error
 if cqfd release; then
 	jtest_result pass
@@ -299,7 +299,7 @@ fi
 # the generated archive should contain our expanded globs
 jtest_prepare "resolved globs are properly archived"
 tar tf "cqfd-$CTEST.tar.xz" >"tmp.$$"
-if ! grep -q '^.cqfdrc$' "tmp.$$" ||
+if ! grep -q '^Cqfdfile$' "tmp.$$" ||
    ! grep -q '^Makefile$' "tmp.$$"; then
 	jtest_result fail
 else
@@ -313,7 +313,7 @@ rm -f "tmp.$$"
 ################################################################################
 jtest_prepare "cqfd resolves globs in build.files"
 # shellcheck disable=SC2016
-sed -i -e 's!^archive=.*$!archive=cqfd-$CTEST.tar.zst!' .cqfdrc
+sed -i -e 's!^archive=.*$!archive=cqfd-$CTEST.tar.zst!' Cqfdfile
 if ! cqfd release; then
 	jtest_result pass
 else
@@ -324,8 +324,8 @@ fi
 # Using option --release should succeed
 ################################################################################
 # shellcheck disable=SC2016
-sed -i -e 's!^archive=.*$!archive=cqfd-$CTEST.tar.xz!' .cqfdrc
-sed -i -e 's!^files=.*$!files=".local/bin/cqfd"!' .cqfdrc
+sed -i -e 's!^archive=.*$!archive=cqfd-$CTEST.tar.xz!' Cqfdfile
+sed -i -e 's!^files=.*$!files=".local/bin/cqfd"!' Cqfdfile
 jtest_prepare "cqfd release with option --release"
 if cqfd --release; then
 	jtest_result pass
@@ -341,5 +341,5 @@ else
 fi
 rm -f "cqfd-$CTEST.tar.xz"
 
-# restore initial .cqfdrc
-mv -f .cqfdrc.orig .cqfdrc
+# restore initial Cqfdfile
+mv -f Cqfdfile.orig Cqfdfile

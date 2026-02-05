@@ -7,16 +7,16 @@ shell='/bin/bash'
 command='make doc'
 files='AUTHORS \
        CHANGELOG.md \
+       Cqfdfile.5.gz \
        LICENSE \
        README.md \
        cqfd \
        cqfd.1.gz \
-       cqfdrc.5.gz \
+       samples/Cqfdfile \
+       samples/Cqfdfile.Yocto:scarthgap \
+       samples/Cqfdfile.kas:4.5 \
        samples/Dockerfile.Ubuntu:24.04 \
        samples/Dockerfile.Yocto:scarthgap \
-       samples/dot-cqfdrc \
-       samples/dot-cqfdrc.Yocto:scarthgap \
-       samples/dot-cqfdrc.kas:4.5 \
 '
 
 [deb]

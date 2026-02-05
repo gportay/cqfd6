@@ -13,11 +13,11 @@ fi
 cd "$TDIR/" || exit 1
 
 mv -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
-mv -f .cqfdrc .cqfdrc.orig
+mv -f Cqfdfile Cqfdfile.orig
 
 # Use a custom Dockerfile with a busybox version of su.
 jtest_prepare "cqfd run with busybox su -c sets path"
-sed '/\[build\]/apath="/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin"' .cqfdrc.orig >.cqfdrc
+sed '/\[build\]/apath="/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin"' Cqfdfile.orig >Cqfdfile
 cat <<EOF >.cqfd/docker/Dockerfile
 FROM alpine:3.20
 RUN apk update && apk upgrade
@@ -142,7 +142,7 @@ else
 	fi
 fi
 
-# Restore .cqfdrc and Dockerfile.
+# Restore Cqfdfile and Dockerfile.
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 # Restore container.

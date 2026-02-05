@@ -14,15 +14,15 @@ cd "$TDIR/" || exit 1
 
 cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
-cp -f .cqfdrc .cqfdrc.orig
-cp -f cqfdrc-tag .cqfdrc
+cp -f Cqfdfile Cqfdfile.orig
+cp -f Cqfdfile-tag Cqfdfile
 
 ################################################################################
 # 'cqfd init' creates image with tag
 ################################################################################
 random="$RANDOM$RANDOM"
 tag="%Un-%Po-%Pn-%Bd-%Dh-$random"
-sed -i -e "s!^tag=.*\$!tag='$tag'!" .cqfdrc
+sed -i -e "s!^tag=.*\$!tag='$tag'!" Cqfdfile
 # shellcheck disable=SC2001
 un="$(sed 's/[^0-9a-zA-Z\-]/_/g' <<<"$USER")"
 dh="$(sha256sum .cqfd/docker/Dockerfile | cut -b 1-7)"
@@ -42,7 +42,7 @@ fi
 "${cqfd_docker[@]}" rmi "$image:$dh"
 
 tag="%Un-%Po-%Pn-%Bd-%DH-$random"
-sed -i -e "s!^tag=.*\$!tag='$tag'!" .cqfdrc
+sed -i -e "s!^tag=.*\$!tag='$tag'!" Cqfdfile
 dh="$(sha256sum .cqfd/centos/Dockerfile | cut -b 1-64)"
 image="cqfd-$un-$un-cqfd-test-centos-$dh-$random"
 dh="$(sha256sum .cqfd/centos/Dockerfile | cut -b 1-7)"
@@ -52,7 +52,7 @@ if "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 fi
 
 jtest_prepare "cqfd init with tag $tag and distro build templated image $image:$dh"
-sed -i -e "s/\[build\]/[build]\ndistro='centos'/" .cqfdrc
+sed -i -e "s/\[build\]/[build]\ndistro='centos'/" Cqfdfile
 if cqfd init && \
    "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	jtest_result pass
@@ -62,9 +62,9 @@ fi
 "${cqfd_docker[@]}" rmi "$image:$dh"
 
 ################################################################################
-# Restore initial .cqfdrc and Dockerfile
+# Restore initial Cqfdfile and Dockerfile
 ################################################################################
-mv -f .cqfdrc.orig .cqfdrc
+mv -f Cqfdfile.orig Cqfdfile
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 ################################################################################

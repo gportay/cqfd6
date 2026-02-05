@@ -28,7 +28,7 @@ Copyright:
  Copyright (C) 2015-2025 Savoir-faire Linux, Inc.
 License: GPL-3+
 
-Files: cqfdrc.5.adoc
+Files: Cqfdfile.5.adoc
 Copyright:
  Copyright (C) 2017,2025-2026 Gaël PORTAY
  Copyright (C) 2015-2025 Savoir-faire Linux, Inc.
@@ -36,6 +36,10 @@ License: GPL-3+
 
 Files: docker-cqfd
 Copyright: Copyright (C) 2024-2026 Gaël PORTAY
+License: GPL-3+
+
+Files: samples/Cqfdfile.Yocto:scarthgap
+Copyright: Copyright (c) 2026 Gaël PORTAY
 License: GPL-3+
 
 Files: samples/Dockerfile.Ubuntu:24:04
@@ -46,11 +50,11 @@ Files: samples/Dockerfile.Yocto:scarthgap
 Copyright: Copyright (c) 2026 Gaël PORTAY
 License: GPL-3+
 
-Files: samples/dot-cqfdrc.Yocto:scarthgap
+Files: samples/Dockerfile.yocto:scarthgap
 Copyright: Copyright (c) 2026 Gaël PORTAY
 License: GPL-3+
 
-Files: samples/dot-cqfdrc.kas:4.5
+Files: samples/Dockerfile.kas:4.5
 Copyright: Copyright (c) 2026 Gaël PORTAY
 License: GPL-3+
 

@@ -11,7 +11,7 @@ cd "$TDIR/" || exit 1
 ################################################################################
 jtest_prepare "cqfd init without using build_context"
 if cqfd init && \
-   cqfd run "! test -e /tmp/cqfdrc-build_context"; then
+   cqfd run "! test -e /tmp/Cqfdfile-build_context"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -22,23 +22,23 @@ fi
 ################################################################################
 cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 cp -f .cqfd/docker/Dockerfile.build_context .cqfd/docker/Dockerfile
-cp -f cqfdrc-build_context .cqfdrc
+cp -f Cqfdfile-build_context Cqfdfile
 
 ################################################################################
 # 'cqfd init' with context changes the context
 ################################################################################
 jtest_prepare "cqfd init using build_context"
 if cqfd init && \
-   cqfd run "test -e /tmp/cqfdrc-build_context"; then
+   cqfd run "test -e /tmp/Cqfdfile-build_context"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 ################################################################################
-# restore initial .cqfdrc and Dockerfile
+# restore initial Cqfdfile and Dockerfile
 ################################################################################
-cp -f cqfdrc-test .cqfdrc
+cp -f Cqfdfile-test Cqfdfile
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 ################################################################################

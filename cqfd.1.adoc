@@ -64,7 +64,7 @@ Linux distribution.
 	Run shell command inside build container.
 
 By default, the _--run_ command is assumed, with the default command string
-configured in your _.cqfdrc_ (see build.command).
+configured in your _Cqfdfile_ (see build.command).
 
 Command options for --run:
 
@@ -82,8 +82,8 @@ Command options for --run:
 *--platform TARGET*::
 	Set target platform.
 
-*-f* or *--cqfdrc-file FILE*::
-	Use file as config file (default _.cqfdrc_).
+*-f* or *--cqfd-file FILE*::
+	Use file as config file (default _Cqfdfile_).
 
 *-d* or *--cqfd-directory DIR*::
 	Use directory as cqfd directory (default _.cqfd_).
@@ -114,8 +114,8 @@ Command options for --run:
 *CQFD_DIR*::
 	Directory used as cqfd directory (default _.cqfd_).
 
-*CQFDRC_FILE*::
-	File used as config file (default _.cqfdrc_).
+*CQFDFILE*::
+	File used as config file (default _Cqfdfile_).
 
 *CQFD_DOCKER*::
 	Program used to invoke _docker_ client.
@@ -182,8 +182,8 @@ Command options for --run:
 
 == FILES
 
-*.cqfdrc*::
-	Project information config file (See *cqfdrc(5)*).
+*Cqfdfile*::
+	Project information config file (See *Cqfdfile(5)*).
 
 *.cqfd*::
 	Project data directory.
@@ -218,4 +218,4 @@ SIX stands for *Sudo Interface eXperimentation*.
 
 == SEE ALSO
 
-*docker-build(1)*, *docker-run(1)*, *Dockerfile(5)*, *cqfdrc6(5)*
+*docker-build(1)*, *docker-run(1)*, *Dockerfile(5)*, *Cqfdfile6(5)*

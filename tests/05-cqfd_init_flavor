@@ -12,8 +12,8 @@ cd "$TDIR/" || exit 1
 ################################################################################
 # 'cqfd init' with different flavor makes a different container
 ################################################################################
-cp -f .cqfdrc .cqfdrc.orig
-sed -i -e "s/\[foo\]/[foo]\ndistro='centos'/" .cqfdrc
+cp -f Cqfdfile Cqfdfile.orig
+sed -i -e "s/\[foo\]/[foo]\ndistro='centos'/" Cqfdfile
 
 jtest_prepare "cqfd init using '$flavor' flavor"
 if cqfd -b "$flavor" init && \
@@ -22,8 +22,8 @@ if cqfd -b "$flavor" init && \
 else
 	jtest_result fail
 fi
-# restore initial .cqfdrc
-mv -f .cqfdrc.orig .cqfdrc
+# restore initial Cqfdfile
+mv -f Cqfdfile.orig Cqfdfile
 
 ################################################################################
 # 'cqfd init' with invalid flavor should fail

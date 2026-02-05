@@ -34,14 +34,14 @@ jtest_prepare "'cqfd run' should add config's extra_groups to the local user"
 if [ "$USER" = "runner" ] || [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	cp -f .cqfdrc .cqfdrc.orig
-	echo 'user_extra_groups="docker newgroup:12345"' >>.cqfdrc
+	cp -f Cqfdfile Cqfdfile.orig
+	echo 'user_extra_groups="docker newgroup:12345"' >>Cqfdfile
 	if output=$(cqfd run groups | grep docker | grep newgroup) && \
 	   [ -n "$output" ]; then
 		jtest_result pass
 	else
 		jtest_result fail
 	fi
-	# restore initial .cqfdrc
-	mv -f .cqfdrc.orig .cqfdrc
+	# restore initial Cqfdfile
+	mv -f Cqfdfile.orig Cqfdfile
 fi
