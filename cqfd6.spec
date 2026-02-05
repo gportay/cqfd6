@@ -73,8 +73,6 @@ fi
 %{_bindir}/linux-ppc64le-cqfd6
 %{_bindir}/linux-riscv64-cqfd6
 %{_bindir}/linux-s390x-cqfd6
-%{_datadir}/%{name}/samples/Dockerfile.focalFossa.android34
-%{_datadir}/%{name}/samples/Dockerfile.focalFossa.nodejs20x
 %{_datadir}/%{name}/samples/dot-cqfdrc
 %{_datadir}/bash-completion/completions/%{name}
 %{_datadir}/man/man1/cqfd6.1.gz

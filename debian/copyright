@@ -38,10 +38,6 @@ Files: docker-cqfd
 Copyright: Copyright (C) 2024-2026 Gaël PORTAY
 License: GPL-3+
 
-Files: samples/Dockerfile.focalFossa.android34
-Copyright: Copyright (c) 2025 Savoir faire linux
-License: GPL-3+
-
 Files: tests/jtest.inc
 Copyright: 
  Copyright (C) 2016,2023,2025-2026 Gaël PORTAY
