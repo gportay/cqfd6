@@ -930,7 +930,7 @@ fi
 # Drop the root privileges and run providing command, using sudo if it exists
 if [ -n "\$has_sudo" ]; then
 	# Set user read permission only
-	umask 266
+	umask 0266
 
 	if [ "$CQFD_SUDO_NOPASSWD" = true ]; then
 		# Disable password authentication using sudoers(5)
