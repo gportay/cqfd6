@@ -12,8 +12,6 @@ files='AUTHORS \
        cqfd \
        cqfd.1.gz \
        cqfdrc.5.gz \
-       samples/Dockerfile.focalFossa.android34 \
-       samples/Dockerfile.focalFossa.nodejs20x \
        samples/dot-cqfdrc \
 '
 
