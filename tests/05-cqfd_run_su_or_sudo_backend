@@ -56,7 +56,7 @@ fi
 ################################################################################
 # Install the sudo package.
 ################################################################################
-echo "ENV DEBIAN_FRONTEND noninteractive" >>.cqfd/docker/Dockerfile
+echo "ENV DEBIAN_FRONTEND=noninteractive" >>.cqfd/docker/Dockerfile
 echo "RUN apt-get update && apt-get install -y --no-install-recommends sudo" >>.cqfd/docker/Dockerfile
 
 ################################################################################
