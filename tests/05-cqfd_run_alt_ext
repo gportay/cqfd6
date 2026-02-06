@@ -15,7 +15,7 @@ cd "$TDIR/" || exit 1
 workdir="workingdir"
 mkdir -p "$workdir"
 mv .cqfd "$workdir/.cqfd"
-mv .cqfdrc "$workdir/.cqfdrc"
+mv Cqfdfile "$workdir/Cqfdfile"
 
 cd "$workdir" || exit 1
 
@@ -89,6 +89,6 @@ fi
 # restore local cqfd files
 ################################################################################
 cd "$OLDPWD" || exit 1
-mv "$workdir/.cqfdrc" .cqfdrc
+mv "$workdir/Cqfdfile" Cqfdfile
 mv "$workdir/.cqfd" .cqfd
 rmdir -p "$workdir"

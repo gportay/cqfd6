@@ -13,7 +13,7 @@ cd "$TDIR/" || exit 1
 extdir="external/dir"
 mkdir -p "$extdir"
 mv .cqfd "$extdir/cqfd"
-mv .cqfdrc "$extdir/cqfdrc"
+mv Cqfdfile "$extdir/cqfdrc"
 
 ################################################################################
 # 'cqfd init' without local files should fail
@@ -63,7 +63,7 @@ fi
 # should work
 ################################################################################
 jtest_prepare "cqfd init using alternate filenames in an external directory using filenames using environment variables should work"
-if CQFD_DIR=cqfd CQFDRC_FILE=cqfdrc cqfd -C "$extdir" init; then
+if CQFD_DIR=cqfd CQFDFILE=cqfdrc cqfd -C "$extdir" init; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -74,7 +74,7 @@ fi
 # filenames should work
 ################################################################################
 jtest_prepare "cqfd init using alternate filenames in an external directory using relative filenames using environment variables should work"
-if CQFD_DIR="$extdir/cqfd" CQFDRC_FILE="$extdir/cqfdrc" cqfd init; then
+if CQFD_DIR="$extdir/cqfd" CQFDFILE="$extdir/cqfdrc" cqfd init; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -85,7 +85,7 @@ fi
 # filenames should work
 ################################################################################
 jtest_prepare "cqfd init using alternate filenames in an external directory using absolute filenames using environment variables should work"
-if CQFD_DIR="$PWD/$extdir/cqfd" CQFDRC_FILE="$PWD/$extdir/cqfdrc" cqfd init; then
+if CQFD_DIR="$PWD/$extdir/cqfd" CQFDFILE="$PWD/$extdir/cqfdrc" cqfd init; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -94,6 +94,6 @@ fi
 ################################################################################
 # restore local cqfd files
 ################################################################################
-mv "$extdir/cqfdrc" .cqfdrc
+mv "$extdir/cqfdrc" Cqfdfile
 mv "$extdir/cqfd" .cqfd
 rmdir -p "$extdir"
