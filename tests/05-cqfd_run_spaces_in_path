@@ -13,7 +13,7 @@ cd "$TDIR/" || exit 1
 spaces_dir="aa bb cc dd"
 spaces_dir2="aa2 bb2 cc2 dd2"
 mkdir -p "$spaces_dir/$spaces_dir2"
-cp -a .cqfd .cqfdrc "$spaces_dir/$spaces_dir2"
+mv -f .cqfd .cqfdrc "$spaces_dir/$spaces_dir2"
 pushd "$spaces_dir/$spaces_dir2" >/dev/null || exit 1
 
 jtest_prepare "cqfd run from a directory with spaces"
@@ -26,5 +26,8 @@ fi
 
 # Teardown
 popd >/dev/null || exit 1
+
+# Restore local cqfd files
+mv -f "$spaces_dir/$spaces_dir2"/.cqfdrc "$spaces_dir/$spaces_dir2"/.cqfd .
 rm -rf "$spaces_dir"
 rm -f "$file"
