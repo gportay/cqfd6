@@ -53,7 +53,7 @@ install:
 
 uninstall: DOCKERLIBDIR ?= $(PREFIX)/lib/docker
 uninstall:
-	rm -rf $(DESTDIR)$(PREFIX)/bin/cqfd6 \
+	rm -Rf $(DESTDIR)$(PREFIX)/bin/cqfd6 \
 	        $(DESTDIR)$(DOCKERLIBDIR)/cli-plugins/docker-cqfd \
 		$(DESTDIR)$(PREFIX)/share/man/man1/cqfd6.1.gz \
 		$(DESTDIR)$(PREFIX)/share/man/man5/cqfdrc6.5.gz \
@@ -67,7 +67,7 @@ uninstall:
 	                                                --variable=completionsdir \
 	                                                bash-completion)}; \
 	if [ -n "$$completionsdir" ]; then \
-		rm -rf $(DESTDIR)$$completionsdir/cqfd6; \
+		rm -Rf $(DESTDIR)$$completionsdir/cqfd6; \
 	fi
 
 user-install user-uninstall:

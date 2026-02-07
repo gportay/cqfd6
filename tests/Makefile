@@ -42,7 +42,7 @@ tests:
 		fi; \
 	fi; \
 	if echo $(TDIR) | grep -q "/tmp/cqfd-test\.[0-9a-zA-Z]{6,6}"; then \
-		rm -rf $(TDIR); \
+		rm -Rf $(TDIR); \
 	fi; \
 	if [ "$$failed" -ne "0" ]; then \
 		echo "$$failed failure(s) occured"; \

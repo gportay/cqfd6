@@ -21,4 +21,4 @@ build:
 	@echo cqfd_c >a/b/c/cqfd_c.txt
 
 clean:
-	@rm -rf foo bar a/
+	@rm -Rf foo bar a/
