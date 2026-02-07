@@ -61,7 +61,7 @@ else
 fi
 
 jtest_prepare "cqfdrc fails if no command property set in build section even if using run -c"
-if "$cqfd" run -c true 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing build.command property!$";
+if cqfd run -c true 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing build.command property!$";
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
