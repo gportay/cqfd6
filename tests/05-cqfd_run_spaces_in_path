@@ -30,4 +30,6 @@ popd >/dev/null || exit 1
 
 # Restore local cqfd files
 mv -f "$spaces_dir/$spaces_dir2"/.cqfdrc "$spaces_dir/$spaces_dir2"/.cqfd .
-rm -Rf "$spaces_dir"
+
+# Cleanup
+rmdir -p "$spaces_dir/$spaces_dir2"
