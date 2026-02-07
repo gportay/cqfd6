@@ -24,4 +24,4 @@ fi
 
 # cleanup
 popd >/dev/null || exit 1
-rm -rf "$sub_dir"
+rmdir -p "$sub_dir"
