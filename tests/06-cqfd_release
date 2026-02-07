@@ -126,6 +126,7 @@ else
 	jtest_result fail
 fi
 # cleanup
+make clean
 rm -f "cqfd-$d3-foobar.tar.xz"
 
 jtest_prepare "run cqfd release with archive=cqfd-%Gh-\$CTEST.tar.xz should template tarball archive filename (git short hash of last commit)"
@@ -140,6 +141,7 @@ else
 	jtest_result fail
 fi
 # cleanup
+make clean
 rm -f cqfd-*-foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%GH-\$CTEST.tar.xz should template tarball archive filename (git long hash of last commit)"
@@ -154,6 +156,7 @@ else
 	jtest_result fail
 fi
 # cleanup
+make clean
 rm -f cqfd-*-foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%Du-\$CTEST.tar.xz should template tarball archive filename (Unix timestamp)"
@@ -168,6 +171,7 @@ else
 	jtest_result fail
 fi
 # cleanup
+make clean
 rm -f cqfd-*-foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%Cf-\$CTEST.tar.xz should template tarball archive filename (current cqfd flavor name unset)"
@@ -197,6 +201,7 @@ else
 	jtest_result fail
 fi
 # cleanup
+make clean
 rm -f cqfd-bar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%Po-\$CTEST.tar.xz should template tarball archive filename (value of the project.org configuration key)"
@@ -208,6 +213,7 @@ else
 	jtest_result fail
 fi
 # cleanup
+make clean
 rm -f cqfd-cqfd-foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%Pn-\$CTEST.tar.xz should template tarball archive filename (value of the project.name configuration key)"
@@ -219,6 +225,7 @@ else
 	jtest_result fail
 fi
 # cleanup
+make clean
 rm -f cqfd-test-foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%%-\$CTEST.tar.xz should template tarball archive filename (litteral '%' sign)"
@@ -230,6 +237,7 @@ else
 	jtest_result fail
 fi
 # cleanup
+make clean
 rm -f cqfd-%-foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-\$CTEST.tar.gz should generate a gzipped tarball archive"
@@ -241,6 +249,7 @@ else
 	jtest_result fail
 fi
 # cleanup
+make clean
 rm -f "cqfd-$CTEST.tar.gz"
 
 jtest_prepare "run cqfd release with archive=cqfd-\$CTEST.zip should generate a zip archive"
@@ -252,6 +261,7 @@ else
 	jtest_result fail
 fi
 # cleanup
+make clean
 rm -f "cqfd-$CTEST.zip"
 
 jtest_prepare "run cqfd release with a non-existing file or directory in files parameter should fail"
@@ -261,6 +271,8 @@ if ! cqfd release; then
 else
 	jtest_result fail
 fi
+# cleanup
+make clean
 
 jtest_prepare "run cqfd release should resolve globbing pathnames in files parameter"
 # shellcheck disable=SC2016
@@ -282,6 +294,7 @@ else
 	jtest_result pass
 fi
 # cleanup
+make clean
 rm -f "cqfd-$CTEST.tar.xz"
 rm -f "tmp.$$"
 
@@ -293,6 +306,8 @@ if ! cqfd release; then
 else
 	jtest_result fail
 fi
+# cleanup
+make clean
 
 jtest_prepare "run cqfd with option --release should pass"
 # shellcheck disable=SC2016
