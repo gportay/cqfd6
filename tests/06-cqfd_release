@@ -22,9 +22,9 @@ fi
 ################################################################################
 # Adding a files section should help
 ################################################################################
-rel_files="a/cqfd_a.txt a/b/c/cqfd_c.txt a/b/cqfd_b.txt"
+rel_files=(a/cqfd_a.txt a/b/c/cqfd_c.txt a/b/cqfd_b.txt)
 cp -f .cqfdrc .cqfdrc.orig
-echo "files=\"$rel_files\"" >>.cqfdrc
+echo "files=\"${rel_files[*]}\"" >>.cqfdrc
 jtest_prepare "cqfd release now with a files parameter"
 if cqfd release; then
 	jtest_result pass
@@ -45,7 +45,7 @@ fi
 ################################################################################
 jtest_prepare "archived files NOT at root of tar archive"
 result="pass"
-for f in $rel_files; do
+for f in "${rel_files[@]}"; do
 	if ! tar tf cqfd-test.tar.xz | grep "^$f$"; then
 		result="fail"
 	fi
@@ -61,7 +61,7 @@ if cqfd release; then
 else
 	result="fail"
 fi
-for f in $rel_files; do
+for f in "${rel_files[@]}"; do
 	if ! tar tf cqfd-test.tar.xz | grep "^$f$"; then
 		result="fail"
 	fi
@@ -78,7 +78,7 @@ if cqfd release; then
 else
 	result="fail"
 fi
-for f in $rel_files; do
+for f in "${rel_files[@]}"; do
 	if ! tar tf cqfd-test.tar.xz | grep "^${f##*/}$"; then
 		result="fail"
 	fi
@@ -97,9 +97,9 @@ if ! cqfd run ln -s a/cqfd_a.txt link.txt; then
 	jtest_log fatal "cqfd run failed"
 	result="fail"
 fi
-rel_files_link="a/cqfd_a.txt link.txt"
+rel_files_link=(a/cqfd_a.txt link.txt)
 sed -i '/files=/d' .cqfdrc
-echo "files=\"$rel_files_link\"" >>.cqfdrc
+echo "files=\"${rel_files_link[*]}\"" >>.cqfdrc
 echo "tar_options=-h" >>.cqfdrc
 
 if ! cqfd release; then
@@ -121,7 +121,7 @@ jtest_result "$result"
 rm -f link.txt
 sed -i '/tar_options=/d' .cqfdrc
 sed -i '/files=/d' .cqfdrc
-echo "files=\"$rel_files\"" >>.cqfdrc
+echo "files=\"${rel_files[*]}\"" >>.cqfdrc
 
 # cleanup
 rm -f cqfd-test.tar.xz
