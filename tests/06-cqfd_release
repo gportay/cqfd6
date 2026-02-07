@@ -131,7 +131,7 @@ echo "files=\"${rel_files[*]}\"" >>.cqfdrc
 # cleanup
 make clean
 rm -f link.txt cqfd-test.tar.xz
-rm -rf "$TDIR/output"
+rm -Rf "$TDIR/output"
 
 ################################################################################
 # Now test adding an archive filename template to the config
