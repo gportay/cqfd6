@@ -56,3 +56,6 @@ done
 
 # restore initial .cqfdrc
 mv -f "$confdir/mycqfdrc" .cqfdrc
+
+# cleanup
+rmdir -p "$confdir"
