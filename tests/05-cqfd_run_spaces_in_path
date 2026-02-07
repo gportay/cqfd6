@@ -23,6 +23,7 @@ if cqfd run touch "$file" && [ -f "$file" ]; then
 else
 	jtest_result fail
 fi
+rm -f "$file"
 
 # Teardown
 popd >/dev/null || exit 1
@@ -30,4 +31,3 @@ popd >/dev/null || exit 1
 # Restore local cqfd files
 mv -f "$spaces_dir/$spaces_dir2"/.cqfdrc "$spaces_dir/$spaces_dir2"/.cqfd .
 rm -rf "$spaces_dir"
-rm -f "$file"
