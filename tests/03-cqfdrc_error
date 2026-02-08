@@ -182,7 +182,6 @@ fi
 cp -f .cqfdrc.orig .cqfdrc
 sed -i -e "/[build]/,/^$/s,^command=.*$,command=\"make foo\"," .cqfdrc
 echo "include /dev/null" >>.cqfdrc
-rm -f foo
 
 jtest_prepare "cqfdrc with include empty file should pass"
 if cqfd && test -e foo; then
@@ -190,13 +189,13 @@ if cqfd && test -e foo; then
 else
 	jtest_result fail
 fi
+rm -f foo
 
 cat <<EOF >bar.inc
 [build]
 command="make bar"
 EOF
 echo "include bar.inc" >>.cqfdrc
-rm -f bar
 
 jtest_prepare "cqfdrc with include file should pass"
 if cqfd && test -e bar; then
@@ -204,9 +203,9 @@ if cqfd && test -e bar; then
 else
 	jtest_result fail
 fi
+rm -f bar
 
 echo "include bar.inc" >>.cqfdrc
-rm -f bar
 
 jtest_prepare "cqfdrc with duplicate include file should pass"
 if cqfd && test -e bar; then
@@ -214,6 +213,7 @@ if cqfd && test -e bar; then
 else
 	jtest_result fail
 fi
+rm -f bar
 
 echo "include bar.inc" >>bar.inc
 
@@ -223,6 +223,9 @@ if ! cqfd; then
 else
 	jtest_result fail
 fi
+
+# cleanup
+rm -f bar.inc
 
 # restore initial .cqfdrc
 mv -f .cqfdrc.orig .cqfdrc
