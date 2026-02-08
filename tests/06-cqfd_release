@@ -311,7 +311,7 @@ rm -f "tmp.$$"
 ################################################################################
 # Using a non-supported format in archive= should fail
 ################################################################################
-jtest_prepare "cqfd resolves globs in build.files"
+jtest_prepare "cqfd fails if archive format is not supported"
 # shellcheck disable=SC2016
 sed -i -e 's!^archive=.*$!archive=cqfd-$CTEST.tar.zst!' .cqfdrc
 if ! cqfd release; then
