@@ -31,6 +31,9 @@ else
 	jtest_result fail
 fi
 
+# cleanup
+make clean
+
 # restore initial Dockerfile
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 

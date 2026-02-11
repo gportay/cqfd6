@@ -48,6 +48,9 @@ test_step1() {
 		rm -f "$test_file"
 		return
 	fi
+
+	# cleanup
+	make clean
 }
 
 # Build the default command with run -c

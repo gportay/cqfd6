@@ -50,5 +50,7 @@ if ! cqfd run; then
 else
 	jtest_result fail
 fi
+# cleanup
+make clean
 # restore Dockerfile
 sed -i '$d' "$dockerfile"
