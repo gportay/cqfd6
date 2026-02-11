@@ -144,6 +144,7 @@ fi
 
 # Restore .cqfdrc and Dockerfile.
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
+mv -f .cqfdrc.orig .cqfdrc
 
 # Restore container.
 if ! cqfd init; then
