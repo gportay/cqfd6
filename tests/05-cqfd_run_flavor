@@ -36,3 +36,6 @@ for i in 0 1; do
 	fi
 	rm -f "$test_file"
 done
+
+# cleanup
+make clean

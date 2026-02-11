@@ -3,7 +3,7 @@
 # validate the behavior of run command with alternative config file
 
 . "$(dirname "$0")/jtest.inc" "$1"
-confdir="$TDIR/.config/dir"
+confdir=".config/dir"
 flavor="foo"
 
 cd "$TDIR/" || exit 1
@@ -58,4 +58,5 @@ done
 mv -f "$confdir/mycqfdrc" .cqfdrc
 
 # cleanup
+make clean
 rmdir -p "$confdir"
