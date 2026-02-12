@@ -113,7 +113,9 @@ _cqfd6() {
 		done
 
 		if [ -e "$cqfdrc" ]; then
-			flavors=$(CQFD_NO_DEPRECATED_COMMAND_WARNING=true cqfd6 -f "$cqfdrc" --flavors)
+			flavors=$(CQFD_NO_DEPRECATED_COMMAND_WARNING=true \
+				  CQFD_NO_DEPRECATED_WARNING=true \
+				  cqfd6 -f "$cqfdrc" --flavors)
 			# shellcheck disable=SC2207
 			COMPREPLY=($(compgen -W "$flavors" -- "$cur"))
 		fi

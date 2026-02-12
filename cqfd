@@ -112,6 +112,19 @@ warn() {
 	echo "cqfd: warning: $*" >&2
 }
 
+## warn_deprecated() - output warning about deprecated
+# $*: messages and variables shown in the message
+warn_deprecated() {
+	# Deprecated messages disabled explicitly or not supported before cqfd6
+	# (not included)
+	if [ "$CQFD_NO_DEPRECATED_WARNING" = true ] || \
+	   [ "$COMPAT" -lt 6 ]; then
+		return
+	fi
+
+	warn "$@"
+}
+
 ## warn_deprecated_command() - output warning about deprecated command
 # $1: the deprecated command
 # $2..*: the command to consider
@@ -998,8 +1011,8 @@ locate_project_dir() {
 	dir="$PWD"
 	while [ "$dir" != "/" ]; do
 		if [ -d "$dir/.cqfd" ]; then
-			warn ".cqfd is deprecated, move directory content to" \
-			     "the parent directory."
+			warn_deprecated ".cqfd is deprecated, move directory" \
+					"content to the parent directory."
 			realpath "$dir"
 			return
 		fi
@@ -1186,14 +1199,15 @@ load_config() {
 
 	# warn if using legacy variable distro
 	if [ -n "$build_distro" ]; then
-		warn "distro is deprecated, use dockerfile to set path to" \
-		     "the Dockerfile."
+		warn_deprecated "distro is deprecated, use dockerfile to set" \
+				" path to the Dockerfile."
 	fi
 
 	# warn if using legacy variable custom_img_name
 	if [ -n "$project_custom_img_name" ]; then
-		warn "custom_img_name is deprecated, use either tag to name" \
-		     "your image or image to pull an image from a registry."
+		warn_deprecated "custom_img_name is deprecated, use either" \
+				"tag to name your image or image to pull an" \
+				"image from a registry."
 		# backward compatibility if image= or tag= unspecified
 		if [ ! "$project_image" ]; then
 			project_image="$project_custom_img_name"
