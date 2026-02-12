@@ -18,7 +18,7 @@ mv .cqfdrc "$extdir/cqfdrc"
 ################################################################################
 # 'cqfd init' without local files should fail
 ################################################################################
-jtest_prepare "cqfd init without local files should fail"
+jtest_prepare "run cqfd init without .cqfdrc file and .cqfd directory should fail"
 if ! cqfd init; then
 	jtest_result pass
 else
@@ -29,7 +29,7 @@ fi
 # 'cqfd init' using alternate filenames in an external directory using filenames
 # should work
 ################################################################################
-jtest_prepare "cqfd init using alternate filenames in an external directory using filenames using options should work"
+jtest_prepare "run cqfd init from a subdirectory with options -f and -d using path relative to subdirectory should pass"
 if cqfd -C "$extdir" -d cqfd -f cqfdrc init; then
 	jtest_result pass
 else
@@ -40,7 +40,7 @@ fi
 # 'cqfd init' using alternate filenames in an external directory using absolute
 # filenames should work
 ################################################################################
-jtest_prepare "cqfd init using alternate filenames in an external directory using relative filenames using options should work"
+jtest_prepare "run cqfd init with options -f and -d should pass"
 if cqfd -d "$extdir/cqfd" -f "$extdir/cqfdrc" init; then
 	jtest_result pass
 else
@@ -51,7 +51,7 @@ fi
 # 'cqfd init' using alternate filenames in an external directory using absolute
 # filenames should work
 ################################################################################
-jtest_prepare "cqfd init using alternate filenames in an external directory using absolute using options filenames should work"
+jtest_prepare "run cqfd init with options -f and -d using absolute path should pass"
 if cqfd -d "$PWD/$extdir/cqfd" -f "$PWD/$extdir/cqfdrc" init; then
 	jtest_result pass
 else
@@ -62,7 +62,7 @@ fi
 # 'cqfd init' using alternate filenames in an external directory using filenames
 # should work
 ################################################################################
-jtest_prepare "cqfd init using alternate filenames in an external directory using filenames using environment variables should work"
+jtest_prepare "run cqfd init from a subdirectory with environments CQFDRC_FILE and CQFD_DIR using relative path to subdirectory should pass"
 if CQFD_DIR=cqfd CQFDRC_FILE=cqfdrc cqfd -C "$extdir" init; then
 	jtest_result pass
 else
@@ -73,7 +73,7 @@ fi
 # 'cqfd init' using alternate filenames in an external directory using absolute
 # filenames should work
 ################################################################################
-jtest_prepare "cqfd init using alternate filenames in an external directory using relative filenames using environment variables should work"
+jtest_prepare "run cqfd init with environments CQFDRC_FILE and CQFD_DIR should pass"
 if CQFD_DIR="$extdir/cqfd" CQFDRC_FILE="$extdir/cqfdrc" cqfd init; then
 	jtest_result pass
 else
@@ -84,7 +84,7 @@ fi
 # 'cqfd init' using alternate filenames in an external directory using absolute
 # filenames should work
 ################################################################################
-jtest_prepare "cqfd init using alternate filenames in an external directory using absolute filenames using environment variables should work"
+jtest_prepare "run cqfd init from a subdirectory with environments CQFDRC_FILE and CQFD_DIR using absolute path should pass"
 if CQFD_DIR="$PWD/$extdir/cqfd" CQFDRC_FILE="$PWD/$extdir/cqfdrc" cqfd init; then
 	jtest_result pass
 else
