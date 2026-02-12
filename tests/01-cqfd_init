@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of init command
+# validate the behavior of --init command
 
 set -o pipefail
 
@@ -8,8 +8,8 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-jtest_prepare "run cqfd init with a .cqfdrc file should pass"
-if cqfd init; then
+jtest_prepare "run cqfd --init with a .cqfdrc file should pass"
+if cqfd --init; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -18,17 +18,17 @@ fi
 # backup .cqfdrc
 mv .cqfdrc .cqfdrc.orig
 
-jtest_prepare "run cqfd init with a nonexistent Dockerfile should fail"
+jtest_prepare "run cqfd --init with a nonexistent Dockerfile should fail"
 sed -e "s/\[build\]/[build]\ndistro='thisshouldfail'/" .cqfdrc.orig >.cqfdrc
-if ! cqfd init; then
+if ! cqfd --init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd init with another Dockerfile should pass"
+jtest_prepare "run cqfd --init with another Dockerfile should pass"
 sed -e "s/thisshouldfail/centos/" -i .cqfdrc
-if cqfd init; then
+if cqfd --init; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -40,19 +40,19 @@ mv .cqfdrc.orig .cqfdrc
 # backup Dockerfile
 mv .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 
-jtest_prepare "run cqfd init with same uid/gid dummy user should pass"
+jtest_prepare "run cqfd --init with same uid/gid dummy user should pass"
 cat .cqfd/docker/Dockerfile.orig <<EOF >>.cqfd/docker/Dockerfile
 RUN groupadd -og "${GROUPS[0]}" -f dummy && \
     useradd -s /bin/bash -ou "$UID" -g "${GROUPS[0]}" dummy
 EOF
-if cqfd init; then
+if cqfd --init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd init with --quiet should remain quiet"
-if ! cqfd -q init | grep -E "^(sha256:)?[a-f0-9]{64}$"; then
+jtest_prepare "run cqfd --init with --quiet should remain quiet"
+if ! cqfd -q --init | grep -E "^(sha256:)?[a-f0-9]{64}$"; then
 	jtest_result fail
 else
 	jtest_result pass
@@ -62,6 +62,6 @@ fi
 mv .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 # restore container
-if ! cqfd init; then
+if ! cqfd --init; then
 	jtest_log error "restore container failed"
 fi

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of ls and gc command to teardown
+# validate the behavior of --ls and --gc command to teardown
 
 set -o pipefail
 
@@ -13,24 +13,24 @@ for i in .cqfd/*/Dockerfile; do
 	echo "RUN echo $EPOCHSECONDS" >>"$i"
 done
 
-jtest_prepare "run cqfd ls should list build containers"
-if cqfd ls | grep -E "^cqfd-$USER-.+$";
+jtest_prepare "run cqfd --ls should list build containers"
+if cqfd --ls | grep -E "^cqfd-$USER-.+$";
    test "${PIPESTATUS[0]}" -eq 0 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd gc should collect unused build containers"
-if CQFD_PROMPT=yes cqfd gc && ( ! cqfd ls | grep -E "^cqfd-$USER-.+[[:blank:]]+(Deleted|Outdated)[[:blank:]][[:alnum:]/.-]+$" && \
+jtest_prepare "run cqfd --gc should collect unused build containers"
+if CQFD_PROMPT=yes cqfd --gc && ( ! cqfd --ls | grep -E "^cqfd-$USER-.+[[:blank:]]+(Deleted|Outdated)[[:blank:]][[:alnum:]/.-]+$" && \
 	           test "${PIPESTATUS[0]}" -eq 0 -a "${PIPESTATUS[1]}" -eq 1 ); then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd ls should not list build containers"
-if ! cqfd ls | grep -E "^cqfd-$USER-.+$" && \
+jtest_prepare "run cqfd --ls should not list build containers"
+if ! cqfd --ls | grep -E "^cqfd-$USER-.+$" && \
    test "${PIPESTATUS[0]}" -eq 0 -a "${PIPESTATUS[1]}" -eq 1; then
 	jtest_result pass
 else

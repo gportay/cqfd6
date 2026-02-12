@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of exec command
+# validate the behavior of --exec command
 
 set -o pipefail
 
@@ -8,31 +8,31 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-jtest_prepare "run cqfd exec without argument should fail"
-if ! cqfd exec; then
+jtest_prepare "run cqfd --exec without argument should fail"
+if ! cqfd --exec; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd exec with arguments should pass"
-if cqfd exec true; then
+jtest_prepare "run cqfd --exec with arguments should pass"
+if cqfd --exec true; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd exec should return same status"
-if cqfd exec exit 10; \
+jtest_prepare "run cqfd --exec should return same status"
+if cqfd --exec exit 10; \
    test "$?" -eq 10; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd exec should preserve the arguments"
+jtest_prepare "run cqfd --exec should preserve the arguments"
 # shellcheck disable=SC2016
-if cqfd exec /bin/sh -c 'printf "0=$0,*=$*,#=$#"' zero one two three \
+if cqfd --exec /bin/sh -c 'printf "0=$0,*=$*,#=$#"' zero one two three \
        | grep "^0=zero,\*=one two three,#=3$"; then
 	jtest_result pass
 else
@@ -42,11 +42,11 @@ fi
 # backup .cqfdrc
 mv .cqfdrc .cqfdrc.orig
 
-jtest_prepare "run cqfd exec with option --release should generate cqfd-test.tar.xz tarball archive by default"
+jtest_prepare "run cqfd --exec with option --release should generate cqfd-test.tar.xz tarball archive by default"
 cat .cqfdrc.orig - <<EOF >.cqfdrc
 files="exec"
 EOF
-if cqfd --release exec touch exec && tar tf cqfd-test.tar.xz | grep "^exec$"; then
+if cqfd --release --exec touch exec && tar tf cqfd-test.tar.xz | grep "^exec$"; then
 	jtest_result pass
 else
 	jtest_result fail
