@@ -4,9 +4,6 @@
 
 . "$(dirname "$0")/jtest.inc" "$1"
 
-################################################################################
-# Running cqfd with an empty argument shall fail
-################################################################################
 jtest_prepare "run cqfd with an empty argument should fail"
 if ! cqfd ""; then
 	jtest_result pass
@@ -14,9 +11,6 @@ else
 	jtest_result fail
 fi
 
-################################################################################
-# Running cqfd with an unknown command shall fail
-################################################################################
 jtest_prepare "run cqfd with an unknown command should fail"
 if ! CQFD_COMPAT=5 cqfd invalid_arg_should_fail; then
 	jtest_result pass
