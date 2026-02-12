@@ -9,7 +9,7 @@ cd "$TDIR/" || exit 1
 ################################################################################
 # 'cqfd deinit' with a proper .cqfdrc should pass
 ################################################################################
-jtest_prepare "run cqfd deinit"
+jtest_prepare "run cqfd deinit with a proper .cqfdrc should pass"
 if cqfd deinit; then
 	jtest_result pass
 else
@@ -19,7 +19,7 @@ fi
 ################################################################################
 # 'cqfd deinit' with a nonexistent Dockerfile should fail
 ################################################################################
-jtest_prepare "deinit with a nonexisting dockerfile shall fail"
+jtest_prepare "run cqfd deinit with a nonexisting Dockerfile should fail"
 cp -f .cqfdrc .cqfdrc.orig
 sed -i -e "s/\[build\]/[build]\ndistro='thisshouldfail'/" .cqfdrc
 if ! cqfd deinit; then
@@ -31,7 +31,7 @@ fi
 ################################################################################
 # 'cqfd deinit' with another Dockerfile should succeed
 ################################################################################
-jtest_prepare "run cqfd deinit with an other Dockerfile"
+jtest_prepare "run cqfd deinit with another Dockerfile should pass"
 sed -i -e "s/thisshouldfail/centos/" .cqfdrc
 if cqfd init && cqfd deinit; then
 	jtest_result pass
@@ -44,7 +44,7 @@ mv -f .cqfdrc.orig .cqfdrc
 ################################################################################
 # 'cqfd deinit' with an already deinit'ed image should fail
 ################################################################################
-jtest_prepare "deinit an already deinit'ed image shall fail"
+jtest_prepare "run cqfd deinit with an already deinit'ed image should fail"
 if ! cqfd deinit; then
 	jtest_result pass
 else
@@ -54,7 +54,7 @@ fi
 ################################################################################
 # 'cqfd deinit' with CQFD_EXTRA_RMI_ARGS should succeed
 ################################################################################
-jtest_prepare "deinit using CQFD_EXTRA_RMI_ARGS"
+jtest_prepare "run cqfd deinit with CQFD_EXTRA_RMI_ARGS=--force should pass"
 if CQFD_EXTRA_RMI_ARGS="--force" cqfd deinit; then
 	jtest_result pass
 else
