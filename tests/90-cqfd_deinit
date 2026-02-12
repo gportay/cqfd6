@@ -29,7 +29,7 @@ else
 fi
 
 ################################################################################
-# 'cqfd deinit' with a proper Dockerfile should fail
+# 'cqfd deinit' with another Dockerfile should succeed
 ################################################################################
 jtest_prepare "run cqfd deinit with an other Dockerfile"
 sed -i -e "s/thisshouldfail/centos/" .cqfdrc
