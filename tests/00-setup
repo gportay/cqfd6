@@ -6,8 +6,8 @@
 
 cd "$TDIR/" || exit 1
 
-jtest_prepare "run cqfd init without an .cqfd directory should fail"
-if ! cqfd init; then
+jtest_prepare "run cqfd --init without an .cqfd directory should fail"
+if ! cqfd --init; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -15,22 +15,22 @@ fi
 
 mv cqfd .cqfd
 
-jtest_prepare "run cqfd ls without a .cqfdrc file should fail"
-if ! cqfd ls; then
+jtest_prepare "run cqfd --ls without a .cqfdrc file should fail"
+if ! cqfd --ls; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd gc without a .cqfdrc file should fail"
-if ! cqfd gc; then
+jtest_prepare "run cqfd --gc without a .cqfdrc file should fail"
+if ! cqfd --gc; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd init without a .cqfdrc file should fail"
-if ! cqfd init; then
+jtest_prepare "run cqfd --init without a .cqfdrc file should fail"
+if ! cqfd --init; then
 	jtest_result pass
 else
 	jtest_result fail

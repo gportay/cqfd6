@@ -9,10 +9,10 @@ cd "$TDIR/" || exit 1
 # backup .cqfdrc
 mv .cqfdrc .cqfdrc.orig
 
-jtest_prepare "run cqfd init without using build_context should not use context directory"
+jtest_prepare "run cqfd --init without using build_context should not use context directory"
 cp .cqfdrc.orig .cqfdrc
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='! test -e /tmp/cqfdrc-build_context'," -i .cqfdrc
-if cqfd --reinit && cqfd; then
+if cqfd --init && cqfd; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -21,11 +21,11 @@ fi
 # backup Dockerfile
 mv .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 
-jtest_prepare "run cqfd init using build_context should use the context directory"
+jtest_prepare "run cqfd --init using build_context should use the context directory"
 cp .cqfd/docker/Dockerfile.build_context .cqfd/docker/Dockerfile
 cp cqfdrc-build_context .cqfdrc
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='test -e /tmp/cqfdrc-build_context'," -i .cqfdrc
-if cqfd --reinit && cqfd; then
+if cqfd --init && cqfd; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -36,6 +36,6 @@ mv .cqfdrc.orig .cqfdrc
 mv .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 # restore container
-if ! cqfd init; then
+if ! cqfd --init; then
 	jtest_log error "restore container failed"
 fi

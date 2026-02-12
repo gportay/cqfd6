@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of deinit with docker extra rmi arguments
+# validate the behavior of --deinit with docker extra rmi arguments
 
 . "$(dirname "$0")/jtest.inc" "$1"
 
 cd "$TDIR/" || exit 1
 
-jtest_prepare "run cqfd deinit with --force set in CQFD_EXTRA_RMI_ARGS should pass"
-if CQFD_EXTRA_RMI_ARGS="--force" cqfd deinit; then
+jtest_prepare "run cqfd --deinit with --force set in CQFD_EXTRA_RMI_ARGS should pass"
+if CQFD_EXTRA_RMI_ARGS="--force" cqfd --deinit; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -16,9 +16,9 @@ fi
 # backup .cqfdrc
 mv .cqfdrc .cqfdrc.orig
 
-jtest_prepare "run cqfd deinit with --force set in docker_rmi_args should pass"
+jtest_prepare "run cqfd --deinit with --force set in docker_rmi_args should pass"
 sed -e '/\[build\]/adocker_rmi_args="--force"' .cqfdrc.orig >.cqfdrc
-if cqfd deinit; then
+if cqfd --deinit; then
 	jtest_result pass
 else
 	jtest_result fail
