@@ -29,7 +29,7 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd should not list build containers"
+jtest_prepare "run cqfd ls should not list build containers"
 if ! cqfd ls | grep -E "^cqfd-$USER-.+$" && \
    test "${PIPESTATUS[0]}" -eq 0 -a "${PIPESTATUS[1]}" -eq 1; then
 	jtest_result pass
