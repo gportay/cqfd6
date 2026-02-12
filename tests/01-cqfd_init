@@ -16,7 +16,7 @@ cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 ################################################################################
 # 'cqfd init' with a proper .cqfdrc file should pass
 ################################################################################
-jtest_prepare "run cqfd init"
+jtest_prepare "run cqfd init with a proper .cqfdrc file should pass"
 if cqfd init; then
 	jtest_result pass
 else
@@ -26,7 +26,7 @@ fi
 ################################################################################
 # 'cqfd init' with a nonexistent Dockerfile should fail
 ################################################################################
-jtest_prepare "init with a nonexisting dockerfile shall fail"
+jtest_prepare "run cqfd init with a nonexisting Dockerfile should fail"
 cp -f .cqfdrc .cqfdrc.orig
 sed -i -e "s/\[build\]/[build]\ndistro='thisshouldfail'/" .cqfdrc
 if ! cqfd init; then
@@ -38,7 +38,7 @@ fi
 ################################################################################
 # 'cqfd init' with a proper Dockerfile should pass
 ################################################################################
-jtest_prepare "run cqfd init with an other Dockerfile"
+jtest_prepare "run cqfd init with an other Dockerfile should pass"
 sed -i -e "s/thisshouldfail/centos/" .cqfdrc
 if cqfd init; then
 	jtest_result pass
@@ -51,7 +51,7 @@ mv -f .cqfdrc.orig .cqfdrc
 ################################################################################
 # 'cqfd init' with same uid/gid dummy user should pass
 ################################################################################
-jtest_prepare "add dummy user and dummy group with same uid/gid"
+jtest_prepare "run cqfd init with same uid/gid dummy user should pass"
 cat <<EOF >>.cqfd/docker/Dockerfile
 RUN groupadd -og "${GROUPS[0]}" -f dummy && \
     useradd -s /bin/bash -ou "$UID" -g "${GROUPS[0]}" dummy
@@ -65,7 +65,7 @@ fi
 ################################################################################
 # 'cqfd init' in quiet mode should be quiet
 ################################################################################
-jtest_prepare "cqfd -q init should remain quiet"
+jtest_prepare "run cqfd init with --quiet should remain quiet"
 if ! cqfd -q init | grep -E "^(sha256:)?[a-f0-9]{64}$"; then
 	jtest_result fail
 else
