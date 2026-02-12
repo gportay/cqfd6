@@ -8,14 +8,9 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-################################################################################
-# Create a special test context
-################################################################################
+# create a special test context
 cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 
-################################################################################
-# 'cqfd init' with a proper .cqfdrc file should pass
-################################################################################
 jtest_prepare "run cqfd init with a proper .cqfdrc file should pass"
 if cqfd init; then
 	jtest_result pass
@@ -23,9 +18,6 @@ else
 	jtest_result fail
 fi
 
-################################################################################
-# 'cqfd init' with a nonexistent Dockerfile should fail
-################################################################################
 jtest_prepare "run cqfd init with a nonexisting Dockerfile should fail"
 cp -f .cqfdrc .cqfdrc.orig
 sed -i -e "s/\[build\]/[build]\ndistro='thisshouldfail'/" .cqfdrc
@@ -35,9 +27,6 @@ else
 	jtest_result fail
 fi
 
-################################################################################
-# 'cqfd init' with a proper Dockerfile should pass
-################################################################################
 jtest_prepare "run cqfd init with an other Dockerfile should pass"
 sed -i -e "s/thisshouldfail/centos/" .cqfdrc
 if cqfd init; then
@@ -48,9 +37,6 @@ fi
 # restore initial .cqfdrc
 mv -f .cqfdrc.orig .cqfdrc
 
-################################################################################
-# 'cqfd init' with same uid/gid dummy user should pass
-################################################################################
 jtest_prepare "run cqfd init with same uid/gid dummy user should pass"
 cat <<EOF >>.cqfd/docker/Dockerfile
 RUN groupadd -og "${GROUPS[0]}" -f dummy && \
@@ -62,9 +48,6 @@ else
 	jtest_result fail
 fi
 
-################################################################################
-# 'cqfd init' in quiet mode should be quiet
-################################################################################
 jtest_prepare "run cqfd init with --quiet should remain quiet"
 if ! cqfd -q init | grep -E "^(sha256:)?[a-f0-9]{64}$"; then
 	jtest_result fail
@@ -72,14 +55,10 @@ else
 	jtest_result pass
 fi
 
-################################################################################
 # restore initial Dockerfile
-################################################################################
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
-################################################################################
 # restore container
-################################################################################
 if ! cqfd init; then
 	jtest_log error "restore container failed"
 fi
