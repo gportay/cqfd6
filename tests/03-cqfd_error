@@ -18,7 +18,7 @@ fi
 # Running cqfd with an unknown argument shall fail
 ################################################################################
 jtest_prepare "run a bad cqfd command-line shall fail"
-if ! cqfd invalid_arg_should_fail; then
+if ! CQFD_COMPAT=5 cqfd invalid_arg_should_fail; then
 	jtest_result pass
 else
 	jtest_result fail
