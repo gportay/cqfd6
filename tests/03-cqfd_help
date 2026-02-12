@@ -7,7 +7,7 @@
 ################################################################################
 # 'cqfd help' shall be an accepted command
 ################################################################################
-jtest_prepare "cqfd help shall exit normally"
+jtest_prepare "run cqfd help should exit normally"
 if cqfd help >"$TDIR/usage"; then
 	jtest_result pass
 else
@@ -17,7 +17,7 @@ fi
 ################################################################################
 # 'cqfd help' shall produce a useful help message
 ################################################################################
-jtest_prepare "cqfd help shall produce an help message"
+jtest_prepare "run cqfd help shall produce an help message"
 # Those words shall be present in the output
 for word in Usage Options Commands; do
 	if ! grep -q "^$word:" "$TDIR/usage"; then
