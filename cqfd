@@ -106,9 +106,35 @@ Command options for --run:
 EOF
 }
 
+## no_color() - checks if has color
+has_color() {
+	if [[ -t 2 ]] && [[ "${NO_COLOR:-0}" -eq 0 ]]; then
+		return 0
+	fi
+
+	return 1
+}
+
+## red() - output message in red
+# $*: messages and variables shown in the message
+red() {
+	printf "\e[31;1m$*\e[0m\n"
+}
+
+## red() - output message in yellow
+# $*: messages and variables shown in the message
+yellow() {
+	printf "\e[33m$*\e[0m\n"
+}
+
 ## warn() - output warning
 # $*: messages and variables shown in the message
 warn() {
+	if has_color; then
+		yellow "cqfd: warning: $*" >&2
+		return
+	fi
+
 	echo "cqfd: warning: $*" >&2
 }
 
@@ -148,6 +174,11 @@ warn_deprecated_command() {
 ## die() - exit when an error occured
 # $*: messages shown in the error message
 die() {
+	if has_color; then
+		red "cqfd: fatal: $*" >&2
+		exit 1
+	fi
+
 	echo "cqfd: fatal: $*" >&2
 	exit 1
 }
