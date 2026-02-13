@@ -40,6 +40,7 @@ for f in "${rel_files[@]}"; do
 	fi
 done
 jtest_result "$result"
+unset result
 # cleanup
 make clean
 rm -f cqfd-test.tar.xz
@@ -57,6 +58,7 @@ for f in "${rel_files[@]}"; do
 	fi
 done
 jtest_result "$result"
+unset result
 # revert the changes in .cqfdrc file
 sed -i -e '$ s!^tar_transform=.*$!!' .cqfdrc
 # cleanup
@@ -76,6 +78,7 @@ for f in "${rel_files[@]}"; do
 	fi
 done
 jtest_result "$result"
+unset result
 # revert the changes in .cqfdrc file
 sed -i -e '$ s!^tar_transform=.*$!!' .cqfdrc
 # cleanup
@@ -107,6 +110,7 @@ if [ -L "$TDIR/output/link.txt" ] || ! diff "$TDIR/output/a/cqfd_a.txt" "$TDIR/o
 	result="fail"
 fi
 jtest_result "$result"
+unset result
 
 # revert the changes in .cqfdrc file
 sed -i '/tar_options=/d' .cqfdrc
