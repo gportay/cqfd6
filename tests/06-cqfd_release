@@ -8,10 +8,6 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-################################################################################
-# The first invocation has no 'files' parameter defined,
-# hence it should fail
-################################################################################
 jtest_prepare "run cqfd release without files parameter should fail"
 if ! cqfd release; then
 	jtest_result pass
@@ -19,9 +15,6 @@ else
 	jtest_result fail
 fi
 
-################################################################################
-# Adding a files section should help
-################################################################################
 rel_files=(a/cqfd_a.txt a/b/c/cqfd_c.txt a/b/cqfd_b.txt)
 cp -f .cqfdrc .cqfdrc.orig
 echo "files=\"${rel_files[*]}\"" >>.cqfdrc
@@ -39,10 +32,6 @@ else
 	jtest_result fail
 fi
 
-################################################################################
-# cqfd packs files at the archive root, whatever their original place,
-# only if tar_transform=yes
-################################################################################
 jtest_prepare "run cqfd release should preserve pathnames in tarball archive"
 result="pass"
 for f in "${rel_files[@]}"; do
@@ -55,7 +44,6 @@ jtest_result "$result"
 make clean
 rm -f cqfd-test.tar.xz
 
-# now use tar_transform=no
 jtest_prepare "run cqfd release with tar_transform=no should preserve pathnames in tarball archive"
 echo "tar_transform=no" >>.cqfdrc
 if cqfd release; then
@@ -74,7 +62,6 @@ sed -i -e '$ s!^tar_transform=.*$!!' .cqfdrc
 make clean
 rm -f cqfd-test.tar.xz
 
-# now use tar_transform=yes
 jtest_prepare "run cqfd release with tar_transform=yes should not preserve pathnames in tarball archive"
 echo "tar_transform=yes" >>.cqfdrc
 if cqfd release; then
@@ -93,10 +80,6 @@ sed -i -e '$ s!^tar_transform=.*$!!' .cqfdrc
 make clean
 rm -f cqfd-test.tar.xz
 
-################################################################################
-# cqfd follows the symlinks of the files, only if tar_options=-h,
-# only for tar archive.
-################################################################################
 jtest_prepare "run cqfd release with tar_options=-h should follows symlinks in tarball archive"
 result="pass"
 if ! cqfd run ln -s a/cqfd_a.txt link.txt; then
@@ -133,9 +116,6 @@ make clean
 rm -f link.txt cqfd-test.tar.xz
 rm -Rf "$TDIR/output"
 
-################################################################################
-# Now test adding an archive filename template to the config
-################################################################################
 jtest_prepare "run cqfd release with archive=cqfd-%D3-\$CTEST.tar.xz should template tarball archive filename (RFC3339 date)"
 export CTEST=foobar
 d3="$(date --rfc-3339='date')"
@@ -235,9 +215,6 @@ else
 fi
 rm -f cqfd-%-foobar.tar.xz
 
-################################################################################
-# Now test generation of .tar.gz archives
-################################################################################
 jtest_prepare "run cqfd release with archive=cqfd-\$CTEST.tar.gz should generate a gzipped tarball archive"
 # shellcheck disable=SC2016
 sed -i -e '$ s!^archive=.*xz$!archive=cqfd-$CTEST.tar.gz!' .cqfdrc
@@ -248,9 +225,6 @@ else
 fi
 rm -f "cqfd-$CTEST.tar.gz"
 
-################################################################################
-# Now test generation of .zip archives
-################################################################################
 jtest_prepare "run cqfd release with archive=cqfd-\$CTEST.zip should generate a zip archive"
 # shellcheck disable=SC2016
 sed -i -e '$ s!^archive=.*gz$!archive=cqfd-$CTEST.zip!' .cqfdrc
@@ -261,9 +235,6 @@ else
 fi
 rm -f "cqfd-$CTEST.zip"
 
-################################################################################
-# Now test releasing a flavor
-################################################################################
 for flav in foo bar; do
 	filename="cqfd-$flav.tar.xz"
 	jtest_prepare "run cqfd release with flavor '$flav' and archive=cqfd-%Cf.tar.xz should template tarball archive filename (current cqfd flavor name set)"
@@ -277,9 +248,6 @@ for flav in foo bar; do
 	rm -f "$filename"
 done
 
-################################################################################
-# Using a non-existing file/dir in files= should fail
-################################################################################
 jtest_prepare "run cqfd release with a non-existing file or directory in files parameter should fail"
 sed -i -e 's!^files=.*$!files="ThisFileDoesNotExist.txt"!' .cqfdrc
 if ! cqfd release; then
@@ -288,9 +256,6 @@ else
 	jtest_result fail
 fi
 
-################################################################################
-# Now test usage of globs in the file= parameter
-################################################################################
 jtest_prepare "run cqfd release should resolve globbing pathnames in files parameter"
 # shellcheck disable=SC2016
 sed -i -e 's!^archive=.*$!archive=cqfd-$CTEST.tar.xz!' .cqfdrc
@@ -314,9 +279,6 @@ fi
 rm -f "cqfd-$CTEST.tar.xz"
 rm -f "tmp.$$"
 
-################################################################################
-# Using a non-supported format in archive= should fail
-################################################################################
 jtest_prepare "run cqfd release with unsupported archive format in archive parameter should fail"
 # shellcheck disable=SC2016
 sed -i -e 's!^archive=.*$!archive=cqfd-$CTEST.tar.zst!' .cqfdrc
@@ -326,9 +288,6 @@ else
 	jtest_result fail
 fi
 
-################################################################################
-# Using option --release should succeed
-################################################################################
 # shellcheck disable=SC2016
 sed -i -e 's!^archive=.*$!archive=cqfd-$CTEST.tar.xz!' .cqfdrc
 sed -i -e 's!^files=.*$!files=".local/bin/cqfd"!' .cqfdrc
