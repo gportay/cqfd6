@@ -185,7 +185,7 @@ fi
 # cleanup
 rm -f cqfd--foobar.tar.xz
 
-jtest_prepare "run cqfd release with archive=cqfd-%Cf-\$CTEST.tar.xz should template tarball archive filename (current cqfd flavor name set)"
+jtest_prepare "run cqfd release with flavor foo and archive=cqfd-%Cf-\$CTEST.tar.xz should template tarball archive filename (current cqfd flavor name set)"
 if cqfd -b foo release && tar tf cqfd-foo.tar.xz &>/dev/null; then
 	jtest_result pass
 else
@@ -193,6 +193,15 @@ else
 fi
 # cleanup
 rm -f cqfd-foo.tar.xz
+
+jtest_prepare "run cqfd release with flavor bar archive=cqfd-%Cf-\$CTEST.tar.xz should template tarball archive filename (current cqfd flavor name set)"
+if cqfd -b bar release && tar tf cqfd-bar.tar.xz &>/dev/null; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+# cleanup
+rm -f cqfd-bar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%Po-\$CTEST.tar.xz should template tarball archive filename (value of the project.org configuration key)"
 # shellcheck disable=SC2016
@@ -248,19 +257,6 @@ else
 fi
 # cleanup
 rm -f "cqfd-$CTEST.zip"
-
-for flav in foo bar; do
-	jtest_prepare "run cqfd release with flavor '$flav' and archive=cqfd-%Cf.tar.xz should template tarball archive filename (current cqfd flavor name set)"
-	if cqfd -b "$flav" release && \
-	   tar tf "cqfd-$flav.tar.xz" &>/dev/null; then
-		jtest_result pass
-	else
-		jtest_result fail
-	fi
-	# cleanup
-	rm -f "cqfd-$flav.tar.xz"
-done
-unset flav
 
 jtest_prepare "run cqfd release with a non-existing file or directory in files parameter should fail"
 sed -i -e 's!^files=.*$!files="ThisFileDoesNotExist.txt"!' .cqfdrc
