@@ -23,7 +23,7 @@ else
 fi
 
 jtest_prepare "cqfd exec should return same status"
-if cqfd exec exit 10;
+if cqfd exec exit 10; \
    test "$?" -eq 10; then
 	jtest_result pass
 else
