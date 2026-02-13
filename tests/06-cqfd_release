@@ -260,6 +260,7 @@ for flav in foo bar; do
 	# cleanup
 	rm -f "cqfd-$flav.tar.xz"
 done
+unset flav
 
 jtest_prepare "run cqfd release with a non-existing file or directory in files parameter should fail"
 sed -i -e 's!^files=.*$!files="ThisFileDoesNotExist.txt"!' .cqfdrc
