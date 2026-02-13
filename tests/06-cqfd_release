@@ -91,9 +91,8 @@ if ! cqfd run ln -s a/cqfd_a.txt link.txt; then
 	jtest_log fatal "cqfd run failed"
 	result="fail"
 fi
-rel_files_link=(a/cqfd_a.txt link.txt)
 sed -i '/files=/d' .cqfdrc
-echo "files=\"${rel_files_link[*]}\"" >>.cqfdrc
+echo "files=\"a/cqfd_a.txt link.txt\"" >>.cqfdrc
 echo "tar_options=-h" >>.cqfdrc
 
 if ! cqfd release; then
