@@ -57,6 +57,7 @@ for f in "${rel_files[@]}"; do
 	fi
 done
 jtest_result "$result"
+# revert the changes in .cqfdrc file
 sed -i -e '$ s!^tar_transform=.*$!!' .cqfdrc
 # cleanup
 make clean
@@ -75,6 +76,7 @@ for f in "${rel_files[@]}"; do
 	fi
 done
 jtest_result "$result"
+# revert the changes in .cqfdrc file
 sed -i -e '$ s!^tar_transform=.*$!!' .cqfdrc
 # cleanup
 make clean
@@ -126,6 +128,7 @@ if cqfd release && tar tf "cqfd-$d3-foobar.tar.xz" &>/dev/null; then
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f "cqfd-$d3-foobar.tar.xz"
 
 jtest_prepare "run cqfd release with archive=cqfd-%Gh-\$CTEST.tar.xz should template tarball archive filename (git short hash of last commit)"
@@ -139,6 +142,7 @@ if cqfd release &&
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f cqfd-*-foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%GH-\$CTEST.tar.xz should template tarball archive filename (git long hash of last commit)"
@@ -152,6 +156,7 @@ if cqfd release &&
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f cqfd-*-foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%Du-\$CTEST.tar.xz should template tarball archive filename (Unix timestamp)"
@@ -165,6 +170,7 @@ if cqfd release &&
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f cqfd-*-foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%Cf-\$CTEST.tar.xz should template tarball archive filename (current cqfd flavor name unset)"
@@ -175,6 +181,7 @@ if cqfd release && tar tf cqfd--foobar.tar.xz &>/dev/null; then
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f cqfd--foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%Cf-\$CTEST.tar.xz should template tarball archive filename (current cqfd flavor name set)"
@@ -183,6 +190,7 @@ if cqfd -b foo release && tar tf cqfd-foo.tar.xz &>/dev/null; then
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f cqfd-foo.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%Po-\$CTEST.tar.xz should template tarball archive filename (value of the project.org configuration key)"
@@ -193,6 +201,7 @@ if cqfd release && tar tf cqfd-cqfd-foobar.tar.xz &>/dev/null; then
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f cqfd-cqfd-foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%Pn-\$CTEST.tar.xz should template tarball archive filename (value of the project.name configuration key)"
@@ -203,6 +212,7 @@ if cqfd release && tar tf cqfd-test-foobar.tar.xz &>/dev/null; then
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f cqfd-test-foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%%-\$CTEST.tar.xz should template tarball archive filename (litteral '%' sign)"
@@ -213,6 +223,7 @@ if cqfd release && tar tf cqfd-%-foobar.tar.xz &>/dev/null; then
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f cqfd-%-foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-\$CTEST.tar.gz should generate a gzipped tarball archive"
@@ -223,6 +234,7 @@ if cqfd release && tar ztf "cqfd-$CTEST.tar.gz" &>/dev/null; then
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f "cqfd-$CTEST.tar.gz"
 
 jtest_prepare "run cqfd release with archive=cqfd-\$CTEST.zip should generate a zip archive"
@@ -233,6 +245,7 @@ if cqfd release && unzip -l "cqfd-$CTEST.zip" &>/dev/null; then
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f "cqfd-$CTEST.zip"
 
 for flav in foo bar; do
@@ -245,6 +258,7 @@ for flav in foo bar; do
 	else
 		jtest_result fail
 	fi
+	# cleanup
 	rm -f "$filename"
 done
 
@@ -276,6 +290,7 @@ if ! grep -q '^.cqfdrc$' "tmp.$$" ||
 else
 	jtest_result pass
 fi
+# cleanup
 rm -f "cqfd-$CTEST.tar.xz"
 rm -f "tmp.$$"
 
@@ -304,6 +319,7 @@ if tar tf "cqfd-$CTEST.tar.xz" &>/dev/null; then
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f "cqfd-$CTEST.tar.xz"
 
 # cleanup
