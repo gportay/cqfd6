@@ -8,6 +8,8 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
+cp -f .cqfdrc .cqfdrc.orig
+
 jtest_prepare "run cqfd release without files parameter should fail"
 if ! cqfd release; then
 	jtest_result pass
@@ -15,10 +17,9 @@ else
 	jtest_result fail
 fi
 
-files=(a/cqfd_a.txt a/b/c/cqfd_c.txt a/b/cqfd_b.txt)
-cp -f .cqfdrc .cqfdrc.orig
-echo "files=\"${files[*]}\"" >>.cqfdrc
 jtest_prepare "run cqfd release with a files parameter should pass"
+files=(a/cqfd_a.txt a/b/c/cqfd_c.txt a/b/cqfd_b.txt)
+echo "files=\"${files[*]}\"" >>.cqfdrc
 if cqfd release; then
 	jtest_result pass
 else
@@ -94,7 +95,6 @@ fi
 sed -i '/files=/d' .cqfdrc
 echo "files=\"a/cqfd_a.txt link.txt\"" >>.cqfdrc
 echo "tar_options=-h" >>.cqfdrc
-
 if ! cqfd release; then
 	jtest_log fatal "cqfd release failed"
 	result="fail"
@@ -110,12 +110,10 @@ if [ -L "$TDIR/output/link.txt" ] || ! diff "$TDIR/output/a/cqfd_a.txt" "$TDIR/o
 fi
 jtest_result "$result"
 unset result
-
 # revert the changes in .cqfdrc file
 sed -i '/tar_options=/d' .cqfdrc
 sed -i '/files=/d' .cqfdrc
 echo "files=\"${files[*]}\"" >>.cqfdrc
-
 # cleanup
 make clean
 rm -f link.txt cqfd-test.tar.xz
@@ -253,7 +251,6 @@ rm -f "cqfd-$CTEST.zip"
 
 for flav in foo bar; do
 	jtest_prepare "run cqfd release with flavor '$flav' and archive=cqfd-%Cf.tar.xz should template tarball archive filename (current cqfd flavor name set)"
-
 	if cqfd -b "$flav" release && \
 	   tar tf "cqfd-$flav.tar.xz" &>/dev/null; then
 		jtest_result pass
@@ -276,7 +273,6 @@ jtest_prepare "run cqfd release should resolve globbing pathnames in files param
 # shellcheck disable=SC2016
 sed -i -e 's!^archive=.*$!archive=cqfd-$CTEST.tar.xz!' .cqfdrc
 sed -i -e 's!^files=.*$!files=".cq*rc Ma*"!' .cqfdrc
-# cqfd release must work without error
 if cqfd release; then
 	jtest_result pass
 else
@@ -305,10 +301,10 @@ else
 	jtest_result fail
 fi
 
+jtest_prepare "run cqfd with option --release should pass"
 # shellcheck disable=SC2016
 sed -i -e 's!^archive=.*$!archive=cqfd-$CTEST.tar.xz!' .cqfdrc
 sed -i -e 's!^files=.*$!files=".local/bin/cqfd"!' .cqfdrc
-jtest_prepare "run cqfd with option --release should pass"
 if cqfd --release; then
 	jtest_result pass
 else
