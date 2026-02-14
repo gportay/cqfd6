@@ -12,7 +12,7 @@ fi
 
 cd "$TDIR/" || exit 1
 
-jtest_prepare "cqfd run execute as the host user with the cqfd docker's group"
+jtest_prepare "run cqfd run should execute as the host user with the cqfd docker's group"
 if [ "${cqfd_docker[-1]}" != "docker" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
 else
@@ -23,7 +23,7 @@ else
 	fi
 fi
 
-jtest_prepare "cqfd run docker using host docker daemon"
+jtest_prepare "run cqfd should run docker using host docker daemon"
 if [ "${cqfd_docker[-1]}" != "docker" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
 else
