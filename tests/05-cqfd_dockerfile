@@ -9,7 +9,7 @@ cd "$TDIR/" || exit 1
 mv -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 mv -f .cqfdrc .cqfdrc.orig
 
-jtest_prepare "cqfd with Dockerfile in project directory set in dockerfile should pass"
+jtest_prepare "run cqfd should use the Dockerfile set in dockerfile"
 echo "FROM ubuntu:16.04" >Dockerfile
 sed '/\[build\]/adockerfile="Dockerfile"' .cqfdrc.orig >.cqfdrc
 if cqfd init && \
@@ -19,7 +19,7 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "cqfd from a subdirectory with Dockerfile in project directory set in dockerfile should pass"
+jtest_prepare "run cqfd from a subdirectory should use the Dockerfile set in dockerfile, relative to project directory"
 mkdir -p subdir
 if cqfd -C subdir run "grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
@@ -27,7 +27,7 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "cqfd with Dockerfile in a subdirectory of the project directory set in dockerfile should pass"
+jtest_prepare "run cqfd from a subdirectory should use the Dockerfile in subdirectory set in dockerfile"
 mkdir -p support/docker
 mv Dockerfile support/docker/Dockerfile
 sed '/\[build\]/adockerfile="support/docker/Dockerfile"' .cqfdrc.orig >.cqfdrc
@@ -38,7 +38,7 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "cqfd from a subdirectory with Dockerfile in a subdirectory of the project directory set in dockerfile should pass"
+jtest_prepare "run cqfd from a subdirectory should use the Dockerfile in a subdirectory set in dockerfile, relative to project directory"
 if cqfd -C subdir run "grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
@@ -48,7 +48,7 @@ fi
 rm -Rf subdir/ support/
 cp -f .cqfdrc.orig .cqfdrc
 
-jtest_prepare "cqfd with Containerfile in project directory set in dockerfile should pass"
+jtest_prepare "run cqfd should use the Dockerfile named Containerfile set in dockerfile"
 echo "FROM ubuntu:16.04" >.cqfd/docker/Containerfile
 sed '/\[build\]/adockerfile=".cqfd/docker/Containerfile"' -i .cqfdrc
 if cqfd init && \
@@ -58,7 +58,7 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "cqfd with Containerfile in project directory set in dockerfile and context set in build_context should pass"
+jtest_prepare "run cqfd should with build_context should use the context directory and the Dockerfile named Containerfile set in dockerfile"
 echo "ADD ./cqfdrc-build_context /tmp/" >>.cqfd/docker/Containerfile
 sed '/\[project\]/abuild_context="."' -i .cqfdrc
 if cqfd init && \
