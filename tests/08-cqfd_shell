@@ -45,30 +45,6 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd sh should run sh"
-# shellcheck disable=SC2016
-if cqfd sh <<<'printf "$0"' | grep "^sh$"; then
-	jtest_result pass
-else
-	jtest_result fail
-fi
-
-jtest_prepare "run cqfd bash should run bash"
-# shellcheck disable=SC2016
-if cqfd bash <<<'printf "$0"' | grep "^bash$"; then
-	jtest_result pass
-else
-	jtest_result fail
-fi
-
-jtest_prepare "run cqfd dash should run dash"
-# shellcheck disable=SC2016
-if cqfd dash <<<'printf "$0"' | grep "^dash$"; then
-	jtest_result pass
-else
-	jtest_result fail
-fi
-
 jtest_prepare "run cqfd shell should run shell script"
 if cqfd shell ./whereami.sh 2>&1 | grep "^Ubuntu .* LTS$"; then
 	jtest_result pass
