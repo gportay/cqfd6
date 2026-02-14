@@ -55,6 +55,7 @@ if cqfd >out; then
 else
 	jtest_result fail
 fi
+# cleanup
 rm out
 
 jtest_prepare "run cqfd without allocated pty should redirect stdout and stderr to distinct endpoints"
@@ -63,6 +64,7 @@ if cqfd >out 2>err && grep '^stdout$' out && grep '^stderr$' err; then
 else
 	jtest_result fail
 fi
+# cleanup
 rm out err
 
 # restore initial .cqfdrc
