@@ -9,7 +9,7 @@ cd "$TDIR/" || exit 1
 ################################################################################
 # running 'cqfd init' without a proper config directory should fail
 ################################################################################
-jtest_prepare "cqfd init complains without an .cqfd directory"
+jtest_prepare "run cqfd init without an .cqfd directory should fail"
 if ! cqfd init; then
 	jtest_result pass
 else
@@ -24,7 +24,7 @@ mv cqfd .cqfd
 ################################################################################
 # running 'cqfd ls' without a proper config file should fail
 ################################################################################
-jtest_prepare "cqfd ls complains without an .cqfdrc file"
+jtest_prepare "run cqfd ls without a .cqfdrc file should fail"
 if ! cqfd ls; then
 	jtest_result pass
 else
@@ -34,7 +34,7 @@ fi
 ################################################################################
 # running 'cqfd gc' without a proper config file should fail
 ################################################################################
-jtest_prepare "cqfd gc complains without an .cqfdrc file"
+jtest_prepare "run cqfd gc without a .cqfdrc file should fail"
 if ! cqfd gc; then
 	jtest_result pass
 else
@@ -44,7 +44,7 @@ fi
 ################################################################################
 # running 'cqfd init' should fail, as there's no proper config file
 ################################################################################
-jtest_prepare "create a test skeleton in temporary directory"
+jtest_prepare "run cqfd init without a .cqfdrc file should fail"
 if ! cqfd init; then
 	jtest_result pass
 else
@@ -54,7 +54,7 @@ fi
 ################################################################################
 # running 'cqfd init' should fail, as there's an empty config file
 ################################################################################
-jtest_prepare "cqfd init complains with an empty .cqfdrc file"
+jtest_prepare "run cqfd init with an empty .cqfdrc file should fail"
 touch "$TDIR/.cqfdrc"
 if ! cqfd init; then
 	jtest_result pass
@@ -65,7 +65,7 @@ fi
 ################################################################################
 # running 'cqfd init' should fail, as there's an incomplete config file
 ################################################################################
-jtest_prepare "cqfd init complains with an incomplete .cqfdrc file"
+jtest_prepare "run cqfd init with an incomplete .cqfdrc file should fail"
 echo '[project]' >"$TDIR/.cqfdrc"
 if ! cqfd init; then
 	jtest_result pass
