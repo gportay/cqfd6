@@ -5,16 +5,15 @@
 set -o pipefail
 
 . "$(dirname "$0")/jtest.inc" "$1"
-flavor="foo"
 
 cd "$TDIR/" || exit 1
 
 cp -f .cqfdrc .cqfdrc.orig
 sed -i -e "s/\[foo\]/[foo]\ndistro='centos'/" .cqfdrc
 
-jtest_prepare "run cqfd init with build flavor '$flavor' should pass"
-if cqfd -b "$flavor" init && \
-   cqfd -b "$flavor" run "grep '^NAME=' /etc/os-release" | grep "^NAME=\"CentOS Linux\"$"; then
+jtest_prepare "run cqfd init with build flavor should pass"
+if cqfd -b foo init && \
+   cqfd -b foo run "grep '^NAME=' /etc/os-release" | grep "^NAME=\"CentOS Linux\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -22,9 +21,8 @@ fi
 # restore initial .cqfdrc
 mv -f .cqfdrc.orig .cqfdrc
 
-flavorPart="${flavor:0:2}"
-jtest_prepare "run cqfd init with nonexistent build flavor '$flavor' should fail"
-if ! cqfd -b "$flavorPart" init; then
+jtest_prepare "run cqfd init with nonexistent build flavor should fail"
+if ! cqfd -b foobar init; then
 	jtest_result pass
 else
 	jtest_result fail
