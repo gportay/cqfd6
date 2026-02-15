@@ -9,17 +9,17 @@ set -o pipefail
 cd "$TDIR/" || exit 1
 
 cp -f .cqfdrc .cqfdrc.orig
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='grep ^NAME /etc/os-release'," .cqfdrc
+sed -i -e "/\[foo\]/,/^$/s,^command=.*$,command='grep ^NAME /etc/os-release'," .cqfdrc
 sed -i -e "s/\[foo\]/[foo]\ndistro='centos'/" .cqfdrc
 
 jtest_prepare "run cqfd init with build flavor should pass"
 if cqfd -b foo init && \
-   cqfd -b foo run "grep '^NAME=' /etc/os-release" | grep "^NAME=\"CentOS Linux\"$"; then
+   cqfd -b foo | grep "^NAME=\"CentOS Linux\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
-# restore initial .cqfdrc
-mv -f .cqfdrc.orig .cqfdrc
 
 jtest_prepare "run cqfd init with nonexistent build flavor should fail"
 if ! cqfd -b foobar init; then
@@ -30,8 +30,11 @@ fi
 
 jtest_prepare "run cqfd init without build flavor should pass"
 if cqfd init &&
-   cqfd run "grep '^NAME=' /etc/os-release" | grep "^NAME=\"Ubuntu\"$"; then
+   cqfd | grep "^NAME=\"Ubuntu\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
+
+# restore initial .cqfdrc
+mv -f .cqfdrc.orig .cqfdrc
