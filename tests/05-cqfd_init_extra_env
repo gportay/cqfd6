@@ -15,7 +15,7 @@ cp -f .cqfd/docker/Dockerfile.init_extra_env .cqfd/docker/Dockerfile
 ################################################################################
 # 'cqfd init' without CQFD_EXTRA_BUILD_ARGS should fail
 ################################################################################
-jtest_prepare "cqfd init without using CQFD_EXTRA_BUILD_ARGS"
+jtest_prepare "run cqfd init with ARG in Dockerfile and without CQFD_EXTRA_BUILD_ARGS should fail"
 if ! cqfd init; then
 	jtest_result pass
 else
@@ -25,7 +25,7 @@ fi
 ################################################################################
 # 'cqfd init' with CQFD_EXTRA_BUILD_ARGS should succeed
 ################################################################################
-jtest_prepare "cqfd init using CQFD_EXTRA_BUILD_ARGS"
+jtest_prepare "cqfd init with ARG in Dockerfile and with CQFD_EXTRA_BUILD_ARGS should pass"
 export CQFD_EXTRA_BUILD_ARGS="--build-arg FOO=foo --no-cache"
 if cqfd init; then
 	jtest_result pass
