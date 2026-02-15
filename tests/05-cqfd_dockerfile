@@ -11,9 +11,10 @@ mv -f .cqfdrc .cqfdrc.orig
 
 jtest_prepare "run cqfd should use the Dockerfile set in dockerfile"
 echo "FROM ubuntu:16.04" >Dockerfile
-sed '/\[build\]/adockerfile="Dockerfile"' .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='grep ^PRETTY_NAME /etc/os-release'," .cqfdrc.orig >.cqfdrc
+sed -e '/\[build\]/adockerfile="Dockerfile"' -i .cqfdrc
 if cqfd init && \
-   cqfd run "grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
+   cqfd | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -21,7 +22,7 @@ fi
 
 jtest_prepare "run cqfd from a subdirectory should use the Dockerfile set in dockerfile, relative to project directory"
 mkdir -p subdir
-if cqfd -C subdir run "grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
+if cqfd -C subdir | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -30,29 +31,30 @@ fi
 jtest_prepare "run cqfd from a subdirectory should use the Dockerfile in subdirectory set in dockerfile"
 mkdir -p support/docker
 mv Dockerfile support/docker/Dockerfile
-sed '/\[build\]/adockerfile="support/docker/Dockerfile"' .cqfdrc.orig >.cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='grep ^PRETTY_NAME /etc/os-release'," .cqfdrc.orig >.cqfdrc
+sed -e '/\[build\]/adockerfile="support/docker/Dockerfile"' -i .cqfdrc
 if cqfd init && \
-   cqfd run "grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
+   cqfd | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "run cqfd from a subdirectory should use the Dockerfile in a subdirectory set in dockerfile, relative to project directory"
-if cqfd -C subdir run "grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
+if cqfd -C subdir | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 # cleanup
 rm -Rf subdir/ support/
-cp -f .cqfdrc.orig .cqfdrc
 
 jtest_prepare "run cqfd should use the Dockerfile named Containerfile set in dockerfile"
 echo "FROM ubuntu:16.04" >.cqfd/docker/Containerfile
-sed '/\[build\]/adockerfile=".cqfd/docker/Containerfile"' -i .cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='grep ^PRETTY_NAME /etc/os-release'," .cqfdrc.orig >.cqfdrc
+sed -e '/\[build\]/adockerfile=".cqfd/docker/Containerfile"' -i .cqfdrc
 if cqfd init && \
-   cqfd run "grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
+   cqfd | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -60,9 +62,11 @@ fi
 
 jtest_prepare "run cqfd should with build_context should use the context directory and the Dockerfile named Containerfile set in dockerfile"
 echo "ADD ./cqfdrc-build_context /tmp/" >>.cqfd/docker/Containerfile
-sed '/\[project\]/abuild_context="."' -i .cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='grep ^PRETTY_NAME /etc/os-release \&\& test -e /tmp/cqfdrc-build_context'," .cqfdrc.orig >.cqfdrc
+sed -e '/\[build\]/adockerfile=".cqfd/docker/Containerfile"' -i .cqfdrc
+sed -e '/\[project\]/abuild_context="."' -i .cqfdrc
 if cqfd init && \
-   cqfd run "test -e /tmp/cqfdrc-build_context && grep ^PRETTY_NAME /etc/os-release" | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
+   cqfd | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
