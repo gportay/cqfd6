@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of custom image
+# validate the behavior of custom_img_name
 
 set -o pipefail
 
