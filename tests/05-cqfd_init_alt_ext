@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of init with alternate file and external directory
+# validate the behavior of init with alternate file and directory, from a subdirectory
 
 . "$(dirname "$0")/jtest.inc" "$1"
 
@@ -60,7 +60,9 @@ else
 	jtest_result fail
 fi
 
-# restore local cqfd files
+# restore .cqfdrc file and .cqfd directory
 mv "$extdir/cqfdrc" .cqfdrc
 mv "$extdir/cqfd" .cqfd
+
+# cleanup
 rmdir -p "$extdir"
