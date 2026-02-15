@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of init command with flavors
+# validate the behavior of init with build flavors
 
 set -o pipefail
 
