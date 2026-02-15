@@ -29,7 +29,7 @@ else
 fi
 
 jtest_prepare "run cqfd init without build flavor should pass"
-if cqfd init &&
+if cqfd init && \
    cqfd | grep "^NAME=\"Ubuntu\"$"; then
 	jtest_result pass
 else
