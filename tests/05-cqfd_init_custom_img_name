@@ -23,7 +23,9 @@ custom_img_name="ubuntu:16.04"
 sed -e "s!^custom_img_name=.*\$!custom_img_name='$custom_img_name'!" -i .cqfdrc
 if "${cqfd_docker[@]}" inspect "$custom_img_name" &>/dev/null; then
 	jtest_log info "${cqfd_docker[-1]} registry contains image named: $custom_img_name, removing..."
-	"${cqfd_docker[@]}" rmi "$custom_img_name"
+	if "${cqfd_docker[@]}" rmi "$custom_img_name"; then
+		jtest_log error "removing image failed"
+	fi
 fi
 
 jtest_prepare "run cqfd should pull image $custom_img_name from registry"
@@ -37,7 +39,9 @@ custom_img_name="cqfd_test_custom_image_$RANDOM$RANDOM"
 sed -e "s!^custom_img_name=.*\$!custom_img_name='$custom_img_name'!" -i .cqfdrc
 if "${cqfd_docker[@]}" inspect "$custom_img_name" &>/dev/null; then
 	jtest_log info "${cqfd_docker[-1]} registry contains image named: $custom_img_name, removing..."
-	"${cqfd_docker[@]}" rmi "$custom_img_name"
+	if "${cqfd_docker[@]}" rmi "$custom_img_name"; then
+		jtest_log error "removing image failed"
+	fi
 fi
 
 jtest_prepare "run cqfd should fail to pull inexistant image $custom_img_name from remote registry"
@@ -62,7 +66,9 @@ else
 	jtest_result fail
 fi
 # cleanup
-"${cqfd_docker[@]}" rmi "$custom_img_name"
+if ! "${cqfd_docker[@]}" rmi "$custom_img_name"; then
+	jtest_log error "cleanup image failed"
+fi
 
 # restore .cqfdrc and Dockerfile
 mv .cqfdrc.orig .cqfdrc
