@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of run with Dockerfile
+# validate the behavior of cqfd with Dockerfile
 
 set -o pipefail
 
