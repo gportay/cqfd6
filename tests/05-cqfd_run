@@ -8,36 +8,42 @@ test_file="a/cqfd_a.txt"
 cd "$TDIR/" || exit 1
 
 # Here we test cqfd run, which is also invoked without any argument
-for i in 0 1; do
-	# Data set shall produce a/cqfd_a.txt:
 
-	if [ -f "$test_file" ]; then
-		jtest_log fatal "$test_file already present before test"
-		rm -f "$test_file"
-		continue
-	fi
-
-	if [ "$i" = "1" ]; then
-		jtest_prepare "running \"cqfd run\" makes it run"
-		cqfd run
-	else
-		jtest_prepare "running \"cqfd\" with no argument makes it run"
-		cqfd
-	fi
-
-	# at the end of either test, $test_file is populated
-	# shellcheck disable=SC2181
-	if [ "$?" -eq 0 ] && grep -qw "^cqfd$" "$test_file"; then
-		jtest_result pass
-	else
-		jtest_log fatal "$test_file not present after test"
-		jtest_result fail
-		rm -f "$test_file"
-		continue
-	fi
-
+# Data set shall produce a/cqfd_a.txt:
+if [ -f "$test_file" ]; then
+	jtest_log fatal "$test_file already present before test"
 	rm -f "$test_file"
-done
+fi
+
+jtest_prepare "running \"cqfd\" with no argument makes it run"
+cqfd
+
+# at the end of either test, $test_file is populated
+# shellcheck disable=SC2181
+if [ "$?" -eq 0 ] && grep -qw "^cqfd$" "$test_file"; then
+	jtest_result pass
+else
+	jtest_log fatal "$test_file not present after test"
+	jtest_result fail
+	rm -f "$test_file"
+fi
+
+rm -f "$test_file"
+
+jtest_prepare "running \"cqfd run\" makes it run"
+cqfd run
+
+# at the end of either test, $test_file is populated
+# shellcheck disable=SC2181
+if [ "$?" -eq 0 ] && grep -qw "^cqfd$" "$test_file"; then
+	jtest_result pass
+else
+	jtest_log fatal "$test_file not present after test"
+	jtest_result fail
+	rm -f "$test_file"
+fi
+
+rm -f "$test_file"
 
 ################################################################################
 # If the Dockerfile changed and no init is done again, 'cqfd run' should fail
