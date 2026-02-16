@@ -6,6 +6,8 @@
 
 cd "$TDIR/" || exit 1
 
+cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
+
 jtest_prepare "run cqfd run without argument should pass"
 # shellcheck disable=SC2181
 if cqfd && grep -qw "^cqfd$" a/cqfd_a.txt; then
@@ -35,5 +37,11 @@ else
 fi
 # cleanup
 make clean
-# restore Dockerfile
-sed -i '$d' .cqfd/docker/Dockerfile
+
+# restore initial Dockerfile
+mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
+
+# restore container
+if ! cqfd init; then
+	jtest_log error "restore container failed"
+fi
