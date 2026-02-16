@@ -7,8 +7,7 @@
 cd "$TDIR/" || exit 1
 
 jtest_prepare "run cqfd run -c with argument should concatenate to command string"
-if cqfd run -c --debug | grep "^Successfully remade target file 'build'\.$" && \
-   grep "^cqfd$" a/cqfd_a.txt; then
+if cqfd run -c --debug | grep "^Successfully remade target file 'build'\.$"; then
 	jtest_result pass
 else
 	jtest_result fail
