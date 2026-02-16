@@ -9,12 +9,6 @@ cd "$TDIR/" || exit 1
 
 # Here we test cqfd run, which is also invoked without any argument
 
-# Data set shall produce a/cqfd_a.txt:
-if [ -f "$test_file" ]; then
-	jtest_log info "$test_file already present before test"
-	rm -f "$test_file"
-fi
-
 jtest_prepare "running \"cqfd\" with no argument makes it run"
 
 # at the end of either test, $test_file is populated
