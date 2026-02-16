@@ -25,3 +25,17 @@ else
 fi
 # cleanup
 rm -f foo
+
+jtest_prepare "run cqfd with nonexistent build flavor should fail"
+if ! cqfd -b foobar; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+jtest_prepare "run cqfd run with nonexistent build flavor should fail"
+if ! cqfd -b foobar run; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
