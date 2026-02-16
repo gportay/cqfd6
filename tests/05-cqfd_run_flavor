@@ -16,6 +16,7 @@ if cqfd -b "$flavor" && [ -f "$test_file" ]; then
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f "$test_file"
 
 test_file=$flavor
@@ -27,6 +28,7 @@ if cqfd -b "$flavor" run && [ -f "$test_file" ]; then
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f "$test_file"
 
 # cleanup
