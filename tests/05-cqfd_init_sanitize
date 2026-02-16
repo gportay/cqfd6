@@ -31,6 +31,7 @@ if USER="user@invalid" cqfd init && \
 else
 	jtest_result fail
 fi
+# cleanup
 "${cqfd_docker[@]}" rmi "$image:$dh"
 
 jtest_prepare "run cqfd init with invalid character in org should create image"
