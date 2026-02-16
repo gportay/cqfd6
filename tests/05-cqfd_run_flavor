@@ -10,10 +10,9 @@ cd "$TDIR/" || exit 1
 # First pass: build a simple flavor
 test_file=$flavor
 jtest_prepare "cqfd build cmd for '$flavor' flavor"
-cqfd -b "$flavor"
 
 # shellcheck disable=SC2181
-if [ "$?" -eq 0 ] && [ -f "$test_file" ]; then
+if cqfd -b "$flavor" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
 	jtest_log fatal "failed or test file not present after execution"
@@ -24,10 +23,9 @@ rm -f "$test_file"
 # Second pass: override flavor build with an additional command
 test_file=$flavor
 jtest_prepare "cqfd run build cmd for '$flavor' flavor"
-cqfd -b "$flavor" run
 
 # shellcheck disable=SC2181
-if [ "$?" -eq 0 ] && [ -f "$test_file" ]; then
+if cqfd -b "$flavor" run && [ -f "$test_file" ]; then
 	jtest_result pass
 else
 	jtest_log fatal "failed or test file not present after execution"
