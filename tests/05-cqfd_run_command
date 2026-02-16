@@ -30,8 +30,7 @@ rm -f foobar
 
 jtest_prepare "run cqfd run with arguments cannot preserve arguments"
 # shellcheck disable=SC2016
-if cqfd run /bin/sh -c 'printf "0=$0,*=$*,#=$#"' zero one two three \
-       | grep "^0=sh,\*=,#=0$"; \
+if cqfd run /bin/sh -c 'printf "0=$0,*=$*,#=$#"' zero one two three | grep "^0=sh,\*=,#=0$"; \
    test "${PIPESTATUS[0]}" -eq 2; then
 	jtest_result pass
 else
