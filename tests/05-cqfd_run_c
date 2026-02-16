@@ -10,14 +10,14 @@ cd "$TDIR/" || exit 1
 
 jtest_prepare "run cqfd run -c with argument should concatenate to command string"
 if ! cqfd run -c --debug >>"$test_run_c_file"; then
-	jtest_log fatal "cqfd run -c failed"
+	jtest_log log "cqfd run -c failed"
 	jtest_result fail
 	rm -f "$test_run_c_file"
 fi
 
 # at the end of this test, $test_run_c_file is populated
 if ! grep "^Successfully remade target file 'build'\.$" "$test_run_c_file"; then
-	jtest_log fatal "$test_run_c_file not present after test"
+	jtest_log log "$test_run_c_file not present after test"
 	jtest_result fail
 	rm -f "$test_run_c_file"
 fi
@@ -26,7 +26,7 @@ fi
 if grep "^cqfd$" "$test_file"; then
 	jtest_result pass
 else
-	jtest_log fatal "$test_file not present after test"
+	jtest_log log "$test_file not present after test"
 	jtest_result fail
 	rm -f "$test_file"
 fi
