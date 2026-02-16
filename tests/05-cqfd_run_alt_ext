@@ -18,15 +18,15 @@ cd "$workdir" || exit 1
 cp -f .cqfdrc .cqfdrc.orig
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='stat --printf '%u:' . ..'," .cqfdrc
 
-jtest_prepare "run cqfd run with --working-directory set to inexistant directory should fail"
-if ! cqfd -w "nonexistentdir"; then
+jtest_prepare "run cqfd run without --working-directory should own working directory and should not own its parent directory"
+if cqfd | grep "^$UID:0:$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd run without --working-directory should own working directory and should not own its parent directory"
-if cqfd | grep "^$UID:0:$"; then
+jtest_prepare "run cqfd run with --working-directory set to inexistant directory should fail"
+if ! cqfd -w "nonexistentdir"; then
 	jtest_result pass
 else
 	jtest_result fail
