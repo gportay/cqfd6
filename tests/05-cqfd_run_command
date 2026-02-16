@@ -12,7 +12,7 @@ cd "$TDIR/" || exit 1
 # First pass: the command is a single argument
 # Data set shall produce $test_file:
 
-jtest_prepare "cqfd run \"touch somefile\" creates the file"
+jtest_prepare "run cqfd run with argument should run command string"
 
 # shellcheck disable=SC2181
 if cqfd run "touch $test_file" && [ -f "$test_file" ]; then
@@ -25,7 +25,7 @@ rm -f "$test_file"
 # Second pass: the command is the rest of the arguments
 # Data set shall produce $test_file:
 
-jtest_prepare "cqfd run touch somefile (no quotes) creates the file"
+jtest_prepare "run cqfd run with arguments should run as a command string"
 
 # shellcheck disable=SC2181
 if cqfd run touch "$test_file" && [ -f "$test_file" ]; then
@@ -35,7 +35,7 @@ else
 fi
 rm -f "$test_file"
 
-jtest_prepare "cqfd run with additional argument, do not preserve the arguments"
+jtest_prepare "run cqfd run with arguments cannot preserve arguments"
 # shellcheck disable=SC2016
 if cqfd run /bin/sh -c 'printf "0=$0,*=$*,#=$#"' zero one two three \
        | grep "^0=sh,\*=,#=0$"; \
