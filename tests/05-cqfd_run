@@ -15,6 +15,7 @@ else
 	jtest_result fail
 fi
 
+# cleanup
 rm -f "$test_file"
 
 jtest_prepare "run cqfd run with run without arguments should pass"
@@ -25,6 +26,7 @@ else
 	jtest_result fail
 fi
 
+# cleanup
 rm -f "$test_file"
 
 jtest_prepare "run cqfd run with outdated Dockerfile should fail"
