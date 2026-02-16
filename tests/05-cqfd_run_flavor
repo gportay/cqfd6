@@ -15,7 +15,7 @@ jtest_prepare "cqfd build cmd for '$flavor' flavor"
 if cqfd -b "$flavor" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
-	jtest_log fatal "failed or test file not present after execution"
+	jtest_log log "failed or test file not present after execution"
 	jtest_result fail
 fi
 rm -f "$test_file"
@@ -28,7 +28,7 @@ jtest_prepare "cqfd run build cmd for '$flavor' flavor"
 if cqfd -b "$flavor" run && [ -f "$test_file" ]; then
 	jtest_result pass
 else
-	jtest_log fatal "failed or test file not present after execution"
+	jtest_log log "failed or test file not present after execution"
 	jtest_result fail
 fi
 rm -f "$test_file"
