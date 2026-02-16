@@ -1031,7 +1031,7 @@ EOF
 ## locate_project_dir() - locate directory with .cqfdrc (or .cqfd) upwards
 # stdout: the path to the .cqfdrc (or .cqfd directory) parent directory
 locate_project_dir() {
-	local dir 
+	local dir
 
 	if [ -n "$CQFD_DIR" ]; then
 		dir="$(dirname "$CQFD_DIR")"
