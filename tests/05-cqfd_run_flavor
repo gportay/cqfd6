@@ -30,6 +30,3 @@ else
 fi
 # cleanup
 rm -f "$test_file"
-
-# cleanup
-make clean
