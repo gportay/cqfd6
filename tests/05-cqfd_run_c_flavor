@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of run -c command
+# validate the behavior of run -c command with flavors
 
 . "$(dirname "$0")/jtest.inc" "$1"
 flavor="foo"
