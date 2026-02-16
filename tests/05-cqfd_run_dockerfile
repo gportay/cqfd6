@@ -8,7 +8,6 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-# backup Dockerfile
 cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 
 jtest_prepare "run cqfd run with ENTRYPOINT in Dockerfile should pass"
