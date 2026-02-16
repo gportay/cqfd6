@@ -17,7 +17,6 @@ cp -f .cqfdrc .cqfdrc.orig
 cp -f cqfdrc-image .cqfdrc
 
 image="ubuntu:16.04"
-sed -i -e "s!^image=.*\$!image='$image'!" .cqfdrc
 if "${cqfd_docker[@]}" inspect "$image" &>/dev/null; then
 	jtest_log info "${cqfd_docker[-1]} registry contains image named: $image, removing..."
 	"${cqfd_docker[@]}" rmi "$image"
