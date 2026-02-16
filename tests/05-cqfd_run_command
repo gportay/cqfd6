@@ -17,6 +17,7 @@ if cqfd run "touch $test_file" && [ -f "$test_file" ]; then
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f "$test_file"
 
 jtest_prepare "run cqfd run with arguments should run as a command string"
@@ -27,6 +28,7 @@ if cqfd run touch "$test_file" && [ -f "$test_file" ]; then
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f "$test_file"
 
 jtest_prepare "run cqfd run with arguments cannot preserve arguments"
