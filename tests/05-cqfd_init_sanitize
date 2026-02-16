@@ -27,7 +27,7 @@ if "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	"${cqfd_docker[@]}" rmi "$image:$dh"
 fi
 
-jtest_prepare "cqfd init creates image with invalid user name"
+jtest_prepare "run cqfd init with invalid character in USER should create image"
 if USER="user@invalid" cqfd init && \
    "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	jtest_result pass
@@ -39,7 +39,7 @@ fi
 ################################################################################
 # 'cqfd init' creates image with invalid character in project.org should pass
 ################################################################################
-jtest_prepare "cqfd init creates image with invalid character in project.org"
+jtest_prepare "run cqfd init with invalid character in org should create image"
 sed -e "s!^org=.*\$!org='savoirfairelinux@invalid'!" .cqfdrc.orig >.cqfdrc
 if cqfd init; then
 	jtest_result pass
@@ -50,7 +50,7 @@ fi
 ################################################################################
 # 'cqfd init' creates image with invalid character in project.name should pass
 ################################################################################
-jtest_prepare "cqfd init creates image with invalid character in project.name"
+jtest_prepare "run cqfd init with invalid character in name should create image"
 sed -e "s!^name=.*\$!name='test@invalid'!" .cqfdrc.orig >.cqfdrc
 if cqfd init; then
 	jtest_result pass
