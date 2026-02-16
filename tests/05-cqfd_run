@@ -41,6 +41,35 @@ make clean
 # restore initial Dockerfile
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
+jtest_prepare "run cqfd run with argument should run command string"
+# shellcheck disable=SC2181
+if cqfd run "touch foobar" && test -f foobar; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+# cleanup
+rm -f foobar
+
+jtest_prepare "run cqfd run with arguments should run as a command string"
+# shellcheck disable=SC2181
+if cqfd run touch foobar && test -f foobar; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+# cleanup
+rm -f foobar
+
+jtest_prepare "run cqfd run with arguments cannot preserve arguments"
+# shellcheck disable=SC2016
+if cqfd run /bin/sh -c 'printf "0=$0,*=$*,#=$#"' zero one two three | grep "^0=sh,\*=,#=0$"; \
+   test "${PIPESTATUS[0]}" -eq 2; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
 # restore container
 if ! cqfd init; then
 	jtest_log error "restore container failed"
