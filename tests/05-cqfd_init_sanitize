@@ -21,7 +21,9 @@ if uname -m | grep -q "^aarch64$"; then
 fi
 if "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	jtest_log info "${cqfd_docker[-1]} registry contains image named: $image:$dh, removing..."
-	"${cqfd_docker[@]}" rmi "$image:$dh"
+	if ! "${cqfd_docker[@]}" rmi "$image:$dh"; then
+		jtest_log error "removing image failed"
+	fi
 fi
 
 jtest_prepare "run cqfd init with invalid character in USER should create image"
@@ -32,7 +34,9 @@ else
 	jtest_result fail
 fi
 # cleanup
-"${cqfd_docker[@]}" rmi "$image:$dh"
+if ! "${cqfd_docker[@]}" rmi "$image:$dh"; then
+	jtest_log error "cleanup image failed"
+fi
 
 jtest_prepare "run cqfd init with invalid character in org should create image"
 sed -e "s!^org=.*\$!org='savoirfairelinux@invalid'!" .cqfdrc.orig >.cqfdrc
