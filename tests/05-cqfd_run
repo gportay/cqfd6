@@ -16,11 +16,10 @@ if [ -f "$test_file" ]; then
 fi
 
 jtest_prepare "running \"cqfd\" with no argument makes it run"
-cqfd
 
 # at the end of either test, $test_file is populated
 # shellcheck disable=SC2181
-if [ "$?" -eq 0 ] && grep -qw "^cqfd$" "$test_file"; then
+if cqfd && grep -qw "^cqfd$" "$test_file"; then
 	jtest_result pass
 else
 	jtest_log fatal "$test_file not present after test"
@@ -31,11 +30,10 @@ fi
 rm -f "$test_file"
 
 jtest_prepare "running \"cqfd run\" makes it run"
-cqfd run
 
 # at the end of either test, $test_file is populated
 # shellcheck disable=SC2181
-if [ "$?" -eq 0 ] && grep -qw "^cqfd$" "$test_file"; then
+if cqfd run && grep -qw "^cqfd$" "$test_file"; then
 	jtest_result pass
 else
 	jtest_log fatal "$test_file not present after test"
