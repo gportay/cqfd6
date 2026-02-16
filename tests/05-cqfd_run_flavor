@@ -7,7 +7,6 @@ flavor="foo"
 
 cd "$TDIR/" || exit 1
 
-# First pass: build a simple flavor
 test_file=$flavor
 jtest_prepare "run cqfd without argument and with build flavor should execute flavor's command"
 
@@ -19,7 +18,6 @@ else
 fi
 rm -f "$test_file"
 
-# Second pass: override flavor build with an additional command
 test_file=$flavor
 jtest_prepare "run cqfd run without argument and with build flavor should execute flavor's command"
 
