@@ -11,7 +11,7 @@ cd "$TDIR/" || exit 1
 
 # Data set shall produce a/cqfd_a.txt:
 if [ -f "$test_file" ]; then
-	jtest_log fatal "$test_file already present before test"
+	jtest_log info "$test_file already present before test"
 	rm -f "$test_file"
 fi
 
@@ -22,7 +22,7 @@ jtest_prepare "running \"cqfd\" with no argument makes it run"
 if cqfd && grep -qw "^cqfd$" "$test_file"; then
 	jtest_result pass
 else
-	jtest_log fatal "$test_file not present after test"
+	jtest_log info "$test_file not present after test"
 	jtest_result fail
 	rm -f "$test_file"
 fi
@@ -36,7 +36,7 @@ jtest_prepare "running \"cqfd run\" makes it run"
 if cqfd run && grep -qw "^cqfd$" "$test_file"; then
 	jtest_result pass
 else
-	jtest_log fatal "$test_file not present after test"
+	jtest_log info "$test_file not present after test"
 	jtest_result fail
 	rm -f "$test_file"
 fi
