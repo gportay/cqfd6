@@ -10,36 +10,40 @@ test_file="file.$RANDOM"
 cd "$TDIR/" || exit 1
 
 # First pass: the command is a single argument
-# Second pass: the command is the rest of the arguments
+# Data set shall produce $test_file:
 
-for i in 0 1; do
-	# Data set shall produce $test_file:
-
-	jtest_log info "run cqfd with additional argument, pass $i"
-
-	if [ -f "$test_file" ]; then
-		jtest_log fatal "$test_file already present before test"
-		rm -f "$test_file"
-		continue
-	fi
-
-	if [ "$i" = "0" ]; then
-		jtest_prepare "cqfd run \"touch somefile\" creates the file"
-		cqfd run "touch $test_file"
-	else
-		jtest_prepare "cqfd run touch somefile (no quotes) creates the file"
-		cqfd run touch "$test_file"
-	fi
-
-	# shellcheck disable=SC2181
-	if [ "$?" -eq 0 ] && [ -f "$test_file" ]; then
-		jtest_result pass
-	else
-		jtest_log fatal "failed or test file not present after execution"
-		jtest_result fail
-	fi
+if [ -f "$test_file" ]; then
+	jtest_log fatal "$test_file already present before test"
 	rm -f "$test_file"
-done
+	continue
+fi
+
+jtest_prepare "cqfd run \"touch somefile\" creates the file"
+cqfd run "touch $test_file"
+
+# shellcheck disable=SC2181
+if [ "$?" -eq 0 ] && [ -f "$test_file" ]; then
+	jtest_result pass
+else
+	jtest_log fatal "failed or test file not present after execution"
+	jtest_result fail
+fi
+rm -f "$test_file"
+
+# Second pass: the command is the rest of the arguments
+# Data set shall produce $test_file:
+
+jtest_prepare "cqfd run touch somefile (no quotes) creates the file"
+cqfd run touch "$test_file"
+
+# shellcheck disable=SC2181
+if [ "$?" -eq 0 ] && [ -f "$test_file" ]; then
+	jtest_result pass
+else
+	jtest_log fatal "failed or test file not present after execution"
+	jtest_result fail
+fi
+rm -f "$test_file"
 
 jtest_prepare "cqfd run with additional argument, do not preserve the arguments"
 # shellcheck disable=SC2016
