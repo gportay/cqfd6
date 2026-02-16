@@ -9,7 +9,7 @@ test_run_c_file="test_run_c.txt"
 cd "$TDIR/" || exit 1
 
 # Append default command build with an additional option
-jtest_prepare "running \"cqfd run -c\" makes it run with appended arguments"
+jtest_prepare "run cqfd run -c with argument should concatenate to command string"
 if ! cqfd run -c --debug >>"$test_run_c_file"; then
 	jtest_log fatal "cqfd run -c failed"
 	jtest_result fail
@@ -39,7 +39,7 @@ rm -f "$test_file"
 rm -f "$test_run_c_file"
 
 # Build the default command with run -c
-jtest_prepare "running \"cqfd run -c\" with no argument makes it fail"
+jtest_prepare "run cqfd run -c without argument should fail"
 if ! cqfd run -c; then
 	jtest_result pass
 else
