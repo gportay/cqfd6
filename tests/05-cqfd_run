@@ -16,7 +16,6 @@ jtest_prepare "running \"cqfd\" with no argument makes it run"
 if cqfd && grep -qw "^cqfd$" "$test_file"; then
 	jtest_result pass
 else
-	jtest_log info "$test_file not present after test"
 	jtest_result fail
 	rm -f "$test_file"
 fi
@@ -30,7 +29,6 @@ jtest_prepare "running \"cqfd run\" makes it run"
 if cqfd run && grep -qw "^cqfd$" "$test_file"; then
 	jtest_result pass
 else
-	jtest_log info "$test_file not present after test"
 	jtest_result fail
 	rm -f "$test_file"
 fi
