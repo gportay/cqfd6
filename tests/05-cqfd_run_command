@@ -12,12 +12,6 @@ cd "$TDIR/" || exit 1
 # First pass: the command is a single argument
 # Data set shall produce $test_file:
 
-if [ -f "$test_file" ]; then
-	jtest_log log "$test_file already present before test"
-	rm -f "$test_file"
-	continue
-fi
-
 jtest_prepare "cqfd run \"touch somefile\" creates the file"
 
 # shellcheck disable=SC2181
