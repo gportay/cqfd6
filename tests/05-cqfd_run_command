@@ -9,9 +9,6 @@ test_file="file.$RANDOM"
 
 cd "$TDIR/" || exit 1
 
-# First pass: the command is a single argument
-# Data set shall produce $test_file:
-
 jtest_prepare "run cqfd run with argument should run command string"
 
 # shellcheck disable=SC2181
@@ -21,9 +18,6 @@ else
 	jtest_result fail
 fi
 rm -f "$test_file"
-
-# Second pass: the command is the rest of the arguments
-# Data set shall produce $test_file:
 
 jtest_prepare "run cqfd run with arguments should run as a command string"
 
