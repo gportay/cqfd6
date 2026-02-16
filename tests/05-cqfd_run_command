@@ -18,7 +18,6 @@ jtest_prepare "cqfd run \"touch somefile\" creates the file"
 if cqfd run "touch $test_file" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
-	jtest_log log "failed or test file not present after execution"
 	jtest_result fail
 fi
 rm -f "$test_file"
@@ -32,7 +31,6 @@ jtest_prepare "cqfd run touch somefile (no quotes) creates the file"
 if cqfd run touch "$test_file" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
-	jtest_log log "failed or test file not present after execution"
 	jtest_result fail
 fi
 rm -f "$test_file"
