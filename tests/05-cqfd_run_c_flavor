@@ -18,20 +18,20 @@ fi
 
 jtest_prepare "build cmd for '$flavor' flavor and concatenate with an additional option"
 if ! cqfd -b "$flavor" run -c --debug >>"$test_run_c_file"; then
-	jtest_log fatal "cqfd run -c --debug failed"
+	jtest_log log "cqfd run -c --debug failed"
 	fail=1
 fi
 
 # at the end of this test, $test_run_c_file is populated
 if ! grep "^Successfully remade target file 'foo'\.$" "$test_run_c_file"; then
-	jtest_log fatal "$test_run_c_file not present after test"
+	jtest_log log "$test_run_c_file not present after test"
 	fail=1
 	rm -f "$test_run_c_file"
 fi
 
 # at the end of either test, $test_file is populated
 if ! grep "^cqfd$" "$test_file"; then
-	jtest_log fatal "$test_file not present after test"
+	jtest_log log "$test_file not present after test"
 	fail=1
 	rm -f "$test_file"
 fi
