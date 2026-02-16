@@ -12,7 +12,7 @@ fi
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfdrc .cqfdrc.orig
+cp -f Cqfdfile Cqfdfile.orig
 
 dh="$(sha256sum .cqfd/docker/Dockerfile | cut -b 1-7)"
 image="cqfd-user_invalid-cqfd-test-linux_amd64-docker"
@@ -39,7 +39,7 @@ if ! "${cqfd_docker[@]}" rmi "$image:$dh"; then
 fi
 
 jtest_prepare "run cqfd init with invalid character in org should create image"
-sed -e "s!^org=.*\$!org='savoirfairelinux@invalid'!" .cqfdrc.orig >.cqfdrc
+sed -e "s!^org=.*\$!org='savoirfairelinux@invalid'!" Cqfdfile.orig >Cqfdfile
 if cqfd init; then
 	jtest_result pass
 else
@@ -47,12 +47,12 @@ else
 fi
 
 jtest_prepare "run cqfd init with invalid character in name should create image"
-sed -e "s!^name=.*\$!name='test@invalid'!" .cqfdrc.orig >.cqfdrc
+sed -e "s!^name=.*\$!name='test@invalid'!" Cqfdfile.orig >Cqfdfile
 if cqfd init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-# restore initial .cqfdrc
-mv -f .cqfdrc.orig .cqfdrc
+# restore initial Cqfdfile
+mv -f Cqfdfile.orig Cqfdfile

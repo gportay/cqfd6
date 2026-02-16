@@ -3,7 +3,7 @@ override_dh_auto_test:
 	$(MAKE) check
 
 override_dh_auto_build:
-	$(MAKE) cqfd.1.gz cqfdrc.5.gz
+	$(MAKE) cqfd.1.gz Cqfdfile.5.gz
 
 override_dh_install:
 	dh_install

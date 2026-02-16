@@ -34,12 +34,12 @@ Just follow these steps:
 * [Install requirements](#requirements)
 * [Install cqfd](#installingremoving-cqfd6)
 * Go into your project's directory
-* Create a [.cqfdrc](cqfdrc.5.adoc) file
+* Create a [Cqfdfile](Cqfdfile.5.adoc) file
 * Create a [Dockerfile](https://docs.docker.com/reference/dockerfile/) and save
   it as `.cqfd/docker/Dockerfile`
 
 The project uses itself to build the documentation or release packages. The
-in-tree files [.cqfdrc](.cqfdrc), the [.cqfd](.cqfd) directory, and the three
+in-tree files [Cqfdfile](Cqfdfile), the [.cqfd](.cqfd) directory, and the three
 cqfd shell scripts — [make-deb.sh](make-deb.sh), [make-pkg.sh](make-pkg.sh),
 and [make-rpm.sh](make-rpm.sh) — provide good examples of how to set up a
 project and add custom scripting. Additional examples can be found in the
@@ -53,7 +53,7 @@ environment for your project.
 ### Regular builds
 
 To build your project from the configured build environment with the default
-build command as configured in `.cqfdrc`, use:
+build command as configured in `Cqfdfile`, use:
 
     $ cqfd
 
@@ -78,7 +78,7 @@ and removed.
 ### Release
 
 The `--release` option creates a release tarball for your project. The release
-files (as specified in your `.cqfdrc`) will be included inside the release
+files (as specified in your `Cqfdfile`) will be included inside the release
 archive.
 
     $ cqfd --release
@@ -91,13 +91,13 @@ which defaults to `%Po-%Pn.tar.xz`.
 Flavors are used to create alternate build scenarios. For example, to use
 another build container or another build command.
 
-## The .cqfdrc file
+## The Cqfdfile file
 
-The `.cqfdrc` file at the root of your project contains the information
+The `Cqfdfile` file at the root of your project contains the information
 required to support project tooling. It is written in an .ini-like format and
-`samples/dot-cqfdrc` is an example.
+`samples/Cqfdfile` is an example.
 
-Here is a sample `.cqfdrc` file:
+Here is a sample `Cqfdfile` file:
 
     [project]
     org='fooinc'
@@ -110,7 +110,7 @@ Here is a sample `.cqfdrc` file:
 
 ### Comments
 
-The `.cqfdrc` file supports Unix shell and .ini comments: words after the
+The `Cqfdfile` file supports Unix shell and .ini comments: words after the
 character `#` or `;` are ignored to the end of the line.
 
 ### Include files
@@ -124,7 +124,7 @@ In some cases, it may be desirable to build the project using variations of the
 build and release methods (for example a debug build). This is made possible in
 `cqfd` with the build flavors feature.
 
-In the `.cqfdrc` file, one or more flavors may be listed in the `[build]`
+In the `Cqfdfile` file, one or more flavors may be listed in the `[build]`
 section, referencing other sections named following flavor's name.
 
     [centos7]
@@ -144,8 +144,8 @@ A flavor will typically redefine some keys of the build section: `command`,
 
 ### Manual page
 
-For a more thorough description of the `.cqfdrc` configuration file, please
-refer to [cqfdrc(5)](cqfdrc.5.adoc).
+For a more thorough description of the `Cqfdfile` configuration file, please
+refer to [Cqfdfile(5)](Cqfdfile.5.adoc).
 
 ## Using cqfd in an advanced way
 
@@ -225,7 +225,7 @@ Examples:
     $ cqfd uname -m
     aarch64
 
-    $ cat .cqfdrc
+    $ cat Cqfdfile
     [project]
     org='fooinc'
     name='multi-platform'
@@ -255,8 +255,8 @@ the *project* or *working* directory. This directory is bind-mounted into the
 build container and is controlled by the `-w` option or the `CQFD_WORKDIR`
 environment variable.
 
-The `.cqfdrc` file defines the cqfd project information and the build command.
-It is controlled by the `-f` option or the `CQFDRC_FILE` environment variable.
+The `Cqfdfile` file defines the cqfd project information and the build command.
+It is controlled by the `-f` option or the `CQFDFILE` environment variable.
 
 All these files and directories are interpreted relative to the current working
 directory if specified with a relative path. Additionally, the `--directory`
@@ -274,9 +274,9 @@ To specify an alternate cqfd directory, use the `--cqfd-directory` option:
 
     $ cqfd --cqfd-directory cqfd_alt
 
-To specify an alternate cqfdrc file, use the `--cqfdrc-file` option:
+To specify an alternate Cqfdfile  file, use the `--cqfd-file` option:
 
-    $ cqfd --cqfdrc-file cqfdrc_alt
+    $ cqfd --cqfd-file Cqfdfile_alt
 
 To specify an alternate working directory, use the `--working-directory`
 option:
@@ -293,16 +293,16 @@ Example:
     ├── cqfd
     │   └── docker
     │       └── Dockerfile
-    └── cqfdrc
+    └── Cqfdfile
 
     3 directories, 2 files
     ~/src$ cd buildroot
-    ~/src/buildroot$ cqfd --working-directory . --cqfd-directory ../out-of-tree-cqfd-files/cqfd --cqfdrc-file ../out-of-tree-cqfd-files/cqfdrc
+    ~/src/buildroot$ cqfd --working-directory . --cqfd-directory ../out-of-tree-cqfd-files/cqfd --cqfd-file ../out-of-tree-cqfd-files/Cqfdfile
     # or sourcing environment from a file
     ~/src/buildroot$ cat environment
     export CQFD_WORKDIR=.
     export CQFD_DIR=../out-of-tree-cqfd-files/cqfd
-    export CQFDRC_FILE=../out-of-tree-cqfd-files/cqfdrc
+    export CQFDFILE=../out-of-tree-cqfd-files/Cqfdfile
     ~/src/buildroot$ source environment
     ~/src/buildroot$ cqfd
     (...)

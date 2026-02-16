@@ -1,4 +1,4 @@
-= cqfdrc6(5)
+= Cqfdfile6(5)
 :doctype: manpage
 :author: Gaël PORTAY
 :email: gael.portay@gmail.com
@@ -8,16 +8,16 @@
 
 == NAME
 
-cqfdrc - project information config file
+Cqfdfile - project information config file
 
 == DESCRIPTION
 
-The _.cqfdrc_ file at the root of your project contains the information
+The _Cqfdfile_ file at the root of your project contains the information
 required to support project tooling. It is written in an .ini-like format.
 
 === COMMENT
 
-The _.cqfdrc_ file supports Unix shell and .ini comments; the words after the
+The _Cqfdfile_ file supports Unix shell and .ini comments; the words after the
 character _#_ or _;_ are ignored up to the end of line.
 
 === THE INCLUDE DIRECTIVE
@@ -36,7 +36,7 @@ file's contents at the location of the include statement.
 *flavors (optional)*::
 	The list of build flavors (see below). Each flavor has its own command
 	just like _build.command_. _flavors_ is *deprecated*, the flavors are
-	now automatically deduced from the flavors sections of _.cqfdrc_.
+	now automatically deduced from the flavors sections of _Cqfdfile_.
 
 *build_context (optional)*::
 	a directory to pass as the build context to Docker. This should be

@@ -16,7 +16,7 @@ tests: CQFD_DOCKER_GID =
 tests: CQFD_SHELL =
 tests: CQFD_WORKDIR =
 tests: CQFD_DIR =
-tests: CQFDRC_FILE =
+tests: CQFFILE =
 tests:
 	@$(eval TDIR=$(shell mktemp -d /tmp/cqfd-test.XXXXXX))
 	@export CQFD_CACHE=$(TDIR); \

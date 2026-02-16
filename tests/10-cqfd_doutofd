@@ -16,8 +16,8 @@ jtest_prepare "run cqfd should execute as the host user with the cqfd docker's g
 if [ "${cqfd_docker[-1]}" != "docker" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
 else
-	cp -f .cqfdrc .cqfdrc.orig
-	sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='id -Gn'," .cqfdrc
+	cp -f Cqfdfile Cqfdfile.orig
+	sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='id -Gn'," Cqfdfile
 
 	if CQFD_BIND_DOCKER_SOCK=true cqfd | grep -w cqfd; then
 		jtest_result pass
@@ -30,18 +30,18 @@ jtest_prepare "run cqfd should run docker using host docker daemon"
 if [ "${cqfd_docker[-1]}" != "docker" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
 else
-	cp -f .cqfdrc .cqfdrc.orig
+	cp -f Cqfdfile Cqfdfile.orig
 	cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 	cp -f .cqfd/docker/Dockerfile.doutofd .cqfd/docker/Dockerfile
-	sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='docker run --rm ubuntu:24.04 cat /etc/os-release'," .cqfdrc
+	sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='docker run --rm ubuntu:24.04 cat /etc/os-release'," Cqfdfile
 
 	if cqfd init && CQFD_BIND_DOCKER_SOCK=true cqfd | grep -E "^PRETTY_NAME=\"Ubuntu 24.04(.[[:digit:]]+)? LTS\"$"; then
 		jtest_result pass
 	else
 		jtest_result fail
 	fi
-	# restore .cqfdrc and Dockerfile
-	mv -f .cqfdrc.orig .cqfdrc
+	# restore Cqfdfile and Dockerfile
+	mv -f Cqfdfile.orig Cqfdfile
 	mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 	# restore container

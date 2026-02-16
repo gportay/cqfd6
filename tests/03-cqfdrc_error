@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the .cqfdrc syntax
+# validate the Cqfdfile syntax
 
 set -o pipefail
 
@@ -8,182 +8,182 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfdrc .cqfdrc.orig
+cp -f Cqfdfile Cqfdfile.orig
 
-echo -n "" >.cqfdrc
+echo -n "" >Cqfdfile
 
-jtest_prepare "cqfdrc fails if no project section"
-if cqfd 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing project section!$"; \
+jtest_prepare "Cqfdfile fails if no project section"
+if cqfd 2>&1 | grep "^cqfd: fatal: Cqfdfile: Missing project section!$"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-echo "[project]" >>.cqfdrc
+echo "[project]" >>Cqfdfile
 
-jtest_prepare "cqfdrc fails if no name property set in project section"
-if cqfd 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing project.org or project.name properties!$"; \
+jtest_prepare "Cqfdfile fails if no name property set in project section"
+if cqfd 2>&1 | grep "^cqfd: fatal: Cqfdfile: Missing project.org or project.name properties!$"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-echo "name=test" >>.cqfdrc
+echo "name=test" >>Cqfdfile
 
-jtest_prepare "cqfdrc fails if no org property set in project section"
-if cqfd 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing project.org or project.name properties!$"; \
+jtest_prepare "Cqfdfile fails if no org property set in project section"
+if cqfd 2>&1 | grep "^cqfd: fatal: Cqfdfile: Missing project.org or project.name properties!$"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-echo "org=cqfd" >>.cqfdrc
+echo "org=cqfd" >>Cqfdfile
 
-jtest_prepare "cqfdrc fails if no build section"
-if cqfd 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing build section!$"; \
+jtest_prepare "Cqfdfile fails if no build section"
+if cqfd 2>&1 | grep "^cqfd: fatal: Cqfdfile: Missing build section!$"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-echo "[build]" >>.cqfdrc
+echo "[build]" >>Cqfdfile
 
-jtest_prepare "cqfdrc fails if no command property set in build section"
-if cqfd 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing or empty build.command property!$"; \
+jtest_prepare "Cqfdfile fails if no command property set in build section"
+if cqfd 2>&1 | grep "^cqfd: fatal: Cqfdfile: Missing or empty build.command property!$"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "cqfdrc succeeds if project and build sections are set correctly"
+jtest_prepare "Cqfdfile succeeds if project and build sections are set correctly"
 if cqfd init && cqfd run true; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "cqfdrc succeeds even if no command property set in build section using run -c"
-if cqfd run -c true 2>&1 | grep "^cqfd: warning: .cqfdrc: Missing or empty build.command property!$"; \
+jtest_prepare "Cqfdfile succeeds even if no command property set in build section using run -c"
+if cqfd run -c true 2>&1 | grep "^cqfd: warning: Cqfdfile: Missing or empty build.command property!$"; \
    test "${PIPESTATUS[0]}" -eq 0 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-echo "command=true" >>.cqfdrc
+echo "command=true" >>Cqfdfile
 
-jtest_prepare "cqfdrc succeeds if command property set in build section using run -c"
-if cqfd run -c true 2>&1 | grep "^cqfd: warning: .cqfdrc: Missing or empty build.command property!$"; \
+jtest_prepare "Cqfdfile succeeds if command property set in build section using run -c"
+if cqfd run -c true 2>&1 | grep "^cqfd: warning: Cqfdfile: Missing or empty build.command property!$"; \
    test "${PIPESTATUS[0]}" -eq 0 -a "${PIPESTATUS[1]}" -ne 0; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
-echo "foo	=bar" >>.cqfdrc
+cp -f Cqfdfile.orig Cqfdfile
+echo "foo	=bar" >>Cqfdfile
 
-jtest_prepare "cqfdrc with tabulation before should pass"
+jtest_prepare "Cqfdfile with tabulation before should pass"
 if cqfd run true; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
-echo "foo=	bar" >>.cqfdrc
+cp -f Cqfdfile.orig Cqfdfile
+echo "foo=	bar" >>Cqfdfile
 
-jtest_prepare "cqfdrc with tabulation after should pass"
+jtest_prepare "Cqfdfile with tabulation after should pass"
 if cqfd run true; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
-echo "foo =bar" >>.cqfdrc
+cp -f Cqfdfile.orig Cqfdfile
+echo "foo =bar" >>Cqfdfile
 
-jtest_prepare "cqfdrc with space before should pass"
+jtest_prepare "Cqfdfile with space before should pass"
 if cqfd run true; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
-echo "foo= bar" >>.cqfdrc
+cp -f Cqfdfile.orig Cqfdfile
+echo "foo= bar" >>Cqfdfile
 
-jtest_prepare "cqfdrc with space after should pass"
+jtest_prepare "Cqfdfile with space after should pass"
 if cqfd run true; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
-sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"; works!\"'," .cqfdrc
+cp -f Cqfdfile.orig Cqfdfile
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"; works!\"'," Cqfdfile
 
-jtest_prepare "cqfdrc does not strip semicolons in command"
+jtest_prepare "Cqfdfile does not strip semicolons in command"
 if cqfd init && cqfd | grep "^; works!$" ; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
-sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"# works!\"'," .cqfdrc
+cp -f Cqfdfile.orig Cqfdfile
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"# works!\"'," Cqfdfile
 
-jtest_prepare "cqfdrc does not strip hash in command"
+jtest_prepare "Cqfdfile does not strip hash in command"
 if cqfd init && cqfd | grep "^# works!$" ; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
+cp -f Cqfdfile.orig Cqfdfile
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command=\"echo \\\\\\
 	foo=bar \\\\\\
-	baz=quux\"," .cqfdrc
+	baz=quux\"," Cqfdfile
 
-jtest_prepare "cqfdrc with multiline should pass"
+jtest_prepare "Cqfdfile with multiline should pass"
 if cqfd | grep "^foo=bar baz=quux$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
-sed -i -e "/\[project\]/,/^$/s,^,; ," .cqfdrc
+cp -f Cqfdfile.orig Cqfdfile
+sed -i -e "/\[project\]/,/^$/s,^,; ," Cqfdfile
 
-jtest_prepare "cqfdrc with ;-commented project section should fail"
-if cqfd 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing project section!$"; \
+jtest_prepare "Cqfdfile with ;-commented project section should fail"
+if cqfd 2>&1 | grep "^cqfd: fatal: Cqfdfile: Missing project section!$"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
-sed -i -e "/\[build\]/,/^$/s,^,# ," .cqfdrc
+cp -f Cqfdfile.orig Cqfdfile
+sed -i -e "/\[build\]/,/^$/s,^,# ," Cqfdfile
 
-jtest_prepare "cqfdrc with #-commented build section should fail"
-if cqfd 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing build section!$"; \
+jtest_prepare "Cqfdfile with #-commented build section should fail"
+if cqfd 2>&1 | grep "^cqfd: fatal: Cqfdfile: Missing build section!$"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
-sed -i -e "/[build]/,/^$/s,^command=.*$,command=\"make foo\"," .cqfdrc
-echo "include /dev/null" >>.cqfdrc
+cp -f Cqfdfile.orig Cqfdfile
+sed -i -e "/[build]/,/^$/s,^command=.*$,command=\"make foo\"," Cqfdfile
+echo "include /dev/null" >>Cqfdfile
 
-jtest_prepare "cqfdrc with include empty file should pass"
+jtest_prepare "Cqfdfile with include empty file should pass"
 if cqfd && test -e foo; then
 	jtest_result pass
 else
@@ -195,9 +195,9 @@ cat <<EOF >bar.inc
 [build]
 command="make bar"
 EOF
-echo "include bar.inc" >>.cqfdrc
+echo "include bar.inc" >>Cqfdfile
 
-jtest_prepare "cqfdrc with include file should pass"
+jtest_prepare "Cqfdfile with include file should pass"
 if cqfd && test -e bar; then
 	jtest_result pass
 else
@@ -205,9 +205,9 @@ else
 fi
 rm -f bar
 
-echo "include bar.inc" >>.cqfdrc
+echo "include bar.inc" >>Cqfdfile
 
-jtest_prepare "cqfdrc with duplicate include file should pass"
+jtest_prepare "Cqfdfile with duplicate include file should pass"
 if cqfd && test -e bar; then
 	jtest_result pass
 else
@@ -217,7 +217,7 @@ rm -f bar
 
 echo "include bar.inc" >>bar.inc
 
-jtest_prepare "cqfdrc with recursive include file should fail"
+jtest_prepare "Cqfdfile with recursive include file should fail"
 if ! cqfd; then
 	jtest_result pass
 else
@@ -227,5 +227,5 @@ fi
 # cleanup
 rm -f bar.inc
 
-# restore initial .cqfdrc
-mv -f .cqfdrc.orig .cqfdrc
+# restore initial Cqfdfile
+mv -f Cqfdfile.orig Cqfdfile

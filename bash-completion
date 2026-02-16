@@ -97,25 +97,25 @@ _cqfd6() {
 		_filedir -d
 		return
 		;;
-	-f|--cqfdrc-file)
+	-f|--cqfd-file)
 		_filedir
 		return
 		;;
 	-b|--build)
-		local flavors cqfdrc=.cqfdrc
-		# before we scan for flavors, see if a cqfdrc name was
+		local flavors cqfdfile=Cqfdfile
+		# before we scan for flavors, see if a Cqfdfile name was
 		# specified with -f
 		for ((i = 1; i < cword; i++)); do
 			if [[ ${words[i]} == -f ]]; then
 				# eval for tilde expansion
-				eval "cqfdrc=(\"${words[i+1]}\")"
+				eval "cqfdfile=(\"${words[i+1]}\")"
 			fi
 		done
 
-		if [ -e "$cqfdrc" ]; then
+		if [ -e "$cqfdfile" ]; then
 			flavors=$(CQFD_NO_DEPRECATED_COMMAND_WARNING=true \
 				  CQFD_NO_DEPRECATED_WARNING=true \
-				  cqfd6 -f "$cqfdrc" --flavors)
+				  cqfd6 -f "$cqfdfile" --flavors)
 			# shellcheck disable=SC2207
 			COMPREPLY=($(compgen -W "$flavors" -- "$cur"))
 		fi
@@ -167,7 +167,7 @@ _cqfd6() {
 			done
 		fi
 
-		local opts="-C --directory -w --working-directory -d --cqfd-directory -f --cqfdrc-file -b --build -q --quiet --reinit --release --platform -y --yes"
+		local opts="-C --directory -w --working-directory -d --cqfd-directory -f --cqfd-file -b --build -q --quiet --reinit --release --platform -y --yes"
 		local cmds="--init --deinit --ls --gc --flavors --exec --run --shell -v --version --compatibility -D --verbose -h --help"
 		# shellcheck disable=SC2207
 		COMPREPLY=($(compgen -W "$cmds $opts" -- "$cur"))
@@ -186,11 +186,11 @@ _cqfd6() {
 		done
 
 		_command_offset "$i"
-		return 
+		return
 	fi
 
 	if [[ "$cur" == -* ]]; then
-		local opts="-C --directory -w --working-directory -d --cqfd-directory -f --cqfdrc-file -b --build -q --quiet --reinit --release --platform -y --yes"
+		local opts="-C --directory -w --working-directory -d --cqfd-directory -f --cqfd-file -b --build -q --quiet --reinit --release --platform -y --yes"
 		local cmds="--init --deinit --ls --gc --flavors -v --version --compatibility -D --verbose -h --help"
 		# shellcheck disable=SC2207
 		COMPREPLY=($(compgen -W "$cmds $opts" -- "$cur"))

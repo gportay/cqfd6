@@ -8,7 +8,7 @@ cd "$TDIR/" || exit 1
 
 cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 cp -f .cqfd/docker/Dockerfile.init_extra_env .cqfd/docker/Dockerfile
-cp -f .cqfdrc .cqfdrc.orig
+cp -f Cqfdfile Cqfdfile.orig
 
 jtest_prepare "run cqfd init with ARG in Dockerfile and without CQFD_EXTRA_BUILD_ARGS and docker_build_args should fail"
 if ! cqfd init; then
@@ -25,15 +25,15 @@ else
 fi
 
 jtest_prepare "run cqfd init with ARG in Dockerfile and with docker_build_args should pass"
-sed '/\[build\]/adocker_build_args="--build-arg FOO=foo --no-cache"' -i .cqfdrc
+sed '/\[build\]/adocker_build_args="--build-arg FOO=foo --no-cache"' -i Cqfdfile
 if cqfd init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-# restore initial .cqfdrc and Dockerfile
-mv -f .cqfdrc.orig .cqfdrc
+# restore initial Cqfdfile and Dockerfile
+mv -f Cqfdfile.orig Cqfdfile
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 # restore container

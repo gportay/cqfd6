@@ -63,8 +63,8 @@ Options:
     --reinit             Reinitialize build container.
     --release            Release software.
     --platform <target>  Set target platform.
-    -f or --cqfdrc-file <file>
-                         Use file as config file (default .cqfdrc).
+    -f or --cqfd-file <file>
+                         Use file as config file (default Cqfdfile).
     -d or --cqfd-directory <directory>
                          Use directory as cqfd directory (default .cqfd).
     -w or --working-directory <directory>
@@ -92,7 +92,7 @@ Commands:
     --shell [shargs]     Run shell command inside build container.
 
     By default, the '--run' command is assumed, with the default
-    command string configured in your .cqfdrc (see build.command).
+    command string configured in your Cqfdfile (see build.command).
 
 Command options for --run:
     -c <argstring>       Append argument string to the default command string.
@@ -477,7 +477,7 @@ collect_images() {
 
 		echo "Removing images..."
 
-		# Append extra arguments from the .cqfdrc [build] section
+		# Append extra arguments from the Cqfdfile [build] section
 		if [ "$build_docker_rmi_args" ]; then
 			local array
 			# shellcheck disable=SC2162
@@ -540,7 +540,7 @@ docker_pull_or_build() {
 	# Pull the image
 	# If custom image name is used, it is pulled pull by docker_run()
 	if [ "$project_image" ] && [ ! "$project_custom_img_name" ] ; then
-		# Append extra arguments from the .cqfdrc [build] section
+		# Append extra arguments from the Cqfdfile [build] section
 		if [ "$build_docker_pull_args" ]; then
 			local array
 			# shellcheck disable=SC2162
@@ -563,7 +563,7 @@ docker_pull_or_build() {
 		return
 	fi
 
-	# Append extra arguments from the .cqfdrc [build] section
+	# Append extra arguments from the Cqfdfile [build] section
 	if [ "$build_docker_build_args" ]; then
 		local array
 		# shellcheck disable=SC2162
@@ -621,7 +621,7 @@ docker_rmi() {
 		die "$cqfd_image: Image busy!"
 	fi
 
-	# Append extra arguments from the .cqfdrc [build] section
+	# Append extra arguments from the Cqfdfile [build] section
 	if [ "$build_docker_rmi_args" ]; then
 		local array
 		# shellcheck disable=SC2162
@@ -676,7 +676,7 @@ docker_run() {
 		fi
 	fi
 
-	# Append extra arguments from the .cqfdrc [build] section
+	# Append extra arguments from the Cqfdfile [build] section
 	if [ "$build_docker_run_args" ]; then
 		local array
 		# shellcheck disable=SC2162
@@ -727,7 +727,7 @@ docker_run() {
 		    "CQFD_EXTRA_RUN_ARGS=\"-p <host_port>:<docker_port>\""
 	fi
 
-	# The user may set the user_extra_groups in the .cqfdrc
+	# The user may set the user_extra_groups in the Cqfdfile
 	# file to add groups to the user in the container.
 	if [ -n "$build_user_extra_groups" ]; then
 		local group
@@ -816,7 +816,7 @@ make_archive() {
 
 	eval "files=($release_files)"
 	if [ -z "${files[*]}" ]; then
-		die ".cqfdrc: Missing or empty build.files property!"
+		die "Cqfdfile: Missing or empty build.files property!"
 	fi
 
 	for file in "${files[@]}"; do
@@ -1031,7 +1031,7 @@ EOF
 ## locate_project_dir() - locate directory with .cqfdrc (or .cqfd) upwards
 # stdout: the path to the .cqfdrc (or .cqfd directory) parent directory
 locate_project_dir() {
-	local dir 
+	local dir
 
 	if [ -n "$CQFD_DIR" ]; then
 		dir="$(dirname "$CQFD_DIR")"
@@ -1051,13 +1051,17 @@ locate_project_dir() {
 			realpath "$dir"
 			return
 		fi
+		if [ -e "$dir/cqfdfile" ] || [ -e "$dir/Cqfdfile" ]; then
+			realpath "$dir"
+			return
+		fi
 		dir="$(dirname "$dir")"
 	done
 
 	return 1
 }
 
-## load_config() - load build settings from cqfdrc
+## load_config() - load build settings from Cqfdfile
 # $1: optional "flavor" of the build, is a suffix of command
 load_config() {
 	# get the project directory
@@ -1082,17 +1086,29 @@ load_config() {
 		cqfddir="$workdir"
 	fi
 
-	local cqfdrc
-	cqfdrc="${CQFDRC_FILE:-$project_dir/.cqfdrc}"
+	local cqfdfile
+	for cqfdfile in .cqfdrc cqfdfile Cqfdfile; do
+		cqfdfile="${CQFDFILE:-$project_dir/$cqfdfile}"
+		# make an absolute path and check if it is a file
+		if [ -e "$cqfdfile" ]; then
+			break
+		fi
+	done
 	# make an absolute path and check if it is a file
-	if ! cqfdrc="$(realpath "$cqfdrc")" || \
-	   [ ! -f "$cqfdrc" ]; then
-		die ".cqfdrc: Missing or not a file!"
+	if ! cqfdfile="$(realpath "$cqfdfile")" || \
+	   [ ! -f "$cqfdfile" ]; then
+		die "Cqfdfile: Missing or not a file!"
 	fi
 
-	# parse cqfdrc file
-	if ! source_ini_file "$cqfdrc"; then
-		die ".cqfdrc: Invalid ini-file!"
+	# warn if using legacy .cqfdrc
+	if [ ! "$CQFDRF_FILE" ] && [ "$CQFDFILE" ] && \
+	   [ "${cqfdfile##*/}" = .cqfdrc ]; then
+		warn ".cqfdrc is deprecated, rename it to Cqfdfile."
+	fi
+
+	# parse Cqfdfile file
+	if ! source_ini_file "$cqfdfile"; then
+		die "Cqfdfile: Invalid ini-file!"
 	fi
 
 	# deduce native platform from system
@@ -1144,7 +1160,7 @@ load_config() {
 
 	# load the [project] section
 	if ! source_ini_sections project; then
-		die ".cqfdrc: Missing project section!"
+		die "Cqfdfile: Missing project section!"
 	fi
 
 	# shellcheck disable=SC2154
@@ -1164,19 +1180,19 @@ load_config() {
 
 	# check for [project] org and name properties are set and are not empty
 	if [ -z "$project_org" ] || [ -z "$project_name" ]; then
-		die ".cqfdrc: Missing project.org or project.name properties!"
+		die "Cqfdfile: Missing project.org or project.name properties!"
 	fi
 
 	# load the [build] section
 	if ! source_ini_sections build; then
-		die ".cqfdrc: Missing build section!"
+		die "Cqfdfile: Missing build section!"
 	fi
 
 	# build parameters may be overriden by a flavor defined in the
 	# build section's 'flavors' parameter.
 	if [ -n "$1" ]; then
 		if ! source_ini_sections "$1" 2>/dev/null; then
-			die ".cqfdrc: Missing $1 section!"
+			die "Cqfdfile: Missing $1 section!"
 		fi
 	fi
 
@@ -1514,9 +1530,9 @@ while [ $# -gt 0 ]; do
 		shift
 		CQFD_DIR="$1"
 		;;
-	-f|--cqfdrc-file)
+	-f|--cqfd-file)
 		shift
-		CQFDRC_FILE="$1"
+		CQFDFILE="$1"
 		;;
 	-C|--directory)
 		shift
@@ -1588,7 +1604,7 @@ while [ $# -gt 0 ]; do
 		if [ "$#" -eq 0 ]; then
 			# Check for [build] command property is set and not empty
 			if [ -z "$build_command" ]; then
-				die ".cqfdrc: Missing or empty build.command property!"
+				die "Cqfdfile: Missing or empty build.command property!"
 			fi
 
 			# Run default command
@@ -1608,7 +1624,7 @@ while [ $# -gt 0 ]; do
 
 			# Check for [build] command property is set and not empty
 			if [ -z "$build_command" ]; then
-				warn ".cqfdrc: Missing or empty build.command property!"
+				warn "Cqfdfile: Missing or empty build.command property!"
 			fi
 
 			# Display a warning message if using -c with multiple arguments
@@ -1718,7 +1734,7 @@ if [ -z "$cqfd_command" ]; then
 
 	# Check for [build] command property is set and not empty
 	if [ -z "$build_command" ]; then
-		die ".cqfdrc: Missing or empty build.command property!"
+		die "Cqfdfile: Missing or empty build.command property!"
 	fi
 fi
 

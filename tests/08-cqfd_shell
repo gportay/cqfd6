@@ -8,7 +8,7 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfdrc .cqfdrc.orig
+cp -f Cqfdfile Cqfdfile.orig
 
 jtest_prepare "run cqfd shell without stdin should pass"
 if cqfd shell </dev/null; then
@@ -25,7 +25,7 @@ else
 fi
 
 jtest_prepare "run cqfd shell should use program set in shell"
-sed '/\[build\]/ashell="/bin/bash"' .cqfdrc.orig >.cqfdrc
+sed '/\[build\]/ashell="/bin/bash"' Cqfdfile.orig >Cqfdfile
 # shellcheck disable=SC2016
 if cqfd bash <<<'printf "$0"' | grep "^bash$"; then
 	jtest_result pass
@@ -33,8 +33,8 @@ else
 	jtest_result fail
 fi
 
-# restore .cqfdrc
-mv -f .cqfdrc.orig .cqfdrc
+# restore Cqfdfile
+mv -f Cqfdfile.orig Cqfdfile
 
 jtest_prepare "run cqfd shell should preserve the arguments"
 # shellcheck disable=SC2016
@@ -77,8 +77,8 @@ else
 	fi
 fi
 
-cp -f .cqfdrc .cqfdrc.orig
-echo "files=\"shell\"" >>.cqfdrc
+cp -f Cqfdfile Cqfdfile.orig
+echo "files=\"shell\"" >>Cqfdfile
 jtest_prepare "run cqfd shell with option --release should generate cqfd-test.tar.xz tarball archive"
 if cqfd --release shell -c "touch shell" && tar tf cqfd-test.tar.xz | grep "^shell$"; then
 	jtest_result pass
@@ -88,5 +88,5 @@ fi
 # cleanup
 rm -f cqfd-test.tar.xz shell
 
-# restore initial .cqfdrc
-mv -f .cqfdrc.orig .cqfdrc
+# restore initial Cqfdfile
+mv -f Cqfdfile.orig Cqfdfile
