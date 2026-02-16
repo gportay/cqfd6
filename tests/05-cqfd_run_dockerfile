@@ -9,28 +9,32 @@ set -o pipefail
 cd "$TDIR/" || exit 1
 
 cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
+cp -f .cqfdrc .cqfdrc.orig
 
 jtest_prepare "run cqfd run with ENTRYPOINT in Dockerfile should pass"
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true'," .cqfdrc
 cat <<EOF >>.cqfd/docker/Dockerfile
 ENTRYPOINT ["false"]
 EOF
-if cqfd init && cqfd run true; then
+if cqfd init && cqfd; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "run cqfd run with WORKDIR in Dockerfile should pass"
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='pwd'," .cqfdrc
 cat <<EOF >>.cqfd/docker/Dockerfile
 WORKDIR /mnt
 EOF
-if cqfd init && cqfd run pwd | grep "^$PWD$"; then
+if cqfd init && cqfd | grep "^$PWD$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-# restore initial Dockerfile
+# restore .cqfdrc and Dockerfile
+mv -f .cqfdrc.orig .cqfdrc
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 # restore container
