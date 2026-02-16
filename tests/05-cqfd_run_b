@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of run command with flavors
+# validate the behavior of run with build flavors
 
 . "$(dirname "$0")/jtest.inc" "$1"
 
