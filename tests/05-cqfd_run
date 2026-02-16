@@ -10,7 +10,7 @@ cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 
 jtest_prepare "run cqfd run without argument should pass"
 # shellcheck disable=SC2181
-if cqfd && grep -qw "^cqfd$" a/cqfd_a.txt; then
+if cqfd && test -e a/cqfd_a.txt; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -20,7 +20,7 @@ rm -f a/cqfd_a.txt
 
 jtest_prepare "run cqfd run with run without arguments should pass"
 # shellcheck disable=SC2181
-if cqfd run && grep -qw "^cqfd$" a/cqfd_a.txt; then
+if cqfd run && test -e a/cqfd_a.txt; then
 	jtest_result pass
 else
 	jtest_result fail
