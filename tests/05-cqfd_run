@@ -9,7 +9,7 @@ cd "$TDIR/" || exit 1
 
 # Here we test cqfd run, which is also invoked without any argument
 
-jtest_prepare "running \"cqfd\" with no argument makes it run"
+jtest_prepare "run cqfd run without argument should pass"
 
 # at the end of either test, $test_file is populated
 # shellcheck disable=SC2181
@@ -22,7 +22,7 @@ fi
 
 rm -f "$test_file"
 
-jtest_prepare "running \"cqfd run\" makes it run"
+jtest_prepare "run cqfd run with run without arguments should pass"
 
 # at the end of either test, $test_file is populated
 # shellcheck disable=SC2181
@@ -38,7 +38,7 @@ rm -f "$test_file"
 ################################################################################
 # If the Dockerfile changed and no init is done again, 'cqfd run' should fail
 ################################################################################
-jtest_prepare "Modifying the Dockerfile should require running 'cqfd init' again"
+jtest_prepare "run cqfd run with outdated Dockerfile should fail"
 dockerfile=.cqfd/docker/Dockerfile
 echo "RUN echo $RANDOM" >>"$dockerfile"
 if ! cqfd run; then
