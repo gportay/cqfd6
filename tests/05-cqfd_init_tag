@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of cqfd with tag
+# validate the behavior of cqfd tag
 
 set -o pipefail
 
@@ -35,6 +35,7 @@ if cqfd init && \
 else
 	jtest_result fail
 fi
+# cleanup
 "${cqfd_docker[@]}" rmi "$image:$dh"
 
 tag="%Un-%Po-%Pn-%Bd-%DH-$random"
@@ -55,6 +56,7 @@ if cqfd init && \
 else
 	jtest_result fail
 fi
+# cleanup
 "${cqfd_docker[@]}" rmi "$image:$dh"
 
 # restore initial .cqfdrc and Dockerfile
