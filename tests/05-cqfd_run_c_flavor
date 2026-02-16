@@ -16,4 +16,5 @@ else
 	jtest_result fail
 fi
 
+# cleanup
 rm -f "$test_file"
