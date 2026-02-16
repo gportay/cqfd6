@@ -25,7 +25,9 @@ dh="$(sha256sum .cqfd/docker/Dockerfile | cut -b 1-7)"
 image="cqfd-$un-$un-cqfd-test-docker-$dh-$random"
 if "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	jtest_log info "${cqfd_docker[-1]} registry contains image named: $image:$dh, removing..."
-	"${cqfd_docker[@]}" rmi "$image:$dh"
+	if ! "${cqfd_docker[@]}" rmi "$image:$dh"; then
+		jtest_log error "removing image failed"
+	fi
 fi
 
 jtest_prepare "run cqfd init with tag $tag should build templated image $image:$dh"
@@ -36,7 +38,9 @@ else
 	jtest_result fail
 fi
 # cleanup
-"${cqfd_docker[@]}" rmi "$image:$dh"
+if ! "${cqfd_docker[@]}" rmi "$image:$dh"; then
+	jtest_log error "cleanup image failed"
+fi
 
 tag="%Un-%Po-%Pn-%Bd-%DH-$random"
 sed -i -e "s!^tag=.*\$!tag='$tag'!" .cqfdrc
@@ -45,7 +49,9 @@ image="cqfd-$un-$un-cqfd-test-centos-$dh-$random"
 dh="$(sha256sum .cqfd/centos/Dockerfile | cut -b 1-7)"
 if "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	jtest_log info "${cqfd_docker[-1]} registry contains image named: $image:$dh, removing..."
-	"${cqfd_docker[@]}" rmi "$image:$dh"
+	if ! "${cqfd_docker[@]}" rmi "$image:$dh"; then
+		jtest_log error "removing image failed"
+	fi
 fi
 
 jtest_prepare "run cqfd init with tag $tag and distro should build templated image $image:$dh"
@@ -57,7 +63,9 @@ else
 	jtest_result fail
 fi
 # cleanup
-"${cqfd_docker[@]}" rmi "$image:$dh"
+if ! "${cqfd_docker[@]}" rmi "$image:$dh"; then
+	jtest_log error "cleanup image failed"
+fi
 
 # restore initial .cqfdrc and Dockerfile
 mv -f .cqfdrc.orig .cqfdrc
