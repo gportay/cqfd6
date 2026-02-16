@@ -7,26 +7,24 @@ flavor="foo"
 
 cd "$TDIR/" || exit 1
 
-test_file=$flavor
 jtest_prepare "run cqfd without argument and with build flavor should execute flavor's command"
 
 # shellcheck disable=SC2181
-if cqfd -b "$flavor" && [ -f "$test_file" ]; then
+if cqfd -b "$flavor" && [ -f foo ]; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 # cleanup
-rm -f "$test_file"
+rm -f foo
 
-test_file=$flavor
 jtest_prepare "run cqfd run without argument and with build flavor should execute flavor's command"
 
 # shellcheck disable=SC2181
-if cqfd -b "$flavor" run && [ -f "$test_file" ]; then
+if cqfd -b "$flavor" run && [ -f foo ]; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 # cleanup
-rm -f "$test_file"
+rm -f foo
