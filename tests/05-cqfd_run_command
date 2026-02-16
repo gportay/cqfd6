@@ -13,7 +13,7 @@ cd "$TDIR/" || exit 1
 # Data set shall produce $test_file:
 
 if [ -f "$test_file" ]; then
-	jtest_log fatal "$test_file already present before test"
+	jtest_log log "$test_file already present before test"
 	rm -f "$test_file"
 	continue
 fi
@@ -24,7 +24,7 @@ jtest_prepare "cqfd run \"touch somefile\" creates the file"
 if cqfd run "touch $test_file" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
-	jtest_log fatal "failed or test file not present after execution"
+	jtest_log log "failed or test file not present after execution"
 	jtest_result fail
 fi
 rm -f "$test_file"
@@ -38,7 +38,7 @@ jtest_prepare "cqfd run touch somefile (no quotes) creates the file"
 if cqfd run touch "$test_file" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
-	jtest_log fatal "failed or test file not present after execution"
+	jtest_log log "failed or test file not present after execution"
 	jtest_result fail
 fi
 rm -f "$test_file"
