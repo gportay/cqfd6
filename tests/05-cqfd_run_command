@@ -19,10 +19,9 @@ if [ -f "$test_file" ]; then
 fi
 
 jtest_prepare "cqfd run \"touch somefile\" creates the file"
-cqfd run "touch $test_file"
 
 # shellcheck disable=SC2181
-if [ "$?" -eq 0 ] && [ -f "$test_file" ]; then
+if cqfd run "touch $test_file" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
 	jtest_log fatal "failed or test file not present after execution"
@@ -34,10 +33,9 @@ rm -f "$test_file"
 # Data set shall produce $test_file:
 
 jtest_prepare "cqfd run touch somefile (no quotes) creates the file"
-cqfd run touch "$test_file"
 
 # shellcheck disable=SC2181
-if [ "$?" -eq 0 ] && [ -f "$test_file" ]; then
+if cqfd run touch "$test_file" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
 	jtest_log fatal "failed or test file not present after execution"
