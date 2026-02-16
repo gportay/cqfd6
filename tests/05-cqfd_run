@@ -29,8 +29,7 @@ fi
 rm -f a/cqfd_a.txt
 
 jtest_prepare "run cqfd run with outdated Dockerfile should fail"
-dockerfile=.cqfd/docker/Dockerfile
-echo "RUN echo $RANDOM" >>"$dockerfile"
+echo "RUN echo $RANDOM" >>.cqfd/docker/Dockerfile
 if ! cqfd run; then
 	jtest_result pass
 else
@@ -39,4 +38,4 @@ fi
 # cleanup
 make clean
 # restore Dockerfile
-sed -i '$d' "$dockerfile"
+sed -i '$d' .cqfd/docker/Dockerfile
