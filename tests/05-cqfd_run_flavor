@@ -3,14 +3,13 @@
 # validate the behavior of run command with flavors
 
 . "$(dirname "$0")/jtest.inc" "$1"
-flavor="foo"
 
 cd "$TDIR/" || exit 1
 
 jtest_prepare "run cqfd without argument and with build flavor should execute flavor's command"
 
 # shellcheck disable=SC2181
-if cqfd -b "$flavor" && [ -f foo ]; then
+if cqfd -b foo && [ -f foo ]; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -21,7 +20,7 @@ rm -f foo
 jtest_prepare "run cqfd run without argument and with build flavor should execute flavor's command"
 
 # shellcheck disable=SC2181
-if cqfd -b "$flavor" run && [ -f foo ]; then
+if cqfd -b foo run && [ -f foo ]; then
 	jtest_result pass
 else
 	jtest_result fail
