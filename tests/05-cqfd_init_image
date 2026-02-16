@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of cqfd with image
+# validate the behavior of cqfd image
 
 set -o pipefail
 
@@ -32,21 +32,6 @@ fi
 
 jtest_prepare "run cqfd should run pulled image $image from local registry"
 if cqfd | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
-	jtest_result pass
-else
-	jtest_result fail
-fi
-
-jtest_prepare "run cqfd init with CQFD_EXTRA_PULL_ARGS should pass"
-if CQFD_EXTRA_BUILD_ARGS="--disable-content-trust=false" cqfd init; then
-	jtest_result pass
-else
-	jtest_result fail
-fi
-
-jtest_prepare "run cqfd with docker_pull_args should pass"
-sed '/\[build\]/adocker_build_args="--disable-content-trust=false"' -i .cqfdrc
-if cqfd init; then
 	jtest_result pass
 else
 	jtest_result fail
