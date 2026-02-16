@@ -17,14 +17,10 @@ for i in 0 1; do
 		test_file=$flavor
 		jtest_prepare "cqfd build cmd for '$flavor' flavor"
 		cqfd -b "$flavor"
-	elif [ "$i" = "1" ]; then
+	else
 		test_file=$flavor
 		jtest_prepare "cqfd run build cmd for '$flavor' flavor"
 		cqfd -b "$flavor" run
-	else
-		test_file="file.$RANDOM"
-		jtest_prepare "cqfd run and override with additional cmd"
-		cqfd -b "$flavor" run touch "$test_file"
 	fi
 
 	# shellcheck disable=SC2181
