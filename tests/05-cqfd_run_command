@@ -9,7 +9,6 @@ set -o pipefail
 cd "$TDIR/" || exit 1
 
 jtest_prepare "run cqfd run with argument should run command string"
-
 # shellcheck disable=SC2181
 if cqfd run "touch foobar" && [ -f foobar ]; then
 	jtest_result pass
@@ -20,7 +19,6 @@ fi
 rm -f foobar
 
 jtest_prepare "run cqfd run with arguments should run as a command string"
-
 # shellcheck disable=SC2181
 if cqfd run touch foobar && [ -f foobar ]; then
 	jtest_result pass
