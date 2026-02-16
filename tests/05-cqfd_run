@@ -13,7 +13,6 @@ if cqfd && grep -qw "^cqfd$" "$test_file"; then
 	jtest_result pass
 else
 	jtest_result fail
-	rm -f "$test_file"
 fi
 
 rm -f "$test_file"
@@ -24,7 +23,6 @@ if cqfd run && grep -qw "^cqfd$" "$test_file"; then
 	jtest_result pass
 else
 	jtest_result fail
-	rm -f "$test_file"
 fi
 
 rm -f "$test_file"
