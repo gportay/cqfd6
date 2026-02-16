@@ -23,16 +23,14 @@ else
 fi
 
 jtest_prepare "run cqfd run without --working-directory should own working directory and should not own its parent directory"
-if cqfd run "stat -c '%u' ." | grep "^$UID$" && \
-   cqfd run "stat -c '%u' .." | grep "^0$"; then
+if cqfd run "stat --printf '%u:' . .." | grep "^$UID:0:$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "run cqfd run with --working-directory set to parent directory should own parent directory and should not own its parent directory"
-if cqfd -w ".." run "stat -c '%u' ." | grep "^$UID$" && \
-   cqfd -w ".." run "stat -c '%u' .." | grep "^0$"; then
+if cqfd -w ".." run "stat --printf '%u:' . .." | grep "^$UID:0:$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -46,8 +44,7 @@ else
 fi
 
 jtest_prepare "run cqfd run with CQFD_WORKDIR set to parent directory should own parent directory and should not own its parent directory"
-if CQFD_WORKDIR=".." cqfd run "stat -c '%u' ." | grep "^$UID$" && \
-   CQFD_WORKDIR=".." cqfd run "stat -c '%u' .." | grep "^0$"; then
+if CQFD_WORKDIR=".." cqfd run "stat --printf '%u:' . .." | grep "^$UID:0:$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -55,8 +52,7 @@ else
 fi
 
 jtest_prepare "run cqfd run with CQFD_WORKDIR set to parent directory using absolute path should own parent directory and should not own its parent directory"
-if CQFD_WORKDIR="$PWD/.." cqfd run "stat -c '%u' ." | grep "^$UID$" && \
-   CQFD_WORKDIR="$PWD/.." cqfd run "stat -c '%u' .." | grep "^0$"; then
+if CQFD_WORKDIR="$PWD/.." cqfd run "stat --printf '%u:' . .." | grep "^$UID:0:$"; then
 	jtest_result pass
 else
 	jtest_result fail
