@@ -22,3 +22,14 @@ fi
 
 # cleanup
 make clean
+
+jtest_prepare "run cqfd run -c with argument and --build flavor should concatenate to command string"
+if cqfd -b foo run -c --debug | grep "^Successfully remade target file 'foo'\.$" && \
+   grep "^cqfd$" foo; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+# cleanup
+rm -f foo
