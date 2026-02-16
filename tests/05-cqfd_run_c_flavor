@@ -3,12 +3,11 @@
 # validate the behavior of run -c command with flavors
 
 . "$(dirname "$0")/jtest.inc" "$1"
-flavor="foo"
 
 cd "$TDIR/" || exit 1
 
 jtest_prepare "run cqfd run -c with argument and --build flavor should concatenate to command string"
-if cqfd -b "$flavor" run -c --debug | grep "^Successfully remade target file 'foo'\.$" && \
+if cqfd -b foo run -c --debug | grep "^Successfully remade target file 'foo'\.$" && \
    grep "^cqfd$" foo; then
 	jtest_result pass
 else
