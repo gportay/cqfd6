@@ -22,7 +22,7 @@ cd "$workdir" || exit 1
 ################################################################################
 # 'cqfd run' using nonexistent working directory should fail
 ################################################################################
-jtest_prepare "cqfd run using inexistant working directory set using -w should fail"
+jtest_prepare "run cqfd run with --working-directory set to inexistant directory should fail"
 if ! cqfd -w "nonexistentdir" run; then
 	jtest_result pass
 else
@@ -32,7 +32,7 @@ fi
 ################################################################################
 # 'cqfd run' using default working directory should work
 ################################################################################
-jtest_prepare "cqfd run using default working directory should work"
+jtest_prepare "run cqfd run without --working-directory should own working directory and should not own its parent directory"
 if cqfd run "stat -c '%u' ." | grep "^$UID$" && \
    cqfd run "stat -c '%u' .." | grep "^0$"; then
 	jtest_result pass
@@ -43,7 +43,7 @@ fi
 ################################################################################
 # 'cqfd run' using alternate working directory should work
 ################################################################################
-jtest_prepare "cqfd run using working directory set using -w should work"
+jtest_prepare "run cqfd run with --working-directory set to parent directory should own parent directory and should not own its parent directory"
 if cqfd -w ".." run "stat -c '%u' ." | grep "^$UID$" && \
    cqfd -w ".." run "stat -c '%u' .." | grep "^0$"; then
 	jtest_result pass
@@ -54,7 +54,7 @@ fi
 ################################################################################
 # 'cqfd run' using nonexistent working directory should fail
 ################################################################################
-jtest_prepare "cqfd run using inexistant working directory set using CQFD_WORKDIR should fail"
+jtest_prepare "run cqfd run with CQFD_WORKDIR set to inexistant directory should fail"
 if ! CQFD_WORKDIR="nonexistentdir" cqfd run; then
 	jtest_result pass
 else
@@ -64,7 +64,7 @@ fi
 ################################################################################
 # 'cqfd run' using alternate working directory should work
 ################################################################################
-jtest_prepare "cqfd run using working directory set using CQFD_WORKDIR should work"
+jtest_prepare "run cqfd run with CQFD_WORKDIR set to parent directory should own parent directory and should not own its parent directory"
 if CQFD_WORKDIR=".." cqfd run "stat -c '%u' ." | grep "^$UID$" && \
    CQFD_WORKDIR=".." cqfd run "stat -c '%u' .." | grep "^0$"; then
 	jtest_result pass
@@ -76,7 +76,7 @@ fi
 ################################################################################
 # 'cqfd run' using alternate working directory should work
 ################################################################################
-jtest_prepare "cqfd run using working directory set using CQFD_WORKDIR should work"
+jtest_prepare "run cqfd run with CQFD_WORKDIR set to parent directory using absolute path should own parent directory and should not own its parent directory"
 if CQFD_WORKDIR="$PWD/.." cqfd run "stat -c '%u' ." | grep "^$UID$" && \
    CQFD_WORKDIR="$PWD/.." cqfd run "stat -c '%u' .." | grep "^0$"; then
 	jtest_result pass
