@@ -14,7 +14,7 @@ jtest_prepare "run cqfd run with ENTRYPOINT in Dockerfile should pass"
 cat <<EOF >>.cqfd/docker/Dockerfile
 ENTRYPOINT ["false"]
 EOF
-if cqfd init && cqfd run; then
+if cqfd init && cqfd run true; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -29,9 +29,6 @@ if cqfd init && cqfd run pwd | grep "^$PWD$"; then
 else
 	jtest_result fail
 fi
-
-# cleanup
-make clean
 
 # restore initial Dockerfile
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
