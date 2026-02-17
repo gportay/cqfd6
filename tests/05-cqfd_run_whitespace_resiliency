@@ -8,10 +8,6 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-################################################################################
-# 'cqfd run' passes environment variables to the container when using
-# CQFD_EXTRA_RUN_ARGS with an option containing a whitespace
-################################################################################
 jtest_prepare "run cqfd run with --env containing whitespaces in CQFD_EXTRA_RUN_ARGS should set environment variables and preserve whitespaces"
 if CQFD_EXTRA_RUN_ARGS="-e FOO=bar\ baz" \
    cqfd run env | grep "^FOO=bar baz$"; then
@@ -20,12 +16,7 @@ else
 	jtest_result fail
 fi
 
-################################################################################
-# 'cqfd run' passes environment variables to the container when using
-# docker_run_args with an option containing a whitespace
-################################################################################
 jtest_prepare "run cqfd run with --env containing whitespaces in docker_run_args should set environment variables and preserve whitespaces"
-# setup -- add the docker_run_args option to config
 sed '/\[build\]/adocker_run_args="-e FOO=bar\\ baz"'\
     -i "$TDIR/.cqfdrc"
 if cqfd run env | grep "^FOO=bar baz$"; then
