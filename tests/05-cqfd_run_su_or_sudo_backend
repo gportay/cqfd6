@@ -21,7 +21,7 @@ echo "FROM ubuntu:16.04" >.cqfd/docker/Dockerfile
 ################################################################################
 # cqfd run should be happy using su -c.
 ################################################################################
-jtest_prepare "cqfd run with su -c"
+jtest_prepare "run cqfd run with ancient su should run su -c"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -41,7 +41,7 @@ echo "FROM ubuntu:24.04" >.cqfd/docker/Dockerfile
 ################################################################################
 # cqfd run should be happy using su --session-command.
 ################################################################################
-jtest_prepare "cqfd run with su --session-command"
+jtest_prepare "run cqfd run with recent su should run su --session-command"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -62,7 +62,7 @@ echo "RUN apt-get update && apt-get install -y --no-install-recommends sudo" >>.
 ################################################################################
 # cqfd run should be happy using sudo.
 ################################################################################
-jtest_prepare "cqfd run with sudo"
+jtest_prepare "run cqfd run with sudo should run sudo"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
