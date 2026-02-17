@@ -16,7 +16,7 @@ mv -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 mv -f .cqfdrc .cqfdrc.orig
 
 # Use a custom Dockerfile with a busybox version of su.
-jtest_prepare "cqfd run with busybox su -c sets path"
+jtest_prepare "run cqfd run with path and busybox su -c should set PATH"
 sed '/\[build\]/apath="/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin"' .cqfdrc.orig >.cqfdrc
 cat <<EOF >.cqfd/docker/Dockerfile
 FROM alpine:3.20
@@ -33,7 +33,7 @@ else
 	fi
 fi
 
-jtest_prepare "cqfd run with busybox su -c preserves umask"
+jtest_prepare "run cqfd run with busybox su -c should preserve umask"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -47,7 +47,7 @@ else
 fi
 
 # Use a custom Dockerfile with an ancient version of su.
-jtest_prepare "cqfd run with su -c sets path"
+jtest_prepare "run cqfd run with path and su -c should set PATH"
 echo "FROM ubuntu:16.04" >.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
@@ -59,7 +59,7 @@ else
 	fi
 fi
 
-jtest_prepare "cqfd run with su -c preserves umask"
+jtest_prepare "run cqfd run with su -c should preserve umask"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -73,7 +73,7 @@ else
 fi
 
 # Use another custom Dockerfile with a recent version of su.
-jtest_prepare "cqfd run with su --session-command sets path"
+jtest_prepare "run cqfd run with path and su --session-command should set PATH"
 echo "FROM ubuntu:24.04" >.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
@@ -85,7 +85,7 @@ else
 	fi
 fi
 
-jtest_prepare "cqfd run with su --session-command preserves umask"
+jtest_prepare "run cqfd run with su --session-command should preserve umask"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -99,7 +99,7 @@ else
 fi
 
 # Install the sudo package.
-jtest_prepare "cqfd run with sudo sets path"
+jtest_prepare "run cqfd run with path and sudo should set PATH"
 echo "ENV DEBIAN_FRONTEND=noninteractive" >>.cqfd/docker/Dockerfile
 echo "RUN apt-get update && apt-get install -y --no-install-recommends sudo" >>.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
@@ -112,7 +112,7 @@ else
 	fi
 fi
 
-jtest_prepare "cqfd run with sudo preserves umask"
+jtest_prepare "run cqfd run with sudo should preserve umask"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -127,7 +127,7 @@ fi
 
 # Set user UID and GID.
 echo "USER $UID:${GROUPS[0]}" >>.cqfd/docker/Dockerfile
-jtest_prepare "cqfd run with sh sets path"
+jtest_prepare "run cqfd with path and sh should set PATH"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	if cqfd init && cqfd run env | grep "^PATH=/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin$"; then
 		jtest_result pass
