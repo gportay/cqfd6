@@ -22,9 +22,8 @@ else
 	jtest_result fail
 fi
 
-echo 'RUN apk add shadow' >>.cqfd/docker/Dockerfile
-
 jtest_prepare "run cqfd run with useradd and groupadd commands should pass"
+echo 'RUN apk add shadow' >>.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -35,9 +34,8 @@ else
 	fi
 fi
 
-echo 'RUN apk add bash' >>.cqfd/docker/Dockerfile
-
 jtest_prepare "run cqfd run with CQFD_SHELL command should pass"
+echo 'RUN apk add bash' >>.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -60,9 +58,8 @@ else
 	fi
 fi
 
-echo 'RUN apk add sudo' >>.cqfd/docker/Dockerfile
-
 jtest_prepare "run cqfd run with sudo command should pass"
+echo 'RUN apk add sudo' >>.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -85,9 +82,8 @@ else
 	fi
 fi
 
-echo 'RUN sed "/DEFAULT_HOME/s,yes,no," -i /etc/login.defs' >>.cqfd/docker/Dockerfile
-
 jtest_prepare "run cqfd run should create and own the user's home directory"
+echo 'RUN sed "/DEFAULT_HOME/s,yes,no," -i /etc/login.defs' >>.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
