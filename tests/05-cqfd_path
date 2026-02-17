@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of run with PATH
+# validate the behavior of cqfd with path
 
 set -o pipefail
 
