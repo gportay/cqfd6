@@ -13,9 +13,9 @@ fi
 cd "$TDIR/" || exit 1
 
 cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
-echo "FROM ubuntu:16.04" >.cqfd/docker/Dockerfile
 
 jtest_prepare "run cqfd run with ancient su should run su -c"
+echo "FROM ubuntu:16.04" >.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -27,9 +27,8 @@ else
 	fi
 fi
 
-echo "FROM ubuntu:24.04" >.cqfd/docker/Dockerfile
-
 jtest_prepare "run cqfd run with recent su should run su --session-command"
+echo "FROM ubuntu:24.04" >.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -41,10 +40,9 @@ else
 	fi
 fi
 
+jtest_prepare "run cqfd run with sudo should run sudo"
 echo "ENV DEBIAN_FRONTEND=noninteractive" >>.cqfd/docker/Dockerfile
 echo "RUN apt-get update && apt-get install -y --no-install-recommends sudo" >>.cqfd/docker/Dockerfile
-
-jtest_prepare "run cqfd run with sudo should run sudo"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
