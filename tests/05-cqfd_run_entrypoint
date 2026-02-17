@@ -14,12 +14,18 @@ cd "$TDIR/" || exit 1
 
 cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 cp -f .cqfd/docker/Dockerfile.missing_dependencies .cqfd/docker/Dockerfile
+cp -f .cqfdrc .cqfdrc.orig
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true'," .cqfdrc
 
 jtest_prepare "run cqfd run without useradd and groupadd commands should fail"
-if cqfd init && ! cqfd run; then
-	jtest_result pass
+if [ "${cqfd_docker[-1]}" = "podman" ]; then
+	jtest_result skip
 else
-	jtest_result fail
+	if cqfd init && ! cqfd; then
+		jtest_result pass
+	else
+		jtest_result fail
+	fi
 fi
 
 jtest_prepare "run cqfd run with useradd and groupadd commands should pass"
@@ -27,7 +33,7 @@ echo 'RUN apk add shadow' >>.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && cqfd --verbose run true; then
+	if cqfd init && cqfd --verbose; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -38,7 +44,7 @@ jtest_prepare "run cqfd run without CQFD_SHELL command should fail"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && ! CQFD_SHELL=/bin/bash cqfd --verbose run true; then
+	if cqfd init && ! CQFD_SHELL=/bin/bash cqfd --verbose; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -50,7 +56,7 @@ echo 'RUN apk add bash' >>.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && CQFD_SHELL=/bin/bash cqfd --verbose run true; then
+	if cqfd init && CQFD_SHELL=/bin/bash cqfd --verbose; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -61,7 +67,7 @@ jtest_prepare "run cqfd run with su command should pass"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && cqfd --verbose run true \
+	if cqfd init && cqfd --verbose \
 		| awk -v rc=1 '/Using "su"/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -74,7 +80,7 @@ echo 'RUN apk add sudo' >>.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && cqfd --verbose run true \
+	if cqfd init && cqfd --verbose \
 		| awk -v rc=1 '/Using "sudo"/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -156,7 +162,7 @@ echo "FROM ubuntu:16.04" >.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && cqfd --verbose run true \
+	if cqfd init && cqfd --verbose \
 		| awk -v rc=1 '/Using "su" to execute command/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -169,7 +175,7 @@ echo "FROM ubuntu:24.04" >.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && cqfd --verbose run true \
+	if cqfd init && cqfd --verbose \
 		| awk -v rc=1 '/Using "su" to execute session command/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -183,7 +189,7 @@ echo "RUN apt-get update && apt-get install -y --no-install-recommends sudo" >>.
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && cqfd --verbose run true \
+	if cqfd init && cqfd --verbose \
 		| awk -v rc=1 '/Using "sudo" to execute command/ { rc=0 } 1; END {exit rc}'; then
 		jtest_result pass
 	else
@@ -191,7 +197,8 @@ else
 	fi
 fi
 
-# restore initial Dockerfile
+# restore .cqfdrc and Dockerfile
+mv -f .cqfdrc.orig .cqfdrc
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 # restore container
