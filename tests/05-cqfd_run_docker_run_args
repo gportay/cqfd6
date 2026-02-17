@@ -19,7 +19,7 @@ else
 fi
 
 jtest_prepare "run cqfd run with --env in CQFD_EXTRA_RUN_ARGS should set environment variables"
-if CQFD_EXTRA_RUN_ARGS="-e FOO=foo -e BAR=bar" cqfd | grep "^foo bar$"; then
+if CQFD_EXTRA_RUN_ARGS="--env FOO=foo --env BAR=bar" cqfd | grep "^foo bar$"; then
 	jtest_result pass
 else
 	jtest_result fail
