@@ -25,6 +25,13 @@ else
 	jtest_result fail
 fi
 
+jtest_prepare "run cqfd run with --env containing whitespaces in CQFD_EXTRA_RUN_ARGS should set environment variables and preserve whitespaces"
+if CQFD_EXTRA_RUN_ARGS="--env FOO=foo\ foobar --env BAR=bar" cqfd | grep "^foo foobar bar$"; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
 jtest_prepare "run cqfd run with --env in docker_run_args should set environment variables"
 sed '/\[build\]/adocker_run_args="--env FOO=foo --env BAR=bar"' -i .cqfdrc
 if cqfd | grep "^foo bar$"; then
@@ -32,6 +39,16 @@ if cqfd | grep "^foo bar$"; then
 else
 	jtest_result fail
 fi
+sed '/^docker_run_args=/d' -i .cqfdrc
+
+jtest_prepare "run cqfd run with --env containing whitespaces in docker_run_args should set environment variables and preserve whitespaces"
+sed '/\[build\]/adocker_run_args="--env FOO=foo\\ foobar --env BAR=bar"' -i .cqfdrc
+if cqfd | grep "^foo foobar bar$"; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+sed '/^docker_run_args=/d' -i .cqfdrc
 
 # restore initial .cqfdrc
 mv -f .cqfdrc.orig .cqfdrc
