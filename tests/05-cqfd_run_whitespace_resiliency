@@ -20,7 +20,7 @@ fi
 
 jtest_prepare "run cqfd run with --env containing whitespaces in docker_run_args should set environment variables and preserve whitespaces"
 sed '/\[build\]/adocker_run_args="-e FOO=bar\\ baz"'\
-    -i "$TDIR/.cqfdrc"
+    -i .cqfdrc
 if cqfd | grep "^bar baz$"; then
 	jtest_result pass
 else
