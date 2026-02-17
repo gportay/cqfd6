@@ -2,9 +2,19 @@
 #
 # validate the behavior of run command with extra run environment variable
 
+set -o pipefail
+
 . "$(dirname "$0")/jtest.inc" "$1"
 
 cd "$TDIR/" || exit 1
+
+jtest_prepare "run cqfd run without --env in CQFD_EXTRA_RUN_ARGS and docker_run_args should fail"
+# shellcheck disable=SC2016
+if cqfd run 'echo "$FOO $BAR"' | grep "^ $"; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
 
 jtest_prepare "run cqfd run with --env in CQFD_EXTRA_RUN_ARGS should set environment variables"
 # shellcheck disable=SC2016
