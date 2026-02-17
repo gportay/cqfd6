@@ -12,14 +12,14 @@ cp -f .cqfdrc .cqfdrc.orig
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='echo \$FOO'," .cqfdrc
 
 jtest_prepare "run cqfd run with --env containing whitespaces in CQFD_EXTRA_RUN_ARGS should set environment variables and preserve whitespaces"
-if CQFD_EXTRA_RUN_ARGS="-e FOO=bar\ baz" cqfd | grep "^bar baz$"; then
+if CQFD_EXTRA_RUN_ARGS="--env FOO=bar\ baz" cqfd | grep "^bar baz$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
 jtest_prepare "run cqfd run with --env containing whitespaces in docker_run_args should set environment variables and preserve whitespaces"
-sed '/\[build\]/adocker_run_args="-e FOO=bar\\ baz"' -i .cqfdrc
+sed '/\[build\]/adocker_run_args="--env FOO=bar\\ baz"' -i .cqfdrc
 if cqfd | grep "^bar baz$"; then
 	jtest_result pass
 else
