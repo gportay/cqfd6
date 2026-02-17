@@ -9,6 +9,7 @@ set -o pipefail
 cd "$TDIR/" || exit 1
 
 cp -f .cqfdrc .cqfdrc.orig
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='echo \"\$FOO \$BAR\"'," .cqfdrc
 
 jtest_prepare "run cqfd run without --env in CQFD_EXTRA_RUN_ARGS and docker_run_args should fail"
 # shellcheck disable=SC2016
@@ -20,7 +21,7 @@ fi
 
 jtest_prepare "run cqfd run with --env in CQFD_EXTRA_RUN_ARGS should set environment variables"
 # shellcheck disable=SC2016
-if CQFD_EXTRA_RUN_ARGS="-e FOO=foo -e BAR=bar" cqfd run 'echo "$FOO $BAR"' | grep "^foo bar$"; then
+if CQFD_EXTRA_RUN_ARGS="-e FOO=foo -e BAR=bar" cqfd | grep "^foo bar$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -29,7 +30,7 @@ fi
 jtest_prepare "run cqfd run with --env in docker_run_args should pass"
 sed '/\[build\]/adocker_run_args="--env FOO=foo --env BAR=bar"' -i .cqfdrc
 # shellcheck disable=SC2016
-if cqfd run 'echo "$FOO $BAR"' | grep "^foo bar$"; then
+if cqfd | grep "^foo bar$"; then
 	jtest_result pass
 else
 	jtest_result fail
