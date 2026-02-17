@@ -8,9 +8,7 @@ cd "$TDIR/" || exit 1
 
 jtest_prepare "run cqfd run with --env in CQFD_EXTRA_RUN_ARGS should set environment variables"
 # shellcheck disable=SC2016
-if output="$(CQFD_EXTRA_RUN_ARGS="-e FOO=foo -e BAR=bar" \
-	     cqfd run 'echo -n $FOO $BAR' | grep "foo bar")" && \
-   [ "$output" = "foo bar" ]; then
+if CQFD_EXTRA_RUN_ARGS="-e FOO=foo -e BAR=bar" cqfd run 'echo -n $FOO $BAR' | grep "^foo bar$"; then
 	jtest_result pass
 else
 	jtest_result fail
