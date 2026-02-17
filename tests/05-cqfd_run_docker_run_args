@@ -20,7 +20,6 @@ else
 fi
 
 jtest_prepare "run cqfd run with --env in CQFD_EXTRA_RUN_ARGS should set environment variables"
-# shellcheck disable=SC2016
 if CQFD_EXTRA_RUN_ARGS="-e FOO=foo -e BAR=bar" cqfd | grep "^foo bar$"; then
 	jtest_result pass
 else
@@ -29,7 +28,6 @@ fi
 
 jtest_prepare "run cqfd run with --env in docker_run_args should set environment variables"
 sed '/\[build\]/adocker_run_args="--env FOO=foo --env BAR=bar"' -i .cqfdrc
-# shellcheck disable=SC2016
 if cqfd | grep "^foo bar$"; then
 	jtest_result pass
 else
