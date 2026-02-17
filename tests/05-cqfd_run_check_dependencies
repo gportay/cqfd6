@@ -12,15 +12,9 @@ fi
 
 cd "$TDIR/" || exit 1
 
-################################################################################
-# Use a custom Dockerfile
-################################################################################
 cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 cp -f .cqfd/docker/Dockerfile.missing_dependencies .cqfd/docker/Dockerfile
 
-################################################################################
-# Missing all core dependencies for the launch script
-################################################################################
 jtest_prepare "run cqfd run without useradd and groupadd commands should fail"
 if cqfd init && ! cqfd run; then
 	jtest_result pass
@@ -28,14 +22,8 @@ else
 	jtest_result fail
 fi
 
-################################################################################
-# Add the 'shadow' package, which provides useradd, groupadd.
-################################################################################
 echo 'RUN apk add shadow' >>.cqfd/docker/Dockerfile
 
-################################################################################
-# cqfd run should now be happy with the required commands useradd and groupadd
-################################################################################
 jtest_prepare "run cqfd run with useradd and groupadd commands should pass"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
@@ -47,14 +35,8 @@ else
 	fi
 fi
 
-################################################################################
-# Add Bash package.
-################################################################################
 echo 'RUN apk add bash' >>.cqfd/docker/Dockerfile
 
-################################################################################
-# cqfd run should now be happy with the required shell
-################################################################################
 jtest_prepare "run cqfd run with CQFD_SHELL command should pass"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
@@ -66,9 +48,6 @@ else
 	fi
 fi
 
-################################################################################
-# cqfd run should now be happy with the required commands, using su.
-################################################################################
 jtest_prepare "run cqfd run with su command should pass"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
@@ -81,14 +60,8 @@ else
 	fi
 fi
 
-################################################################################
-# Install the sudo package.
-################################################################################
 echo 'RUN apk add sudo' >>.cqfd/docker/Dockerfile
 
-################################################################################
-# cqfd run should now be happy with the required commands, using sudo
-################################################################################
 jtest_prepare "run cqfd run with sudo command should pass"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
@@ -101,9 +74,6 @@ else
 	fi
 fi
 
-################################################################################
-# cqfd run should now creates the user correctly.
-################################################################################
 jtest_prepare "run cqfd run should create the user"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
@@ -115,14 +85,8 @@ else
 	fi
 fi
 
-################################################################################
-# shadow does not create home directory.
-################################################################################
 echo 'RUN sed "/DEFAULT_HOME/s,yes,no," -i /etc/login.defs' >>.cqfd/docker/Dockerfile
 
-################################################################################
-# cqfd run should now creates and own the user directory.
-################################################################################
 jtest_prepare "run cqfd run should create and own the user's home directory"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
@@ -134,9 +98,6 @@ else
 	fi
 fi
 
-################################################################################
-# cqfd run should now executes as the host user.
-################################################################################
 jtest_prepare "run cqfd run should execute as the host user"
 if [ "${cqfd_docker[-1]}" = "podman" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
@@ -148,9 +109,6 @@ else
 	fi
 fi
 
-################################################################################
-# cqfd run should not executes sudo without authentication.
-################################################################################
 jtest_prepare "run cqfd run should not execute sudo without authentication"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
@@ -162,9 +120,6 @@ else
 	fi
 fi
 
-################################################################################
-# cqfd run should now executes sudo without authentication.
-################################################################################
 jtest_prepare "run cqfd run with CQFD_SUDO_NOPASSWD should execute sudo without authentication"
 if [ "${cqfd_docker[-1]}" = "podman" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
@@ -176,9 +131,6 @@ else
 	fi
 fi
 
-################################################################################
-# cqfd run should preserve umask no matter what CQFD_SUDO_NOPASSWD value.
-################################################################################
 jtest_prepare "run cqfd run with sudo should preserve umask"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
@@ -192,14 +144,10 @@ else
 	fi
 fi
 
-################################################################################
 # restore initial Dockerfile
-################################################################################
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
-################################################################################
 # restore container
-################################################################################
 if ! cqfd init; then
 	jtest_log error "restore container failed"
 fi
