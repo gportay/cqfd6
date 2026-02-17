@@ -34,6 +34,17 @@ else
 	fi
 fi
 
+jtest_prepare "run cqfd run without CQFD_SHELL command should fail"
+if [ "${cqfd_docker[-1]}" = "podman" ]; then
+	jtest_result skip
+else
+	if cqfd init && ! CQFD_SHELL=/bin/bash cqfd --verbose run true; then
+		jtest_result pass
+	else
+		jtest_result fail
+	fi
+fi
+
 jtest_prepare "run cqfd run with CQFD_SHELL command should pass"
 echo 'RUN apk add bash' >>.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
