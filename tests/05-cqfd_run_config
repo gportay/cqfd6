@@ -25,7 +25,7 @@ rm -f "$test_file"
 # Second pass: run with non default config file and bash cmd
 test_file="file.$RANDOM"
 jtest_prepare "cqfd run and override with additionnal cmd"
-if cqfd -f "$confdir/mycqfdrc" run touch "$test_file" && [ -f "$test_file" ]; then
+if cqfd -f "$confdir/mycqfdrc" run "touch $test_file" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -35,7 +35,7 @@ rm -f "$test_file"
 # Third pass: run with non default config file and flavor
 test_file="$flavor.$RANDOM"
 jtest_prepare "cqfd run and build a given '$flavor' flavor"
-if cqfd -f "$confdir/mycqfdrc" -b "$flavor" run touch "$test_file" && [ -f "$test_file" ]; then
+if cqfd -f "$confdir/mycqfdrc" -b "$flavor" run "touch $test_file" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -45,7 +45,7 @@ rm -f "$test_file"
 # Fourth pass: run with flavor non default config file
 test_file="$flavor.$RANDOM"
 jtest_prepare "cqfd run and build a given '$flavor' flavor (inverted args)"
-if cqfd -b "$flavor" -f "$confdir/mycqfdrc" run touch "$test_file" && [ -f "$test_file" ]; then
+if cqfd -b "$flavor" -f "$confdir/mycqfdrc" run "touch $test_file" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
 	jtest_result fail
