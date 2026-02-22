@@ -25,7 +25,7 @@ rm -f "$file"
 popd >/dev/null || exit 1
 
 # restore local cqfd files
-mv -f "$spaces_dir/$spaces_dir2"/.cqfdrc "$spaces_dir/$spaces_dir2"/.cqfd .
+mv -f "$spaces_dir/$spaces_dir2/.cqfdrc" "$spaces_dir/$spaces_dir2/.cqfd" .
 
 # cleanup
 rmdir -p "$spaces_dir/$spaces_dir2"
