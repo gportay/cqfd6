@@ -6,11 +6,10 @@
 
 cd "$TDIR/" || exit 1
 
-spaces_dir="aa bb cc dd"
-spaces_dir2="aa2 bb2 cc2 dd2"
-mkdir -p "$spaces_dir/$spaces_dir2"
-mv -f .cqfd .cqfdrc "$spaces_dir/$spaces_dir2"
-pushd "$spaces_dir/$spaces_dir2" >/dev/null || exit 1
+sub_dir="dir with space/b/c/d/e"
+mkdir -p "$sub_dir"
+mv -f .cqfd .cqfdrc "$sub_dir"
+pushd "$sub_dir" >/dev/null || exit 1
 
 jtest_prepare "run cqfd run from a subdirectory containing spaces should pass"
 file="rand.$RANDOM"
@@ -25,7 +24,7 @@ rm -f "$file"
 popd >/dev/null || exit 1
 
 # restore local cqfd files
-mv -f "$spaces_dir/$spaces_dir2/.cqfdrc" "$spaces_dir/$spaces_dir2/.cqfd" .
+mv -f "$sub_dir/.cqfdrc" "$sub_dir/.cqfd" .
 
 # cleanup
-rmdir -p "$spaces_dir/$spaces_dir2"
+rmdir -p "$sub_dir"
