@@ -1,18 +1,21 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of run from subdirectory
+# validate the behavior of cqfd from subdirectory
 
 . "$(dirname "$0")/jtest.inc" "$1"
 
 cd "$TDIR/" || exit 1
 
+cp -f .cqfdrc .cqfdrc.orig
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='pwd'," .cqfdrc
+
 sub_dir="dir with space/b/c/d/e"
 mkdir -p "$sub_dir"
 pushd "$sub_dir" >/dev/null || exit 1
 
-jtest_prepare "run cqfd run from project's subdirectory should pass"
+jtest_prepare "run cqfd from project's subdirectory should pass"
 if p1="$(pwd)" && \
-   p2="$(cqfd run pwd)" && \
+   p2="$(cqfd)" && \
    [ "$p1" = "$p2" ]; then
 	jtest_result pass
 else
@@ -22,3 +25,6 @@ fi
 # cleanup
 popd >/dev/null || exit 1
 rmdir -p "$sub_dir"
+
+# restore initial .cqfdrc
+mv -f .cqfdrc.orig .cqfdrc
