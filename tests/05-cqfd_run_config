@@ -7,7 +7,6 @@
 cd "$TDIR/" || exit 1
 
 extdir="external/dir"
-flavor="foo"
 mkdir -p "$extdir"
 mv .cqfdrc "$extdir/cqfdrc"
 
@@ -31,9 +30,9 @@ fi
 # cleanup
 rm -f "$test_file"
 
-test_file="$flavor.$RANDOM"
+test_file="foo.$RANDOM"
 jtest_prepare "run cqfd run with argument and options -f and -b should pass"
-if cqfd -f "$extdir/cqfdrc" -b "$flavor" run "touch $test_file" && [ -f "$test_file" ]; then
+if cqfd -f "$extdir/cqfdrc" -b foo run "touch $test_file" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -41,9 +40,9 @@ fi
 # cleanup
 rm -f "$test_file"
 
-test_file="$flavor.$RANDOM"
+test_file="foo.$RANDOM"
 jtest_prepare "run cqfd run with argument and options -b and -f should pass"
-if cqfd -b "$flavor" -f "$extdir/cqfdrc" run "touch $test_file" && [ -f "$test_file" ]; then
+if cqfd -b foo -f "$extdir/cqfdrc" run "touch $test_file" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
 	jtest_result fail
