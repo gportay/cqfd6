@@ -6,10 +6,6 @@
 
 cd "$TDIR/" || exit 1
 
-################################################################################
-# Working from a sub-directory with spaces should also work.
-# Create one and copy the necessary config inside it.
-################################################################################
 spaces_dir="aa bb cc dd"
 spaces_dir2="aa2 bb2 cc2 dd2"
 mkdir -p "$spaces_dir/$spaces_dir2"
@@ -25,11 +21,11 @@ else
 fi
 rm -f "$file"
 
-# Teardown
+# teardown
 popd >/dev/null || exit 1
 
-# Restore local cqfd files
+# restore local cqfd files
 mv -f "$spaces_dir/$spaces_dir2"/.cqfdrc "$spaces_dir/$spaces_dir2"/.cqfd .
 
-# Cleanup
+# cleanup
 rmdir -p "$spaces_dir/$spaces_dir2"
