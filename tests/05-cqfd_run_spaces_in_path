@@ -12,7 +12,7 @@ mv -f Makefile .cqfd .cqfdrc "$sub_dir"
 pushd "$sub_dir" >/dev/null || exit 1
 
 jtest_prepare "run cqfd from a subdirectory containing spaces should pass"
-if cqfd && [ -f a/cqfd_a.txt ]; then
+if cqfd && test -f a/cqfd_a.txt; then
 	jtest_result pass
 else
 	jtest_result fail
