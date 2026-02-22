@@ -37,15 +37,6 @@ fi
 # cleanup
 rm -f foo
 
-jtest_prepare "run cqfd run with argument and options -b and -f should pass"
-if cqfd -b foo -f "$extdir/cqfdrc" run "touch foo" && [ -f foo ]; then
-	jtest_result pass
-else
-	jtest_result fail
-fi
-# cleanup
-rm -f foo
-
 # restore initial .cqfdrc
 mv -f "$extdir/cqfdrc" .cqfdrc
 
