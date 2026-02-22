@@ -18,7 +18,7 @@ else
 	jtest_result fail
 fi
 # cleanup
-rm -f "$test_file"
+make clean
 
 test_file="file.$RANDOM"
 jtest_prepare "run cqfd run with argument and option -f should pass"
@@ -54,5 +54,4 @@ rm -f "$test_file"
 mv -f "$extdir/cqfdrc" .cqfdrc
 
 # cleanup
-make clean
 rmdir -p "$extdir"
