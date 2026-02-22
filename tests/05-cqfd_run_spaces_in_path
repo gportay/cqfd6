@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of run command with spaces in current working directory
+# validate the behavior of cqfd with spaces in current working directory
 
 . "$(dirname "$0")/jtest.inc" "$1"
 
@@ -8,23 +8,23 @@ cd "$TDIR/" || exit 1
 
 sub_dir="dir with space/b/c/d/e"
 mkdir -p "$sub_dir"
-mv -f .cqfd .cqfdrc "$sub_dir"
+mv -f Makefile .cqfd .cqfdrc "$sub_dir"
 pushd "$sub_dir" >/dev/null || exit 1
 
-jtest_prepare "run cqfd run from a subdirectory containing spaces should pass"
-file="rand.$RANDOM"
-if cqfd run touch "$file" && [ -f "$file" ]; then
+jtest_prepare "run cqfd from a subdirectory containing spaces should pass"
+if cqfd && [ -f a/cqfd_a.txt ]; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
-rm -f "$file"
+# cleanup
+make clean
 
 # teardown
 popd >/dev/null || exit 1
 
 # restore local cqfd files
-mv -f "$sub_dir/.cqfdrc" "$sub_dir/.cqfd" .
+mv -f "$sub_dir/.cqfdrc" "$sub_dir/.cqfd" "$sub_dir/Makefile" .
 
 # cleanup
 rmdir -p "$sub_dir"
