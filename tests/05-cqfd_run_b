@@ -7,7 +7,6 @@
 cd "$TDIR/" || exit 1
 
 jtest_prepare "run cqfd without argument and with build flavor should execute flavor's command"
-# shellcheck disable=SC2181
 if cqfd -b foo && test -f foo; then
 	jtest_result pass
 else
@@ -17,7 +16,6 @@ fi
 rm -f foo
 
 jtest_prepare "run cqfd run without argument and with build flavor should execute flavor's command"
-# shellcheck disable=SC2181
 if cqfd -b foo run && test -f foo; then
 	jtest_result pass
 else
