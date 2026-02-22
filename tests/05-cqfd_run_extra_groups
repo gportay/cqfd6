@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of run command with extra groups
+# validate the behavior of run command with user_extra_groups
 
 set -o pipefail
 
