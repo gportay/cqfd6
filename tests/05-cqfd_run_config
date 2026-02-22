@@ -3,11 +3,11 @@
 # validate the behavior of run command with alternative config file and build flavors
 
 . "$(dirname "$0")/jtest.inc" "$1"
-confdir=".config/dir"
-flavor="foo"
 
 cd "$TDIR/" || exit 1
 
+confdir=".config/dir"
+flavor="foo"
 mkdir -p "$confdir"
 mv .cqfdrc "$confdir/mycqfdrc"
 
