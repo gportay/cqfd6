@@ -6,14 +6,14 @@
 
 cd "$TDIR/" || exit 1
 
-confdir=".config/dir"
+extdir=".config/dir"
 flavor="foo"
-mkdir -p "$confdir"
-mv .cqfdrc "$confdir/mycqfdrc"
+mkdir -p "$extdir"
+mv .cqfdrc "$extdir/mycqfdrc"
 
 test_file="a/cqfd_a.txt"
 jtest_prepare "run cqfd run without argument and with option -f should pass"
-if cqfd -f "$confdir/mycqfdrc" run && [ -f "$test_file" ]; then
+if cqfd -f "$extdir/mycqfdrc" run && [ -f "$test_file" ]; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -23,7 +23,7 @@ rm -f "$test_file"
 
 test_file="file.$RANDOM"
 jtest_prepare "run cqfd run with argument and option -f should pass"
-if cqfd -f "$confdir/mycqfdrc" run "touch $test_file" && [ -f "$test_file" ]; then
+if cqfd -f "$extdir/mycqfdrc" run "touch $test_file" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -33,7 +33,7 @@ rm -f "$test_file"
 
 test_file="$flavor.$RANDOM"
 jtest_prepare "run cqfd run with argument and options -f and -b should pass"
-if cqfd -f "$confdir/mycqfdrc" -b "$flavor" run "touch $test_file" && [ -f "$test_file" ]; then
+if cqfd -f "$extdir/mycqfdrc" -b "$flavor" run "touch $test_file" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -43,7 +43,7 @@ rm -f "$test_file"
 
 test_file="$flavor.$RANDOM"
 jtest_prepare "run cqfd run with argument and options -b and -f should pass"
-if cqfd -b "$flavor" -f "$confdir/mycqfdrc" run "touch $test_file" && [ -f "$test_file" ]; then
+if cqfd -b "$flavor" -f "$extdir/mycqfdrc" run "touch $test_file" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -52,8 +52,8 @@ fi
 rm -f "$test_file"
 
 # restore initial .cqfdrc
-mv -f "$confdir/mycqfdrc" .cqfdrc
+mv -f "$extdir/mycqfdrc" .cqfdrc
 
 # cleanup
 make clean
-rmdir -p "$confdir"
+rmdir -p "$extdir"
