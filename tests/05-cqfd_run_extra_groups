@@ -16,8 +16,7 @@ jtest_prepare "run cqfd run with groups in environment user_extra_groups should 
 if [ "$USER" = "runner" ] || [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if output=$(user_extra_groups="docker newgroup:12345" cqfd run groups | grep docker | grep newgroup) && \
-	   [ -n "$output" ]; then
+	if user_extra_groups="docker newgroup:12345" cqfd run groups | grep docker | grep newgroup; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -30,8 +29,7 @@ if [ "$USER" = "runner" ] || [ "${cqfd_docker[-1]}" = "podman" ]; then
 else
 	cp -f .cqfdrc .cqfdrc.orig
 	echo 'user_extra_groups="docker newgroup:12345"' >>.cqfdrc
-	if output=$(cqfd run groups | grep docker | grep newgroup) && \
-	   [ -n "$output" ]; then
+	if cqfd run groups | grep docker | grep newgroup; then
 		jtest_result pass
 	else
 		jtest_result fail
