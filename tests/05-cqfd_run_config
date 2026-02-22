@@ -28,6 +28,15 @@ fi
 # cleanup
 rm -f file
 
+jtest_prepare "run cqfd run without argument and with options -f and -b should pass"
+if cqfd -f "$extdir/cqfdrc" -b foo run && [ -f foo ]; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+# cleanup
+make clean
+
 jtest_prepare "run cqfd run with argument and options -f and -b should pass"
 if cqfd -f "$extdir/cqfdrc" -b foo run "touch foo" && [ -f foo ]; then
 	jtest_result pass
