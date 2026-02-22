@@ -2,8 +2,6 @@
 #
 # validate the behavior of run from subdirectory
 
-set -o pipefail
-
 . "$(dirname "$0")/jtest.inc" "$1"
 
 cd "$TDIR/" || exit 1
@@ -13,8 +11,8 @@ mkdir -p "$sub_dir"
 pushd "$sub_dir" >/dev/null || exit 1
 
 jtest_prepare "run cqfd run from project's subdirectory should pass"
-if p1="$(pwd | strings)" && \
-   p2="$(cqfd run pwd | strings)" && \
+if p1="$(pwd)" && \
+   p2="$(cqfd run pwd)" && \
    [ "$p1" = "$p2" ]; then
 	jtest_result pass
 else
