@@ -6,7 +6,7 @@
 
 cd "$TDIR/" || exit 1
 
-extdir=".config/dir"
+extdir="external/dir"
 flavor="foo"
 mkdir -p "$extdir"
 mv .cqfdrc "$extdir/mycqfdrc"
