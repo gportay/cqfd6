@@ -13,46 +13,60 @@ mkdir -p "$confdir"
 mv .cqfdrc "$confdir/mycqfdrc"
 
 # First pass: run with non default config file
+test_file="a/cqfd_a.txt" # from mycqfdrc
+jtest_prepare "cqfd run with config in $confdir/mycqfdrc"
+cqfd -f "$confdir/mycqfdrc" run
+
+# shellcheck disable=SC2181
+if [ "$?" -eq 0 ] && [ -f "$test_file" ]; then
+	jtest_result pass
+else
+	jtest_log fatal "failed or test file not present after execution"
+	jtest_result fail
+fi
+rm -f "$test_file"
+
 # Second pass: run with non default config file and bash cmd
+test_file="file.$RANDOM"
+jtest_prepare "cqfd run and override with additionnal cmd"
+cqfd -f "$confdir/mycqfdrc" run touch "$test_file"
+
+# shellcheck disable=SC2181
+if [ "$?" -eq 0 ] && [ -f "$test_file" ]; then
+	jtest_result pass
+else
+	jtest_log fatal "failed or test file not present after execution"
+	jtest_result fail
+fi
+rm -f "$test_file"
+
 # Third pass: run with non default config file and flavor
+test_file="$flavor.$RANDOM"
+jtest_prepare "cqfd run and build a given '$flavor' flavor"
+cqfd -f "$confdir/mycqfdrc" -b "$flavor" run touch "$test_file"
+
+# shellcheck disable=SC2181
+if [ "$?" -eq 0 ] && [ -f "$test_file" ]; then
+	jtest_result pass
+else
+	jtest_log fatal "failed or test file not present after execution"
+	jtest_result fail
+fi
+rm -f "$test_file"
+
 # Fourth pass: run with flavor non default config file
-for i in 0 1 2 3; do
-	jtest_log info "cqfd run, custom cqfdrc: $confdir/mycqfdrc, pass $i"
+test_file="$flavor.$RANDOM"
+jtest_prepare "cqfd run and build a given '$flavor' flavor (inverted args)"
+cqfd -b "$flavor" -f "$confdir/mycqfdrc" run touch "$test_file"
 
-	case "$i" in
-	0)
-		test_file="a/cqfd_a.txt" # from mycqfdrc
-		jtest_prepare "cqfd run with config in $confdir/mycqfdrc"
-		cqfd -f "$confdir/mycqfdrc" run
-		;;
-	1)
-		test_file="file.$RANDOM"
-		jtest_prepare "cqfd run and override with additionnal cmd"
-		cqfd -f "$confdir/mycqfdrc" run touch "$test_file"
-		;;
-	2)
-		test_file="$flavor.$RANDOM"
-		jtest_prepare "cqfd run and build a given '$flavor' flavor"
-		cqfd -f "$confdir/mycqfdrc" -b "$flavor" run touch "$test_file"
-		;;
-	3)
-		test_file="$flavor.$RANDOM"
-		jtest_prepare "cqfd run and build a given '$flavor' flavor (inverted args)"
-		cqfd -b "$flavor" -f "$confdir/mycqfdrc" run touch "$test_file"
-		;;
-	*)
-		;;
-	esac
-
-	# shellcheck disable=SC2181
-	if [ "$?" -eq 0 ] && [ -f "$test_file" ]; then
-		jtest_result pass
-	else
-		jtest_log fatal "failed or test file not present after execution"
-		jtest_result fail
-	fi
-	rm -f "$test_file"
-done
+# shellcheck disable=SC2181
+if [ "$?" -eq 0 ] && [ -f "$test_file" ]; then
+	jtest_result pass
+else
+	jtest_log fatal "failed or test file not present after execution"
+	jtest_result fail
+fi
+rm -f "$test_file"
 
 # restore initial .cqfdrc
 mv -f "$confdir/mycqfdrc" .cqfdrc
