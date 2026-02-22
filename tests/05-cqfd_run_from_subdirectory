@@ -4,7 +4,7 @@
 
 . "$(dirname "$0")/jtest.inc" "$1"
 
-jtest_prepare "cqfd can run from a project's sub-directory"
+jtest_prepare "run cqfd run from project's subdirectory should pass"
 
 pushd "$TDIR" >/dev/null || exit 1
 
