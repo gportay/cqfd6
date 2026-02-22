@@ -24,7 +24,27 @@ fi
 
 # cleanup
 popd >/dev/null || exit 1
-rmdir -p "$sub_dir"
 
 # restore initial .cqfdrc
 mv -f .cqfdrc.orig .cqfdrc
+
+mv -f Makefile .cqfd .cqfdrc "$sub_dir"
+pushd "$sub_dir" >/dev/null || exit 1
+
+jtest_prepare "run cqfd from a subdirectory containing spaces should pass"
+if cqfd && test -f a/cqfd_a.txt; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+# cleanup
+make clean
+
+# teardown
+popd >/dev/null || exit 1
+
+# restore local cqfd files
+mv -f "$sub_dir/.cqfdrc" "$sub_dir/.cqfd" "$sub_dir/Makefile" .
+
+# cleanup
+rmdir -p "$sub_dir"
