@@ -12,9 +12,6 @@ fi
 
 cd "$TDIR/" || exit 1
 
-################################################################################
-# 'cqfd run' should add user_extra_groups provided by an environment variable
-################################################################################
 jtest_prepare "run cqfd run with groups in environment user_extra_groups should execute as groups"
 if [ "$USER" = "runner" ] || [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
@@ -27,9 +24,6 @@ else
 	fi
 fi
 
-################################################################################
-# 'cqfd run' should add user_extra_groups provided by the config
-################################################################################
 jtest_prepare "run cqfd run with groups in user_extra_groups should execute as groups"
 if [ "$USER" = "runner" ] || [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
