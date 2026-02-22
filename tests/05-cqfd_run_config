@@ -10,9 +10,8 @@ extdir="external/dir"
 mkdir -p "$extdir"
 mv .cqfdrc "$extdir/cqfdrc"
 
-test_file="a/cqfd_a.txt"
 jtest_prepare "run cqfd run without argument and with option -f should pass"
-if cqfd -f "$extdir/cqfdrc" run && [ -f "$test_file" ]; then
+if cqfd -f "$extdir/cqfdrc" run && [ -f a/cqfd_a.txt ]; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -20,35 +19,32 @@ fi
 # cleanup
 make clean
 
-test_file="file.$RANDOM"
 jtest_prepare "run cqfd run with argument and option -f should pass"
-if cqfd -f "$extdir/cqfdrc" run "touch $test_file" && [ -f "$test_file" ]; then
+if cqfd -f "$extdir/cqfdrc" run "touch file" && [ -f file ]; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 # cleanup
-rm -f "$test_file"
+rm -f file
 
-test_file="foo.$RANDOM"
 jtest_prepare "run cqfd run with argument and options -f and -b should pass"
-if cqfd -f "$extdir/cqfdrc" -b foo run "touch $test_file" && [ -f "$test_file" ]; then
+if cqfd -f "$extdir/cqfdrc" -b foo run "touch foo" && [ -f foo ]; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 # cleanup
-rm -f "$test_file"
+rm -f foo
 
-test_file="foo.$RANDOM"
 jtest_prepare "run cqfd run with argument and options -b and -f should pass"
-if cqfd -b foo -f "$extdir/cqfdrc" run "touch $test_file" && [ -f "$test_file" ]; then
+if cqfd -b foo -f "$extdir/cqfdrc" run "touch foo" && [ -f foo ]; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 # cleanup
-rm -f "$test_file"
+rm -f foo
 
 # restore initial .cqfdrc
 mv -f "$extdir/cqfdrc" .cqfdrc
