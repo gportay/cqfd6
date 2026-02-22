@@ -4,14 +4,13 @@
 
 . "$(dirname "$0")/jtest.inc" "$1"
 
-jtest_prepare "run cqfd run from project's subdirectory should pass"
-
 cd "$TDIR/" || exit 1
 
 sub_dir="dir with space/b/c/d/e"
 mkdir -p "$sub_dir"
 pushd "$sub_dir" >/dev/null || exit 1
 
+jtest_prepare "run cqfd run from project's subdirectory should pass"
 if p1="$(pwd | strings)" && \
    p2="$(cqfd run pwd | strings)" && \
    [ "$p1" = "$p2" ]; then
