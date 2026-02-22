@@ -2,6 +2,8 @@
 #
 # validate the behavior of cqfd from subdirectory
 
+set -o pipefail
+
 . "$(dirname "$0")/jtest.inc" "$1"
 
 cd "$TDIR/" || exit 1
@@ -14,9 +16,7 @@ mkdir -p "$sub_dir"
 pushd "$sub_dir" >/dev/null || exit 1
 
 jtest_prepare "run cqfd from project's subdirectory should pass"
-if p1="$(pwd)" && \
-   p2="$(cqfd)" && \
-   [ "$p1" = "$p2" ]; then
+if cqfd | grep "^$PWD$"; then
 	jtest_result pass
 else
 	jtest_result fail
