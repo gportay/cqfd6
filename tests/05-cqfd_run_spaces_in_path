@@ -16,7 +16,7 @@ mkdir -p "$spaces_dir/$spaces_dir2"
 mv -f .cqfd .cqfdrc "$spaces_dir/$spaces_dir2"
 pushd "$spaces_dir/$spaces_dir2" >/dev/null || exit 1
 
-jtest_prepare "cqfd run from a directory with spaces"
+jtest_prepare "run cqfd run from a subdirectory containing spaces should pass"
 file="rand.$RANDOM"
 if cqfd run touch "$file" && [ -f "$file" ]; then
 	jtest_result pass
