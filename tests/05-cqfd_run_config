@@ -18,7 +18,6 @@ jtest_prepare "cqfd run with config in $confdir/mycqfdrc"
 if cqfd -f "$confdir/mycqfdrc" run && [ -f "$test_file" ]; then
 	jtest_result pass
 else
-	jtest_log log "failed or test file not present after execution"
 	jtest_result fail
 fi
 rm -f "$test_file"
@@ -29,7 +28,6 @@ jtest_prepare "cqfd run and override with additionnal cmd"
 if cqfd -f "$confdir/mycqfdrc" run touch "$test_file" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
-	jtest_log log "failed or test file not present after execution"
 	jtest_result fail
 fi
 rm -f "$test_file"
@@ -40,7 +38,6 @@ jtest_prepare "cqfd run and build a given '$flavor' flavor"
 if cqfd -f "$confdir/mycqfdrc" -b "$flavor" run touch "$test_file" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
-	jtest_log log "failed or test file not present after execution"
 	jtest_result fail
 fi
 rm -f "$test_file"
@@ -51,7 +48,6 @@ jtest_prepare "cqfd run and build a given '$flavor' flavor (inverted args)"
 if cqfd -b "$flavor" -f "$confdir/mycqfdrc" run touch "$test_file" && [ -f "$test_file" ]; then
 	jtest_result pass
 else
-	jtest_log log "failed or test file not present after execution"
 	jtest_result fail
 fi
 rm -f "$test_file"
