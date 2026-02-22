@@ -6,7 +6,7 @@
 
 jtest_prepare "run cqfd run from project's subdirectory should pass"
 
-pushd "$TDIR" >/dev/null || exit 1
+cd "$TDIR/" || exit 1
 
 sub_dir="dir with space/b/c/d/e"
 mkdir -p "$sub_dir"
