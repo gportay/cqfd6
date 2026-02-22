@@ -11,7 +11,7 @@ cd "$TDIR/" || exit 1
 cp -f .cqfdrc .cqfdrc.orig
 cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 
-jtest_prepare "cqfd with running host ssh-agent should forward socket to container"
+jtest_prepare "run cqfd run with running host ssh-agent should forward socket to container"
 echo "FROM ubuntu:24.04" >.cqfd/docker/Dockerfile
 echo "RUN apt-get -y update && apt-get -y install openssh-client" >>.cqfd/docker/Dockerfile
 if ! command -v ssh-agent; then
@@ -24,7 +24,7 @@ else
 	fi
 fi
 
-jtest_prepare "cqfd with running host and no private keys added ssh-agent should fail"
+jtest_prepare "run cqfd run with running host and no private keys added ssh-agent should fail"
 if ! command -v ssh-agent; then
 	jtest_result skip
 else
@@ -35,7 +35,7 @@ else
 	fi
 fi
 
-jtest_prepare "cqfd with running host and a private key added ssh-agent should pass"
+jtest_prepare "run cqfd run with running host and a private key added ssh-agent should pass"
 chmod 600 cqfd-test_ed25519
 if ! command -v ssh-agent; then
 	jtest_result skip
@@ -47,7 +47,7 @@ else
 	fi
 fi
 
-jtest_prepare "cqfd with running host ssh-agent should forward socket to container if CQFD_NO_SSH_AUTH_SOCK=true"
+jtest_prepare "run cqfd run with CQFD_NO_SSH_AUTH_SOCK=true and running host ssh-agent should forward socket to container"
 if ! command -v ssh-agent; then
 	jtest_result skip
 else
