@@ -9,7 +9,7 @@ cd "$TDIR/" || exit 1
 ################################################################################
 # 'cqfd version' shall be an accepted command
 ################################################################################
-jtest_prepare "cqfd version shall exit normally"
+jtest_prepare "run cqfd version should exit success"
 # shellcheck disable=SC2094
 if cqfd version >version; then
 	jtest_result pass
@@ -20,7 +20,7 @@ fi
 ################################################################################
 # 'cqfd version' shall produce a version message
 ################################################################################
-jtest_prepare "cqfd version shall produce a version string"
+jtest_prepare "run cqfd version should produce a version output"
 if grep -qE "^[0-9.]+(-[a-z]+)?\$" version; then
 	jtest_result pass
 else
