@@ -12,9 +12,6 @@ fi
 
 cd "$TDIR/" || exit 1
 
-################################################################################
-# 'cqfd run' sets HOME environment variable for the local user
-################################################################################
 jtest_prepare "run cqfd run should set user's HOME environment variable"
 # shellcheck disable=SC2016
 if output="$(cqfd run 'echo -n $HOME')" && \
@@ -24,10 +21,6 @@ else
 	jtest_result fail
 fi
 
-################################################################################
-# 'cqfd run' does not override HOME environment explicitly set via
-# CQFD_EXTRA_RUN_ARGS
-################################################################################
 jtest_prepare "run cqfd run with --env in CQFD_EXTRA_RUN_ARGS including HOME should set overriden HOME environment variable"
 val1="value-$RANDOM"
 val2="value-$RANDOM"
@@ -40,10 +33,6 @@ else
 	jtest_result fail
 fi
 
-################################################################################
-# 'cqfd run' does not override HOME environment when it is the only entry in
-# CQFD_EXTRA_RUN_ARGS
-################################################################################
 jtest_prepare "run cqfd run with --env HOME in CQFD_EXTRA_RUN_ARGS should set overriden HOME environment variable"
 val1="value-$RANDOM"
 # shellcheck disable=SC2016
@@ -55,10 +44,6 @@ else
 	jtest_result fail
 fi
 
-################################################################################
-# 'cqfd run' does not confuse JAVA_HOME and the like with HOME when set via
-# CQFD_EXTRA_RUN_ARGS
-################################################################################
 jtest_prepare "run cqfd run with --env in CQFD_EXTRA_RUN_ARGS including JAVA_HOME and HOME should set overriden HOME environment variable"
 val1="value-$RANDOM"
 val2="value-$RANDOM"
@@ -71,10 +56,6 @@ else
 	jtest_result fail
 fi
 
-################################################################################
-# The container's user directory has been created with the right home
-# directory.
-################################################################################
 jtest_prepare "run cqfd run should set home directory to passwd file"
 if [ "${cqfd_docker[0]}" = "sudo" ] || [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
@@ -88,10 +69,6 @@ else
 	fi
 fi
 
-################################################################################
-# 'cqfd run' does not override HOME environment explicitly set via
-# docker_run_args
-################################################################################
 jtest_prepare "run cqfd run with --env in docker_run_args including HOME should set overriden HOME environment variable"
 val1="value-$RANDOM"
 val2="value-$RANDOM"
@@ -107,10 +84,6 @@ else
 	jtest_result fail
 fi
 
-################################################################################
-# 'cqfd run' does not override HOME environment when it is the only entry in
-# docker_run_args
-################################################################################
 jtest_prepare "run cqfd run with --env HOME in docker_run_args should set overriden HOME environment variable"
 val1="value-$RANDOM"
 cat .cqfdrc.orig - <<EOF >.cqfdrc
@@ -124,10 +97,6 @@ else
 	jtest_result fail
 fi
 
-################################################################################
-# 'cqfd run' does not confuse JAVA_HOME and the like with HOME when set via
-# docker_run_args
-################################################################################
 jtest_prepare "run cqfd run with --env in docker_run_args including JAVA_HOME and HOME should set overriden HOME environment variable"
 val1="value-$RANDOM"
 val2="value-$RANDOM"
@@ -142,7 +111,5 @@ else
 	jtest_result fail
 fi
 
-################################################################################
 # restore initial .cqfdrc
-################################################################################
 mv -f .cqfdrc.orig .cqfdrc
