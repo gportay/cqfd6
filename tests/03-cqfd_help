@@ -4,8 +4,10 @@
 
 . "$(dirname "$0")/jtest.inc" "$1"
 
+cd "$TDIR/" || exit 1
+
 jtest_prepare "run cqfd help should exit normally"
-if cqfd help >"$TDIR/usage"; then
+if cqfd help >usage; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -14,9 +16,9 @@ fi
 jtest_prepare "run cqfd help shall produce an help message"
 # Those words shall be present in the output
 for word in Usage Options Commands; do
-	if ! grep -q "^$word:" "$TDIR/usage"; then
+	if ! grep -q "^$word:" usage; then
 		jtest_log error "cannot find $word in help message"
-		rm -f "$TDIR/usage"
+		rm -f usage
 		missing=1
 		break
 	fi
@@ -28,4 +30,4 @@ else
 fi
 
 # cleanup
-rm -f "$TDIR/usage"
+rm -f usage
