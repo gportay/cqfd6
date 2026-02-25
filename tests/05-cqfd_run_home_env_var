@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of run command with home directory
+# validate the behavior of cqfd with home directory
 
 set -o pipefail
 
@@ -12,9 +12,12 @@ fi
 
 cd "$TDIR/" || exit 1
 
+cp -f .cqfdrc .cqfdrc.orig
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='echo \$HOME'," .cqfdrc
+
 jtest_prepare "run cqfd run should set user's HOME environment variable"
 # shellcheck disable=SC2016
-if cqfd run 'echo -n $HOME' | grep "^$HOME$"; then
+if cqfd | grep "^$HOME$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -23,8 +26,9 @@ fi
 jtest_prepare "run cqfd run with --env in CQFD_EXTRA_RUN_ARGS including HOME should set overriden HOME environment variable"
 val1="value-$RANDOM"
 val2="value-$RANDOM"
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='echo -n \$FOO \$HOME'," .cqfdrc
 # shellcheck disable=SC2016
-if CQFD_EXTRA_RUN_ARGS="-e FOO=$val1 -e HOME=$val2" cqfd run 'echo -n $FOO $HOME' | grep "^$val1 $val2$"; then
+if CQFD_EXTRA_RUN_ARGS="-e FOO=$val1 -e HOME=$val2" cqfd | grep "^$val1 $val2$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -32,8 +36,9 @@ fi
 
 jtest_prepare "run cqfd run with --env HOME in CQFD_EXTRA_RUN_ARGS should set overriden HOME environment variable"
 val1="value-$RANDOM"
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='echo \$HOME'," .cqfdrc
 # shellcheck disable=SC2016
-if CQFD_EXTRA_RUN_ARGS="-e HOME=$val1" cqfd run 'echo -n $FOO $HOME' | grep "^$val1$"; then
+if CQFD_EXTRA_RUN_ARGS="-e HOME=$val1" cqfd | grep "^$val1$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -42,8 +47,9 @@ fi
 jtest_prepare "run cqfd run with --env in CQFD_EXTRA_RUN_ARGS including JAVA_HOME and HOME should set overriden HOME environment variable"
 val1="value-$RANDOM"
 val2="value-$RANDOM"
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='echo -n \$JAVA_HOME \$HOME'," .cqfdrc
 # shellcheck disable=SC2016
-if CQFD_EXTRA_RUN_ARGS="-e JAVA_HOME=$val1 -e HOME=$val2" cqfd run 'echo -n $JAVA_HOME $HOME' | grep "^$val1 $val2$"; then
+if CQFD_EXTRA_RUN_ARGS="-e JAVA_HOME=$val1 -e HOME=$val2" cqfd | grep "^$val1 $val2$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -65,10 +71,10 @@ fi
 jtest_prepare "run cqfd run with --env in docker_run_args including HOME should set overriden HOME environment variable"
 val1="value-$RANDOM"
 val2="value-$RANDOM"
-cp -f .cqfdrc .cqfdrc.orig
 cat .cqfdrc.orig - <<EOF >.cqfdrc
 docker_run_args="--env FOO=$val1 --env HOME=$val2"
 EOF
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='echo -n \$FOO \$HOME'," .cqfdrc
 # shellcheck disable=SC2016
 if cqfd run 'echo -n $FOO $HOME' | grep "^$val1 $val2$"; then
 	jtest_result pass
@@ -81,6 +87,7 @@ val1="value-$RANDOM"
 cat .cqfdrc.orig - <<EOF >.cqfdrc
 docker_run_args="--env HOME=$val1"
 EOF
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='echo \$HOME'," .cqfdrc
 # shellcheck disable=SC2016
 if cqfd run 'echo -n $FOO $HOME' | grep "^$val1$"; then
 	jtest_result pass
@@ -94,6 +101,7 @@ val2="value-$RANDOM"
 cat .cqfdrc.orig - <<EOF >.cqfdrc
 docker_run_args="--env JAVA_HOME=$val1 --env HOME=$val2"
 EOF
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='echo -n \$JAVA_HOME \$HOME'," .cqfdrc
 # shellcheck disable=SC2016
 if cqfd run 'echo -n $JAVA_HOME $HOME' | grep "^$val1 $val2$"; then
 	jtest_result pass
