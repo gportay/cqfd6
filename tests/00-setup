@@ -52,4 +52,4 @@ else
 	jtest_result fail
 fi
 
-cat cqfdrc-test >.cqfdrc
+cp cqfdrc-test .cqfdrc
