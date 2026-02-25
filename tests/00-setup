@@ -37,7 +37,7 @@ else
 fi
 
 jtest_prepare "run cqfd init with an empty .cqfdrc file should fail"
-touch "$TDIR/.cqfdrc"
+touch .cqfdrc
 if ! cqfd init; then
 	jtest_result pass
 else
@@ -45,11 +45,11 @@ else
 fi
 
 jtest_prepare "run cqfd init with an incomplete .cqfdrc file should fail"
-echo '[project]' >"$TDIR/.cqfdrc"
+echo '[project]' >.cqfdrc
 if ! cqfd init; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-cat "$TDIR/cqfdrc-test" >"$TDIR/.cqfdrc"
+cat cqfdrc-test >.cqfdrc
