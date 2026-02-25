@@ -14,7 +14,6 @@ else
 	jtest_result fail
 fi
 
-# create a special test context
 cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 cp -f .cqfd/docker/Dockerfile.build_context .cqfd/docker/Dockerfile
 cp -f cqfdrc-build_context .cqfdrc
