@@ -17,7 +17,7 @@ cp -f .cqfd/docker/Dockerfile.missing_dependencies .cqfd/docker/Dockerfile
 cp -f .cqfdrc .cqfdrc.orig
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true'," .cqfdrc
 
-jtest_prepare "run cqfd run without useradd and groupadd commands should fail"
+jtest_prepare "run cqfd without useradd and groupadd commands should fail"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -28,7 +28,7 @@ else
 	fi
 fi
 
-jtest_prepare "run cqfd run with useradd and groupadd commands should pass"
+jtest_prepare "run cqfd with useradd and groupadd commands should pass"
 echo 'RUN apk add shadow' >>.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
@@ -40,7 +40,7 @@ else
 	fi
 fi
 
-jtest_prepare "run cqfd run without CQFD_SHELL command should fail"
+jtest_prepare "run cqfd without CQFD_SHELL command should fail"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -51,7 +51,7 @@ else
 	fi
 fi
 
-jtest_prepare "run cqfd run with CQFD_SHELL command should pass"
+jtest_prepare "run cqfd with CQFD_SHELL command should pass"
 echo 'RUN apk add bash' >>.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
@@ -63,7 +63,7 @@ else
 	fi
 fi
 
-jtest_prepare "run cqfd run with su command should pass"
+jtest_prepare "run cqfd with su command should pass"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -75,7 +75,7 @@ else
 	fi
 fi
 
-jtest_prepare "run cqfd run with sudo command should pass"
+jtest_prepare "run cqfd with sudo command should pass"
 echo 'RUN apk add sudo' >>.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
@@ -162,7 +162,7 @@ else
 	fi
 fi
 
-jtest_prepare "run cqfd run with ancient su should run su -c"
+jtest_prepare "run cqfd with ancient su should run su -c"
 echo "FROM ubuntu:16.04" >.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
@@ -175,7 +175,7 @@ else
 	fi
 fi
 
-jtest_prepare "run cqfd run with recent su should run su --session-command"
+jtest_prepare "run cqfd with recent su should run su --session-command"
 echo "FROM ubuntu:24.04" >.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
@@ -188,7 +188,7 @@ else
 	fi
 fi
 
-jtest_prepare "run cqfd run with sudo should run sudo"
+jtest_prepare "run cqfd with sudo should run sudo"
 echo "ENV DEBIAN_FRONTEND=noninteractive" >>.cqfd/docker/Dockerfile
 echo "RUN apt-get update && apt-get install -y --no-install-recommends sudo" >>.cqfd/docker/Dockerfile
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
