@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of run command with HOME environment variable
+# validate the behavior of run command with home directory
 
 set -o pipefail
 
