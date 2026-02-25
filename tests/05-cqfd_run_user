@@ -14,10 +14,11 @@ cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 jtest_prepare "run cqfd run with running host ssh-agent should forward socket to container"
 echo "FROM ubuntu:24.04" >.cqfd/docker/Dockerfile
 echo "RUN apt-get -y update && apt-get -y install openssh-client" >>.cqfd/docker/Dockerfile
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='test -S \$SSH_AUTH_SOCK \&\& env'," .cqfdrc
 if ! command -v ssh-agent; then
 	jtest_result skip
 else
-	if cqfd init && ssh-agent cqfd run "test -S \$SSH_AUTH_SOCK && env" | grep -E "^SSH_AUTH_SOCK=/tmp/ssh-[[:alnum:]]+/agent\.[[:digit:]]+$"; then
+	if cqfd init && ssh-agent cqfd | grep -E "^SSH_AUTH_SOCK=/tmp/ssh-[[:alnum:]]+/agent\.[[:digit:]]+$"; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -25,10 +26,11 @@ else
 fi
 
 jtest_prepare "run cqfd run with running host and no private keys added ssh-agent should fail"
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='ssh-add -L'," .cqfdrc
 if ! command -v ssh-agent; then
 	jtest_result skip
 else
-	if ! ssh-agent cqfd run "ssh-add -L" 2>&1 | grep "The agent has no identities."; then
+	if ! ssh-agent cqfd | grep "The agent has no identities."; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -40,7 +42,7 @@ chmod 600 cqfd-test_ed25519
 if ! command -v ssh-agent; then
 	jtest_result skip
 else
-	if ssh-agent sh -c "ssh-add cqfd-test_ed25519 && exec cqfd run \"ssh-add -L\"" | diff - cqfd-test_ed25519.pub; then
+	if ssh-agent sh -c "ssh-add cqfd-test_ed25519 && exec cqfd" | diff - cqfd-test_ed25519.pub; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -48,10 +50,11 @@ else
 fi
 
 jtest_prepare "run cqfd run with CQFD_NO_SSH_AUTH_SOCK=true and running host ssh-agent should forward socket to container"
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='env'," .cqfdrc
 if ! command -v ssh-agent; then
 	jtest_result skip
 else
-	if ! env CQFD_NO_SSH_AUTH_SOCK=true ssh-agent cqfd run "env" | grep -E "^SSH_AUTH_SOCK=/tmp/ssh-[[:alnum:]]+/agent\.[[:digit:]]+$"; then
+	if ! env CQFD_NO_SSH_AUTH_SOCK=true ssh-agent cqfd | grep -E "^SSH_AUTH_SOCK=/tmp/ssh-[[:alnum:]]+/agent\.[[:digit:]]+$"; then
 		jtest_result pass
 	else
 		jtest_result fail
