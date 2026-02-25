@@ -196,6 +196,7 @@ if cqfd && test -e foo; then
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f foo
 
 cat <<EOF >bar.inc
@@ -210,6 +211,7 @@ if cqfd && test -e bar; then
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f bar
 
 echo "include bar.inc" >>.cqfdrc
@@ -220,6 +222,7 @@ if cqfd && test -e bar; then
 else
 	jtest_result fail
 fi
+# cleanup
 rm -f bar
 
 echo "include bar.inc" >>bar.inc
