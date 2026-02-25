@@ -12,6 +12,7 @@ fi
 
 cd "$TDIR/" || exit 1
 
+# backup Dockerfile and .cqfdrc
 cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 cp .cqfd/docker/Dockerfile.missing_dependencies .cqfd/docker/Dockerfile
 cp .cqfdrc .cqfdrc.orig

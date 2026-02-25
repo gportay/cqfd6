@@ -8,6 +8,7 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
+# backup initial .cqfdrc
 cp .cqfdrc .cqfdrc.orig
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='pwd'," -i .cqfdrc
 

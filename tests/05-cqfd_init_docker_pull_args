@@ -12,6 +12,7 @@ fi
 
 cd "$TDIR/" || exit 1
 
+# backup initial .cqfdrc
 cp .cqfdrc .cqfdrc.orig
 cp cqfdrc-image .cqfdrc
 

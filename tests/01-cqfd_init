@@ -8,6 +8,7 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
+# backup initial Dockerfile
 cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 
 jtest_prepare "run cqfd init with a proper .cqfdrc file should pass"
@@ -18,6 +19,7 @@ else
 fi
 
 jtest_prepare "run cqfd init with a nonexisting Dockerfile should fail"
+# backup .cqfdrc
 cp .cqfdrc .cqfdrc.orig
 sed -e "s/\[build\]/[build]\ndistro='thisshouldfail'/" -i .cqfdrc
 if ! cqfd init; then

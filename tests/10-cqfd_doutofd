@@ -16,6 +16,7 @@ jtest_prepare "run cqfd should execute as the host user with the cqfd docker's g
 if [ "${cqfd_docker[-1]}" != "docker" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
 else
+	# backup .cqfdrc
 	cp .cqfdrc .cqfdrc.orig
 	sed -e "/\[build\]/,/^$/s,^command=.*$,command='id -Gn'," -i .cqfdrc
 
@@ -32,6 +33,7 @@ jtest_prepare "run cqfd should run docker using host docker daemon"
 if [ "${cqfd_docker[-1]}" != "docker" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
 else
+	# backup Dockerfile and .cqfdrc
 	cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 	cp .cqfd/docker/Dockerfile.doutofd .cqfd/docker/Dockerfile
 	cp .cqfdrc .cqfdrc.orig
