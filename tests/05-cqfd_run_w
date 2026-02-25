@@ -15,6 +15,7 @@ mv .cqfdrc "$workdir/.cqfdrc"
 
 cd "$workdir" || exit 1
 
+# backup initial .cqfdrc
 cp .cqfdrc .cqfdrc.orig
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='stat --printf '%u:' . ..'," -i .cqfdrc
 

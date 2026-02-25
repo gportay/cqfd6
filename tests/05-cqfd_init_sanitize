@@ -12,6 +12,7 @@ fi
 
 cd "$TDIR/" || exit 1
 
+# backup initial .cqfdrc
 cp .cqfdrc .cqfdrc.orig
 
 dh="$(sha256sum .cqfd/docker/Dockerfile | cut -b 1-7)"

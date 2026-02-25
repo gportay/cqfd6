@@ -14,6 +14,7 @@ else
 fi
 
 jtest_prepare "run cqfd deinit with a nonexisting Dockerfile should fail"
+# backup cqfdrc
 cp .cqfdrc .cqfdrc.orig
 sed -e "s/\[build\]/[build]\ndistro='thisshouldfail'/" -i .cqfdrc
 if ! cqfd deinit; then

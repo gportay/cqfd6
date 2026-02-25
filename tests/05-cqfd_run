@@ -6,6 +6,7 @@
 
 cd "$TDIR/" || exit 1
 
+# backup initial Dockerfile
 cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 
 jtest_prepare "run cqfd without argument should pass"

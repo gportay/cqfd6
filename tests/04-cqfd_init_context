@@ -6,6 +6,7 @@
 
 cd "$TDIR/" || exit 1
 
+# backup initial .cqfdrc
 cp .cqfdrc .cqfdrc.orig
 
 jtest_prepare "run cqfd init without using build_context should not use context directory"
@@ -16,6 +17,7 @@ else
 	jtest_result fail
 fi
 
+# backup initial Dockerfile
 cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 cp .cqfd/docker/Dockerfile.build_context .cqfd/docker/Dockerfile
 cp cqfdrc-build_context .cqfdrc
