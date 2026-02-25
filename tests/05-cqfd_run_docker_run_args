@@ -8,7 +8,7 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfdrc .cqfdrc.orig
+cp .cqfdrc .cqfdrc.orig
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='echo \"\$FOO \$BAR\"'," .cqfdrc
 
 jtest_prepare "run cqfd without --env in CQFD_EXTRA_RUN_ARGS and docker_run_args should fail"
@@ -51,4 +51,4 @@ fi
 sed '/^docker_run_args=/d' -i .cqfdrc
 
 # restore initial .cqfdrc
-mv -f .cqfdrc.orig .cqfdrc
+mv .cqfdrc.orig .cqfdrc

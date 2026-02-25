@@ -6,7 +6,7 @@
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
+cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 
 jtest_prepare "run cqfd without argument should pass"
 # shellcheck disable=SC2181
@@ -16,7 +16,7 @@ else
 	jtest_result fail
 fi
 # cleanup
-rm -f a/cqfd_a.txt
+rm a/cqfd_a.txt
 
 jtest_prepare "run cqfd run with run without arguments should pass"
 # shellcheck disable=SC2181
@@ -26,7 +26,7 @@ else
 	jtest_result fail
 fi
 # cleanup
-rm -f a/cqfd_a.txt
+rm a/cqfd_a.txt
 
 jtest_prepare "run cqfd run with outdated Dockerfile should fail"
 echo "RUN echo $RANDOM" >>.cqfd/docker/Dockerfile
@@ -39,7 +39,7 @@ fi
 make clean
 
 # restore initial Dockerfile
-mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
+mv .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 jtest_prepare "run cqfd run with argument should run command string"
 # shellcheck disable=SC2181
@@ -49,7 +49,7 @@ else
 	jtest_result fail
 fi
 # cleanup
-rm -f foobar
+rm foobar
 
 jtest_prepare "run cqfd run with arguments should run as a command string"
 # shellcheck disable=SC2181
@@ -59,7 +59,7 @@ else
 	jtest_result fail
 fi
 # cleanup
-rm -f foobar
+rm foobar
 
 jtest_prepare "run cqfd run with arguments cannot preserve arguments"
 # shellcheck disable=SC2016

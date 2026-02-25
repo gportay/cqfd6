@@ -8,10 +8,10 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfdrc .cqfdrc.orig
-cp -f cqfdrc-multi_platform .cqfdrc
-cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
-cp -f .cqfd/docker/Dockerfile.multi_platform .cqfd/docker/Dockerfile
+cp .cqfdrc .cqfdrc.orig
+cp cqfdrc-multi_platform .cqfdrc
+cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
+cp .cqfd/docker/Dockerfile.multi_platform .cqfd/docker/Dockerfile
 
 native_machine=x86_64
 cross_machine=aarch64
@@ -72,8 +72,8 @@ else
 fi
 
 # restore .cqfdrc and Dockerfile
-mv -f .cqfdrc.orig .cqfdrc
-mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
+mv .cqfdrc.orig .cqfdrc
+mv .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 # restore container
 if ! cqfd init; then

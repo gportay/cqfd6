@@ -8,7 +8,7 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfdrc .cqfdrc.orig
+cp .cqfdrc .cqfdrc.orig
 
 jtest_prepare "run cqfd release without files parameter should fail"
 if ! cqfd release; then
@@ -44,7 +44,7 @@ jtest_result "$result"
 unset result
 # cleanup
 make clean
-rm -f cqfd-test.tar.xz
+rm cqfd-test.tar.xz
 
 jtest_prepare "run cqfd release with tar_transform=no should preserve pathnames in tarball archive"
 echo "tar_transform=no" >>.cqfdrc
@@ -64,7 +64,7 @@ unset result
 sed -i -e '$ s!^tar_transform=.*$!!' .cqfdrc
 # cleanup
 make clean
-rm -f cqfd-test.tar.xz
+rm cqfd-test.tar.xz
 
 jtest_prepare "run cqfd release with tar_transform=yes should not preserve pathnames in tarball archive"
 echo "tar_transform=yes" >>.cqfdrc
@@ -84,7 +84,7 @@ unset result
 sed -i -e '$ s!^tar_transform=.*$!!' .cqfdrc
 # cleanup
 make clean
-rm -f cqfd-test.tar.xz
+rm cqfd-test.tar.xz
 
 jtest_prepare "run cqfd release with tar_options=-h should follows symlinks in tarball archive"
 result="pass"
@@ -112,8 +112,8 @@ sed -i '/files=/d' .cqfdrc
 echo "files=\"${files[*]}\"" >>.cqfdrc
 # cleanup
 make clean
-rm -f link.txt cqfd-test.tar.xz
-rm -Rf "$TDIR/output"
+rm link.txt cqfd-test.tar.xz
+rm -R "$TDIR/output"
 
 jtest_prepare "run cqfd release with archive=cqfd-%D3-\$CTEST.tar.xz should template tarball archive filename (RFC3339 date)"
 export CTEST=foobar
@@ -127,7 +127,7 @@ else
 fi
 # cleanup
 make clean
-rm -f "cqfd-$d3-foobar.tar.xz"
+rm "cqfd-$d3-foobar.tar.xz"
 
 jtest_prepare "run cqfd release with archive=cqfd-%Gh-\$CTEST.tar.xz should template tarball archive filename (git short hash of last commit)"
 # shellcheck disable=SC2016
@@ -142,7 +142,7 @@ else
 fi
 # cleanup
 make clean
-rm -f cqfd-*-foobar.tar.xz
+rm cqfd-*-foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%GH-\$CTEST.tar.xz should template tarball archive filename (git long hash of last commit)"
 # shellcheck disable=SC2016
@@ -157,7 +157,7 @@ else
 fi
 # cleanup
 make clean
-rm -f cqfd-*-foobar.tar.xz
+rm cqfd-*-foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%Du-\$CTEST.tar.xz should template tarball archive filename (Unix timestamp)"
 # shellcheck disable=SC2016
@@ -172,7 +172,7 @@ else
 fi
 # cleanup
 make clean
-rm -f cqfd-*-foobar.tar.xz
+rm cqfd-*-foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%Cf-\$CTEST.tar.xz should template tarball archive filename (current cqfd flavor name unset)"
 # shellcheck disable=SC2016
@@ -183,7 +183,7 @@ else
 	jtest_result fail
 fi
 # cleanup
-rm -f cqfd--foobar.tar.xz
+rm cqfd--foobar.tar.xz
 
 jtest_prepare "run cqfd release with flavor foo and archive=cqfd-%Cf-\$CTEST.tar.xz should template tarball archive filename (current cqfd flavor name set)"
 if cqfd -b foo release && tar tf cqfd-foo.tar.xz &>/dev/null; then
@@ -192,7 +192,7 @@ else
 	jtest_result fail
 fi
 # cleanup
-rm -f cqfd-foo.tar.xz
+rm cqfd-foo.tar.xz
 
 jtest_prepare "run cqfd release with flavor bar archive=cqfd-%Cf-\$CTEST.tar.xz should template tarball archive filename (current cqfd flavor name set)"
 if cqfd -b bar release && tar tf cqfd-bar.tar.xz &>/dev/null; then
@@ -202,7 +202,7 @@ else
 fi
 # cleanup
 make clean
-rm -f cqfd-bar.tar.xz
+rm cqfd-bar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%Po-\$CTEST.tar.xz should template tarball archive filename (value of the project.org configuration key)"
 # shellcheck disable=SC2016
@@ -214,7 +214,7 @@ else
 fi
 # cleanup
 make clean
-rm -f cqfd-cqfd-foobar.tar.xz
+rm cqfd-cqfd-foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%Pn-\$CTEST.tar.xz should template tarball archive filename (value of the project.name configuration key)"
 # shellcheck disable=SC2016
@@ -226,7 +226,7 @@ else
 fi
 # cleanup
 make clean
-rm -f cqfd-test-foobar.tar.xz
+rm cqfd-test-foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-%%-\$CTEST.tar.xz should template tarball archive filename (litteral '%' sign)"
 # shellcheck disable=SC2016
@@ -238,7 +238,7 @@ else
 fi
 # cleanup
 make clean
-rm -f cqfd-%-foobar.tar.xz
+rm cqfd-%-foobar.tar.xz
 
 jtest_prepare "run cqfd release with archive=cqfd-\$CTEST.tar.gz should generate a gzipped tarball archive"
 # shellcheck disable=SC2016
@@ -250,7 +250,7 @@ else
 fi
 # cleanup
 make clean
-rm -f "cqfd-$CTEST.tar.gz"
+rm "cqfd-$CTEST.tar.gz"
 
 jtest_prepare "run cqfd release with archive=cqfd-\$CTEST.zip should generate a zip archive"
 # shellcheck disable=SC2016
@@ -262,7 +262,7 @@ else
 fi
 # cleanup
 make clean
-rm -f "cqfd-$CTEST.zip"
+rm "cqfd-$CTEST.zip"
 
 jtest_prepare "run cqfd release with a non-existing file or directory in files parameter should fail"
 sed -i -e 's!^files=.*$!files="ThisFileDoesNotExist.txt"!' .cqfdrc
@@ -295,8 +295,8 @@ else
 fi
 # cleanup
 make clean
-rm -f "cqfd-$CTEST.tar.xz"
-rm -f "tmp.$$"
+rm "cqfd-$CTEST.tar.xz"
+rm "tmp.$$"
 
 jtest_prepare "run cqfd release with unsupported archive format in archive parameter should fail"
 # shellcheck disable=SC2016
@@ -327,7 +327,7 @@ else
 fi
 # cleanup
 make clean
-rm -f "cqfd-$CTEST.tar.xz"
+rm "cqfd-$CTEST.tar.xz"
 
 # restore initial .cqfdrc
-mv -f .cqfdrc.orig .cqfdrc
+mv .cqfdrc.orig .cqfdrc

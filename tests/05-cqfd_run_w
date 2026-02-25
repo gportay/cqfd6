@@ -15,7 +15,7 @@ mv .cqfdrc "$workdir/.cqfdrc"
 
 cd "$workdir" || exit 1
 
-cp -f .cqfdrc .cqfdrc.orig
+cp .cqfdrc .cqfdrc.orig
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='stat --printf '%u:' . ..'," .cqfdrc
 
 jtest_prepare "run cqfd without --working-directory should own working directory and should not own its parent directory"

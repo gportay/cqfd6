@@ -8,10 +8,10 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfdrc .cqfdrc.orig
-cp -f cqfdrc-platform .cqfdrc
-cp -f .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
-cp -f .cqfd/docker/Dockerfile.platform .cqfd/docker/Dockerfile
+cp .cqfdrc .cqfdrc.orig
+cp cqfdrc-platform .cqfdrc
+cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
+cp .cqfd/docker/Dockerfile.platform .cqfd/docker/Dockerfile
 
 jtest_prepare "run cqfd with FROM --platform=linux/arm64 in Dockerfile should run linux/arm64 docker platform"
 if cqfd init && cqfd | grep "^aarch64$"; then
@@ -20,8 +20,8 @@ else
 	jtest_result fail
 fi
 # restore .cqfdrc and Dockerfile
-mv -f .cqfdrc.orig .cqfdrc
-mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
+mv .cqfdrc.orig .cqfdrc
+mv .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 # restore container
 if ! cqfd init; then

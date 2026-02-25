@@ -8,7 +8,7 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfdrc .cqfdrc.orig
+cp .cqfdrc .cqfdrc.orig
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='pwd'," .cqfdrc
 
 subdir="dir with space/b/c/d/e"
@@ -26,9 +26,9 @@ fi
 cd "$OLDPWD" || exit 1
 
 # restore initial .cqfdrc
-mv -f .cqfdrc.orig .cqfdrc
+mv .cqfdrc.orig .cqfdrc
 
-mv -f Makefile .cqfd .cqfdrc "$subdir"
+mv Makefile .cqfd .cqfdrc "$subdir"
 
 cd "$subdir" || exit 1
 
@@ -45,7 +45,7 @@ make clean
 cd "$OLDPWD" || exit 1
 
 # restore local cqfd files
-mv -f "$subdir/.cqfdrc" "$subdir/.cqfd" "$subdir/Makefile" .
+mv "$subdir/.cqfdrc" "$subdir/.cqfd" "$subdir/Makefile" .
 
 # cleanup
 rmdir -p "$subdir"

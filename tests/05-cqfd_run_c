@@ -32,4 +32,4 @@ else
 fi
 
 # cleanup
-rm -f foo
+rm foo
