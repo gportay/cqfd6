@@ -4,11 +4,14 @@
 
 . "$(dirname "$0")/jtest.inc" "$1"
 
+cd "$TDIR/" || exit 1
+
 ################################################################################
 # 'cqfd version' shall be an accepted command
 ################################################################################
 jtest_prepare "cqfd version shall exit normally"
-if cqfd version >"$TDIR/version"; then
+# shellcheck disable=SC2094
+if cqfd version >version; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -18,7 +21,7 @@ fi
 # 'cqfd version' shall produce a version message
 ################################################################################
 jtest_prepare "cqfd version shall produce a version string"
-if grep -qE "^[0-9.]+(-[a-z]+)?\$" "$TDIR/version"; then
+if grep -qE "^[0-9.]+(-[a-z]+)?\$" version; then
 	jtest_result pass
 else
 	jtest_log error "not a version message"
@@ -26,4 +29,4 @@ else
 fi
 
 # cleanup
-rm -f "$TDIR/version"
+rm -f version
