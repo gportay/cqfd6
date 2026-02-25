@@ -18,7 +18,6 @@ jtest_prepare "run cqfd version should produce a version output"
 if grep -qE "^[0-9.]+(-[a-z]+)?\$" version; then
 	jtest_result pass
 else
-	jtest_log error "not a version message"
 	jtest_result fail
 fi
 
