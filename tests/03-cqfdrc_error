@@ -60,7 +60,7 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd with required properties set in project and build sections in cqfdrc file should pass"
+jtest_prepare "run cqfd run with argument and required properties set in project and build sections in cqfdrc file should pass"
 if cqfd init && cqfd run true; then
 	jtest_result pass
 else
@@ -77,7 +77,7 @@ fi
 
 echo "command=true" >>.cqfdrc
 
-jtest_prepare "run cqfd run with command property set in build section in cqfdrc should pass"
+jtest_prepare "run cqfd run without argument and with command property set in build section in cqfdrc should pass"
 if cqfd run; then
 	jtest_result pass
 else
