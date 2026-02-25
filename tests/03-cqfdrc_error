@@ -8,7 +8,7 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfdrc .cqfdrc.orig
+cp .cqfdrc .cqfdrc.orig
 
 echo -n "" >.cqfdrc
 
@@ -92,7 +92,7 @@ else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
+cp .cqfdrc.orig .cqfdrc
 echo "foo	=bar" >>.cqfdrc
 
 jtest_prepare "run cqfd run with tabulation before property assignment in cqfdrc file should pass"
@@ -102,7 +102,7 @@ else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
+cp .cqfdrc.orig .cqfdrc
 echo "foo=	bar" >>.cqfdrc
 
 jtest_prepare "run cqfd run with tabulation after property assignment in cqfdrc file should pass"
@@ -112,7 +112,7 @@ else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
+cp .cqfdrc.orig .cqfdrc
 echo "foo =bar" >>.cqfdrc
 
 jtest_prepare "run cqfd run with whitespace before property assignment in cqfdrc file should pass"
@@ -122,7 +122,7 @@ else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
+cp .cqfdrc.orig .cqfdrc
 echo "foo= bar" >>.cqfdrc
 
 jtest_prepare "run cqfd run with whitespace after property assignment in cqfdrc file should pass"
@@ -132,7 +132,7 @@ else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
+cp .cqfdrc.orig .cqfdrc
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"; works!\"'," .cqfdrc
 
 jtest_prepare "cqfdrc does not strip semicolons in command"
@@ -142,7 +142,7 @@ else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
+cp .cqfdrc.orig .cqfdrc
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"# works!\"'," .cqfdrc
 
 jtest_prepare "cqfdrc does not strip hash in command"
@@ -152,7 +152,7 @@ else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
+cp .cqfdrc.orig .cqfdrc
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command=\"echo \\\\\\
 	foo=bar \\\\\\
 	baz=quux\"," .cqfdrc
@@ -164,7 +164,7 @@ else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
+cp .cqfdrc.orig .cqfdrc
 sed -i -e "/\[project\]/,/^$/s,^,; ," .cqfdrc
 
 jtest_prepare "cqfdrc with ;-commented project section should fail"
@@ -175,7 +175,7 @@ else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
+cp .cqfdrc.orig .cqfdrc
 sed -i -e "/\[build\]/,/^$/s,^,# ," .cqfdrc
 
 jtest_prepare "cqfdrc with #-commented build section should fail"
@@ -186,7 +186,7 @@ else
 	jtest_result fail
 fi
 
-cp -f .cqfdrc.orig .cqfdrc
+cp .cqfdrc.orig .cqfdrc
 sed -i -e "/[build]/,/^$/s,^command=.*$,command=\"make foo\"," .cqfdrc
 echo "include /dev/null" >>.cqfdrc
 
@@ -197,7 +197,7 @@ else
 	jtest_result fail
 fi
 # cleanup
-rm -f foo
+rm foo
 
 cat <<EOF >bar.inc
 [build]
@@ -212,7 +212,7 @@ else
 	jtest_result fail
 fi
 # cleanup
-rm -f bar
+rm bar
 
 echo "include bar.inc" >>.cqfdrc
 
@@ -223,7 +223,7 @@ else
 	jtest_result fail
 fi
 # cleanup
-rm -f bar
+rm bar
 
 echo "include bar.inc" >>bar.inc
 
@@ -235,7 +235,7 @@ else
 fi
 
 # cleanup
-rm -f bar.inc
+rm bar.inc
 
 # restore initial .cqfdrc
-mv -f .cqfdrc.orig .cqfdrc
+mv .cqfdrc.orig .cqfdrc

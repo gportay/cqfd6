@@ -12,8 +12,8 @@ fi
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfdrc .cqfdrc.orig
-cp -f cqfdrc-image .cqfdrc
+cp .cqfdrc .cqfdrc.orig
+cp cqfdrc-image .cqfdrc
 
 jtest_prepare "run cqfd init with CQFD_EXTRA_PULL_ARGS should pass"
 if CQFD_EXTRA_BUILD_ARGS="--disable-content-trust=false" cqfd init; then
@@ -31,7 +31,7 @@ else
 fi
 
 # restore initial .cqfdrc
-mv -f .cqfdrc.orig .cqfdrc
+mv .cqfdrc.orig .cqfdrc
 
 # restore container
 if ! cqfd init; then

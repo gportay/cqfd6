@@ -12,9 +12,9 @@ fi
 
 cd "$TDIR/" || exit 1
 
-mv -f .cqfd .cqfd.orig
-cp -f .cqfdrc .cqfdrc.orig
-cp -f cqfdrc-image .cqfdrc
+mv .cqfd .cqfd.orig
+cp .cqfdrc .cqfdrc.orig
+cp cqfdrc-image .cqfdrc
 
 image="ubuntu:16.04"
 if "${cqfd_docker[@]}" inspect "$image" &>/dev/null; then
@@ -40,8 +40,8 @@ else
 fi
 
 # restore initial .cqfdrc and .cqfd
-mv -f .cqfdrc.orig .cqfdrc
-mv -f .cqfd.orig .cqfd
+mv .cqfdrc.orig .cqfdrc
+mv .cqfd.orig .cqfd
 
 # restore container
 if ! cqfd init; then

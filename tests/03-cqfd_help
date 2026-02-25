@@ -28,4 +28,4 @@ else
 fi
 
 # cleanup
-rm -f usage
+rm usage

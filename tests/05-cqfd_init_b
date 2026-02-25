@@ -8,7 +8,7 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-cp -f .cqfdrc .cqfdrc.orig
+cp .cqfdrc .cqfdrc.orig
 sed -i -e "/\[foo\]/,/^$/s,^command=.*$,command='grep ^NAME /etc/os-release'," .cqfdrc
 sed -i -e "s/\[foo\]/[foo]\ndistro='centos'/" .cqfdrc
 
@@ -28,7 +28,7 @@ else
 fi
 
 # restore initial .cqfdrc
-mv -f .cqfdrc.orig .cqfdrc
+mv .cqfdrc.orig .cqfdrc
 
 # restore container
 if ! cqfd init; then

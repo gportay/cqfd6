@@ -26,7 +26,7 @@ else
 	jtest_result fail
 fi
 # cleanup
-rm -f file
+rm file
 
 jtest_prepare "run cqfd run without argument and with options -f and -b should pass"
 if cqfd -f "$extdir/cqfdrc" -b foo run && test -f foo; then
@@ -44,10 +44,10 @@ else
 	jtest_result fail
 fi
 # cleanup
-rm -f foo
+rm foo
 
 # restore initial .cqfdrc
-mv -f "$extdir/cqfdrc" .cqfdrc
+mv "$extdir/cqfdrc" .cqfdrc
 
 # cleanup
 rmdir -p "$extdir"

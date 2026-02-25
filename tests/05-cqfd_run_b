@@ -13,7 +13,7 @@ else
 	jtest_result fail
 fi
 # cleanup
-rm -f foo
+rm foo
 
 jtest_prepare "run cqfd run without argument and with build flavor should execute flavor's command"
 if cqfd -b foo run && test -f foo; then
@@ -22,7 +22,7 @@ else
 	jtest_result fail
 fi
 # cleanup
-rm -f foo
+rm foo
 
 jtest_prepare "run cqfd with nonexistent build flavor should fail"
 if ! cqfd -b foobar; then

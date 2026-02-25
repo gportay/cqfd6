@@ -22,4 +22,4 @@ else
 fi
 
 # cleanup
-rm -f version
+rm version
