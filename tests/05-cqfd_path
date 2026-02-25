@@ -122,7 +122,7 @@ else
 fi
 
 echo "USER $UID:${GROUPS[0]}" >>.cqfd/docker/Dockerfile
-jtest_prepare "run cqfd with path and sh should set PATH"
+jtest_prepare "run cqfd run with path and sh should set PATH"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	if cqfd init && cqfd run env | grep "^PATH=/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin$"; then
 		jtest_result pass

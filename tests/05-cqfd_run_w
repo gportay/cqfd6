@@ -18,28 +18,28 @@ cd "$workdir" || exit 1
 cp -f .cqfdrc .cqfdrc.orig
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='stat --printf '%u:' . ..'," .cqfdrc
 
-jtest_prepare "run cqfd run without --working-directory should own working directory and should not own its parent directory"
+jtest_prepare "run cqfd without --working-directory should own working directory and should not own its parent directory"
 if cqfd | grep "^$UID:0:$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd run with --working-directory set to inexistant directory should fail"
+jtest_prepare "run cqfd with --working-directory set to inexistant directory should fail"
 if ! cqfd -w "nonexistentdir"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd run with --working-directory set to parent directory should own parent directory and should not own its parent directory"
+jtest_prepare "run cqfd with --working-directory set to parent directory should own parent directory and should not own its parent directory"
 if cqfd -w ".." | grep "^$UID:0:$"; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd run with --working-directory set to parent directory using absolute path should own parent directory and should not own its parent directory"
+jtest_prepare "run cqfd with --working-directory set to parent directory using absolute path should own parent directory and should not own its parent directory"
 if cqfd -w "$PWD/.." | grep "^$UID:0:$"; then
 	jtest_result pass
 else
@@ -47,14 +47,14 @@ else
 
 fi
 
-jtest_prepare "run cqfd run with CQFD_WORKDIR set to inexistant directory should fail"
+jtest_prepare "run cqfd with CQFD_WORKDIR set to inexistant directory should fail"
 if ! CQFD_WORKDIR="nonexistentdir" cqfd; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd run with CQFD_WORKDIR set to parent directory should own parent directory and should not own its parent directory"
+jtest_prepare "run cqfd with CQFD_WORKDIR set to parent directory should own parent directory and should not own its parent directory"
 if CQFD_WORKDIR=".." cqfd | grep "^$UID:0:$"; then
 	jtest_result pass
 else
@@ -62,7 +62,7 @@ else
 
 fi
 
-jtest_prepare "run cqfd run with CQFD_WORKDIR set to parent directory using absolute path should own parent directory and should not own its parent directory"
+jtest_prepare "run cqfd with CQFD_WORKDIR set to parent directory using absolute path should own parent directory and should not own its parent directory"
 if CQFD_WORKDIR="$PWD/.." cqfd | grep "^$UID:0:$"; then
 	jtest_result pass
 else

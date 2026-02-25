@@ -15,7 +15,7 @@ cd "$TDIR/" || exit 1
 cp -f .cqfdrc .cqfdrc.orig
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='echo \$HOME'," .cqfdrc
 
-jtest_prepare "run cqfd run should set user's HOME environment variable"
+jtest_prepare "run cqfd should set user's HOME environment variable"
 # shellcheck disable=SC2016
 if cqfd | grep "^$HOME$"; then
 	jtest_result pass
@@ -23,7 +23,7 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd run with --env in CQFD_EXTRA_RUN_ARGS including HOME should set overriden HOME environment variable"
+jtest_prepare "run cqfd with --env in CQFD_EXTRA_RUN_ARGS including HOME should set overriden HOME environment variable"
 val1="value-$RANDOM"
 val2="value-$RANDOM"
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='echo -n \$FOO \$HOME'," .cqfdrc
@@ -34,7 +34,7 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd run with --env HOME in CQFD_EXTRA_RUN_ARGS should set overriden HOME environment variable"
+jtest_prepare "run cqfd with --env HOME in CQFD_EXTRA_RUN_ARGS should set overriden HOME environment variable"
 val1="value-$RANDOM"
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='echo \$HOME'," .cqfdrc
 # shellcheck disable=SC2016
@@ -44,7 +44,7 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd run with --env in CQFD_EXTRA_RUN_ARGS including JAVA_HOME and HOME should set overriden HOME environment variable"
+jtest_prepare "run cqfd with --env in CQFD_EXTRA_RUN_ARGS including JAVA_HOME and HOME should set overriden HOME environment variable"
 val1="value-$RANDOM"
 val2="value-$RANDOM"
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='echo -n \$JAVA_HOME \$HOME'," .cqfdrc
@@ -55,7 +55,7 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd run should set home directory to passwd file"
+jtest_prepare "run cqfd should set home directory to passwd file"
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='grep -E \"^$USER:x:[[:digit:]]+:[[:digit:]]+:.*:\$HOME:/bin/sh$\" /etc/passwd'," .cqfdrc
 if [ "${cqfd_docker[0]}" = "sudo" ] || [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
@@ -67,7 +67,7 @@ else
 	fi
 fi
 
-jtest_prepare "run cqfd run with --env in docker_run_args including HOME should set overriden HOME environment variable"
+jtest_prepare "run cqfd with --env in docker_run_args including HOME should set overriden HOME environment variable"
 val1="value-$RANDOM"
 val2="value-$RANDOM"
 cat .cqfdrc.orig - <<EOF >.cqfdrc
@@ -81,7 +81,7 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd run with --env HOME in docker_run_args should set overriden HOME environment variable"
+jtest_prepare "run cqfd with --env HOME in docker_run_args should set overriden HOME environment variable"
 val1="value-$RANDOM"
 cat .cqfdrc.orig - <<EOF >.cqfdrc
 docker_run_args="--env HOME=$val1"
@@ -94,7 +94,7 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd run with --env in docker_run_args including JAVA_HOME and HOME should set overriden HOME environment variable"
+jtest_prepare "run cqfd with --env in docker_run_args including JAVA_HOME and HOME should set overriden HOME environment variable"
 val1="value-$RANDOM"
 val2="value-$RANDOM"
 cat .cqfdrc.orig - <<EOF >.cqfdrc
