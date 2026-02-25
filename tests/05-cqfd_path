@@ -138,8 +138,8 @@ else
 fi
 
 # restore .cqfdrc and Dockerfile
-mv .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 mv .cqfdrc.orig .cqfdrc
+mv .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 # restore container
 if ! cqfd init; then

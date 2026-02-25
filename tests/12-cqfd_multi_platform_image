@@ -8,10 +8,10 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-cp .cqfdrc .cqfdrc.orig
-cp cqfdrc-platform .cqfdrc
 cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 cp .cqfd/docker/Dockerfile.platform .cqfd/docker/Dockerfile
+cp .cqfdrc .cqfdrc.orig
+cp cqfdrc-platform .cqfdrc
 
 jtest_prepare "run cqfd with FROM --platform=linux/arm64 in Dockerfile should run linux/arm64 docker platform"
 if cqfd init && cqfd | grep "^aarch64$"; then
