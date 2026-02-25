@@ -17,7 +17,6 @@ jtest_prepare "run cqfd help should produce an usage output"
 for word in Usage Options Commands; do
 	if ! grep -q "^$word:" usage; then
 		jtest_log error "cannot find $word in help message"
-		rm -f usage
 		missing=1
 		break
 	fi
