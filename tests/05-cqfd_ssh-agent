@@ -8,8 +8,8 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-cp .cqfdrc .cqfdrc.orig
 cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
+cp .cqfdrc .cqfdrc.orig
 
 jtest_prepare "run cqfd with running host ssh-agent should forward socket to container"
 echo "FROM ubuntu:24.04" >.cqfd/docker/Dockerfile
