@@ -56,12 +56,11 @@ else
 fi
 
 jtest_prepare "run cqfd run should set home directory to passwd file"
+sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='grep -E \"^$USER:x:[[:digit:]]+:[[:digit:]]+:.*:\$HOME:/bin/sh$\" /etc/passwd'," .cqfdrc
 if [ "${cqfd_docker[0]}" = "sudo" ] || [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if passwd_home=$(cqfd run "grep ^$(whoami): /etc/passwd |cut -d: -f6") && \
-	   user_home=$(cqfd run "echo \$HOME") && \
-	   [ "$passwd_home" = "$user_home" ]; then
+	if cqfd; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -76,7 +75,7 @@ docker_run_args="--env FOO=$val1 --env HOME=$val2"
 EOF
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='echo -n \$FOO \$HOME'," .cqfdrc
 # shellcheck disable=SC2016
-if cqfd run 'echo -n $FOO $HOME' | grep "^$val1 $val2$"; then
+if cqfd | grep "^$val1 $val2$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -89,7 +88,7 @@ docker_run_args="--env HOME=$val1"
 EOF
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='echo \$HOME'," .cqfdrc
 # shellcheck disable=SC2016
-if cqfd run 'echo -n $FOO $HOME' | grep "^$val1$"; then
+if cqfd | grep "^$val1$"; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -103,7 +102,7 @@ docker_run_args="--env JAVA_HOME=$val1 --env HOME=$val2"
 EOF
 sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='echo -n \$JAVA_HOME \$HOME'," .cqfdrc
 # shellcheck disable=SC2016
-if cqfd run 'echo -n $JAVA_HOME $HOME' | grep "^$val1 $val2$"; then
+if cqfd | grep "^$val1 $val2$"; then
 	jtest_result pass
 else
 	jtest_result fail
