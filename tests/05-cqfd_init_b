@@ -9,7 +9,6 @@ set -o pipefail
 cd "$TDIR/" || exit 1
 
 cp -f .cqfdrc .cqfdrc.orig
-sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='grep ^NAME /etc/os-release'," .cqfdrc
 sed -i -e "/\[foo\]/,/^$/s,^command=.*$,command='grep ^NAME /etc/os-release'," .cqfdrc
 sed -i -e "s/\[foo\]/[foo]\ndistro='centos'/" .cqfdrc
 
