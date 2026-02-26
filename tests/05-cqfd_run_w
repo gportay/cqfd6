@@ -11,7 +11,7 @@ cd "$TDIR/" || exit 1
 workdir="workingdir"
 mkdir -p "$workdir"
 
-# move cqfd files
+# move .cqfd and .cqfdrc
 mv .cqfd "$workdir/.cqfd"
 mv .cqfdrc "$workdir/.cqfdrc"
 
@@ -78,7 +78,7 @@ mv .cqfdrc.orig .cqfdrc
 
 cd "$OLDPWD" || exit 1
 
-# moveback cqfd files
+# moveback .cqfdrc and .cqfd
 mv "$workdir/.cqfdrc" .cqfdrc
 mv "$workdir/.cqfd" .cqfd
 

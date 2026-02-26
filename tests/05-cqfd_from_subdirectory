@@ -29,7 +29,7 @@ cd "$OLDPWD" || exit 1
 # restore .cqfdrc
 mv .cqfdrc.orig .cqfdrc
 
-# move cqfd files and Makefile
+# move Makefile, .cqfd and .cqfdrc
 mv Makefile .cqfd .cqfdrc "$subdir"
 
 cd "$subdir" || exit 1
@@ -46,7 +46,7 @@ make clean
 # teardown
 cd "$OLDPWD" || exit 1
 
-# moveback cqfd files and Makefile
+# moveback .cqfdrc, .cqfd and Makefile
 mv "$subdir/.cqfdrc" "$subdir/.cqfd" "$subdir/Makefile" .
 
 # cleanup
