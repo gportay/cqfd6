@@ -18,7 +18,7 @@ cp .cqfdrc .cqfdrc.orig
 cp cqfdrc-custom_image .cqfdrc
 
 custom_img_name="ubuntu:16.04"
-sed -i -e "s!^custom_img_name=.*\$!custom_img_name='$custom_img_name'!" .cqfdrc
+sed -e "s!^custom_img_name=.*\$!custom_img_name='$custom_img_name'!" -i .cqfdrc
 if "${cqfd_docker[@]}" inspect "$custom_img_name" &>/dev/null; then
 	jtest_log info "${cqfd_docker[-1]} registry contains image named: $custom_img_name, removing..."
 	"${cqfd_docker[@]}" rmi "$custom_img_name"
@@ -32,7 +32,7 @@ else
 fi
 
 custom_img_name="cqfd_test_custom_image_$RANDOM$RANDOM"
-sed -i -e "s!^custom_img_name=.*\$!custom_img_name='$custom_img_name'!" .cqfdrc
+sed -e "s!^custom_img_name=.*\$!custom_img_name='$custom_img_name'!" -i .cqfdrc
 if "${cqfd_docker[@]}" inspect "$custom_img_name" &>/dev/null; then
 	jtest_log info "${cqfd_docker[-1]} registry contains image named: $custom_img_name, removing..."
 	"${cqfd_docker[@]}" rmi "$custom_img_name"

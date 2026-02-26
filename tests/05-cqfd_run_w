@@ -16,7 +16,7 @@ mv .cqfdrc "$workdir/.cqfdrc"
 cd "$workdir" || exit 1
 
 cp .cqfdrc .cqfdrc.orig
-sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='stat --printf '%u:' . ..'," .cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='stat --printf '%u:' . ..'," -i .cqfdrc
 
 jtest_prepare "run cqfd without --working-directory should own working directory and should not own its parent directory"
 if cqfd | grep "^$UID:0:$"; then

@@ -15,7 +15,7 @@ cd "$TDIR/" || exit 1
 cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 cp .cqfd/docker/Dockerfile.missing_dependencies .cqfd/docker/Dockerfile
 cp .cqfdrc .cqfdrc.orig
-sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true'," .cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='true'," -i .cqfdrc
 
 jtest_prepare "run cqfd without useradd and groupadd commands should fail"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then

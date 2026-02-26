@@ -133,7 +133,7 @@ else
 fi
 
 cp .cqfdrc.orig .cqfdrc
-sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"; works!\"'," .cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"; works!\"'," -i .cqfdrc
 
 jtest_prepare "cqfdrc does not strip semicolons in command"
 if cqfd init && cqfd | grep "^; works!$" ; then
@@ -143,7 +143,7 @@ else
 fi
 
 cp .cqfdrc.orig .cqfdrc
-sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"# works!\"'," .cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"# works!\"'," -i .cqfdrc
 
 jtest_prepare "cqfdrc does not strip hash in command"
 if cqfd init && cqfd | grep "^# works!$" ; then
@@ -153,9 +153,9 @@ else
 fi
 
 cp .cqfdrc.orig .cqfdrc
-sed -i -e "/\[build\]/,/^$/s,^command=.*$,command=\"echo \\\\\\
+sed -e "/\[build\]/,/^$/s,^command=.*$,command=\"echo \\\\\\
 	foo=bar \\\\\\
-	baz=quux\"," .cqfdrc
+	baz=quux\"," -i .cqfdrc
 
 jtest_prepare "cqfdrc with multiline should pass"
 if cqfd | grep "^foo=bar baz=quux$"; then
@@ -165,7 +165,7 @@ else
 fi
 
 cp .cqfdrc.orig .cqfdrc
-sed -i -e "/\[project\]/,/^$/s,^,; ," .cqfdrc
+sed -e "/\[project\]/,/^$/s,^,; ," -i .cqfdrc
 
 jtest_prepare "cqfdrc with ;-commented project section should fail"
 if cqfd 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing project section!$"; \
@@ -176,7 +176,7 @@ else
 fi
 
 cp .cqfdrc.orig .cqfdrc
-sed -i -e "/\[build\]/,/^$/s,^,# ," .cqfdrc
+sed -e "/\[build\]/,/^$/s,^,# ," -i .cqfdrc
 
 jtest_prepare "cqfdrc with #-commented build section should fail"
 if cqfd 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing build section!$"; \
@@ -187,7 +187,7 @@ else
 fi
 
 cp .cqfdrc.orig .cqfdrc
-sed -i -e "/[build]/,/^$/s,^command=.*$,command=\"make foo\"," .cqfdrc
+sed -e "/[build]/,/^$/s,^command=.*$,command=\"make foo\"," -i .cqfdrc
 echo "include /dev/null" >>.cqfdrc
 
 jtest_prepare "cqfdrc with include empty file should pass"

@@ -15,7 +15,7 @@ fi
 
 jtest_prepare "run cqfd deinit with a nonexisting Dockerfile should fail"
 cp .cqfdrc .cqfdrc.orig
-sed -i -e "s/\[build\]/[build]\ndistro='thisshouldfail'/" .cqfdrc
+sed -e "s/\[build\]/[build]\ndistro='thisshouldfail'/" -i .cqfdrc
 if ! cqfd deinit; then
 	jtest_result pass
 else
@@ -23,7 +23,7 @@ else
 fi
 
 jtest_prepare "run cqfd deinit with another Dockerfile should pass"
-sed -i -e "s/thisshouldfail/centos/" .cqfdrc
+sed -e "s/thisshouldfail/centos/" -i .cqfdrc
 if cqfd init && cqfd deinit; then
 	jtest_result pass
 else

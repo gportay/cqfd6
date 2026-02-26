@@ -9,7 +9,7 @@ set -o pipefail
 cd "$TDIR/" || exit 1
 
 cp .cqfdrc .cqfdrc.orig
-sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='pwd'," .cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='pwd'," -i .cqfdrc
 
 subdir="dir with space/b/c/d/e"
 mkdir -p "$subdir"

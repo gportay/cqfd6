@@ -9,7 +9,7 @@ cd "$TDIR/" || exit 1
 cp .cqfdrc .cqfdrc.orig
 
 jtest_prepare "run cqfd init without using build_context should not use context directory"
-sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='! test -e /tmp/cqfdrc-build_context'," .cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='! test -e /tmp/cqfdrc-build_context'," -i .cqfdrc
 if cqfd init && cqfd; then
 	jtest_result pass
 else
@@ -21,7 +21,7 @@ cp .cqfd/docker/Dockerfile.build_context .cqfd/docker/Dockerfile
 cp cqfdrc-build_context .cqfdrc
 
 jtest_prepare "run cqfd init using build_context should use the context directory"
-sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='test -e /tmp/cqfdrc-build_context'," .cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='test -e /tmp/cqfdrc-build_context'," -i .cqfdrc
 if cqfd init && cqfd; then
 	jtest_result pass
 else
