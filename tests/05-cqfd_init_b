@@ -9,8 +9,8 @@ set -o pipefail
 cd "$TDIR/" || exit 1
 
 cp .cqfdrc .cqfdrc.orig
-sed -i -e "/\[foo\]/,/^$/s,^command=.*$,command='grep ^NAME /etc/os-release'," .cqfdrc
-sed -i -e "s/\[foo\]/[foo]\ndistro='centos'/" .cqfdrc
+sed -e "/\[foo\]/,/^$/s,^command=.*$,command='grep ^NAME /etc/os-release'," -i .cqfdrc
+sed -e "s/\[foo\]/[foo]\ndistro='centos'/" -i .cqfdrc
 
 jtest_prepare "run cqfd init with build flavor should pass"
 if cqfd -b foo init && \
