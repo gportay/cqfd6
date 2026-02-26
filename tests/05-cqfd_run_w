@@ -77,4 +77,6 @@ mv .cqfdrc.orig .cqfdrc
 cd "$OLDPWD" || exit 1
 mv "$workdir/.cqfdrc" .cqfdrc
 mv "$workdir/.cqfd" .cqfd
+
+# cleanup
 rmdir -p "$workdir"
