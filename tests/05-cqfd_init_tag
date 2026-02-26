@@ -15,6 +15,7 @@ cd "$TDIR/" || exit 1
 # backup Dockerfile and .cqfdrc
 cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 cp .cqfdrc .cqfdrc.orig
+
 cp cqfdrc-tag .cqfdrc
 
 random="$RANDOM$RANDOM"

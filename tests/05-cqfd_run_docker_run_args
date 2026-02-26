@@ -10,6 +10,7 @@ cd "$TDIR/" || exit 1
 
 # backup .cqfdrc
 cp .cqfdrc .cqfdrc.orig
+
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo \"\$FOO \$BAR\"'," -i .cqfdrc
 
 jtest_prepare "run cqfd without --env in CQFD_EXTRA_RUN_ARGS and docker_run_args should fail"

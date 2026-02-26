@@ -14,6 +14,7 @@ cd "$TDIR/" || exit 1
 
 # backup .cqfdrc
 cp .cqfdrc .cqfdrc.orig
+
 cp cqfdrc-image .cqfdrc
 
 jtest_prepare "run cqfd init with CQFD_EXTRA_PULL_ARGS should pass"
