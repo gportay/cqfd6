@@ -29,7 +29,7 @@ else
 fi
 
 # restore initial .cqfdrc and Dockerfile
-cp -f cqfdrc-test .cqfdrc
+cp -f .cqfdrc.orig .cqfdrc
 mv -f .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 # restore container
