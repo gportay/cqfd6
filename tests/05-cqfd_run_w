@@ -78,7 +78,7 @@ mv .cqfdrc.orig .cqfdrc
 
 cd "$OLDPWD" || exit 1
 
-# restore cqfd files
+# moveback cqfd files
 mv "$workdir/.cqfdrc" .cqfdrc
 mv "$workdir/.cqfd" .cqfd
 
