@@ -6,7 +6,7 @@
 
 cd "$TDIR/" || exit 1
 
-# backup initial Dockerfile
+# backup Dockerfile
 cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 
 jtest_prepare "run cqfd without argument should pass"
@@ -39,7 +39,7 @@ fi
 # cleanup
 make clean
 
-# restore initial Dockerfile
+# restore Dockerfile
 mv .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
 jtest_prepare "run cqfd run with argument should run command string"

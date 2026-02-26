@@ -8,7 +8,7 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-# backup initial .cqfdrc
+# backup .cqfdrc
 cp .cqfdrc .cqfdrc.orig
 
 jtest_prepare "run cqfd release without files parameter should fail"
@@ -330,5 +330,5 @@ fi
 make clean
 rm "cqfd-$CTEST.tar.xz"
 
-# restore initial .cqfdrc
+# restore .cqfdrc
 mv .cqfdrc.orig .cqfdrc

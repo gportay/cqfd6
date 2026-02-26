@@ -12,7 +12,7 @@ fi
 
 cd "$TDIR/" || exit 1
 
-# backup initial .cqfdrc
+# backup .cqfdrc
 cp .cqfdrc .cqfdrc.orig
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='groups'," -i .cqfdrc
 sed -e '/\[build\]/auser_extra_groups="docker newgroup:12345"' -i .cqfdrc
@@ -28,5 +28,5 @@ else
 	fi
 fi
 
-# restore initial .cqfdrc
+# restore .cqfdrc
 mv .cqfdrc.orig .cqfdrc

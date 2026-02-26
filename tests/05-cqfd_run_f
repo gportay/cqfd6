@@ -46,7 +46,7 @@ fi
 # cleanup
 rm foo
 
-# restore initial .cqfdrc
+# restore .cqfdrc
 mv "$extdir/cqfdrc" .cqfdrc
 
 # cleanup

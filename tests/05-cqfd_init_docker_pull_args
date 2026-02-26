@@ -12,7 +12,7 @@ fi
 
 cd "$TDIR/" || exit 1
 
-# backup initial .cqfdrc
+# backup .cqfdrc
 cp .cqfdrc .cqfdrc.orig
 cp cqfdrc-image .cqfdrc
 
@@ -31,7 +31,7 @@ else
 	jtest_result fail
 fi
 
-# restore initial .cqfdrc
+# restore .cqfdrc
 mv .cqfdrc.orig .cqfdrc
 
 # restore container

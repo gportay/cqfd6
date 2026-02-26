@@ -8,7 +8,7 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-# backup initial .cqfdrc
+# backup .cqfdrc
 cp .cqfdrc .cqfdrc.orig
 
 jtest_prepare "run cqfd shell without stdin should pass"
@@ -89,5 +89,5 @@ fi
 # cleanup
 rm cqfd-test.tar.xz shell
 
-# restore initial .cqfdrc
+# restore .cqfdrc
 mv .cqfdrc.orig .cqfdrc

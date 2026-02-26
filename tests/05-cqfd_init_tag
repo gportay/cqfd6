@@ -12,7 +12,7 @@ fi
 
 cd "$TDIR/" || exit 1
 
-# backup initial Dockerfile and .cqfdrc
+# backup Dockerfile and .cqfdrc
 cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 cp .cqfdrc .cqfdrc.orig
 cp cqfdrc-tag .cqfdrc
@@ -68,7 +68,7 @@ if ! "${cqfd_docker[@]}" rmi "$image:$dh"; then
 	jtest_log error "cleanup image failed"
 fi
 
-# restore initial .cqfdrc and Dockerfile
+# restore .cqfdrc and Dockerfile
 mv .cqfdrc.orig .cqfdrc
 mv .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 

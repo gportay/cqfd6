@@ -6,7 +6,7 @@
 
 cd "$TDIR/" || exit 1
 
-# backup initial Dockerfile and .cqfdrc
+# backup Dockerfile and .cqfdrc
 cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 cp .cqfd/docker/Dockerfile.init_extra_env .cqfd/docker/Dockerfile
 cp .cqfdrc .cqfdrc.orig
@@ -33,7 +33,7 @@ else
 	jtest_result fail
 fi
 
-# restore initial .cqfdrc and Dockerfile
+# restore .cqfdrc and Dockerfile
 mv .cqfdrc.orig .cqfdrc
 mv .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile
 
