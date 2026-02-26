@@ -8,6 +8,8 @@ cd "$TDIR/" || exit 1
 
 extdir="external/dir"
 mkdir -p "$extdir"
+
+# move cqfd files
 mv .cqfd "$extdir/cqfd"
 mv .cqfdrc "$extdir/cqfdrc"
 

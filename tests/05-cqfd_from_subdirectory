@@ -29,6 +29,7 @@ cd "$OLDPWD" || exit 1
 # restore .cqfdrc
 mv .cqfdrc.orig .cqfdrc
 
+# move local cqfd files and Makefile
 mv Makefile .cqfd .cqfdrc "$subdir"
 
 cd "$subdir" || exit 1
