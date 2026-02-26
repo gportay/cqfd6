@@ -46,7 +46,7 @@ make clean
 # teardown
 cd "$OLDPWD" || exit 1
 
-# restore cqfd files and Makefile
+# moveback cqfd files and Makefile
 mv "$subdir/.cqfdrc" "$subdir/.cqfd" "$subdir/Makefile" .
 
 # cleanup
