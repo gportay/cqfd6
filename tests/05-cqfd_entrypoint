@@ -88,68 +88,73 @@ else
 	fi
 fi
 
-jtest_prepare "run cqfd run should create the user"
+jtest_prepare "run cqfd should create the user"
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='grep \"^$USER:x:$UID:${GROUPS[0]}::$HOME:/bin/sh\$\" /etc/passwd'," -i .cqfdrc
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && cqfd run "grep \"^$USER:x:$UID:${GROUPS[0]}::$HOME:/bin/sh\$\" /etc/passwd"; then
+	if cqfd init && cqfd; then
 		jtest_result pass
 	else
 		jtest_result fail
 	fi
 fi
 
-jtest_prepare "run cqfd run should create and own the user's home directory"
+jtest_prepare "run cqfd should create and own the user's home directory"
 echo 'RUN sed "/DEFAULT_HOME/s,yes,no," -i /etc/login.defs' >>.cqfd/docker/Dockerfile
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='test -w $HOME'," -i .cqfdrc
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if cqfd init && CQFD_NO_USER_SSH_CONFIG=true CQFD_NO_USER_GIT_CONFIG=true cqfd run "test -w $HOME"; then
+	if cqfd init && CQFD_NO_USER_SSH_CONFIG=true CQFD_NO_USER_GIT_CONFIG=true cqfd; then
 		jtest_result pass
 	else
 		jtest_result fail
 	fi
 fi
 
-jtest_prepare "run cqfd run should execute as the host user"
+jtest_prepare "run cqfd should execute as the host user"
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='id'," -i .cqfdrc
 if [ "${cqfd_docker[-1]}" = "podman" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
 else
-	if cqfd run id | grep "^uid=$UID($USER) gid=${GROUPS[0]}($USER) groups=$UID($USER)$"; then
+	if cqfd | grep "^uid=$UID($USER) gid=${GROUPS[0]}($USER) groups=$UID($USER)$"; then
 		jtest_result pass
 	else
 		jtest_result fail
 	fi
 fi
 
-jtest_prepare "run cqfd run should not execute sudo without authentication"
+jtest_prepare "run cqfd should not execute sudo without authentication"
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='sudo env'," -i .cqfdrc
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if ! cqfd run "sudo env" </dev/null; then
+	if ! cqfd </dev/null; then
 		jtest_result pass
 	else
 		jtest_result fail
 	fi
 fi
 
-jtest_prepare "run cqfd run with CQFD_SUDO_NOPASSWD should execute sudo without authentication"
+jtest_prepare "run cqfd with CQFD_SUDO_NOPASSWD should execute sudo without authentication"
 if [ "${cqfd_docker[-1]}" = "podman" ] || ! getent group docker | grep -q "$USER"; then
 	jtest_result skip
 else
-	if CQFD_SUDO_NOPASSWD=true cqfd run "sudo env" </dev/null; then
+	if CQFD_SUDO_NOPASSWD=true cqfd </dev/null; then
 		jtest_result pass
 	else
 		jtest_result fail
 	fi
 fi
 
-jtest_prepare "run cqfd run with sudo should preserve umask"
+jtest_prepare "run cqfd with sudo should preserve umask"
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='umask'," -i .cqfdrc
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
-	if umask="$(cqfd run "umask")" && \
-	   umask_nopasswd="$(CQFD_SUDO_NOPASSWD=true cqfd run "umask")" && \
+	if umask="$(cqfd)" && \
+	   umask_nopasswd="$(CQFD_SUDO_NOPASSWD=true cqfd)" && \
 	   [ "$umask" = "$umask_nopasswd" ]; then
 		jtest_result pass
 	else
