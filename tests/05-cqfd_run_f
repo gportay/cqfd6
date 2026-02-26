@@ -8,6 +8,8 @@ cd "$TDIR/" || exit 1
 
 extdir="external/dir"
 mkdir -p "$extdir"
+
+# move .cqfdrc
 mv .cqfdrc "$extdir/cqfdrc"
 
 jtest_prepare "run cqfd run without argument and with option -f should pass"

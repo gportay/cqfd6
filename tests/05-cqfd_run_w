@@ -10,6 +10,8 @@ cd "$TDIR/" || exit 1
 
 workdir="workingdir"
 mkdir -p "$workdir"
+
+# move local cqfd files
 mv .cqfd "$workdir/.cqfd"
 mv .cqfdrc "$workdir/.cqfdrc"
 
