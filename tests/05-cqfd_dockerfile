@@ -47,7 +47,8 @@ else
 	jtest_result fail
 fi
 # cleanup
-rm -Rf subdir/ support/
+rm support/docker/Dockerfile
+rmdir -p subdir/ support/docker
 
 jtest_prepare "run cqfd should use the Dockerfile named Containerfile set in dockerfile"
 echo "FROM ubuntu:16.04" >.cqfd/docker/Containerfile
