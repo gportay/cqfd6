@@ -14,6 +14,7 @@ cd "$TDIR/" || exit 1
 
 # backup .cqfdrc
 cp .cqfdrc .cqfdrc.orig
+
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo \$HOME'," -i .cqfdrc
 
 jtest_prepare "run cqfd should set user's HOME environment variable"

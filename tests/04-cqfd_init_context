@@ -19,10 +19,10 @@ fi
 
 # backup Dockerfile
 cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
-cp .cqfd/docker/Dockerfile.build_context .cqfd/docker/Dockerfile
-cp cqfdrc-build_context .cqfdrc
 
 jtest_prepare "run cqfd init using build_context should use the context directory"
+cp .cqfd/docker/Dockerfile.build_context .cqfd/docker/Dockerfile
+cp cqfdrc-build_context .cqfdrc
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='test -e /tmp/cqfdrc-build_context'," -i .cqfdrc
 if cqfd init && cqfd; then
 	jtest_result pass

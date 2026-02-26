@@ -15,6 +15,7 @@ cd "$TDIR/" || exit 1
 # backup .cqfd and .cqfdrc
 mv .cqfd .cqfd.orig
 cp .cqfdrc .cqfdrc.orig
+
 cp cqfdrc-image .cqfdrc
 
 image="ubuntu:16.04"

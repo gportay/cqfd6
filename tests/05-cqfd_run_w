@@ -19,6 +19,7 @@ cd "$workdir" || exit 1
 
 # backup .cqfdrc
 cp .cqfdrc .cqfdrc.orig
+
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='stat --printf '%u:' . ..'," -i .cqfdrc
 
 jtest_prepare "run cqfd without --working-directory should own working directory and should not own its parent directory"
