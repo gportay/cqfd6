@@ -8,7 +8,7 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-# backup initial .cqfdrc
+# backup .cqfdrc
 cp .cqfdrc .cqfdrc.orig
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo \"\$FOO \$BAR\"'," -i .cqfdrc
 
@@ -51,5 +51,5 @@ else
 fi
 sed '/^docker_run_args=/d' -i .cqfdrc
 
-# restore initial .cqfdrc
+# restore .cqfdrc
 mv .cqfdrc.orig .cqfdrc

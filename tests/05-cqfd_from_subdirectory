@@ -8,7 +8,7 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-# backup initial .cqfdrc
+# backup .cqfdrc
 cp .cqfdrc .cqfdrc.orig
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='pwd'," -i .cqfdrc
 
@@ -26,7 +26,7 @@ fi
 # cleanup
 cd "$OLDPWD" || exit 1
 
-# restore initial .cqfdrc
+# restore .cqfdrc
 mv .cqfdrc.orig .cqfdrc
 
 mv Makefile .cqfd .cqfdrc "$subdir"

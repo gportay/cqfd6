@@ -12,7 +12,7 @@ fi
 
 cd "$TDIR/" || exit 1
 
-# backup initial .cqfdrc
+# backup .cqfdrc
 cp .cqfdrc .cqfdrc.orig
 
 dh="$(sha256sum .cqfd/docker/Dockerfile | cut -b 1-7)"
@@ -55,5 +55,5 @@ else
 	jtest_result fail
 fi
 
-# restore initial .cqfdrc
+# restore .cqfdrc
 mv .cqfdrc.orig .cqfdrc

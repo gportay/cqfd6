@@ -12,7 +12,7 @@ fi
 
 cd "$TDIR/" || exit 1
 
-# backup initial .cqfdrc
+# backup .cqfdrc
 cp .cqfdrc .cqfdrc.orig
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo \$HOME'," -i .cqfdrc
 
@@ -109,5 +109,5 @@ else
 	jtest_result fail
 fi
 
-# restore initial .cqfdrc
+# restore .cqfdrc
 mv .cqfdrc.orig .cqfdrc
