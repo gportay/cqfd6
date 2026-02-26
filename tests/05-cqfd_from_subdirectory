@@ -13,7 +13,7 @@ sed -i -e "/\[build\]/,/^$/s,^command=.*$,command='pwd'," .cqfdrc
 
 subdir="dir with space/b/c/d/e"
 mkdir -p "$subdir"
-pushd "$subdir" >/dev/null || exit 1
+cd "$subdir" || exit 1
 
 jtest_prepare "run cqfd from project's subdirectory should pass"
 if cqfd | grep "^$PWD$"; then
@@ -23,13 +23,14 @@ else
 fi
 
 # cleanup
-popd >/dev/null || exit 1
+cd "$OLDPWD" || exit 1
 
 # restore initial .cqfdrc
 mv -f .cqfdrc.orig .cqfdrc
 
 mv -f Makefile .cqfd .cqfdrc "$subdir"
-pushd "$subdir" >/dev/null || exit 1
+
+cd "$subdir" || exit 1
 
 jtest_prepare "run cqfd from a subdirectory containing spaces should pass"
 if cqfd && test -f a/cqfd_a.txt; then
@@ -41,7 +42,7 @@ fi
 make clean
 
 # teardown
-popd >/dev/null || exit 1
+cd "$OLDPWD" || exit 1
 
 # restore local cqfd files
 mv -f "$subdir/.cqfdrc" "$subdir/.cqfd" "$subdir/Makefile" .
