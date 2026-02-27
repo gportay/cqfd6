@@ -186,7 +186,7 @@ _cqfd6() {
 		done
 
 		_command_offset "$i"
-		return 
+		return
 	fi
 
 	if [[ "$cur" == -* ]]; then
