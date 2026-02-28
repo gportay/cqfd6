@@ -73,8 +73,11 @@ fi
 # restore initial .cqfdrc
 mv .cqfdrc.orig .cqfdrc
 
-# restore local cqfd files
 cd "$OLDPWD" || exit 1
+
+# restore local cqfd files
 mv "$workdir/.cqfdrc" .cqfdrc
 mv "$workdir/.cqfd" .cqfd
+
+# cleanup
 rmdir -p "$workdir"

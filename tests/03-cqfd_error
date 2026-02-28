@@ -4,8 +4,10 @@
 
 . "$(dirname "$0")/jtest.inc" "$1"
 
+cd "$TDIR/" || exit 1
+
 jtest_prepare "run cqfd with an empty argument should fail"
-if ! cqfd ""; then
+if ! CQFD_COMPAT=5 cqfd ""; then
 	jtest_result pass
 else
 	jtest_result fail
