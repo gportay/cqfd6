@@ -9,7 +9,7 @@ set -o pipefail
 cd "$TDIR/" || exit 1
 
 # backup .cqfdrc
-cp .cqfdrc .cqfdrc.orig
+mv .cqfdrc .cqfdrc.orig
 
 echo -n "" >.cqfdrc
 

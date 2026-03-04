@@ -7,7 +7,7 @@
 cd "$TDIR/" || exit 1
 
 # backup Dockerfile and .cqfdrc
-cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
+mv .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 cp .cqfdrc .cqfdrc.orig
 
 cp .cqfd/docker/Dockerfile.init_extra_env .cqfd/docker/Dockerfile
