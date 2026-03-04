@@ -27,7 +27,7 @@ else
 fi
 
 jtest_prepare "run cqfd init with ARG in Dockerfile and with docker_build_args should pass"
-sed '/\[build\]/adocker_build_args="--build-arg FOO=foo --no-cache"' -i .cqfdrc
+sed -e '/\[build\]/adocker_build_args="--build-arg FOO=foo --no-cache"' -i .cqfdrc
 if cqfd init; then
 	jtest_result pass
 else
