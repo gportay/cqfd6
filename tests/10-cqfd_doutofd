@@ -17,14 +17,15 @@ if [ "${cqfd_docker[-1]}" != "docker" ] || ! getent group docker | grep -q "$USE
 	jtest_result skip
 else
 	# backup .cqfdrc
-	cp .cqfdrc .cqfdrc.orig
-	sed -e "/\[build\]/,/^$/s,^command=.*$,command='id -Gn'," -i .cqfdrc
+	mv .cqfdrc .cqfdrc.orig
 
+	sed -e "/\[build\]/,/^$/s,^command=.*$,command='id -Gn'," .cqfdrc.orig >.cqfdrc
 	if CQFD_BIND_DOCKER_SOCK=true cqfd | grep -w cqfd; then
 		jtest_result pass
 	else
 		jtest_result fail
 	fi
+
 	# restore .cqfdrc
 	mv .cqfdrc.orig .cqfdrc
 fi
@@ -34,17 +35,18 @@ if [ "${cqfd_docker[-1]}" != "docker" ] || ! getent group docker | grep -q "$USE
 	jtest_result skip
 else
 	# backup Dockerfile and .cqfdrc
-	cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
-	cp .cqfdrc .cqfdrc.orig
+	mv .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
+	mv .cqfdrc .cqfdrc.orig
 
 	cp .cqfd/docker/Dockerfile.doutofd .cqfd/docker/Dockerfile
-	sed -e "/\[build\]/,/^$/s,^command=.*$,command='docker run --rm ubuntu:24.04 cat /etc/os-release'," -i .cqfdrc
+	sed -e "/\[build\]/,/^$/s,^command=.*$,command='docker run --rm ubuntu:24.04 cat /etc/os-release'," .cqfdrc.orig >.cqfdrc
 
 	if cqfd init && CQFD_BIND_DOCKER_SOCK=true cqfd | grep -E "^PRETTY_NAME=\"Ubuntu 24.04(.[[:digit:]]+)? LTS\"$"; then
 		jtest_result pass
 	else
 		jtest_result fail
 	fi
+
 	# restore .cqfdrc and Dockerfile
 	mv .cqfdrc.orig .cqfdrc
 	mv .cqfd/docker/Dockerfile.orig .cqfd/docker/Dockerfile

@@ -13,7 +13,7 @@ fi
 cd "$TDIR/" || exit 1
 
 # backup .cqfdrc
-cp .cqfdrc .cqfdrc.orig
+mv .cqfdrc .cqfdrc.orig
 
 cp cqfdrc-tag .cqfdrc
 

@@ -13,12 +13,12 @@ fi
 cd "$TDIR/" || exit 1
 
 # backup .cqfdrc
-cp .cqfdrc .cqfdrc.orig
+mv .cqfdrc .cqfdrc.orig
 
-sed -e "/\[build\]/,/^$/s,^command=.*$,command='groups'," -i .cqfdrc
-sed -e '/\[build\]/auser_extra_groups="docker newgroup:12345"' -i .cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='groups'," .cqfdrc.orig >.cqfdrc
 
 jtest_prepare "run cqfd with groups in user_extra_groups should execute as groups"
+sed -e '/\[build\]/auser_extra_groups="docker newgroup:12345"' -i .cqfdrc
 if [ "$USER" = "runner" ] || [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else

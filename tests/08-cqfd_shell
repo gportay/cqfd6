@@ -8,9 +8,6 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-# backup .cqfdrc
-cp .cqfdrc .cqfdrc.orig
-
 jtest_prepare "run cqfd shell without stdin should pass"
 if cqfd shell </dev/null; then
 	jtest_result pass
@@ -24,6 +21,9 @@ if ( ! cqfd shell <<<"tty" ) | grep "^not a tty$"; then
 else
 	jtest_result fail
 fi
+
+# backup .cqfdrc
+mv .cqfdrc .cqfdrc.orig
 
 jtest_prepare "run cqfd shell should use program set in shell"
 sed -e '/\[build\]/ashell="/bin/bash"' .cqfdrc.orig >.cqfdrc
@@ -78,9 +78,13 @@ else
 	fi
 fi
 
-cp .cqfdrc .cqfdrc.orig
-echo "files=\"shell\"" >>.cqfdrc
+# backup .cqfdrc
+mv .cqfdrc .cqfdrc.orig
+
 jtest_prepare "run cqfd shell with option --release should generate cqfd-test.tar.xz tarball archive"
+cat .cqfdrc.orig - <<EOF >.cqfdrc
+files="shell"
+EOF
 if cqfd --release shell -c "touch shell" && tar tf cqfd-test.tar.xz | grep "^shell$"; then
 	jtest_result pass
 else

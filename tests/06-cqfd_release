@@ -9,7 +9,7 @@ set -o pipefail
 cd "$TDIR/" || exit 1
 
 # backup .cqfdrc
-cp .cqfdrc .cqfdrc.orig
+mv .cqfdrc .cqfdrc.orig
 
 jtest_prepare "run cqfd release without files parameter should fail"
 if ! cqfd release; then
@@ -17,6 +17,8 @@ if ! cqfd release; then
 else
 	jtest_result fail
 fi
+
+cp .cqfdrc.orig .cqfdrc
 
 jtest_prepare "run cqfd release with a files parameter should pass"
 files=(a/cqfd_a.txt a/b/c/cqfd_c.txt a/b/cqfd_b.txt)
