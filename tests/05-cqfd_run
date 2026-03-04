@@ -6,9 +6,6 @@
 
 cd "$TDIR/" || exit 1
 
-# backup Dockerfile
-cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
-
 jtest_prepare "run cqfd run with run without arguments should pass"
 # shellcheck disable=SC2181
 if cqfd run && test -e a/cqfd_a.txt; then
@@ -19,8 +16,13 @@ fi
 # cleanup
 rm a/cqfd_a.txt
 
+# backup Dockerfile
+mv .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
+
 jtest_prepare "run cqfd run with outdated Dockerfile should fail"
-echo "RUN echo $RANDOM" >>.cqfd/docker/Dockerfile
+cat .cqfd/docker/Dockerfile.orig - <<EOF >.cqfd/docker/Dockerfile
+RUN echo $RANDOM
+EOF
 if ! cqfd run; then
 	jtest_result pass
 else

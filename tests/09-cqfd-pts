@@ -9,9 +9,9 @@ set -o pipefail
 cd "$TDIR/" || exit 1
 
 # backup .cqfdrc
-cp .cqfdrc .cqfdrc.orig
+mv .cqfdrc .cqfdrc.orig
 
-sed -e "/\[build\]/,/^$/s/^command=.*$/command='tty || true'/" -i .cqfdrc
+sed -e "/\[build\]/,/^$/s/^command=.*$/command='tty || true'/" .cqfdrc.orig >.cqfdrc
 
 jtest_prepare "run cqfd with stdin and stdout attached to tty should allocate a pty"
 if ! tty; then

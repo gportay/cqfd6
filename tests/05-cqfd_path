@@ -47,7 +47,9 @@ else
 fi
 
 jtest_prepare "run cqfd run with path and su -c should set PATH"
-echo "FROM ubuntu:16.04" >.cqfd/docker/Dockerfile
+cat <<EOF >.cqfd/docker/Dockerfile
+FROM ubuntu:16.04
+EOF
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -72,7 +74,9 @@ else
 fi
 
 jtest_prepare "run cqfd run with path and su --session-command should set PATH"
-echo "FROM ubuntu:24.04" >.cqfd/docker/Dockerfile
+cat <<EOF >.cqfd/docker/Dockerfile
+FROM ubuntu:24.04
+EOF
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -97,8 +101,11 @@ else
 fi
 
 jtest_prepare "run cqfd run with path and sudo should set PATH"
-echo "ENV DEBIAN_FRONTEND=noninteractive" >>.cqfd/docker/Dockerfile
-echo "RUN apt-get update && apt-get install -y --no-install-recommends sudo" >>.cqfd/docker/Dockerfile
+cat <<EOF >.cqfd/docker/Dockerfile
+FROM ubuntu:24.04
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends sudo
+EOF
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	jtest_result skip
 else
@@ -122,7 +129,12 @@ else
 	fi
 fi
 
-echo "USER $UID:${GROUPS[0]}" >>.cqfd/docker/Dockerfile
+cat <<EOF >.cqfd/docker/Dockerfile
+FROM ubuntu:24.04
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends sudo
+USER $UID:${GROUPS[0]}
+EOF
 jtest_prepare "run cqfd run with path and sh should set PATH"
 if [ "${cqfd_docker[-1]}" = "podman" ]; then
 	if cqfd init && cqfd run env | grep "^PATH=/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin$"; then

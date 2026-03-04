@@ -9,8 +9,8 @@ set -o pipefail
 cd "$TDIR/" || exit 1
 
 # backup Dockefile and .cqfdrc
-cp .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
-cp .cqfdrc .cqfdrc.orig
+mv .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
+mv .cqfdrc .cqfdrc.orig
 
 cp .cqfd/docker/Dockerfile.platform .cqfd/docker/Dockerfile
 cp cqfdrc-platform .cqfdrc
