@@ -89,7 +89,7 @@ rm cqfd-test.tar.xz
 
 jtest_prepare "run cqfd release with tar_options=-h should follows symlinks in tarball archive"
 result="pass"
-sed '/files=/d' -i .cqfdrc
+sed -e '/files=/d' -i .cqfdrc
 echo "files=\"a/cqfd_a.txt link.txt\"" >>.cqfdrc
 echo "tar_options=-h" >>.cqfdrc
 if ! cqfd release -c "&& ln -s a/cqfd_a.txt link.txt"; then
@@ -108,8 +108,8 @@ fi
 jtest_result "$result"
 unset result
 # revert the changes in .cqfdrc file
-sed '/tar_options=/d' -i .cqfdrc
-sed '/files=/d' -i .cqfdrc
+sed -e '/tar_options=/d' -i .cqfdrc
+sed -e '/files=/d' -i .cqfdrc
 echo "files=\"${files[*]}\"" >>.cqfdrc
 # cleanup
 make clean

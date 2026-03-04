@@ -26,7 +26,7 @@ else
 fi
 
 jtest_prepare "run cqfd shell should use program set in shell"
-sed '/\[build\]/ashell="/bin/bash"' .cqfdrc.orig >.cqfdrc
+sed -e '/\[build\]/ashell="/bin/bash"' .cqfdrc.orig >.cqfdrc
 # shellcheck disable=SC2016
 if cqfd bash <<<'printf "$0"' | grep "^bash$"; then
 	jtest_result pass

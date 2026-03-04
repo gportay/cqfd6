@@ -17,7 +17,7 @@ mv .cqfd/docker/Dockerfile .cqfd/docker/Dockerfile.orig
 mv .cqfdrc .cqfdrc.orig
 
 jtest_prepare "run cqfd run with path and busybox su -c should set PATH"
-sed '/\[build\]/apath="/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin"' .cqfdrc.orig >.cqfdrc
+sed -e '/\[build\]/apath="/opt/cqfd/bin:/usr/sbin:/usr/bin:/sbin:/bin"' .cqfdrc.orig >.cqfdrc
 cat <<EOF >.cqfd/docker/Dockerfile
 FROM alpine:3.20
 RUN apk update && apk upgrade
