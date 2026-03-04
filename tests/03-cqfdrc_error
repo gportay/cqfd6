@@ -188,7 +188,7 @@ else
 fi
 
 cp .cqfdrc.orig .cqfdrc
-sed -e "/[build]/,/^$/s,^command=.*$,command=\"make foo\"," -i .cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command=\"make foo\"," -i .cqfdrc
 echo "include /dev/null" >>.cqfdrc
 
 jtest_prepare "cqfdrc with include empty file should pass"
