@@ -69,8 +69,6 @@ _jtest_log_init()
 ## _jtest_trap_error() - invoked if an instruction exits in error
 _jtest_trap_error()
 {
-	local i
-
 	jtest_log error "error triggered by ${BASH_SOURCE[1]}"
 	_jtest_has_errors=1
 }
