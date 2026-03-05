@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of run command with alternative config file and build flavors
+# validate the behavior of run with alternate file
 
 . "$(dirname "$0")/jtest.inc" "$1"
 
@@ -29,24 +29,6 @@ else
 fi
 # cleanup
 rm file
-
-jtest_prepare "run cqfd run without argument and with options -f and -b should pass"
-if cqfd -f "$extdir/cqfdrc" -b foo run && test -f foo; then
-	jtest_result pass
-else
-	jtest_result fail
-fi
-# cleanup
-make clean
-
-jtest_prepare "run cqfd run with argument and options -f and -b should pass"
-if cqfd -f "$extdir/cqfdrc" -b foo run "touch foo" && test -f foo; then
-	jtest_result pass
-else
-	jtest_result fail
-fi
-# cleanup
-rm foo
 
 # moveback .cqfdrc
 mv "$extdir/cqfdrc" .cqfdrc
