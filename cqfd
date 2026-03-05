@@ -1197,6 +1197,8 @@ load_config() {
 	# shellcheck disable=SC2154
 	build_docker_run_args="$docker_run_args"
 	# shellcheck disable=SC2154
+	build_docker_rmi_args="$docker_rmi_args"
+	# shellcheck disable=SC2154
 	build_distro="$distro"
 	# shellcheck disable=SC2154
 	build_user_extra_groups="$user_extra_groups"
