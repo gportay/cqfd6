@@ -27,9 +27,11 @@ _has_colors()
 # stdout: the colorized string
 _colorize()
 {
-	local color="$1"; shift
+	local color
 	local c
 
+	color="$1"
+	shift
 	if ! _has_colors; then
 		printf "%s" "$*"
 		return
