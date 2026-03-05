@@ -27,7 +27,7 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd with options -f and -d should pass"
+jtest_prepare "run cqfd with options -f and -d using relative path should pass"
 if cqfd -d "$extdir/cqfd" -f "$extdir/cqfdrc" | grep "^$PWD$"; then
 	jtest_result pass
 else
@@ -48,7 +48,7 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd with environments CQFDRC_FILE and CQFD_DIR should pass"
+jtest_prepare "run cqfd with environments CQFDRC_FILE and CQFD_DIR using relative path should pass"
 if CQFD_DIR="$extdir/cqfd" CQFDRC_FILE="$extdir/cqfdrc" cqfd | grep "^$PWD$"; then
 	jtest_result pass
 else
