@@ -7,9 +7,12 @@
 TDIR="$1"
 JTEST_LOGLVL=debug # all debug error fatal info off
 
-## _colorize() - return colorized string
-# $1: color name
-# $2..$*: string
+## _colorize() - colorize string
+# $1: the color name ("gray", "red", "green", "yellow", "blue", "purple",
+#                     "cyan", "red2", "green2", "yellow2", "blue2", "purple2",
+#                     "cyan2", or "white2")
+# $2..$*: the string to colorize
+# stdout: the colorized string
 _colorize()
 {
 	local color="$1"; shift
@@ -63,7 +66,7 @@ _jtest_log_init()
 	done
 }
 
-## _jtest_trap_error() - invoked when any line produces a non-zero output
+## _jtest_trap_error() - invoked if an instruction exits in error
 _jtest_trap_error()
 {
 	local i
@@ -72,7 +75,7 @@ _jtest_trap_error()
 	_jtest_has_errors=1
 }
 
-## _jtest_trap_exit() - invoked at program exit
+## _jtest_trap_exit() - invoked at exit
 _jtest_trap_exit()
 {
 	if [ -n "$_jtest_current" ]; then
@@ -88,8 +91,9 @@ _jtest_trap_exit()
 }
 
 ## jtest_log() - print log message
-# $1: a valid loglevel
-# $2..$*: message
+# $1: the message loglevel ("all", "debug", "error", "fatal", "info", or "off")
+# $2..$*: the message to log
+# stdout: the logged message
 jtest_log()
 {
 	local level="$1"; shift
@@ -124,7 +128,8 @@ jtest_log()
 }
 
 ## jtest_prepare() - prepare next test
-# $1: "test description string"
+# $1: the test description
+# stdout: the test description (notice)
 jtest_prepare()
 {
 	[ -n "$1" ] || return 1
@@ -133,7 +138,8 @@ jtest_prepare()
 }
 
 ## jtest_result() - report test result
-# $1: "pass", "fail" or "skip"
+# $1: the test status ("pass", "fail" or "skip")
+# stdout: the test status (info)
 jtest_result()
 {
 	local status="$1"
