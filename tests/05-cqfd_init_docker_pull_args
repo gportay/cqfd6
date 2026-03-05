@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of cqfd with docker extra pull arguments
+# validate the behavior of init with docker extra pull arguments
 
 set -o pipefail
 
