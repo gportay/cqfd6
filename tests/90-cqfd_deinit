@@ -30,7 +30,7 @@ if cqfd init && cqfd deinit; then
 else
 	jtest_result fail
 fi
-# restore cqfdrc
+# restore .cqfdrc
 mv .cqfdrc.orig .cqfdrc
 
 jtest_prepare "run cqfd deinit with an already deinit'ed image should fail"
