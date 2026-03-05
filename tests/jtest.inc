@@ -34,6 +34,15 @@ _jcolornames["purple2"]="1;95"
 _jcolornames["cyan2"]="1;96"
 _jcolornames["white2"]="1;97"
 
+## _scissors() - print scissors
+# stdout: the scissors
+_scissors()
+{
+	cat <<EOF
+----- >8 ----------------------------------------------------------------------
+EOF
+}
+
 ## _has_to_log() - checks if has to log
 # $1: the loglevel ("all", "debug", "error", "fatal", "info", or "off")
 _has_to_log()
@@ -144,6 +153,7 @@ jtest_prepare()
 		return 1
 	fi
 
+	_scissors
 	_jtest_current="$1"
 	jtest_log notice "preparing: \"$_jtest_current\""
 }
@@ -197,5 +207,4 @@ fi
 trap _jtest_trap_error ERR
 trap _jtest_trap_exit EXIT
 
-jtest_log info "-----------------------------------------------------"
 jtest_log info "started from ${BASH_SOURCE[1]} in $TDIR"
