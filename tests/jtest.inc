@@ -7,7 +7,7 @@
 TDIR="$1"
 JTEST_LOGLVL=debug # all debug error fatal info off
 
-# _colorize() - return colorized string
+## _colorize() - return colorized string
 # arg1: color name
 # arg2..: string
 _colorize()
@@ -50,7 +50,7 @@ _colorize()
 	printf "%s%s%s" "${c}" "${text}" "${nc}"
 }
 
-# _jtest_log_init() - initialize log subsystem
+## _jtest_log_init() - initialize log subsystem
 declare -A _jloglevels
 _jtest_log_init()
 {
@@ -63,7 +63,7 @@ _jtest_log_init()
 	done
 }
 
-# _jtest_trap_error() - invoked when any line produces a non-zero output
+## _jtest_trap_error() - invoked when any line produces a non-zero output
 _jtest_trap_error()
 {
 	local i
@@ -72,7 +72,7 @@ _jtest_trap_error()
 	_jtest_has_errors=1
 }
 
-# _jtest_trap_exit() - invoked at program exit
+## _jtest_trap_exit() - invoked at program exit
 _jtest_trap_exit()
 {
 	if [ -n "$_jtest_current" ]; then
@@ -87,7 +87,7 @@ _jtest_trap_exit()
 	fi
 }
 
-# jtest_log() - print log message
+## jtest_log() - print log message
 # arg1: a valid loglevel
 jtest_log()
 {
@@ -122,7 +122,7 @@ jtest_log()
 	echo -e "$line\n"
 }
 
-# jtest_prepare() - prepare next test
+## jtest_prepare() - prepare next test
 # arg1: "test description string"
 jtest_prepare()
 {
@@ -131,7 +131,7 @@ jtest_prepare()
 	jtest_log notice "preparing: \"$_jtest_current\""
 }
 
-# jtest_result() - report test result
+## jtest_result() - report test result
 # arg1: "pass", "fail" or "skip"
 jtest_result()
 {
