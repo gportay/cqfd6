@@ -31,7 +31,7 @@ if "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	fi
 fi
 
-jtest_prepare "run cqfd init with tag $tag should build templated image $image:$dh"
+jtest_prepare "run cqfd init with tag should build templated image"
 if cqfd init && \
    "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	jtest_result pass
@@ -55,7 +55,7 @@ if "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	fi
 fi
 
-jtest_prepare "run cqfd init with tag $tag and distro should build templated image $image:$dh"
+jtest_prepare "run cqfd init with tag and distro should build templated image"
 sed -e "s/\[build\]/[build]\ndistro='centos'/" -i .cqfdrc
 if cqfd init && \
    "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
