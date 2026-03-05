@@ -28,28 +28,63 @@ _colorize()
 	# Only colorize a few terminal types
 	# "dumb" is the terminal type in GitHub Actions
 	case "$TERM" in
-	linux*|xterm*|screen*|tmux*|vt102|foot|dumb) ;;
-	*) printf "%s" "$text"; return ;;
+	linux*|xterm*|screen*|tmux*|vt102|foot|dumb)
+		;;
+	*)
+		printf "%s" "$text"
+		return
+		;;
 	esac
 
 	case "$color" in
-	gray)   c='\033[1;30m' ;;
-	red)    c='\033[1;31m' ;;
-	green)  c='\033[1;32m' ;;
-	yellow) c='\033[1;33m' ;;
-	blue)   c='\033[1;34m' ;;
-	purple) c='\033[1;35m' ;;
-	cyan)   c='\033[1;36m' ;;
-	white)  c='\033[1;37m' ;;
-
-	gray2)   c='\033[1;90m' ;;
-	red2)    c='\033[1;91m' ;;
-	green2)  c='\033[1;92m' ;;
-	yellow2) c='\033[1;93m' ;;
-	blue2)   c='\033[1;94m' ;;
-	purple2) c='\033[1;95m' ;;
-	cyan2)   c='\033[1;96m' ;;
-	white2)  c='\033[1;97m' ;;
+	gray)
+		c='\033[1;30m'
+		;;
+	red)
+		c='\033[1;31m'
+		;;
+	green)
+		c='\033[1;32m'
+		;;
+	yellow)
+		c='\033[1;33m'
+		;;
+	blue)
+		c='\033[1;34m'
+		;;
+	purple)
+		c='\033[1;35m'
+		;;
+	cyan)
+		c='\033[1;36m'
+		;;
+	white)
+		c='\033[1;37m'
+		;;
+	gray2)
+		c='\033[1;90m'
+		;;
+	red2)
+		c='\033[1;91m'
+		;;
+	green2)
+		c='\033[1;92m'
+		;;
+	yellow2)
+		c='\033[1;93m'
+		;;
+	blue2)
+		c='\033[1;94m'
+		;;
+	purple2)
+		c='\033[1;95m'
+		;;
+	cyan2)
+		c='\033[1;96m'
+		;;
+	white2)
+		c='\033[1;97m'
+		;;
 	esac
 
 	printf "%s%s%s" "${c}" "${text}" "${nc}"
@@ -132,7 +167,10 @@ jtest_log()
 # stdout: the test description (notice)
 jtest_prepare()
 {
-	[ -n "$1" ] || return 1
+	if [ -z "$1" ]; then
+		return 1
+	fi
+
 	_jtest_current="$1"
 	jtest_log notice "preparing: \"$_jtest_current\""
 }
@@ -154,9 +192,15 @@ jtest_result()
 	echo "$pfx|${status^^}|$_jtest_current" >>"$TDIR/.jtest_results"
 
 	case "$status" in
-	pass) status=$(_colorize green "PASS") ;;
-	fail) status=$(_colorize red "FAIL") ;;
-	skip) status=$(_colorize yellow2 "SKIP") ;;
+	pass)
+		status=$(_colorize green "PASS")
+		;;
+	fail)
+		status=$(_colorize red "FAIL")
+		;;
+	skip)
+		status=$(_colorize yellow2 "SKIP")
+		;;
 	esac
 
 	jtest_log info "result: \"$_jtest_current\": $status"
