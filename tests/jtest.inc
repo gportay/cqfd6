@@ -109,10 +109,12 @@ _jtest_trap_exit()
 # stdout: the logged message
 jtest_log()
 {
-	local level="$1"; shift
+	local level
 	local color
 	local line
 
+	level="$1"
+	shift
 	if ! _has_to_log "$level"; then
 		return 0
 	fi
