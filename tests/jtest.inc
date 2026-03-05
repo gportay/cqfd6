@@ -152,9 +152,9 @@ jtest_result()
 	echo "$pfx|${status^^}|$_jtest_current" >>"$TDIR/.jtest_results"
 
 	case "$status" in
-		pass) status=$(_colorize green "PASS") ;;
-		fail) status=$(_colorize red "FAIL") ;;
-		skip) status=$(_colorize yellow2 "SKIP") ;;
+	pass) status=$(_colorize green "PASS") ;;
+	fail) status=$(_colorize red "FAIL") ;;
+	skip) status=$(_colorize yellow2 "SKIP") ;;
 	esac
 
 	jtest_log info "result: \"$_jtest_current\": $status"
