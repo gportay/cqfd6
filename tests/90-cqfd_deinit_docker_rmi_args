@@ -16,8 +16,8 @@ fi
 # backup .cqfdrc
 mv .cqfdrc .cqfdrc.orig
 
-jtest_prepare "run cqfd deinit with --force set in build_docker_rmi_args should pass"
-sed -e '/\[build\]/abuild_docker_rmi_args="--force"' .cqfdrc.orig >.cqfdrc
+jtest_prepare "run cqfd deinit with --force set in docker_rmi_args should pass"
+sed -e '/\[build\]/adocker_rmi_args="--force"' .cqfdrc.orig >.cqfdrc
 if cqfd deinit; then
 	jtest_result pass
 else
