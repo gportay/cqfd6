@@ -46,3 +46,12 @@ if CQFD_EXTRA_RMI_ARGS="--force" cqfd deinit; then
 else
 	jtest_result fail
 fi
+
+jtest_prepare "run cqfd deinit with build_docker_rmi_args=--force should pass"
+sed -e '/\[build\]/abuild_docker_rmi_args="--force"' -i .cqfdrc
+if cqfd deinit; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+sed -e '/^docker_rmi_args=/d' -i .cqfdrc
