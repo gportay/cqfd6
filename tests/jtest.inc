@@ -7,7 +7,7 @@
 TDIR="$1"
 JTEST_LOGLVL=debug # all debug error fatal info off
 
-# _colorize: return colorized string
+# _colorize(): return colorized string
 # arg1: color name
 # arg2..: string
 _colorize()
