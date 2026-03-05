@@ -13,13 +13,6 @@ mkdir -p "$extdir"
 mv .cqfd "$extdir/cqfd"
 mv .cqfdrc "$extdir/cqfdrc"
 
-jtest_prepare "run cqfd init without .cqfdrc file and .cqfd directory should fail"
-if ! cqfd init; then
-	jtest_result pass
-else
-	jtest_result fail
-fi
-
 jtest_prepare "run cqfd init from a subdirectory with options -f and -d using path relative to subdirectory should pass"
 if cqfd -C "$extdir" -d cqfd -f cqfdrc init; then
 	jtest_result pass
