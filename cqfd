@@ -1193,6 +1193,8 @@ load_config() {
 	# shellcheck disable=SC2154
 	build_dockerfile="$dockerfile"
 	# shellcheck disable=SC2154
+	build_docker_pull_args="$docker_pull_args"
+	# shellcheck disable=SC2154
 	build_docker_build_args="$docker_build_args"
 	# shellcheck disable=SC2154
 	build_docker_run_args="$docker_run_args"
