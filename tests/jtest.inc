@@ -100,6 +100,7 @@ jtest_log()
 {
 	local level="$1"; shift
 	local color
+	local line
 
 	# filter out messages for lower loglevels
 	if [ "$JTEST_LOGLVL" = "off" ]; then
