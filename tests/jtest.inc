@@ -9,7 +9,7 @@ JTEST_LOGLVL=debug # all debug error fatal info off
 
 ## _colorize() - return colorized string
 # $1: color name
-# arg2..arg*: string
+# $2..$*: string
 _colorize()
 {
 	local color="$1"; shift
@@ -88,7 +88,7 @@ _jtest_trap_exit()
 }
 
 ## jtest_log() - print log message
-# arg1: a valid loglevel
+# $1: a valid loglevel
 jtest_log()
 {
 	local level="$1"; shift
@@ -123,7 +123,7 @@ jtest_log()
 }
 
 ## jtest_prepare() - prepare next test
-# arg1: "test description string"
+# $1: "test description string"
 jtest_prepare()
 {
 	[ -n "$1" ] || return 1
@@ -132,7 +132,7 @@ jtest_prepare()
 }
 
 ## jtest_result() - report test result
-# arg1: "pass", "fail" or "skip"
+# $1: "pass", "fail" or "skip"
 jtest_result()
 {
 	local status="$1"
