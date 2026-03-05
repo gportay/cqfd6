@@ -8,8 +8,8 @@ TDIR="$1"
 JTEST_LOGLVL=debug # all debug error fatal info off
 
 ## _colorize() - return colorized string
-# arg1: color name
-# arg2..: string
+# $1: color name
+# arg2..arg*: string
 _colorize()
 {
 	local color="$1"; shift
