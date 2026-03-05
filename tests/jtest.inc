@@ -124,7 +124,7 @@ jtest_log()
 	esac
 
 	line=$(_colorize "$color" "[$(date +%T)|$level] $*")
-	echo -e "$line\n"
+	echo -e "$line"
 }
 
 ## jtest_prepare() - prepare next test
