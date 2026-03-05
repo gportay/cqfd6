@@ -17,7 +17,7 @@ subdir="dir with space/b/c/d/e"
 mkdir -p "$subdir"
 cd "$subdir" || exit 1
 
-jtest_prepare "run cqfd from project's subdirectory should pass"
+jtest_prepare "run cqfd from project subdirectory containing whitespaces should pass"
 if cqfd | grep "^$PWD$"; then
 	jtest_result pass
 else
@@ -35,7 +35,7 @@ mv Makefile .cqfd .cqfdrc "$subdir"
 
 cd "$subdir" || exit 1
 
-jtest_prepare "run cqfd from a subdirectory containing spaces should pass"
+jtest_prepare "run cqfd from project directory containing whitespaces should pass"
 if cqfd && test -f a/cqfd_a.txt; then
 	jtest_result pass
 else
