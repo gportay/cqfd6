@@ -13,7 +13,7 @@ mv .cqfdrc .cqfdrc.orig
 
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo \"\$FOO \$BAR\"'," .cqfdrc.orig >.cqfdrc
 
-jtest_prepare "run cqfd without --env in CQFD_EXTRA_RUN_ARGS and docker_run_args should fail"
+jtest_prepare "run cqfd without --env in CQFD_EXTRA_RUN_ARGS and docker_run_args should not set environment variables"
 if cqfd | grep "^ $"; then
 	jtest_result pass
 else
