@@ -29,7 +29,6 @@ _colorize()
 {
 	local color="$1"; shift
 	local text="$*"
-	local nc='\033[0m'
 	local c
 
 	if ! _has_colors; then
@@ -88,7 +87,7 @@ _colorize()
 		;;
 	esac
 
-	printf "%s%s%s" "${c}" "${text}" "${nc}"
+	printf "%s%s%s" "${c}" "${text}" "\033[0m"
 }
 
 ## _jtest_log_init() - initialize log subsystem
