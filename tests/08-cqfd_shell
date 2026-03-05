@@ -81,7 +81,7 @@ fi
 # backup .cqfdrc
 mv .cqfdrc .cqfdrc.orig
 
-jtest_prepare "run cqfd shell with option --release should generate cqfd-test.tar.xz tarball archive"
+jtest_prepare "run cqfd shell with option --release should generate cqfd-test.tar.xz tarball archive by default"
 cat .cqfdrc.orig - <<EOF >.cqfdrc
 files="shell"
 EOF
