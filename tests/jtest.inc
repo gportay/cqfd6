@@ -153,13 +153,16 @@ jtest_prepare()
 # stdout: the test status (info)
 jtest_result()
 {
-	local status="$1"
-	local pfx="  "
+	local status
+	local pfx
 
+	status="$1"
 	if [ "$status" = "fail" ]; then
 		pfx="**"
 	elif [ "$status" = "skip" ]; then
 		pfx="--"
+	else
+		pfx="  "
 	fi
 
 	echo "$pfx|${status^^}|$_jtest_current" >>"$TDIR/.jtest_results"
