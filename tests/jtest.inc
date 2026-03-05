@@ -154,18 +154,18 @@ jtest_prepare()
 jtest_result()
 {
 	local status
-	local pfx
+	local prefix
 
 	status="$1"
 	if [ "$status" = "fail" ]; then
-		pfx="**"
+		prefix="**"
 	elif [ "$status" = "skip" ]; then
-		pfx="--"
+		prefix="--"
 	else
-		pfx="  "
+		prefix="  "
 	fi
 
-	echo "$pfx|${status^^}|$_jtest_current" >>"$TDIR/.jtest_results"
+	echo "$prefix|${status^^}|$_jtest_current" >>"$TDIR/.jtest_results"
 
 	case "$status" in
 	pass)
