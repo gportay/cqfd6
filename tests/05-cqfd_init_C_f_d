@@ -55,7 +55,7 @@ else
 	jtest_result fail
 fi
 
-# moveback .cqfdrc file and .cqfd directory
+# moveback .cqfdrc and .cqfd
 mv "$extdir/cqfdrc" .cqfdrc
 mv "$extdir/cqfd" .cqfd
 
