@@ -28,7 +28,7 @@ if "${cqfd_docker[@]}" inspect "$custom_img_name" &>/dev/null; then
 	fi
 fi
 
-jtest_prepare "run cqfd should pull image $custom_img_name from registry"
+jtest_prepare "run cqfd should pull image set in custom_img_name from remote registry"
 if cqfd | grep -E "^PRETTY_NAME=\"Ubuntu 16.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
@@ -44,14 +44,14 @@ if "${cqfd_docker[@]}" inspect "$custom_img_name" &>/dev/null; then
 	fi
 fi
 
-jtest_prepare "run cqfd should fail to pull inexistant image $custom_img_name from remote registry"
+jtest_prepare "run cqfd should fail to pull inexistent image set in custom_img_name from remote registry"
 if ! cqfd; then
 	jtest_result pass
 else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd init should create image $custom_img_name from Dockerfile"
+jtest_prepare "run cqfd init should create image set in custom_img_name from Dockerfile"
 if cqfd init && \
    "${cqfd_docker[@]}" inspect "$custom_img_name" &>/dev/null; then
 	jtest_result pass
@@ -59,7 +59,7 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd should run created image $custom_img_name from local registry"
+jtest_prepare "run cqfd should run created image custom_img_name from local registry"
 if cqfd | grep -E "^PRETTY_NAME=\"Ubuntu 24.04(.[[:digit:]]+)? LTS\"$"; then
 	jtest_result pass
 else
