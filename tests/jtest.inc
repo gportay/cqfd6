@@ -89,6 +89,7 @@ _jtest_trap_exit()
 
 ## jtest_log() - print log message
 # $1: a valid loglevel
+# $2..$*: message
 jtest_log()
 {
 	local level="$1"; shift
