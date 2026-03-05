@@ -34,6 +34,21 @@ _jcolornames["purple2"]="1;95"
 _jcolornames["cyan2"]="1;96"
 _jcolornames["white2"]="1;97"
 
+## _has_to_log() - checks if has to log
+# $1: the loglevel ("all", "debug", "error", "fatal", "info", or "off")
+_has_to_log()
+{
+	local level
+
+	level="$1"
+	if [ "$JTEST_LOGLVL" = "off" ] || \
+	   [ "${_jloglevels[$level]}" -lt "${_jloglevels[$JTEST_LOGLVL]}" ]; then
+		return 1
+	fi
+
+	return 0;
+}
+
 ## _has_colors() - checks if has color
 _has_colors()
 {
@@ -98,12 +113,7 @@ jtest_log()
 	local color
 	local line
 
-	# filter out messages for lower loglevels
-	if [ "$JTEST_LOGLVL" = "off" ]; then
-		# logging is off
-		return 0
-	elif [ "${_jloglevels[$level]}" -lt "${_jloglevels[$JTEST_LOGLVL]}" ]; then
-		# insufficient log level
+	if ! _has_to_log "$level"; then
 		return 0
 	fi
 
