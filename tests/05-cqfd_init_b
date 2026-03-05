@@ -15,8 +15,14 @@ sed -e "/\[foo\]/,/^$/s,^command=.*$,command='grep ^NAME /etc/os-release'," -i .
 sed -e "s/\[foo\]/[foo]\ndistro='centos'/" -i .cqfdrc
 
 jtest_prepare "run cqfd init with build flavor should pass"
-if cqfd -b foo init && \
-   cqfd -b foo | grep "^NAME=\"CentOS Linux\"$"; then
+if cqfd -b foo init; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+jtest_prepare "run cqfd with build flavor should pass"
+if cqfd -b foo | grep "^NAME=\"CentOS Linux\"$"; then
 	jtest_result pass
 else
 	jtest_result fail
