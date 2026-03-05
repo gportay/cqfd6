@@ -33,7 +33,7 @@ fi
 
 echo "name=test" >>.cqfdrc
 
-jtest_prepare "run cqfd with cqfdrc with no org property set in project section in cqfdrc file should fail"
+jtest_prepare "run cqfd with no org property set in project section in cqfdrc file should fail"
 if cqfd 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing project.org or project.name properties!$"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
@@ -136,7 +136,7 @@ fi
 cp .cqfdrc.orig .cqfdrc
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"; works!\"'," -i .cqfdrc
 
-jtest_prepare "cqfdrc does not strip semicolons in command"
+jtest_prepare "run cqfd with ini-style comment in command in cqfdrc file should not strip semicolons in command"
 if cqfd | grep "^; works!$" ; then
 	jtest_result pass
 else
@@ -146,7 +146,7 @@ fi
 cp .cqfdrc.orig .cqfdrc
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"# works!\"'," -i .cqfdrc
 
-jtest_prepare "cqfdrc does not strip hash in command"
+jtest_prepare "run cqfd with shell-style comment in command in cqfdrcfile should not strip hash in command"
 if cqfd | grep "^# works!$" ; then
 	jtest_result pass
 else
@@ -158,7 +158,7 @@ sed -e "/\[build\]/,/^$/s,^command=.*$,command=\"echo \\\\\\
 	foo=bar \\\\\\
 	baz=quux\"," -i .cqfdrc
 
-jtest_prepare "cqfdrc with multiline should pass"
+jtest_prepare "run cqfd with multilined command in cqfdrc file should pass"
 if cqfd | grep "^foo=bar baz=quux$"; then
 	jtest_result pass
 else
@@ -168,7 +168,7 @@ fi
 cp .cqfdrc.orig .cqfdrc
 sed -e "/\[project\]/,/^$/s,^,; ," -i .cqfdrc
 
-jtest_prepare "cqfdrc with ;-commented project section should fail"
+jtest_prepare "run cqfd with ;-commented project section cqfdrc file should fail"
 if cqfd 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing project section!$"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
@@ -179,7 +179,7 @@ fi
 cp .cqfdrc.orig .cqfdrc
 sed -e "/\[build\]/,/^$/s,^,# ," -i .cqfdrc
 
-jtest_prepare "cqfdrc with #-commented build section should fail"
+jtest_prepare "run cqfd with #-commented build section cqfdrc file should fail"
 if cqfd 2>&1 | grep "^cqfd: fatal: .cqfdrc: Missing build section!$"; \
    test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
 	jtest_result pass
@@ -191,7 +191,7 @@ cp .cqfdrc.orig .cqfdrc
 sed -e "/\[build\]/,/^$/s,^command=.*$,command=\"make foo\"," -i .cqfdrc
 echo "include /dev/null" >>.cqfdrc
 
-jtest_prepare "cqfdrc with include empty file should pass"
+jtest_prepare "run cqfd with include empty file in cqfdrc file should pass"
 if cqfd && test -e foo; then
 	jtest_result pass
 else
@@ -206,7 +206,7 @@ command="make bar"
 EOF
 echo "include bar.inc" >>.cqfdrc
 
-jtest_prepare "cqfdrc with include file should pass"
+jtest_prepare "run cqfd with include file in cqfdrc file should pass"
 if cqfd && test -e bar; then
 	jtest_result pass
 else
@@ -217,7 +217,7 @@ rm bar
 
 echo "include bar.inc" >>.cqfdrc
 
-jtest_prepare "cqfdrc with duplicate include file should pass"
+jtest_prepare "run cqfd with duplicate include file in cqfdrc file should pass"
 if cqfd && test -e bar; then
 	jtest_result pass
 else
@@ -228,7 +228,7 @@ rm bar
 
 echo "include bar.inc" >>bar.inc
 
-jtest_prepare "cqfdrc with recursive include file should fail"
+jtest_prepare "run cqfd with recursive include file in cqfdrc file should fail"
 if ! cqfd; then
 	jtest_result pass
 else
