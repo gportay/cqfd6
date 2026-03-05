@@ -6,7 +6,7 @@
 
 cd "$TDIR/" || exit 1
 
-jtest_prepare "run cqfd deinit with a proper .cqfdrc should pass"
+jtest_prepare "run cqfd deinit with a .cqfdrc file should pass"
 if cqfd deinit; then
 	jtest_result pass
 else
@@ -16,7 +16,7 @@ fi
 # backup cqfdrc
 mv .cqfdrc .cqfdrc.orig
 
-jtest_prepare "run cqfd deinit with a nonexisting Dockerfile should fail"
+jtest_prepare "run cqfd deinit with a nonexistent Dockerfile should fail"
 sed -e "s/\[build\]/[build]\ndistro='thisshouldfail'/" .cqfdrc.orig >.cqfdrc
 if ! cqfd deinit; then
 	jtest_result pass

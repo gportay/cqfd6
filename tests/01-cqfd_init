@@ -8,7 +8,7 @@ set -o pipefail
 
 cd "$TDIR/" || exit 1
 
-jtest_prepare "run cqfd init with a proper .cqfdrc file should pass"
+jtest_prepare "run cqfd init with a .cqfdrc file should pass"
 if cqfd init; then
 	jtest_result pass
 else
@@ -18,7 +18,7 @@ fi
 # backup .cqfdrc
 mv .cqfdrc .cqfdrc.orig
 
-jtest_prepare "run cqfd init with a nonexisting Dockerfile should fail"
+jtest_prepare "run cqfd init with a nonexistent Dockerfile should fail"
 sed -e "s/\[build\]/[build]\ndistro='thisshouldfail'/" .cqfdrc.orig >.cqfdrc
 if ! cqfd init; then
 	jtest_result pass
@@ -26,7 +26,7 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd init with an other Dockerfile should pass"
+jtest_prepare "run cqfd init with another Dockerfile should pass"
 sed -e "s/thisshouldfail/centos/" -i .cqfdrc
 if cqfd init; then
 	jtest_result pass
