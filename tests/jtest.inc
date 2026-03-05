@@ -102,10 +102,7 @@ jtest_log()
 	local color
 
 	# filter out messages for lower loglevels
-	if [ -z "${_jloglevels[$level]}" ]; then
-		# invalid log level
-		return 1
-	elif [ "$JTEST_LOGLVL" = "off" ]; then
+	if [ "$JTEST_LOGLVL" = "off" ]; then
 		# logging is off
 		return 0
 	elif [ "${_jloglevels[$level]}" -lt "${_jloglevels[$JTEST_LOGLVL]}" ]; then
