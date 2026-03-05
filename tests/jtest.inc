@@ -7,6 +7,15 @@
 TDIR="$1"
 JTEST_LOGLVL=debug # all debug error fatal info off
 
+declare -A _jloglevels
+_jloglevels["all"]=0
+_jloglevels["debug"]=1
+_jloglevels["error"]=2
+_jloglevels["fatal"]=3
+_jloglevels["info"]=4
+_jloglevels["notice"]=5
+_jloglevels["off"]=6
+
 declare -A _jcolornames
 _jcolornames["gray"]="1;30"
 _jcolornames["red"]="1;31"
@@ -55,19 +64,6 @@ _colorize()
 	fi
 
 	printf "%s%s%s" "\033[${_jcolornames[$color]}m" "$*" "\033[0m"
-}
-
-## _jtest_log_init() - initialize log subsystem
-declare -A _jloglevels
-_jtest_log_init()
-{
-	local l
-	local i=0
-
-	for l in all debug error fatal info notice off; do
-		_jloglevels[$l]=$i
-		((i++))
-	done
 }
 
 ## _jtest_trap_error() - invoked if an instruction exits in error
@@ -171,8 +167,6 @@ jtest_result()
 	jtest_log info "result: \"$_jtest_current\": $status"
 	unset _jtest_current
 }
-
-_jtest_log_init
 
 if [ "${BASH_VERSINFO[0]}" -lt 4 ]; then
 	jtest_log fatal "jtest requires a bash >4 environment"
