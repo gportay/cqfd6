@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# validate the behavior of build flavors
+# validate the behavior of cqfd with build flavors
 
 set -o pipefail
 
@@ -14,8 +14,8 @@ cp .cqfdrc .cqfdrc.orig
 sed -e "/\[foo\]/,/^$/s,^command=.*$,command='grep ^NAME /etc/os-release'," -i .cqfdrc
 sed -e "s/\[foo\]/[foo]\ndistro='centos'/" -i .cqfdrc
 
-jtest_prepare "run cqfd init with build flavor should pass"
-if cqfd -b foo init; then
+jtest_prepare "run cqfd with build flavor should pass"
+if cqfd -b foo; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -28,8 +28,8 @@ else
 	jtest_result fail
 fi
 
-jtest_prepare "run cqfd init with nonexistent build flavor should fail"
-if ! cqfd -b foobar init; then
+jtest_prepare "run cqfdwith nonexistent build flavor should fail"
+if ! cqfd -b foobar; then
 	jtest_result pass
 else
 	jtest_result fail
