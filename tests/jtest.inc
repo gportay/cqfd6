@@ -7,6 +7,18 @@
 TDIR="$1"
 JTEST_LOGLVL=debug # all debug error fatal info off
 
+## _has_colors() - checks if has color
+_has_colors()
+{
+	if [ -n "$NO_COLOR" ] || [ -z "$TERM" ] || \
+	   ! command -v tput >/dev/null || \
+	   [ "$(tput colors 2>/dev/null || echo 0)" -lt 8 ]; then
+		return 1
+	fi
+
+	return 0
+}
+
 ## _colorize() - colorize string
 # $1: the color name ("gray", "red", "green", "yellow", "blue", "purple",
 #                     "cyan", "red2", "green2", "yellow2", "blue2", "purple2",
@@ -20,21 +32,10 @@ _colorize()
 	local nc='\033[0m'
 	local c
 
-	if [ -n "$NO_COLOR" ]; then
+	if ! _has_colors; then
 		printf "%s" "$text"
 		return
 	fi
-
-	# Only colorize a few terminal types
-	# "dumb" is the terminal type in GitHub Actions
-	case "$TERM" in
-	linux*|xterm*|screen*|tmux*|vt102|foot|dumb)
-		;;
-	*)
-		printf "%s" "$text"
-		return
-		;;
-	esac
 
 	case "$color" in
 	gray)
