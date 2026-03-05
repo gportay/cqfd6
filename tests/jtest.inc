@@ -7,6 +7,24 @@
 TDIR="$1"
 JTEST_LOGLVL=debug # all debug error fatal info off
 
+declare -A _jcolornames
+_jcolornames["gray"]="1;30"
+_jcolornames["red"]="1;31"
+_jcolornames["green"]="1;32"
+_jcolornames["yellow"]="1;33"
+_jcolornames["blue"]="1;34"
+_jcolornames["purple"]="1;35"
+_jcolornames["cyan"]="1;36"
+_jcolornames["white"]="1;37"
+_jcolornames["gray2"]="1;90"
+_jcolornames["red2"]="1;91"
+_jcolornames["green2"]="1;92"
+_jcolornames["yellow2"]="1;93"
+_jcolornames["blue2"]="1;94"
+_jcolornames["purple2"]="1;95"
+_jcolornames["cyan2"]="1;96"
+_jcolornames["white2"]="1;97"
+
 ## _has_colors() - checks if has color
 _has_colors()
 {
@@ -28,67 +46,15 @@ _has_colors()
 _colorize()
 {
 	local color
-	local c
 
 	color="$1"
 	shift
-	if ! _has_colors; then
+	if ! _has_colors || [ -z "$color" ]; then
 		printf "%s" "$*"
 		return
 	fi
 
-	case "$color" in
-	gray)
-		c='\033[1;30m'
-		;;
-	red)
-		c='\033[1;31m'
-		;;
-	green)
-		c='\033[1;32m'
-		;;
-	yellow)
-		c='\033[1;33m'
-		;;
-	blue)
-		c='\033[1;34m'
-		;;
-	purple)
-		c='\033[1;35m'
-		;;
-	cyan)
-		c='\033[1;36m'
-		;;
-	white)
-		c='\033[1;37m'
-		;;
-	gray2)
-		c='\033[1;90m'
-		;;
-	red2)
-		c='\033[1;91m'
-		;;
-	green2)
-		c='\033[1;92m'
-		;;
-	yellow2)
-		c='\033[1;93m'
-		;;
-	blue2)
-		c='\033[1;94m'
-		;;
-	purple2)
-		c='\033[1;95m'
-		;;
-	cyan2)
-		c='\033[1;96m'
-		;;
-	white2)
-		c='\033[1;97m'
-		;;
-	esac
-
-	printf "%s%s%s" "${c}" "$*" "\033[0m"
+	printf "%s%s%s" "\033[${_jcolornames[$color]}m" "$*" "\033[0m"
 }
 
 ## _jtest_log_init() - initialize log subsystem
