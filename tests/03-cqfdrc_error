@@ -96,8 +96,8 @@ fi
 cp .cqfdrc.orig .cqfdrc
 echo "foo	=bar" >>.cqfdrc
 
-jtest_prepare "run cqfd run with tabulation before property assignment in cqfdrc file should pass"
-if cqfd run true; then
+jtest_prepare "run cqfd with tabulation before property assignment in cqfdrc file should pass"
+if cqfd; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -106,8 +106,8 @@ fi
 cp .cqfdrc.orig .cqfdrc
 echo "foo=	bar" >>.cqfdrc
 
-jtest_prepare "run cqfd run with tabulation after property assignment in cqfdrc file should pass"
-if cqfd run true; then
+jtest_prepare "run cqfd with tabulation after property assignment in cqfdrc file should pass"
+if cqfd; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -116,8 +116,8 @@ fi
 cp .cqfdrc.orig .cqfdrc
 echo "foo =bar" >>.cqfdrc
 
-jtest_prepare "run cqfd run with whitespace before property assignment in cqfdrc file should pass"
-if cqfd run true; then
+jtest_prepare "run cqfd with whitespace before property assignment in cqfdrc file should pass"
+if cqfd; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -126,8 +126,8 @@ fi
 cp .cqfdrc.orig .cqfdrc
 echo "foo= bar" >>.cqfdrc
 
-jtest_prepare "run cqfd run with whitespace after property assignment in cqfdrc file should pass"
-if cqfd run true; then
+jtest_prepare "run cqfd with whitespace after property assignment in cqfdrc file should pass"
+if cqfd; then
 	jtest_result pass
 else
 	jtest_result fail
