@@ -62,7 +62,7 @@ else
 fi
 
 jtest_prepare "run cqfd run with argument and required properties set in project and build sections in cqfdrc file should pass"
-if cqfd init && cqfd run true; then
+if cqfd run true; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -137,7 +137,7 @@ cp .cqfdrc.orig .cqfdrc
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"; works!\"'," -i .cqfdrc
 
 jtest_prepare "cqfdrc does not strip semicolons in command"
-if cqfd init && cqfd | grep "^; works!$" ; then
+if cqfd | grep "^; works!$" ; then
 	jtest_result pass
 else
 	jtest_result fail
@@ -147,7 +147,7 @@ cp .cqfdrc.orig .cqfdrc
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='true; echo \"# works!\"'," -i .cqfdrc
 
 jtest_prepare "cqfdrc does not strip hash in command"
-if cqfd init && cqfd | grep "^# works!$" ; then
+if cqfd | grep "^# works!$" ; then
 	jtest_result pass
 else
 	jtest_result fail
