@@ -20,7 +20,7 @@ help:
 	@echo "   maintainer-clean: Delete almost everything."
 	@echo "   sources:          Make sources needed for packaging."
 
-doc: cqfd.1.gz cqfdrc.5.gz
+doc: cqfd.1.gz Cqfdfile.5.gz
 
 install: DOCKERLIBDIR ?= $(PREFIX)/lib/docker
 install:
@@ -36,9 +36,9 @@ install:
 		install -d $(DESTDIR)$(PREFIX)/share/man/man1/; \
 		install -m 644 cqfd.1.gz $(DESTDIR)$(PREFIX)/share/man/man1/cqfd6.1.gz; \
 	fi
-	if [ -e cqfdrc.5.gz ]; then \
+	if [ -e Cqfdfile.5.gz ]; then \
 		install -d $(DESTDIR)$(PREFIX)/share/man/man5/; \
-		install -m 644 cqfdrc.5.gz $(DESTDIR)$(PREFIX)/share/man/man5/cqfdrc6.5.gz; \
+		install -m 644 Cqfdfile.5.gz $(DESTDIR)$(PREFIX)/share/man/man5/Cqfdfile6.5.gz; \
 	fi
 	install -d $(DESTDIR)$(PREFIX)/share/cqfd6/samples/
 	install -m 0644 samples/* $(DESTDIR)$(PREFIX)/share/cqfd6/samples/
@@ -56,7 +56,7 @@ uninstall:
 	rm -Rf $(DESTDIR)$(PREFIX)/bin/cqfd6 \
 	        $(DESTDIR)$(DOCKERLIBDIR)/cli-plugins/docker-cqfd \
 		$(DESTDIR)$(PREFIX)/share/man/man1/cqfd6.1.gz \
-		$(DESTDIR)$(PREFIX)/share/man/man5/cqfdrc6.5.gz \
+		$(DESTDIR)$(PREFIX)/share/man/man5/Cqfdfile6.5.gz \
 		$(DESTDIR)$(PREFIX)/share/doc/cqfd6 \
 		$(DESTDIR)$(PREFIX)/share/cqfd6
 	for i in linux-amd64 linux-arm linux-arm64 linux-ppc64le linux-riscv64 linux-s390x; do \
@@ -83,7 +83,7 @@ check:
 	@$(MAKE) -C tests check
 
 clean:
-	rm -f cqfd.1.gz cqfdrc.5.gz gportay-cqfd6.tar.xz
+	rm -f cqfd.1.gz Cqfdfile.5.gz gportay-cqfd6.tar.xz
 
 maintainer-clean: clean
 	rm -f *.tar.gz
