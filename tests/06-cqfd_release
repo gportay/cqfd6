@@ -85,6 +85,26 @@ sed -e '$ s!^tar_transform=.*$!!' -i .cqfdrc
 make clean
 rm cqfd-test.tar.xz
 
+jtest_prepare "run cqfd release with tar_transform=true should not preserve pathnames in tarball archive"
+echo "tar_transform=true" >>.cqfdrc
+if cqfd release; then
+	result="pass"
+else
+	result="fail"
+fi
+for f in "${files[@]}"; do
+	if ! tar tf cqfd-test.tar.xz | grep "^${f##*/}$"; then
+		result="fail"
+	fi
+done
+jtest_result "$result"
+unset result
+# revert the changes in .cqfdrc file
+sed -e '$ s!^tar_transform=.*$!!' -i .cqfdrc
+# cleanup
+make clean
+rm cqfd-test.tar.xz
+
 jtest_prepare "run cqfd release with tar_options=-h should follows symlinks in tarball archive"
 result="pass"
 sed -e '/files=/d' -i .cqfdrc
