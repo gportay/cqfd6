@@ -42,9 +42,9 @@ fi
 
 tag="%Un-%Po-%Pn-%Bd-%DH-$random"
 sed -e "s!^tag=.*\$!tag='$tag'!" -i .cqfdrc
-dh="$(sha256sum .cqfd/centos/Dockerfile | cut -b 1-64)"
-image="cqfd-$un-$un-cqfd-test-centos-$dh-$random"
-dh="$(sha256sum .cqfd/centos/Dockerfile | cut -b 1-7)"
+dh="$(sha256sum .cqfd/fedora/Dockerfile | cut -b 1-64)"
+image="cqfd-$un-$un-cqfd-test-fedora-$dh-$random"
+dh="$(sha256sum .cqfd/fedora/Dockerfile | cut -b 1-7)"
 if "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	jtest_log info "${cqfd_docker[-1]} registry contains image named: $image:$dh, removing..."
 	if ! "${cqfd_docker[@]}" rmi "$image:$dh"; then
@@ -53,7 +53,7 @@ if "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 fi
 
 jtest_prepare "run cqfd init with tag and distro should build templated image"
-sed -e "s/\[build\]/[build]\ndistro='centos'/" -i .cqfdrc
+sed -e "s/\[build\]/[build]\ndistro='fedora'/" -i .cqfdrc
 if cqfd init && \
    "${cqfd_docker[@]}" inspect "$image:$dh" &>/dev/null; then
 	jtest_result pass

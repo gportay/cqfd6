@@ -52,7 +52,7 @@ else
 fi
 
 jtest_prepare "run cqfd --init with another Dockerfile should pass"
-sed -e "s/thisshouldfail/centos/" -i .cqfdrc
+sed -e "s/thisshouldfail/fedora/" -i .cqfdrc
 if cqfd --init; then
 	jtest_result pass
 else

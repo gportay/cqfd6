@@ -8,10 +8,10 @@ set -o pipefail
 mv .cqfdrc .cqfdrc.orig
 
 sed -e "/\[foo\]/,/^$/s,^command=.*$,command='grep ^NAME /etc/os-release'," .cqfdrc.orig >.cqfdrc
-sed -e "s/\[foo\]/[foo]\ndistro='centos'/" -i .cqfdrc
+sed -e "s/\[foo\]/[foo]\ndistro='fedora'/" -i .cqfdrc
 
 jtest_prepare "run cqfd with build flavor should pass"
-if cqfd -b foo | grep "^NAME=\"CentOS Linux\"$"; then
+if cqfd -b foo | grep "^NAME=\"Fedora Linux\"$"; then
 	jtest_result pass
 else
 	jtest_result fail

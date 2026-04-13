@@ -127,9 +127,9 @@ build and release methods (for example, a debug build). This is made possible in
 In the `.cqfdrc` file, one or more flavors may be listed in the `[build]`
 section, each referencing the section of the same name.
 
-    [centos7]
-    command='make CENTOS=1'
-    distro='centos7'
+    [fedora]
+    command='make FEDORA=1'
+    distro='fedora'
 
     [debug]
     command='make DEBUG=1'
@@ -352,7 +352,7 @@ use:
 
 If a flavor redefines the distro key of the build section, use:
 
-    $ cqfd --build centos7 --deinit
+    $ cqfd --build fedora --deinit
 
 To list all created images, use:
 
