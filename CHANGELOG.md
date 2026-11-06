@@ -2,6 +2,40 @@
 
 ## Version 6 (coming soon)
 
+## Version 5.10.2 (2026-04-24)
+
+* Better handling of user deletion if conflicting in container. This affects
+  mostly Ubuntu 24.04 containers
+* Allow to use a symlinked Dockerfile in .cqfd
+* Add warning when using `cqfd run` with quoted arguments. Indeed this leads to
+  unexpected behavior since arguments get split in the end
+* Allow to set the HISTFILE to bind in `cqfd` using `CQFD_HISTFILE`
+* Allow to forward system gitconfig to container
+
+## Version 5.9.0 (2026-02-02)
+
+* Add `cqfd images` to list all Docker images built by cqfd across all
+  projects
+* Add `cqfd prune` to delete all the images listed by `cqfd images`
+* Add `bind_docker_sock` option to .cqfdrc
+
+## Version 5.8.0 (2026-01-15)
+
+* Add `cqfd deinit` command to delete currently built Docker image
+* Bind mount shell history file for shell that supports it
+* Move tests to bats framework
+* Allow relative and absolute path with `-d` option
+* Better support for podman
+* Fix compatibility with recent Ubuntu Docker images
+
+## Version 5.7.2 (2025-09-23)
+
+* Publish distro packages in releases
+
+## Version 5.7.1 (2025-08-07)
+
+* Override container entrypoint
+
 ## Version 5.7.0 (2025-06-27)
 
 * Many tests improvements
