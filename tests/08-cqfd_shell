@@ -71,7 +71,7 @@ jtest_prepare "run cqfd shell as a SHELL= program should pass"
 if ! command -v make 2>/dev/null; then
 	jtest_result skip
 else
-	if PATH="$TDIR/.local/bin:$PATH"; make whereami 2>&1 | grep "^Ubuntu .* LTS$"; then
+	if PATH="$TDIR/.local/bin:$PATH"; make SHELL="cqfd --shell" whereami 2>&1 | grep "^Ubuntu .* LTS$"; then
 		jtest_result pass
 	else
 		jtest_result fail

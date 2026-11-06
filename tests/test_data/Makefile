@@ -4,7 +4,7 @@ all:
 	@echo "make foo or bar!"
 
 whereami:
-	@./whereami.sh
+	@sh whereami.sh
 
 foo:
 	@echo making foo
