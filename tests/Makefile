@@ -3,6 +3,7 @@
 tests: export CQFD_NO_DEPRECATED_COMMAND_WARNING = true
 tests: export CQFD_NO_DEPRECATED_WARNING = true
 tests: CQFD_DOCKER =
+tests: CQFD_DEBUG =
 tests: CQFD_EXTRA_RUN_ARGS =
 tests: CQFD_EXTRA_BUILD_ARGS =
 tests: CQFD_EXTRA_PULL_ARGS =
@@ -11,44 +12,18 @@ tests: CQFD_NO_SSH_CONFIG =
 tests: CQFD_NO_SSH_AUTH_SOCK =
 tests: CQFD_NO_USER_SSH_CONFIG =
 tests: CQFD_NO_USER_GIT_CONFIG =
+tests: CQFD_NO_SYSTEM_GIT_CONFIG =
 tests: CQFD_BIND_DOCKER_SOCK =
 tests: CQFD_DOCKER_GID =
 tests: CQFD_SHELL =
+tests: CQFD_HISTFILE =
+tests: CQFD_DISABLE_SHELL_HISTORY =
+tests: CQFD_PLATFORM =
 tests: CQFD_WORKDIR =
 tests: CQFD_DIR =
 tests: CQFDRC_FILE =
 tests:
-	@$(eval TDIR=$(shell mktemp -d /tmp/cqfd-test.XXXXXX))
-	@export CQFD_CACHE=$(TDIR); \
-	export CQFD_PROMPT=no; \
-	export PATH=$(TDIR)/.local/bin:$(PATH); \
-	mkdir -p "$(TDIR)/.local/bin"; \
-	cp -a ../cqfd "$(TDIR)/.local/bin/cqfd$(CQFD_COMPAT)"; \
-	ln -sf "cqfd$(CQFD_COMPAT)" "$(TDIR)/.local/bin/cqfd"; \
-	ln -sf cqfd $(TDIR)/.local/bin/linux-amd64-cqfd; \
-	ln -sf cqfd $(TDIR)/.local/bin/linux-arm64-cqfd; \
-	cp -a test_data/. "$(TDIR)/."; \
-	for f in [0-9][0-9]*; do \
-		if [ -x "$$f" ]; then \
-			./$$f $(TDIR); \
-		fi; \
-	done; \
-	failed=0; \
-	if [ -f $(TDIR)/.jtest_results ]; then \
-		echo " --- Test results ---"; \
-		cat "$(TDIR)"/.jtest_results; \
-		echo " --------------------"; \
-		if grep -q "FAIL" "$(TDIR)"/.jtest_results; then \
-			failed=$$(grep "FAIL" "$(TDIR)"/.jtest_results | wc -l); \
-		fi; \
-	fi; \
-	if echo $(TDIR) | grep -q "/tmp/cqfd-test\.[0-9a-zA-Z]{6,6}"; then \
-		rm -Rf $(TDIR); \
-	fi; \
-	if [ "$$failed" -ne "0" ]; then \
-		echo "$$failed failure(s) occured"; \
-		exit 1; \
-	fi
+	./bats/bin/bats $$PWD
 
 check:
-	shellcheck -x jtest.inc [0-9][0-9]*
+	shellcheck -x [0-9][0-9]*

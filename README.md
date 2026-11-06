@@ -3,7 +3,8 @@
 # What are cqfd and cqfd6 ?
 
 cqfd provides a quick and convenient way to run commands in the current
-directory, but within a Docker container defined in a per-project config file.
+directory within a Docker container defined by a per-project configuration
+file.
 
 This becomes useful when building an application designed for another Linux
 system, e.g. building an old embedded firmware that only works in an older
@@ -29,11 +30,11 @@ more common such as the CLI of `sudo`.
 
 ## Getting started
 
-Just follow these steps:
+Follow these steps:
 
-* [Install requirements](#requirements)
-* [Install cqfd](#installingremoving-cqfd6)
-* Go into your project's directory
+* Ensure the [requirements](#requirements) are met
+* [**Install cqfd**](#installingremoving-cqfd6)
+* Go to your project's directory
 * Create a [.cqfdrc](cqfdrc.5.adoc) file
 * Create a [Dockerfile](https://docs.docker.com/reference/dockerfile/) and save
   it as `.cqfd/docker/Dockerfile`
@@ -48,6 +49,98 @@ project and add custom scripting. Additional examples can be found in the
 `cqfd` will use the provided `Dockerfile` to create a normalized runtime build
 environment for your project.
 
+## Installing/removing cqfd6
+
+### From packages
+
+#### Ubuntu or Debian
+
+First download the package:
+
+```sh
+curl https://github.com/gportay/cqfd6/releases/download/v6/cqfd6_6_all.deb
+```
+
+Then, install it using the package manager:
+
+```sh
+sudo dpkg -i ./cqfd6_6_all.deb
+```
+
+_Note_: Uninstall it using the package manager:
+
+```sh
+sudo dpkg -r cqfd6
+```
+
+#### Fedora or RedHat Linux
+
+First download the package:
+
+```sh
+curl https://github.com/gportay/cqfd6/releases/download/v6/cqfd6-6-1.noarch.rpm
+```
+
+Then, install it using the package manager:
+
+```sh
+sudo dnf install ./cqfd6-6-1.noarch.rpm
+```
+
+_Note_: Uninstall it using the package manager:
+
+```sh
+sudo dnf remove cqfd6
+```
+
+#### Arch Linux or Manjaro
+
+First download the package:
+
+```sh
+curl https://github.com/gportay/cqfd6/releases/download/v6/cqfd6-6-1-any.pkg.tar.zst
+```
+
+Then, install it using the package manager:
+
+```sh
+sudo pacman -U ./cqfd6-6-1-any.pkg.tar.zst
+```
+
+_Note_: Uninstall it using the package manager:
+
+```sh
+sudo pacman -R cqfd6
+```
+
+### From source
+
+First clone this repository:
+
+```sh
+git clone https://github.com/gportay/cqfd6.git
+```
+
+Then, install the script and its resources:
+
+```sh
+make install
+```
+
+Finally, uninstall the script and its resources:
+
+```sh
+make uninstall
+```
+
+Makefile honors both **PREFIX** (__/usr/local__) and **DESTDIR** (__[empty]__)
+variables:
+
+```sh
+make install PREFIX=/opt
+make install PREFIX=/usr DESTDIR=package
+```
+
 ## Using cqfd on a daily basis
 
 ### Regular builds
@@ -55,20 +148,28 @@ environment for your project.
 To build your project from the configured build environment with the default
 build command as configured in `.cqfdrc`, use:
 
-    $ cqfd
+```sh
+cqfd
+```
 
 Alternatively, you may want to specify a single custom command to be executed
 from inside the build container.
 
-    $ cqfd make clean
+```sh
+cqfd make clean
+```
 
 Or custom commands composed with shell grammar:
 
-    $ cqfd sh -c "make linux-dirclean && make foobar-dirclean"
+```sh
+cqfd sh -c "make linux-dirclean && make foobar-dirclean"
+```
 
 Or run a shell script with arguments:
 
-    $ cqfd sh ./build.sh debug
+```sh
+cqfd sh ./build.sh debug
+```
 
 When `cqfd` is running, the current directory is mounted by Docker as a volume.
 As a result, all the build artefacts generated inside the build container are
@@ -81,7 +182,9 @@ The `--release` option creates a release tarball for your project. The release
 files (as specified in your `.cqfdrc`) will be included inside the release
 archive.
 
-    $ cqfd --release
+```sh
+cqfd --release
+```
 
 The resulting release file is then called according to the archive template,
 which defaults to `%Po-%Pn.tar.xz`.
@@ -99,14 +202,16 @@ required to support project tooling. It is written in an .ini-like format and
 
 Here is a sample `.cqfdrc` file:
 
-    [project]
-    org='fooinc'
-    name='buildroot'
+```ini
+[project]
+org='fooinc'
+name='buildroot'
 
-    [build]
-    command='make foobar_defconfig && make && asciidoc README.FOOINC'
-    files='README.FOOINC output/images/sdcard.img'
-    archive='cqfd-%Gh.tar.xz'
+[build]
+command='make foobar_defconfig && make && asciidoc README.FOOINC'
+files='README.FOOINC output/images/sdcard.img'
+archive='cqfd-%Gh.tar.xz'
+```
 
 ### Comments
 
@@ -127,17 +232,19 @@ build and release methods (for example a debug build). This is made possible in
 In the `.cqfdrc` file, one or more flavors may be listed in the `[build]`
 section, referencing other sections named following flavor's name.
 
-    [centos7]
-    command='make CENTOS=1'
-    distro='centos7'
+```ini
+[fedora]
+command='make FEDORA=1'
+distro='fedora'
 
-    [debug]
-    command='make DEBUG=1'
-    files='myprogram Symbols.map'
+[debug]
+command='make DEBUG=1'
+files='myprogram Symbols.map'
 
-    [build]
-    command='make'
-    files='myprogram'
+[build]
+command='make'
+files='myprogram'
+```
 
 A flavor will typically redefine some keys of the build section: `command`,
 `files`, `archive`, `distro`.
@@ -147,16 +254,30 @@ A flavor will typically redefine some keys of the build section: `command`,
 For a more thorough description of the `.cqfdrc` configuration file, please
 refer to [cqfdrc(5)](cqfdrc.5.adoc).
 
-## Using cqfd in an advanced way
-
 ### Running a shell in the build container
 
 You can pop an interactive shell in your build container.
 
 Example:
 
-    fred@host:~/project$ cqfd bash
-    fred@container:~/project$
+```sh
+fred@host:~/project$ cqfd bash
+fred@container:~/project$
+```
+
+### Shell history
+
+`cqfd` bind mounts the current shell history file to the container so the
+commands history is shared between the user and the cqfd container. This
+feature is supported for `bash`, `zsh`, `tcsh`, and `ksh`.
+
+This feature is available only when running a shell, i.e. using `cqfd --shell`,
+`cqfd <name_of_the_shell>` such as `cqfd bash`, `cqfd --run <name_of_the_shell>`
+and `cqfd --exec <name_of_the_shell>`.
+
+The shell history file can be set using `CQFD_HISTFILE`, and the feature can be
+disabled by setting `CQFD_DISABLE_SHELL_HISTORY` to `true` (see
+[cqfd(1)](cqfd.1.adoc)).
 
 ### Use cqfd as an interpreter for shell script
 
@@ -164,15 +285,17 @@ You can write a shell script and run it in your build container.
 
 Example:
 
-    fred@host:~/project$ cat get-container-pretty-name.sh
-    #!/usr/bin/env -S cqfd sh
-    if ! test -e /.dockerenv; then
-        exit 1
-    fi
-    source /etc/os-release
-    echo "$PRETTY_NAME"
-    fred@host:~/projet$ ./get-container-pretty-name.sh
-    Debian GNU/Linux 13 (trixie)
+```sh
+fred@host:~/project$ cat get-container-pretty-name.sh
+#!/usr/bin/env -S cqfd sh
+if ! test -e /.dockerenv; then
+    exit 1
+fi
+source /etc/os-release
+echo "$PRETTY_NAME"
+fred@host:~/projet$ ./get-container-pretty-name.sh
+Debian GNU/Linux 13 (trixie)
+```
 
 ### Use cqfd as a standard shell for binaries
 
@@ -181,12 +304,14 @@ variable run shell commands in your build container.
 
 Example:
 
-    fred@host:~/project$ make SHELL="cqfd sh"
-    Available make targets:
-       help:      This help message
-       install:   Install script, doc and resources
-       uninstall: Remove script, doc and resources
-       tests:     Run functional tests
+```sh
+fred@host:~/project$ make SHELL="cqfd sh"
+Available make targets:
+    help:      This help message
+    install:   Install script, doc and resources
+    uninstall: Remove script, doc and resources
+    tests:     Run functional tests
+```
 
 ### Manual page
 
@@ -204,13 +329,17 @@ Example:
 
 Specify the desired platform in the `Dockerfile`, as shown below:
 
-    FROM --platform=linux/arm64 ubuntu:24.04
-    (...)
+```Dockerfile
+FROM --platform=linux/arm64 ubuntu:24.04
+(...)
+```
 
 Test the build container:
 
-    $ cqfd uname -m
-    aarch64
+```sh
+$ cqfd uname -m
+aarch64
+```
 
 Additionally, `cqfd` supports the option `--platform TARGET`, the environment
 variable `CQFD_PLATFORM`, and the build property `platform=` to set the desired
@@ -218,27 +347,29 @@ platform dynamically.
 
 Examples:
 
-    $ cqfd --platform linux/arm64 uname -m
-    aarch64
+```sh
+$ cqfd --platform linux/arm64 uname -m
+aarch64
 
-    $ export CQFD_PLATFORM="linux/arm64"
-    $ cqfd uname -m
-    aarch64
+$ export CQFD_PLATFORM="linux/arm64"
+$ cqfd uname -m
+aarch64
 
-    $ cat .cqfdrc
-    [project]
-    org='fooinc'
-    name='multi-platform'
+$ cat .cqfdrc
+[project]
+org='fooinc'
+name='multi-platform'
 
-    [arm64]
-    platform='linux/arm64'
+[arm64]
+platform='linux/arm64'
 
-    [build]
-    command='uname -a'
-    $ cqfd uname -m
-    x86_64
-    $ cqfd --build arm64 uname -m
-    aarch64
+[build]
+command='uname -a'
+$ cqfd uname -m
+x86_64
+$ cqfd --build arm64 uname -m
+aarch64
+```
 
 ## Key files and directories
 
@@ -268,44 +399,54 @@ directory. The following options allow you to control cqfd configuration files:
 
 To change the current working directory, use the `--directory` option:
 
-    $ cqfd --directory external/directory
+```sh
+$ cqfd --directory external/directory
+```
 
 To specify an alternate cqfd directory, use the `--cqfd-directory` option:
 
-    $ cqfd --cqfd-directory cqfd_alt
+```sh
+$ cqfd --cqfd-directory cqfd_alt
+```
 
 To specify an alternate cqfdrc file, use the `--cqfdrc-file` option:
 
-    $ cqfd --cqfdrc-file cqfdrc_alt
+```sh
+$ cqfd --cqfdrc-file cqfdrc_alt
+```
 
 To specify an alternate working directory, use the `--working-directory`
 option:
 
-    $ cqfd --working-directory ..
+```sh
+$ cqfd --working-directory ..
+```
 
 These options can be combined, for example to use out-of-tree cqfd files if
 these files cannot be committed to the project.
 
 Example:
 
-    ~/src$ tree out-of-tree-cqfd-files/
-    out-of-tree-cqfd-files/
-    ├── cqfd
-    │   └── docker
-    │       └── Dockerfile
-    └── cqfdrc
+```sh
+~/src$ tree out-of-tree-cqfd-files/
+out-of-tree-cqfd-files/
+├── cqfd
+│   └── docker
+│       └── Dockerfile
+└── cqfdrc
 
-    3 directories, 2 files
-    ~/src$ cd buildroot
-    ~/src/buildroot$ cqfd --working-directory . --cqfd-directory ../out-of-tree-cqfd-files/cqfd --cqfdrc-file ../out-of-tree-cqfd-files/cqfdrc
-    # or sourcing environment from a file
-    ~/src/buildroot$ cat environment
-    export CQFD_WORKDIR=.
-    export CQFD_DIR=../out-of-tree-cqfd-files/cqfd
-    export CQFDRC_FILE=../out-of-tree-cqfd-files/cqfdrc
-    ~/src/buildroot$ source environment
-    ~/src/buildroot$ cqfd
-    (...)
+3 directories, 2 files
+~/src$ cd buildroot
+~/src/buildroot$ cqfd --working-directory . --cqfd-directory ../out-of-tree-cqfd-files/cqfd --cqfdrc-file ../out-of-tree-cqfd-files/cqfdrc
+# or sourcing environment from a file
+~/src/buildroot$ cat environment
+export CQFD_WORKDIR=.
+export CQFD_DIR=../out-of-tree-cqfd-files/cqfd
+export CQFDRC_FILE=../out-of-tree-cqfd-files/cqfdrc
+~/src/buildroot$ source environment
+~/src/buildroot$ cqfd
+(...)
+```
 
 ## Build Container Environment
 
@@ -329,7 +470,7 @@ processes that require a controlling terminal (such as an interactive shell),
 as `su` will prevent the command executed from having one on very old version
 os `su` ([see][0b69ccba9000b9298c8f0b39416884c697b50a38]).
 
-```
+```sh
 $ cqfd bash
 bash: cannot set terminal process group (-1): Inappropriate ioctl for device
 bash: no job control in this shell
@@ -348,93 +489,67 @@ automatically purged.
 To remove the image associated with the current version of the `Dockerfile`,
 use:
 
-    $ cqfd --deinit
+```sh
+$ cqfd --deinit
+```
 
 If a flavor redefines the distro key of the build section, use:
 
-    $ cqfd --build centos7 --deinit
+```sh
+$ cqfd --build centos7 --deinit
+```
 
 To list all created images, use:
 
-    $ cqfd --ls
+```sh
+$ cqfd --ls
+```
 
 To collect all unused images across all user projects on the system, use:
 
-    $ cqfd --gc
+```sh
+$ cqfd --gc
+```
 
 ## Requirements
 
 To use `cqfd`, ensure the following requirements are satisfied on your
 workstation:
 
--  Bash
--  Docker
+- Bash
+- Docker
 
-## Installing/removing cqfd6
+## Building cqfd packages
 
-### From packages
+After having cloned the source of cqfd, you can build the packages for the
+following Linux distributions:
 
-#### Arch Linux or Manjaro
+### Ubuntu or Debian
 
-First download the package:
+If you use an Debian derivative distribution based on the dpkg package manager,
+you can build the latest released version of the `cqfd6` package via:
 
-    $ curl https://github.com/gportay/cqfd6/releases/download/v6/cqfd6-6-1-any.pkg.tar.zst
+```sh
+dpkg-buildpackage -us -uc
+```
 
-Then, install it using the package manager:
+_Note_: The artefacts are available in the parent directory.
 
-    $ sudo pacman -U ./cqfd6-6-1-any.pkg.tar.zst
+### Fedora or RedHat Linux
 
-_Note_: Uninstall it using the package manager:
+If you use a RPM based distribution, you can build the latest released version
+of the `cqfd6` package via:
 
-    $ sudo pacman -R cqfd6
+```sh
+rpmdev-setuptree
+cp cqfd6.spec ~/rpmbuild/SPECS/
+cd ~/rpmbuild/SPECS
+rpmbuild --undefine=_disable_source_fetch --define='_dockerlibdir %{_exec_prefix}/lib/docker' -ba cqfd6.spec "$@"
+cp ~/rpmbuild/SRPMS/*.src.rpm ~/rpmbuild/RPMS/*/*.rpm "$OLDPWD"
+```
 
-#### Debian or Ubuntu
-
-First download the package:
-
-    $ curl https://github.com/gportay/cqfd6/releases/download/v6/cqfd6_6_all.deb
-
-Then, install it using the package manager:
-
-    $ sudo dpkg -i ./cqfd6_6_all.deb
-
-_Note_: Uninstall it using the package manager:
-
-    $ sudo dpkg -r cqfd6
-
-#### RedHat Linux or Fedora
-
-First download the package:
-
-    $ curl https://github.com/gportay/cqfd6/releases/download/v6/cqfd6-6-1.noarch.rpm
-
-Then, install it using the package manager:
-
-    $ sudo dnf install ./cqfd6-6-1.noarch.rpm
-
-_Note_: Uninstall it using the package manager:
-
-    $ sudo dnf remove cqfd6
-
-### From source
-
-First clone this repository:
-
-    $ git clone https://github.com/gportay/cqfd6.git
-
-Then, install the script and its resources:
-
-    $ make install
-
-Finally, uninstall the script and its resources:
-
-    $ make uninstall
-
-Makefile honors both **PREFIX** (__/usr/local__) and **DESTDIR** (__[empty]__)
-variables:
-
-    $ make install PREFIX=/opt
-    $ make install PREFIX=/usr DESTDIR=package
+_Note_: The artefacts are available in `~/rpmbuild/RPMS` and `~/rpmbuild/SRPMS`
+directories.
 
 ### Arch Linux or Manjaro
 
@@ -453,33 +568,6 @@ makepkg -f PKGBUILD-git
 
 _Note_: The artefacts are available in the current directory.
 
-### Debian or Ubuntu
-
-If you use an Debian derivative distribution based on the dpkg package manager,
-you can build the latest released version of the `cqfd6` package via:
-
-```sh
-dpkg-buildpackage -us -uc
-```
-
-_Note_: The artefacts are available in the parent directory.
-
-### RedHat Linux or Fedora
-
-If you use a RPM based distribution, you can build the latest released version
-of the `cqfd6` package via:
-
-```sh
-rpmdev-setuptree
-cp cqfd6.spec ~/rpmbuild/SPECS/
-cd ~/rpmbuild/SPECS
-rpmbuild --undefine=_disable_source_fetch --define='_dockerlibdir %{_exec_prefix}/lib/docker' -ba cqfd6.spec "$@"
-cp ~/rpmbuild/SRPMS/*.src.rpm ~/rpmbuild/RPMS/*/*.rpm "$OLDPWD"
-```
-
-_Note_: The artefacts are available in `~/rpmbuild/RPMS` and `~/rpmbuild/SRPMS`
-directories.
-
 ## Using podman
 
 Podman may be used instead of Docker, but with limited functionalities, for
@@ -490,7 +578,13 @@ To use `podman` instead of `docker`, you can set in your environment, like your
 
 ```bash
 export CQFD_DOCKER="podman"
-export PODMAN_USERNS="keep-id"
+```
+
+You can also prefix your cqfd commands:
+
+```bash
+CQFD_DOCKER="podman" cqfd init
+CQFD_DOCKER="podman" cqfd shell
 ```
 
 ## Testing cqfd (for developers)
@@ -498,7 +592,16 @@ export PODMAN_USERNS="keep-id"
 The codebase contains tests which can be invoked using the following command,
 if the above requirements are met on the system:
 
-    $ make tests
+```sh
+make tests
+```
+
+The test suite depends on a git submodule, so if they do not run it may be
+because submodule have not been synced. To sync them, use:
+
+```sh
+git submodule update --init --recursive
+```
 
 ## Patches
 

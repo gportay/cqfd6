@@ -123,6 +123,11 @@ file's contents at the location of the include statement.
 *docker_rmi_args (optional)*::
 	A space-separated list of extra arguments used to invoke _docker rmi_.
 
+*bind_docker_sock (optional)*::
+	Set to _true_ to enable forwarding the docker socket to the build
+	container. This is equivalent to the environment variable
+	_CQFD_BIND_DOCKER_SOCK_.
+
 ==== CQFD RELEASE
 
 *files*::

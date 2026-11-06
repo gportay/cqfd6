@@ -158,6 +158,10 @@ Command options for --run:
 	Set to _true_ to disable forwarding the user's _~/.gitconfig_
 	configuration to the build container.
 
+*CQFD_NO_SYSTEM_GIT_CONFIG*::
+	Set to _true_ to disable forwarding the system's _/etc/gitconfig_
+	configuration to the build container.
+
 *CQFD_NO_SSH_AUTH_SOCK*::
 	Set to _true_ to disable forwarding the SSH authentication socket to
 	the build container.
@@ -165,6 +169,15 @@ Command options for --run:
 *CQFD_BIND_DOCKER_SOCK*::
 	Set to _true_ to enable forwarding the docker socket to the build
 	container.
+
+*CQFD_HISTFILE*::
+	The shell history file to bind mount in the build container if running
+	a shell (_bash_, _zsh_, _ksh_ or _tcsh_). It defaults to the shell
+	history file of the user (i.e. _~/.bash_history_).
+
+*CQFD_DISABLE_SHELL_HISTORY*::
+	Set to _true_ to disable bind mounting the shell history file in the
+	build container and setting the _HISTFILE_ variable.
 
 *CQFD_DOCKER_GID*::
 	The gid of the docker group in host to map to the cqfd group in the

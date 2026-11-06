@@ -39,6 +39,10 @@ PROGNAME=$(basename "$0")
 VERSION=6
 COMPAT="${CQFD_COMPAT:-$(compat "$VERSION")}"
 cqfd_user="${USER:-builder}"
+cqfd_user_uid="$(id -u)"
+cqfd_user_uid="${cqfd_user_uid:-1000}"
+cqfd_user_gid="$(id -g)"
+cqfd_user_gid="${cqfd_user_gid:-1000}"
 cqfd_home="${HOME:-/home/$cqfd_user}"
 cqfd_shell="${CQFD_SHELL:-/bin/sh}"
 # shellcheck disable=SC2162
@@ -695,6 +699,9 @@ docker_run() {
 	# Give access to all host devices
 	args+=(--privileged)
 
+	# Forward signals and reap processes
+	args+=(--init)
+
 	# Cleanup container after exit
 	args+=(--rm)
 
@@ -745,6 +752,13 @@ docker_run() {
 		done
 	fi
 
+	# Keep the user namespace with podman
+	if [ "${cqfd_docker[-1]}" = "podman" ]; then
+		args+=(--userns="keep-id")
+		args+=(--user=root)
+		args+=(--security-opt label=disable)
+	fi
+
 	# Set HOME variable for the $cqfd_user, except if it was explicitly set
 	# via CQFD_EXTRA_RUN_ARGS or docker_run_args
 	if ! echo "$CQFD_EXTRA_RUN_ARGS $build_docker_run_args" |
@@ -754,8 +768,8 @@ docker_run() {
 
 	# Bind mount SSH all user-specific configuration and authentication
 	# information
-	if [ "$CQFD_NO_USER_SSH_CONFIG" != true ] && [ -d "$cqfd_home/.ssh" ]; then
-		args+=(--volume "$cqfd_home/.ssh:$cqfd_home/.ssh")
+	if [ "$CQFD_NO_USER_SSH_CONFIG" != true ] && [ -d "$HOME/.ssh" ]; then
+		args+=(--volume "$HOME/.ssh:$cqfd_home/.ssh")
 	fi
 
 	# Bind mount SSH systemwide configuration and authentication
@@ -771,13 +785,19 @@ docker_run() {
 		args+=(--env "SSH_AUTH_SOCK=$SSH_AUTH_SOCK")
 	fi
 
-	# Bind mount the git global configuration file
-	if [ "$CQFD_NO_USER_GIT_CONFIG" != true ] && [ -f "$cqfd_home/.gitconfig" ]; then
-		args+=(--volume "$cqfd_home/.gitconfig:$cqfd_home/.gitconfig")
+	# Bind mount the git global user configuration file
+	if [ "$CQFD_NO_USER_GIT_CONFIG" != true ] && [ -f "$HOME/.gitconfig" ]; then
+		args+=(--volume "$HOME/.gitconfig:$cqfd_home/.gitconfig")
+	fi
+
+	# Bind mount the git global system configuration file
+	if [ "$CQFD_NO_SYSTEM_GIT_CONFIG" != true ] && [ -f "/etc/gitconfig" ]; then
+		args+=(--volume "/etc/gitconfig:/etc/gitconfig")
 	fi
 
 	# Bind mount the docker socket in daemon mode
-	if [ "$CQFD_BIND_DOCKER_SOCK" = true ] && [ -S /var/run/docker.sock ]; then
+	if { [ "$CQFD_BIND_DOCKER_SOCK" = true ] || [ "$build_bind_docker_sock" = true ]; } && \
+	   [ -S /var/run/docker.sock ]; then
 		args+=(--volume /var/run/docker.sock:/var/run/docker.sock)
 	fi
 
@@ -789,13 +809,34 @@ docker_run() {
 	fi
 	args+=(--volume "$workdir:$workdir" --workdir "$workdir")
 
+	if [ "$CQFD_DISABLE_SHELL_HISTORY" != "true" ] && [ -n "$shell_histfile" ]; then
+		# Create the history file if it doesn't exist yet
+		if [ ! -f "$shell_histfile" ]; then
+			touch "$shell_histfile"
+		fi
+
+		args+=(--mount "type=bind,src=$shell_histfile,dst=$shell_histfile")
+		args+=(--env "HISTFILE=$shell_histfile")
+	fi
+
 	# Create and bind mount the entrypoint
+	local tmp_entrypoint
 	tmp_entrypoint=$(mktemp /tmp/cqfd-entrypoint.XXXXXX)
-	trap 'rm -f "$tmp_entrypoint"' EXIT
+	list_of_files_to_delete=("${tmp_entrypoint}")
+	trap 'rm -f ${list_of_files_to_delete[@]}' EXIT
 	make_entrypoint "$tmp_entrypoint"
 	chmod 0755 "$tmp_entrypoint"
 	args+=(--volume "$tmp_entrypoint:/bin/cqfd-entrypoint")
 	args+=(--entrypoint "/bin/cqfd-entrypoint")
+
+	if [ "$shell_histfile_shell" = "zsh" ]; then
+		# Create and bind mount the zshenv
+		local tmp_zshenv
+		tmp_zshenv=$(mktemp /tmp/cqfd-zshenv.XXXXXX)
+		list_of_files_to_delete+=("${tmp_zshenv}")
+		make_zshenv "$tmp_zshenv"
+		args+=(--mount "type=bind,src=$tmp_zshenv,dst=$cqfd_home/.zshenv")
+	fi
 
 	# Set positional arguments
 	args+=("$cqfd_image" "$1")
@@ -850,16 +891,17 @@ make_archive() {
 	# also replace variable names - beware with eval
 	eval "release_archive=$release_archive"
 
-	# setting tar_transform=yes will move files to the root of a tar archive
-	if [ "$release_transform" = "yes" ]; then
+	# setting tar_transform=yes or tar_transform=true will move files to the
+	# root of a tar archive
+	if [ "$release_tar_transform" = "yes" ] || [ "$release_tar_transform" = "true" ]; then
 		tar_opts+=('--transform' 's/.*\///g')
 	fi
 
 	# setting tar_options=x will pass the options to tar
-	if [ "$release_tar_opts" ]; then
+	if [ "$release_tar_options" ]; then
 		local array
 		# shellcheck disable=SC2162
-		read -a array <<<"$release_tar_opts"
+		read -a array <<<"$release_tar_options"
 		tar_opts+=("${array[@]}")
 	fi
 
@@ -943,12 +985,20 @@ test -n "\$failed" &&
 # Check is su supports --session-command if not using sudo
 test "\$has_sudo" = 1 || { test_su_session_command && has_su_session_command=1; }
 
+# Delete $cqfd_user_uid user if it exists
+conflicting_users="\$(awk -F: '\$3 == $cqfd_user_uid {printf ("%s ", \$1)}' /etc/passwd)"
+if [ -n "\$conflicting_users" ]; then
+	for u in \$conflicting_users; do
+		userdel "\$u"
+	done
+fi
+
 # Add the host's user and group to the container, and adjust ownership
-debug "Creating user $cqfd_user with UID=$UID, GID=${GROUPS[0]}, HOME=$cqfd_home, and SHELL=\$shell"
+debug "Creating user $cqfd_user with UID=$cqfd_user_uid, GID=$cqfd_user_gid, HOME=$cqfd_home, and SHELL=\$shell"
 mkdir -p "$cqfd_home"
-chown "$UID:${GROUPS[0]}" "$cqfd_home"
-groupadd -og "${GROUPS[0]}" -f "$cqfd_user"
-useradd -s "\$shell" -oN -u "$UID" -g "${GROUPS[0]}" -Md "$cqfd_home" "$cqfd_user"
+chown "$cqfd_user_uid:$cqfd_user_gid" "$cqfd_home"
+groupadd -og "$cqfd_user_gid" -f "$cqfd_user"
+useradd -s "\$shell" -oN -u "$cqfd_user_uid" -g "$cqfd_user_gid" -Md "$cqfd_home" "$cqfd_user"
 
 # Add specified groups to cqfd_user
 for g in ${CQFD_GROUPS[*]}; do
@@ -969,7 +1019,7 @@ if [ "${cqfd_docker_gid:-0}" -gt 0 ] && [ -S /var/run/docker.sock ]; then
 	debug "Creating docker group cqfd with GID=$cqfd_docker_gid"
 	groupadd -og "$cqfd_docker_gid" -f cqfd
 	usermod -a -G cqfd $cqfd_user
-fi	
+fi
 
 # Drop the root privileges and run provided command, using sudo if it exists
 if [ -n "\$has_sudo" ]; then
@@ -1207,13 +1257,15 @@ load_config() {
 	# shellcheck disable=SC2154
 	build_path="$path"
 	# shellcheck disable=SC2154
+	build_bind_docker_sock="$bind_docker_sock"
+	# shellcheck disable=SC2154
 	release_files="$files"
 	# shellcheck disable=SC2154
 	release_archive="$archive"
 	# shellcheck disable=SC2154
-	release_transform="$tar_transform"
+	release_tar_transform="$tar_transform"
 	# shellcheck disable=SC2154
-	release_tar_opts="$tar_options"
+	release_tar_options="$tar_options"
 
 	# set shell if shell= is set
 	if [ "$build_shell" ]; then
@@ -1306,7 +1358,7 @@ load_config() {
 		cqfd_image="$(sanitize "cqfd-$Un-$cqfd_image:$Dh")"
 	fi
 
-	# set the docker gid if the group exists
+	# Get the docker gid if the group exists
 	if [ "$cqfd_docker_gid" -eq 0 ]; then
 		local docker_group
 		if IFS=: read -r -a docker_group < <(getent group docker); then
@@ -1325,6 +1377,46 @@ load_config() {
 	if [ "$CQFD_RUN_WITH_SUDO" = true ] && [ "$cqfd_docker_gid" -eq 0 ]; then
 		cqfd_docker=(sudo "${cqfd_docker[@]}")
 	fi
+}
+
+## set_shell_histfile() - set the histfile if the argument is a shell
+# $1: the program to run (i.e. the first argument of the command string)
+set_shell_histfile() {
+	local program_basename
+	program_basename=$(basename "$1")
+
+	case "$program_basename" in
+	bash|zsh)
+		shell_histfile="${CQFD_HISTFILE:-$HOME/.${program_basename}_history}"
+		;;
+	ksh)
+		shell_histfile="${CQFD_HISTFILE:-$HOME/.sh_history}"
+		;;
+	tcsh)
+		# Note: tcsh history does not persist without doing `history -S` on exit
+		shell_histfile="${CQFD_HISTFILE:-$HOME/.history}"
+		;;
+	*)
+		shell_histfile=""
+		;;
+	esac
+
+	# Remember the shell to configure its history (i.e. zsh needs a zshenv)
+	shell_histfile_shell=
+	if [ -n "$shell_histfile" ]; then
+		shell_histfile_shell="$program_basename"
+	fi
+}
+
+## make_zshenv() - generate zshenv to include settings related to history
+# $1: the path to the zshenv
+make_zshenv() {
+	cat >"$1" <<EOF
+SAVEHIST=9000
+HISTSIZE=9999                   # set HISTSIZE > SAVEHIST
+
+setopt nohistsavebycopy
+EOF
 }
 
 # Parse arguments
@@ -1559,6 +1651,9 @@ while [ $# -gt 0 ]; do
 			warn_deprecated_command "$cqfd_command" cqfd "${*@Q}"
 		fi
 
+		# Set HISTFILE if running a shell (i.e. cqfd --exec bash)
+		set_shell_histfile "$1"
+
 		# Run alternate command
 		build_command="${*@Q}"
 		break
@@ -1654,6 +1749,9 @@ while [ $# -gt 0 ]; do
 				cqfd "--$cqfd_command" --run "${*@Q}"
 		fi
 
+		# Set HISTFILE if running a shell (i.e. cqfd --run bash)
+		set_shell_histfile "$1"
+
 		# Run alternate command
 		build_command="$*"
 		break
@@ -1676,6 +1774,9 @@ while [ $# -gt 0 ]; do
 			warn_deprecated_command "$cqfd_command" cqfd \
 				"$cqfd_shell" "${*@Q}"
 		fi
+
+		# Set HISTFILE if running a shell (i.e. cqfd --shell)
+		set_shell_histfile "$cqfd_shell"
 
 		# Run alternate command
 		build_command="$cqfd_shell"
@@ -1706,6 +1807,9 @@ while [ $# -gt 0 ]; do
 
 		# Setup build
 		load_config "$flavor"
+
+		# Set HISTFILE if running a shell (i.e. cqfd bash)
+		set_shell_histfile "$1"
 
 		# Run alternate command
 		build_command="${*@Q}"
