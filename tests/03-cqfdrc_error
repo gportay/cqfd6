@@ -150,6 +150,30 @@ else
 fi
 
 cp .cqfdrc.orig .cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo works!' # ; touch comment," -i .cqfdrc
+
+jtest_prepare "run cqfd with shell-style comment after quoted command in cqfdrc file should ignore comment"
+if cqfd | grep "^works!$" && test ! -e comment; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+# cleanup
+rm -f comment
+
+cp .cqfdrc.orig .cqfdrc
+sed -e "/\[build\]/,/^$/s,^command=.*$,command='echo works!' ; touch comment," -i .cqfdrc
+
+jtest_prepare "run cqfd with ini-style comment after quoted command in cqfdrc file should ignore comment"
+if cqfd | grep "^works!$" && test ! -e comment; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+# cleanup
+rm -f comment
+
+cp .cqfdrc.orig .cqfdrc
 sed -e "/\[build\]/,/^$/s,^command=.*$,command=\"echo \\\\\\
 	foo=bar \\\\\\
 	baz=quux\"," -i .cqfdrc
