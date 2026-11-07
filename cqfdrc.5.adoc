@@ -160,7 +160,7 @@ For tar archives:
 
 == PATCHES
 
-Submit patches at *https://github.com/gportay/cqfd6/issues*
+Submit patches at *https://github.com/gportay/cqfd6/pulls*
 
 == BUGS
 
