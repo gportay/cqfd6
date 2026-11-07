@@ -323,6 +323,11 @@ $line"
 			continue
 		fi
 
+		# Strip shell and .ini comments after quoted property value
+		if [[ "$line" =~ ^([^=]+=[\ \	]*(\'[^\']*\'|\"([^\"\\]|\\.)*\"))([\ \	]*\;|[\ \	]+\#) ]]; then
+			line="${BASH_REMATCH[1]}"
+		fi
+
 		# Add new section
 		if [[ "$line" =~ ^\[(.*)\]$ ]]; then
 			section="${BASH_REMATCH[1]}"
