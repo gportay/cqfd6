@@ -73,7 +73,7 @@ Command options for --run:
 
 == OPTIONS
 
-*--reinit*:
+*--reinit*::
 	Reinitialize build container.
 
 *--release*::
