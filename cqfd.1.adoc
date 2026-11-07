@@ -45,7 +45,7 @@ Linux distribution.
 *--deinit*::
 	Deinitialize project build container.
 
-*--ls::
+*--ls*::
 	List build containers.
 
 *--gc*::
