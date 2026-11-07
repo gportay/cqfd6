@@ -1,6 +1,6 @@
 ![cqfd logo](./doc/cqfd6_logo.png?raw=true)
 
-# What are cqfd and cqfd6 ?
+# What are cqfd and cqfd6?
 
 cqfd provides a quick and convenient way to run commands in the current
 directory, but within a Docker container defined in a per-project config file.
@@ -9,7 +9,7 @@ This becomes useful when building an application designed for another Linux
 system, e.g. building an old embedded firmware that only works in an older
 Linux distribution.
 
-cqfd uses containers and introduced the concept of build containers to define a
+cqfd uses containers and introduces the concept of build containers to define a
 container specifically configured with all the software required to build the
 project. Simply install the necessary packages in the container file, and cqfd
 makes you feel at home by adding your user and mounting your project workspace
@@ -20,10 +20,10 @@ project for different architectures thanks to multi-platform images and
 emulation.
 
 cqfd6 is a fork of cqfd fixing several broken things in the upstream project
-(hazardous .ini parser, no cleaning commands, inconsistant pulling behaviour,
+(hazardous .ini parser, no cleaning commands, inconsistent pulling behaviour,
 image naming, ambiguous `run` command and `custom_img_name` property...). It
-deprecates the former CLI to modernize it to something much simpler and much
-more common such as the CLI of `sudo`.
+deprecates the former CLI in favor of a much simpler and more common one,
+similar to the CLI of `sudo`.
 
 # Using cqfd
 
@@ -38,7 +38,7 @@ Just follow these steps:
 * Create a [Dockerfile](https://docs.docker.com/reference/dockerfile/) and save
   it as `.cqfd/docker/Dockerfile`
 
-The project uses itself to build the documentation or release packages. The
+The project uses itself to build the documentation and release packages. The
 in-tree files [.cqfdrc](.cqfdrc), the [.cqfd](.cqfd) directory, and the three
 cqfd shell scripts — [make-deb.sh](make-deb.sh), [make-pkg.sh](make-pkg.sh),
 and [make-rpm.sh](make-rpm.sh) — provide good examples of how to set up a
@@ -83,12 +83,12 @@ archive.
 
     $ cqfd --release
 
-The resulting release file is then called according to the archive template,
+The resulting release file is then named according to the archive template,
 which defaults to `%Po-%Pn.tar.xz`.
 
 ### Flavors
 
-Flavors are used to create alternate build scenarios. For example, to use
+Flavors are used to create alternate build scenarios, for example, to use
 another build container or another build command.
 
 ## The .cqfdrc file
@@ -115,17 +115,17 @@ character `#` or `;` are ignored to the end of the line.
 
 ### Include files
 
-The `include` directive causes _cqfd_ to parse a give file, and to include that
+The `include` directive causes _cqfd_ to parse a given file, and to include that
 file's contents at the location of the include statement.
 
 ### Using build flavors
 
 In some cases, it may be desirable to build the project using variations of the
-build and release methods (for example a debug build). This is made possible in
+build and release methods (for example, a debug build). This is made possible in
 `cqfd` with the build flavors feature.
 
 In the `.cqfdrc` file, one or more flavors may be listed in the `[build]`
-section, referencing other sections named following flavor's name.
+section, each referencing the section of the same name.
 
     [centos7]
     command='make CENTOS=1'
@@ -151,14 +151,14 @@ refer to [cqfdrc(5)](cqfdrc.5.adoc).
 
 ### Running a shell in the build container
 
-You can pop an interactive shell in your build container.
+You can open an interactive shell in your build container.
 
 Example:
 
     fred@host:~/project$ cqfd bash
     fred@container:~/project$
 
-### Use cqfd as an interpreter for shell script
+### Use cqfd as an interpreter for shell scripts
 
 You can write a shell script and run it in your build container.
 
@@ -171,7 +171,7 @@ Example:
     fi
     source /etc/os-release
     echo "$PRETTY_NAME"
-    fred@host:~/projet$ ./get-container-pretty-name.sh
+    fred@host:~/project$ ./get-container-pretty-name.sh
     Debian GNU/Linux 13 (trixie)
 
 ### Use cqfd as a standard shell for binaries
@@ -191,7 +191,7 @@ Example:
 ### Manual page
 
 For a more thorough description of the `cqfd` commands, options, and
-environment variables, please refers to [cqfd(1)](cqfd.1.adoc).
+environment variables, please refer to [cqfd(1)](cqfd.1.adoc).
 
 ## Multi-platform
 
@@ -242,7 +242,7 @@ Examples:
 
 ## Key files and directories
 
-cqfd project uses three key files and directories.
+A cqfd project uses three key files and directories.
 
 The `.cqfd` directory contains the `Dockerfile`s, organized in a specific
 hierarchy. Each build container file is located and accessed according to the
@@ -310,7 +310,7 @@ Example:
 ## Build Container Environment
 
 When `cqfd` runs, a build container is launched as the environment in which to
-run the `command`.  Within this environment, commands are run as the same user
+run the `command`. Within this environment, commands are run as the same user
 as the one invoking `cqfd` (with a fallback to the 'builder' user in case it
 cannot be determined). So that this user has access to local files, the current
 working directory is mapped to the same location inside the build container.
@@ -326,8 +326,8 @@ can, for example, pull authenticated git repositories.
 When `cqfd` runs a command as the unprivileged user that called it in the first
 place, `su(1)` is used to run the command. This brings a limitation for
 processes that require a controlling terminal (such as an interactive shell),
-as `su` will prevent the command executed from having one on very old version
-os `su` ([see][0b69ccba9000b9298c8f0b39416884c697b50a38]).
+as `su` will prevent the command executed from having one with very old versions
+of `su` ([see][0b69ccba9000b9298c8f0b39416884c697b50a38]).
 
 ```
 $ cqfd bash
@@ -402,7 +402,7 @@ _Note_: Uninstall it using the package manager:
 
     $ sudo dpkg -r cqfd6
 
-#### RedHat Linux or Fedora
+#### Red Hat Linux or Fedora
 
 First download the package:
 
@@ -430,15 +430,15 @@ Finally, uninstall the script and its resources:
 
     $ make uninstall
 
-Makefile honors both **PREFIX** (__/usr/local__) and **DESTDIR** (__[empty]__)
-variables:
+The Makefile honors both **PREFIX** (__/usr/local__) and **DESTDIR**
+(__[empty]__) variables:
 
     $ make install PREFIX=/opt
     $ make install PREFIX=/usr DESTDIR=package
 
 ### Arch Linux or Manjaro
 
-If you use an Arch Linux derivative distribution based on pacman package
+If you use an Arch Linux derivative distribution based on the pacman package
 manager, you can build the latest released version of the `cqfd6` package via:
 
 ```sh
@@ -455,7 +455,7 @@ _Note_: The artefacts are available in the current directory.
 
 ### Debian or Ubuntu
 
-If you use an Debian derivative distribution based on the dpkg package manager,
+If you use a Debian derivative distribution based on the dpkg package manager,
 you can build the latest released version of the `cqfd6` package via:
 
 ```sh
@@ -464,9 +464,9 @@ dpkg-buildpackage -us -uc
 
 _Note_: The artefacts are available in the parent directory.
 
-### RedHat Linux or Fedora
+### Red Hat Linux or Fedora
 
-If you use a RPM based distribution, you can build the latest released version
+If you use an RPM-based distribution, you can build the latest released version
 of the `cqfd6` package via:
 
 ```sh
@@ -482,11 +482,11 @@ directories.
 
 ## Using podman
 
-Podman may be used instead of Docker, but with limited functionalities, for
+Podman may be used instead of Docker, but with limited functionality, for
 example when dealing with extra groups.
 
-To use `podman` instead of `docker`, you can set in your environment, like your
-`.profile`, `.bashrc` or `.zshrc`:
+To use `podman` instead of `docker`, set the following in your environment, e.g.
+in your `.profile`, `.bashrc` or `.zshrc`:
 
 ```bash
 export CQFD_DOCKER="podman"
@@ -495,7 +495,7 @@ export PODMAN_USERNS="keep-id"
 
 ## Testing cqfd (for developers)
 
-The codebase contains tests which can be invoked using the following command,
+The codebase contains tests that can be invoked using the following command,
 if the above requirements are met on the system:
 
     $ make tests
