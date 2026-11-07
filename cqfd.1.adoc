@@ -1,7 +1,7 @@
 = cqfd6(1)
 :doctype: manpage
 :author: Gaël PORTAY
-:email: gael.portay@gmail.com.com
+:email: gael.portay@gmail.com
 :lang: en
 :man manual: C.Q.F.D. S.I.X. Manual
 :man source: C.Q.F.D. S.I.X. Project 6
@@ -49,7 +49,7 @@ Linux distribution.
 	List build containers.
 
 *--gc*::
-	Cleanup unused build containers.
+	Clean up unused build containers.
 
 *--exec PROGRAM [ARGUMENTS]*::
 	Run command inside build container.
@@ -118,35 +118,35 @@ Command options for --run:
 	File used as config file (default _.cqfdrc_).
 
 *CQFD_DOCKER*::
-	Program used to invoke _docker_ client.
+	Program used to invoke the _docker_ client.
 
 *CQFD_EXTRA_RUN_ARGS*::
-	A space-separated list of additional docker-run options to be append to
-	the starting build container. Format is the same as (and passed to)
+	A space-separated list of additional docker-run options to be appended
+	when starting the build container. Format is the same as (and passed to)
 	docker-run’s options. See 'docker run --help'.
 
 *CQFD_EXTRA_BUILD_ARGS*::
-	A space-separated list of additional docker-build options to be append
-	to the building image. Format is the same as (and passed to)
+	A space-separated list of additional docker-build options to be appended
+	when building the image. Format is the same as (and passed to)
 	docker-build’s options. See 'docker build --help'.
 
 *CQFD_EXTRA_PULL_ARGS*::
-	A space-separated list of additional docker-pull options to be append
-	to the pullind image. Format is the same as (and passed to)
+	A space-separated list of additional docker-pull options to be appended
+	when pulling the image. Format is the same as (and passed to)
 	docker-pull’s options. See 'docker pull --help'.
 
 *CQFD_EXTRA_RMI_ARGS*::
-	A space-separated list of additional docker-rmi options to be append
-	to the removed image. Format is the same as (and passed to)
+	A space-separated list of additional docker-rmi options to be appended
+	when removing the image. Format is the same as (and passed to)
 	docker-rmi’s options. See 'docker rmi --help'.
 
 *CQFD_PROMPT*::
-	Set to _yes_ or _no_ to set user response to prompt messages; prompt is
-	disabled.
+	Set to _yes_ or _no_ to answer prompt messages automatically; the prompt
+	is then disabled.
 
 *CQFD_NO_SSH_CONFIG*::
 	Set to _true_ to disable forwarding the global _/etc/ssh_
-	configurations to the build container. This may be required if the host's
+	configuration to the build container. This may be required if the host's
 	_ssh_ configuration is not compatible with the _ssh_ version within the
 	build container.
 
@@ -167,7 +167,7 @@ Command options for --run:
 	container.
 
 *CQFD_DOCKER_GID*::
-	The gid of the docker group in host to map to the cqfd group in the
+	The gid of the docker group on the host to map to the cqfd group in the
 	build container.
 
 *CQFD_SHELL*::
@@ -177,19 +177,19 @@ Command options for --run:
 	Set to _true_ to run _$CQFD_DOCKER_ with _sudo_.
 
 *CQFD_SUDO_NOPASSWD*::
-	Set to _true_ to run all commands without password authentication using
-	_sudo_ in the build container.
+	Set to _true_ to run all commands with _sudo_ without password
+	authentication in the build container.
 
 == FILES
 
 *.cqfdrc*::
-	Project information config file (See *cqfdrc(5)*).
+	Project information config file (see *cqfdrc(5)*).
 
 *.cqfd*::
 	Project data directory.
 
 *.cqfd/docker/Dockerfile*::
-	Default docker config file (See *Dockerfile(5)*).
+	Default docker config file (see *Dockerfile(5)*).
 
 == PATCHES
 
