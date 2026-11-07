@@ -60,7 +60,7 @@ Linux distribution.
 *--run [COMMAND_STRING]*::
 	Run command string inside build container.
 
-*--shell [SH_ARGUMENTS]*::
+*--shell [SHELL_ARGUMENTS]*::
 	Run shell command inside build container.
 
 By default, the _--run_ command is assumed, with the default command string
