@@ -328,8 +328,8 @@ $line"
 			line="${BASH_REMATCH[1]}"
 		fi
 
-		# Add new section
-		if [[ "$line" =~ ^\[(.*)\]$ ]]; then
+		# Add new section, ignoring shell and .ini comments
+		if [[ "$line" =~ ^\[([^]]*)\]([\ \	]*\;.*|[\ \	]+\#.*)?$ ]]; then
 			section="${BASH_REMATCH[1]}"
 			section="${section//./_}"
 			section="${section//-/_}"
