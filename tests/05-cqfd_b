@@ -31,6 +31,21 @@ else
 	jtest_result fail
 fi
 
+jtest_prepare "run cqfd --flavors should list build flavors"
+if cqfd --flavors | grep "^foo bar$"; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+jtest_prepare "run cqfd --flavors with flavors should list flavors set in flavors"
+sed -e "/\[project\]/aflavors='bar'" -i .cqfdrc
+if cqfd --flavors | grep "^bar$"; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
 # restore .cqfdrc
 mv .cqfdrc.orig .cqfdrc
 
