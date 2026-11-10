@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+#
+# validate the behavior of cqfd with docker
+
+set -o pipefail
+
+# backup .cqfdrc
+mv .cqfdrc .cqfdrc.orig
+
+jtest_prepare "run cqfd with docker should use the program set in docker"
+sed -e "/\[build\]/adocker='echo docker'" .cqfdrc.orig >.cqfdrc
+if cqfd | tee /dev/stderr | grep "^docker run .* make build$"; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
+# restore .cqfdrc
+mv .cqfdrc.orig .cqfdrc
