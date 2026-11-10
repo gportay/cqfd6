@@ -43,6 +43,15 @@ else
 	jtest_result fail
 fi
 
+jtest_prepare "run cqfd with platform should run native docker platform ($native_platform = $native_machine)"
+sed -e "/\[build\]/aplatform='$native_platform'" -i .cqfdrc
+if cqfd --reinit | grep "^$native_machine$"; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+cp cqfdrc-multi_platform .cqfdrc
+
 jtest_prepare "run cqfd with environment CQFD_PLATFORM should run cross docker platform ($cross_platform = $cross_machine)"
 if env CQFD_PLATFORM="$cross_platform" cqfd --reinit | grep "^$cross_machine$"; then
 	jtest_result pass
@@ -56,6 +65,15 @@ if cqfd --platform "$cross_platform" --reinit | grep "^$cross_machine$"; then
 else
 	jtest_result fail
 fi
+
+jtest_prepare "run cqfd with platform should run cross docker platform ($cross_platform = $cross_machine)"
+sed -e "/\[build\]/aplatform='$cross_platform'" -i .cqfdrc
+if cqfd --reinit | grep "^$cross_machine$"; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+cp cqfdrc-multi_platform .cqfdrc
 
 jtest_prepare "run cqfd docker platform helpers should run associated docker platform (linux/amd64, linux/aarch64)"
 if linux-amd64-cqfd | grep "^x86_64$" && \
