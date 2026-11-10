@@ -234,5 +234,13 @@ fi
 # cleanup
 rm bar.inc
 
+jtest_prepare "run cqfd with include nonexistent file in cqfdrc file should fail"
+if cqfd 2>&1 | grep "^cqfd: fatal: .cqfdrc: Invalid ini-file!$"; \
+   test "${PIPESTATUS[0]}" -eq 1 -a "${PIPESTATUS[1]}" -eq 0; then
+	jtest_result pass
+else
+	jtest_result fail
+fi
+
 # restore .cqfdrc
 mv .cqfdrc.orig .cqfdrc
