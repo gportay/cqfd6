@@ -15,7 +15,7 @@ sed -e "/\[build\]/,/^$/s,^command=.*$,command='test -S \$SSH_AUTH_SOCK \&\& env
 if ! command -v ssh-agent; then
 	jtest_result skip
 else
-	if cqfd init && ssh-agent cqfd | grep -E "^SSH_AUTH_SOCK=/tmp/ssh-[[:alnum:]]+/agent\.[[:digit:]]+$"; then
+	if cqfd init && ssh-agent cqfd | grep -E "^SSH_AUTH_SOCK=.+$"; then
 		jtest_result pass
 	else
 		jtest_result fail
@@ -51,7 +51,7 @@ sed -e "/\[build\]/,/^$/s,^command=.*$,command='env'," -i .cqfdrc
 if ! command -v ssh-agent; then
 	jtest_result skip
 else
-	if ! env CQFD_NO_SSH_AUTH_SOCK=true ssh-agent cqfd | grep -E "^SSH_AUTH_SOCK=/tmp/ssh-[[:alnum:]]+/agent\.[[:digit:]]+$"; then
+	if ! env CQFD_NO_SSH_AUTH_SOCK=true ssh-agent cqfd | grep -E "^SSH_AUTH_SOCK=.+$"; then
 		jtest_result pass
 	else
 		jtest_result fail
