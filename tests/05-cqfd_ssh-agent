@@ -46,7 +46,7 @@ else
 	fi
 fi
 
-jtest_prepare "run cqfd with CQFD_NO_SSH_AUTH_SOCK=true and running host ssh-agent should forward socket to container"
+jtest_prepare "run cqfd with CQFD_NO_SSH_AUTH_SOCK=true and running host ssh-agent should not forward socket to container"
 sed -e "/\[build\]/,/^$/s,^command=.*$,command='env'," -i .cqfdrc
 if ! command -v ssh-agent; then
 	jtest_result skip
