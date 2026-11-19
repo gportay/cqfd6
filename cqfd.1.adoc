@@ -46,10 +46,10 @@ Linux distribution.
 	Deinitialize project build container.
 
 *--ls*::
-	List build containers.
+	List build images.
 
 *--gc*::
-	Clean up unused build containers.
+	Clean up unused build images.
 
 *--exec PROGRAM [ARGUMENTS]*::
 	Run command inside build container.

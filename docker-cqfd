@@ -73,8 +73,8 @@ Options:
 Commands:
   --init                                 Initialize project build container.
   --deinit                               Deinitialize project build container.
-  --ls                                   List build containers.
-  --gc                                   Cleanup unused build containers.
+  --ls                                   List build images.
+  --gc                                   Cleanup unused build images.
   --exec cmd [list]                      Run argument(s) inside build container.
   --flavors                              List flavors from config file to stdout.
   --run [list]                           Run argument(s) inside build container.
