@@ -37,6 +37,10 @@ This becomes useful when building an application designed for another Linux
 system, e.g. building an old embedded firmware that only works in an older
 Linux distribution.
 
+By default, the _--run_ command is assumed, with the default command string
+configured in your _.cqfdrc_ (see build.command).
+If a program is given instead of a command, the _--exec_ command is assumed.
+
 == COMMANDS
 
 *--init*::
@@ -62,15 +66,6 @@ Linux distribution.
 
 *--shell [SHELL_ARGUMENTS]*::
 	Run shell inside build container.
-
-By default, the _--run_ command is assumed, with the default command string
-configured in your _.cqfdrc_ (see build.command).
-If a program is given instead of a command, the _--exec_ command is assumed.
-
-Command options for --run:
-
-*-c ARGUMENT_STRING*::
-	Append argument string to the default command string.
 
 == OPTIONS
 
@@ -109,6 +104,11 @@ Command options for --run:
 
 *-h* or *--help*::
 	Show this help text.
+
+== RUN OPTIONS
+
+*-c ARGUMENT_STRING*::
+	Append argument string to the default command string.
 
 == ENVIRONMENT VARIABLES
 
