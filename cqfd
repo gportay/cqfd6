@@ -59,6 +59,29 @@ Usage: $PROGNAME [OPTIONS] --init|--deinit
        $PROGNAME [OPTIONS] --shell [SHELL_ARGUMENTS]
        $PROGNAME [OPTIONS] [--] PROGRAM [ARGUMENTS]
 
+    cqfd6(1) provides a quick and convenient way to run commands in the current
+    directory, but within a Docker container defined in a per-project config
+    file.
+
+    This becomes useful when building an application designed for another Linux
+    system, e.g. building an old embedded firmware that only works in an older
+    Linux distribution.
+
+    By default, the '--run' command is assumed, with the default command string
+    configured in your .cqfdrc (see build.command).
+    If a program is given instead of a command, the '--exec' command
+    is assumed.
+
+Commands:
+    --init               Initialize project build container.
+    --deinit             Deinitialize project build container.
+    --ls                 List build containers.
+    --gc                 Cleanup unused build containers.
+    --exec cmd [args]    Run command inside build container.
+    --flavors            List flavors from config file to stdout.
+    --run [cmdstring]    Run command string inside build container.
+    --shell [shargs]     Run shell command inside build container.
+
 Options:
           --reinit       Reinitialize build container.
           --release      Release software.
@@ -83,22 +106,7 @@ Options:
     -D or --verbose      Increase the script's verbosity.
     -h or --help         Show this help text.
 
-Commands:
-    --init               Initialize project build container.
-    --deinit             Deinitialize project build container.
-    --ls                 List build containers.
-    --gc                 Cleanup unused build containers.
-    --exec cmd [args]    Run command inside build container.
-    --flavors            List flavors from config file to stdout.
-    --run [cmdstring]    Run command string inside build container.
-    --shell [shargs]     Run shell command inside build container.
-
-    By default, the '--run' command is assumed, with the default command string
-    configured in your .cqfdrc (see build.command).
-    If a program is given instead of a command, the '--exec' command
-    is assumed.
-
-Command options for --run:
+Run options:
     -c <argstring>       Append argument string to the default command string.
 
     cqfd6 is Copyright (C) 2016-2017,2023-2026 Gaël PORTAY
