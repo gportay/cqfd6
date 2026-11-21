@@ -13,6 +13,7 @@ BuildRequires:  make
 BuildRequires:  shellcheck
 BuildRequires:  pkgconfig(bash-completion)
 Requires:       bash
+Recommends:     /usr/bin/docker
 
 %description
 Wrap commands in controlled Docker containers using docker.
