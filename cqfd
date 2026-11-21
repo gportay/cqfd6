@@ -771,7 +771,7 @@ docker_run() {
 	# Bind mount SSH systemwide configuration and authentication
 	# information
 	if [ "$CQFD_NO_SSH_CONFIG" != true ] && [ -d /etc/ssh ]; then
-		args+=(--volume /etc/ssh:/etc/ssh)
+		args+=(--volume /etc/ssh:/etc/ssh:ro)
 	fi
 
 	# Bind mount the Unix-domain socket used to communicate with the SSH
@@ -788,7 +788,7 @@ docker_run() {
 
 	# Bind mount the git system configuration file
 	if [ "$CQFD_NO_SYSTEM_GIT_CONFIG" != true ] && [ -f "/etc/gitconfig" ]; then
-		args+=(--volume "/etc/gitconfig:/etc/gitconfig")
+		args+=(--volume "/etc/gitconfig:/etc/gitconfig:ro")
 	fi
 
 	# Bind mount the docker socket in daemon mode
@@ -809,7 +809,7 @@ docker_run() {
 	trap 'rm -f "$tmp_entrypoint"' EXIT
 	make_entrypoint "$tmp_entrypoint"
 	chmod 0755 "$tmp_entrypoint"
-	args+=(--volume "$tmp_entrypoint:/bin/cqfd-entrypoint")
+	args+=(--volume "$tmp_entrypoint:/bin/cqfd-entrypoint:ro")
 	args+=(--entrypoint "/bin/cqfd-entrypoint")
 
 	# Set positional arguments
