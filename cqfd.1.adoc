@@ -61,7 +61,7 @@ Linux distribution.
 	Run command string inside build container.
 
 *--shell [SHELL_ARGUMENTS]*::
-	Run shell command inside build container.
+	Run shell inside build container.
 
 By default, the _--run_ command is assumed, with the default command string
 configured in your _.cqfdrc_ (see build.command).
