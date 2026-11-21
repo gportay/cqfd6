@@ -103,6 +103,9 @@ Command options for --run:
 *-v* or *--version*::
 	Show version.
 
+*-D* or *--verbose*::
+	Increase the script's verbosity.
+
 *-h* or *--help*::
 	Show this help text.
 
