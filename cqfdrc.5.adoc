@@ -143,9 +143,9 @@ file's contents at the location of the include statement.
 	* *%D3* - RFC3339 date (YYYY-MM-DD)
 	* *%Du* - Unix timestamp
 	* *%Cf* - current cqfd flavor name (if any)
-	* *%Po* - value of the `project.org` configuration key
-	* *%Pn* - value of the `project.name` configuration key
-	* *%%* - a literal '%' sign
+	* *%Po* - value of the _project.org_ configuration key
+	* *%Pn* - value of the _project.name_ configuration key
+	* *%%* - a literal _%_ sign
 
 By default, _cqfd6_ will generate a release archive named _org-name.tar.xz_,
 where _org_ and _name_ come from the project's configuration keys. The .tar.xz,
