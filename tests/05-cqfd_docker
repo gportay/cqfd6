@@ -9,7 +9,7 @@ mv .cqfdrc .cqfdrc.orig
 
 jtest_prepare "run cqfd with docker should use the program set in docker"
 sed -e "/\[build\]/adocker='echo docker'" .cqfdrc.orig >.cqfdrc
-if cqfd | tee /dev/stderr | grep "^docker run .* make build$"; then
+if cqfd | grep "^docker run .* make build$"; then
 	jtest_result pass
 else
 	jtest_result fail
