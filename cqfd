@@ -700,7 +700,7 @@ docker_run() {
 	# Give access to all host devices
 	args+=(--privileged)
 
-	# Cleanup container after exit
+	# Clean up container after exit
 	args+=(--rm)
 
 	# Forward signals and reap processes
