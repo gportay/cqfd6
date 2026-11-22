@@ -4,7 +4,7 @@ PREFIX ?= /usr/local
 VERSION ?= $(shell bash cqfd --version)
 COMPAT ?= $(shell bash cqfd --compatibility)
 
-.PHONY: all help man install uninstall test tests check clean maintainer-clean sources FORCE
+.PHONY: all help man install uninstall test tests check serve clean maintainer-clean sources FORCE
 
 all:	help
 
@@ -16,6 +16,7 @@ help:
 	@echo "   uninstall:        Remove script, manual pages, doc and resources"
 	@echo "   test:             Run functional tests"
 	@echo "   check:            Run analysis tool"
+	@echo "   serve:            Serve the website locally"
 	@echo "   clean:            Clean temporary files"
 	@echo "   maintainer-clean: Delete almost everything"
 	@echo "   sources:          Make sources needed for packaging"
@@ -81,6 +82,10 @@ check:
 	shellcheck cqfd
 	shellcheck --shell bash bash-completion
 	@$(MAKE) -C tests check
+
+serve: PATH := $(CURDIR):$(PATH)
+serve:
+	cqfd6 --build serve
 
 clean:
 	rm -f cqfd.1.gz cqfdrc.5.gz gportay-cqfd6.tar.xz

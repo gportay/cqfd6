@@ -1,3 +1,4 @@
 *.html
+!docs/gh-pages/_includes/**/*.html
 .vscode/
 *.pkg.tar.*

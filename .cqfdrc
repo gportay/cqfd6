@@ -32,3 +32,8 @@ command='sh make-pkg.sh'
 dockerfile='.cqfd/rpm/Dockerfile'
 docker_run_args="--volume $PWD/rpmbuild:$HOME/rpmbuild --volume $PWD/cqfd6.spec:$HOME/rpmbuild/SPECS/cqfd6.spec"
 command='sh make-rpm.sh'
+
+[serve]
+dockerfile='.cqfd/jekyll/Dockerfile'
+docker_run_args='--publish 4000:4000 --publish 35729:35729'
+command='cd docs/gh-pages && bundle exec jekyll serve --host 0.0.0.0 --livereload --destination /tmp/_site'

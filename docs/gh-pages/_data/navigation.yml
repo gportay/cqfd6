@@ -1,0 +1,13 @@
+main:
+  - title: "News"
+    url: /news/
+  - title: "Getting Started"
+    url: /getting-started/
+  - title: "Download"
+    url: /download/
+  - title: "Documentation"
+    url: https://github.com/gportay/cqfd6#readme
+  - title: "FAQ"
+    url: /faq/
+  - title: "Support"
+    url: /support/

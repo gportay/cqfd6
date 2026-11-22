@@ -1,0 +1,594 @@
+---
+---
+
+@charset "utf-8";
+
+/*
+ * cqfd6 identity: the green of its logo, laid out after the RTONE brand
+ * guidelines.
+ *  - Raleway for the text, Chillax for the titles.
+ *  - Black and white, with the green of the logo and its light tints.
+ *  - Rounded light grey cards, as the sections of www.rtone.fr.
+ *  - Light tints highlight words and structure secondary blocks.
+ */
+$cqfd-green-pale: #cce6cc;  // 20 %: highlights, secondary blocks
+$cqfd-green-light: #66b366; // 60 %: borders, accents
+$cqfd-green: #008000;       // 100 %: the theme color
+$cqfd-green-dark: #005a00;  // links and buttons, readable on white
+$cqfd-black: #000;
+$cqfd-text: #1a1a1a;
+$cqfd-muted: #4d4d4d;
+$cqfd-border: #dcdcdc;
+
+$sans-serif: "Raleway", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+$global-font-family: $sans-serif;
+$header-font-family: "Chillax", $sans-serif;
+$text-color: $cqfd-text;
+$link-color: $cqfd-green-dark;
+$primary-color: $cqfd-green-dark;
+$border-radius: .5rem;
+
+@import "minimal-mistakes";
+
+body {
+  color: $cqfd-text;
+}
+
+h1, h2, h3, h4, h5, h6,
+.page__title,
+.site-title {
+  color: $cqfd-black;
+  font-family: $header-font-family;
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+
+a {
+  color: $cqfd-green-dark;
+
+  &:hover {
+    color: $cqfd-green;
+  }
+}
+
+/* Highlight keywords: the theme color on its light tint. */
+mark {
+  padding: 0 .15em;
+  border-radius: .2em;
+  background: $cqfd-green-pale;
+  color: $cqfd-green-dark;
+  font-weight: 600;
+}
+
+/* White masthead, black titles, and the palette as the logo underline. */
+.masthead {
+  border-bottom: 0;
+  background: #fff;
+
+  &::after {
+    content: "";
+    display: block;
+    height: 4px;
+    background: linear-gradient(90deg,
+      $cqfd-green-dark 0 25%, $cqfd-green 25% 50%,
+      $cqfd-green-light 50% 75%, $cqfd-green-pale 75% 100%);
+  }
+
+  .greedy-nav {
+    background: #fff;
+  }
+
+  // The logo spells the name out: no title next to it.
+  .site-logo img {
+    max-height: 2.5rem;
+  }
+
+  .site-title {
+    display: none;
+  }
+
+  .site-title,
+  .site-title:visited,
+  .greedy-nav a,
+  .greedy-nav .visible-links a:before {
+    color: $cqfd-black;
+  }
+
+  .greedy-nav .visible-links a:before {
+    background: $cqfd-green;
+  }
+
+  .greedy-nav .visible-links a:hover {
+    color: $cqfd-green-dark;
+  }
+
+  .greedy-nav button {
+    background: $cqfd-black;
+    color: #fff;
+  }
+}
+
+/* Light grey hero, with black text, as the sections of www.rtone.fr. */
+$cqfd-hero: #f3f3f3;
+
+.page__hero--overlay {
+  background-color: $cqfd-hero;
+
+  .page__title,
+  .page__lead,
+  .page__meta,
+  .btn {
+    color: $cqfd-black;
+    text-shadow: none;
+  }
+
+  a {
+    color: $cqfd-green-dark;
+  }
+
+  .btn--light-outline {
+    border-color: $cqfd-black;
+
+    &:hover {
+      background-color: $cqfd-black;
+      color: #fff;
+    }
+  }
+
+  // The actions follow the lead, in a paragraph of their own.
+  .wrapper > p:last-child {
+    text-align: center;
+  }
+}
+
+.page__title,
+.page__lead {
+  color: $cqfd-black;
+}
+
+.page__lead {
+  font-size: 1.15em;
+}
+
+.btn {
+  border-radius: 2rem;
+  font-family: $sans-serif;
+  font-weight: 600;
+}
+
+.btn--primary {
+  background-color: $cqfd-green-dark;
+
+  &:hover {
+    background-color: $cqfd-green;
+  }
+}
+
+/* Logos of the container engines, greyed out as on www.rtone.fr. */
+.cqfd-logos {
+  margin: 0 0 1rem;
+  padding: 1.5rem 0;
+
+  .splide__slide a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    padding: 0 1rem;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: grayscale(1);
+    opacity: .35;
+    transition: all .25s ease-in-out;
+  }
+
+  a:hover img {
+    filter: none;
+    opacity: 1;
+  }
+
+  // No shadow frame on hover, as the theme does for the linked images.
+  a:not(.btn):hover img {
+    box-shadow: none;
+  }
+
+  // No frame when the logos are clicked or dragged; only for the keyboard.
+  a:focus:not(:focus-visible),
+  .splide__slide:focus:not(:focus-visible) {
+    outline: 0;
+  }
+}
+
+/* Section titles, underlined with the theme color. */
+.cqfd-features,
+.cqfd-use-cases {
+  margin-top: 2.5rem;
+
+  > h2 {
+    margin-bottom: 1.5rem;
+    padding-bottom: .5rem;
+    border-bottom: 0;
+    color: $cqfd-black;
+
+    &::after {
+      content: "";
+      display: block;
+      width: 3rem;
+      height: 4px;
+      margin-top: .5rem;
+      background: $cqfd-green;
+    }
+  }
+}
+
+.cqfd-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+.cqfd-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 1.5rem;
+  border-radius: 1.25rem;
+  background: $cqfd-hero;
+
+  h3 {
+    margin: 0 0 .75rem;
+    color: $cqfd-black;
+    font-size: 1.1em;
+    line-height: 1.35;
+  }
+
+  p {
+    margin: 0 0 1rem;
+    color: $cqfd-muted;
+    font-size: .9em;
+    line-height: 1.65;
+  }
+
+  .btn {
+    align-self: center;
+    margin: auto 0 0;
+  }
+}
+
+/* Monochrome icons of the cards, from Font Awesome Free (CC BY 4.0). */
+.cqfd-card__icon {
+  align-self: center;
+  margin-bottom: .75rem;
+  color: $cqfd-green;
+  font-size: 2rem;
+}
+
+/* Packages of the download page: a card per distribution. */
+.cqfd-packages {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 1.5rem;
+
+  .cqfd-card {
+    padding: 1.25rem 1.5rem;
+
+    h3 {
+      margin: 0 0 .25rem;
+      padding: 0;
+      border: 0;
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    code {
+      white-space: nowrap;
+    }
+  }
+}
+
+.cqfd-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem 1rem;
+  margin-top: auto;
+
+  .btn {
+    margin: 0;
+  }
+}
+
+.cqfd-sig {
+  font-size: .8em;
+}
+
+/* Secondary block, structured with the lightest tint. */
+.cqfd-community {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin: 2.5rem 0 1rem;
+  padding: 1.75rem 2rem;
+  border-radius: 1.25rem;
+  background: $cqfd-green-pale;
+
+  h2 {
+    margin: 0 0 .45rem;
+    padding: 0;
+    border: 0;
+    color: $cqfd-black;
+    font-size: 1.3em;
+  }
+
+  p {
+    margin: 0;
+    color: $cqfd-text;
+  }
+
+  .btn {
+    flex: 0 0 auto;
+    margin: 0;
+  }
+}
+
+/* Operating system proposed on the download page. */
+#cqfd-os {
+  border-radius: 1.25rem;
+  background: $cqfd-green-pale;
+  box-shadow: none;
+  color: $cqfd-black;
+
+  a {
+    color: $cqfd-green-dark;
+    font-weight: 600;
+  }
+}
+
+/* White footer, with a thin line on top. */
+.page__footer {
+  border-top: 1px solid $cqfd-border;
+  background: #fff;
+  color: $cqfd-muted;
+
+  a,
+  .page__footer-follow a {
+    color: $cqfd-black;
+  }
+}
+
+@media (max-width: 900px) {
+  .cqfd-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .cqfd-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cqfd-community {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+/*
+ * Dark mode, following the system preference: the logo on a dark
+ * background, white titles, and the light tints for the links and buttons.
+ */
+$cqfd-dark-bg: #0d0d0d;
+$cqfd-dark-surface: #1a1a1a;
+$cqfd-dark-border: #333;
+$cqfd-dark-text: #e6e6e6;
+$cqfd-dark-muted: #b3b3b3;
+
+@media (prefers-color-scheme: dark) {
+  html,
+  body {
+    background: $cqfd-dark-bg;
+    color: $cqfd-dark-text;
+  }
+
+  h1, h2, h3, h4, h5, h6,
+  .page__title,
+  .page__lead,
+  .site-title,
+  .page__title a {
+    color: #fff;
+  }
+
+  a {
+    color: $cqfd-green-light;
+
+    &:hover {
+      color: $cqfd-green-pale;
+    }
+  }
+
+  mark {
+    background: $cqfd-green-dark;
+    color: $cqfd-green-pale;
+  }
+
+  hr,
+  .page__content h2 {
+    border-color: $cqfd-dark-border;
+  }
+
+  .page__content :not(pre) > code {
+    background: $cqfd-dark-surface;
+    color: $cqfd-dark-text;
+  }
+
+  thead {
+    border-bottom-color: $cqfd-dark-border;
+    background: $cqfd-dark-surface;
+  }
+
+  td,
+  th {
+    border-color: $cqfd-dark-border;
+  }
+
+  blockquote {
+    border-left-color: $cqfd-dark-border;
+    color: $cqfd-dark-muted;
+  }
+
+  .masthead {
+    background: $cqfd-dark-bg;
+
+    .site-logo img {
+      content: url("../images/cqfd6-logo-dark.png");
+    }
+
+    .greedy-nav {
+      background: $cqfd-dark-bg;
+    }
+
+    .site-title,
+    .site-title:visited,
+    .greedy-nav a {
+      color: #fff;
+    }
+
+    .greedy-nav .visible-links a:hover {
+      color: $cqfd-green-light;
+    }
+
+    .greedy-nav button {
+      background: $cqfd-green;
+      color: $cqfd-black;
+    }
+
+    .greedy-nav .hidden-links {
+      border-color: $cqfd-dark-border;
+      background: $cqfd-dark-surface;
+
+      &:before,
+      &:after {
+        border-color: $cqfd-dark-surface transparent;
+      }
+    }
+  }
+
+  // The hero color is set inline by the page front matter.
+  .page__hero--overlay {
+    background-color: $cqfd-dark-surface !important;
+    background-image: none !important;
+
+    .page__title,
+    .page__lead,
+    .page__meta,
+    .btn {
+      color: #fff;
+    }
+
+    a {
+      color: $cqfd-green-light;
+    }
+
+    .btn--light-outline {
+      border-color: #fff;
+
+      &:hover {
+        background-color: #fff;
+        color: $cqfd-black;
+      }
+    }
+  }
+
+  .btn--primary {
+    background-color: $cqfd-green;
+    color: $cqfd-black;
+
+    &:hover {
+      background-color: $cqfd-green-light;
+      color: $cqfd-black;
+    }
+  }
+
+  .cqfd-features,
+  .cqfd-use-cases {
+    > h2 {
+      color: #fff;
+    }
+  }
+
+  .cqfd-card {
+    background: $cqfd-dark-surface;
+
+    h3 {
+      color: #fff;
+    }
+
+    p {
+      color: $cqfd-dark-muted;
+    }
+  }
+
+  .cqfd-card__icon {
+    color: $cqfd-green-light;
+  }
+
+  // Invert the dark logos, to show them on the dark background.
+  .cqfd-logos {
+    img {
+      opacity: .5;
+    }
+
+    img[src$="docker.svg"],
+    img[src$="podman.svg"] {
+      filter: grayscale(1) invert(1);
+    }
+
+    a:hover img[src$="docker.svg"],
+    a:hover img[src$="podman.svg"] {
+      // Rotate the hue back, to keep the colors of the logos.
+      filter: invert(1) hue-rotate(180deg);
+      opacity: 1;
+    }
+  }
+
+  .cqfd-community {
+    background: $cqfd-green-dark;
+
+    h2 {
+      color: #fff;
+    }
+
+    p {
+      color: #fff;
+    }
+  }
+
+  #cqfd-os {
+    background: $cqfd-green-dark;
+    color: #fff;
+
+    a {
+      color: #fff;
+    }
+  }
+
+  .page__footer {
+    border-top-color: $cqfd-dark-border;
+    background: $cqfd-dark-bg;
+    color: $cqfd-dark-muted;
+
+    a,
+    .page__footer-follow a {
+      color: #fff;
+    }
+  }
+}
