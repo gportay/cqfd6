@@ -187,7 +187,7 @@ Example:
        doc:       Generate documentation
        install:   Install script, doc and resources
        uninstall: Remove script, doc and resources
-       tests:     Run functional tests
+       test:      Run functional tests
        clean:     Clean temporary files
 
 ### Manual page
