@@ -17,7 +17,7 @@ changelog=CHANGELOG.md
 
 build() {
 	cd "$pkgname-$pkgver"
-	make doc
+	make man
 }
 
 check() {

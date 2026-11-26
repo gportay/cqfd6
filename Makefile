@@ -4,23 +4,23 @@ PREFIX ?= /usr/local
 VERSION ?= $(shell bash cqfd --version)
 COMPAT ?= $(shell bash cqfd --compatibility)
 
-.PHONY: all help doc install uninstall test tests check clean maintainer-clean sources FORCE
+.PHONY: all help man install uninstall test tests check clean maintainer-clean sources FORCE
 
 all:	help
 
 help:
 	@echo "Available make targets:"
 	@echo "   help:             This help message"
-	@echo "   doc:              Generate documentation"
-	@echo "   install:          Install script, doc and resources"
-	@echo "   uninstall:        Remove script, doc and resources"
+	@echo "   man:              Generate manual pages"
+	@echo "   install:          Install script, manual pages, doc and resources"
+	@echo "   uninstall:        Remove script, manual pages, doc and resources"
 	@echo "   test:             Run functional tests"
 	@echo "   check:            Run analysis tool"
 	@echo "   clean:            Clean temporary files"
 	@echo "   maintainer-clean: Delete almost everything"
 	@echo "   sources:          Make sources needed for packaging"
 
-doc: cqfd.1.gz cqfdrc.5.gz
+man: cqfd.1.gz cqfdrc.5.gz
 
 install: DOCKERLIBDIR ?= $(PREFIX)/lib/docker
 install:
