@@ -184,9 +184,11 @@ Example:
     fred@host:~/project$ make SHELL="cqfd sh"
     Available make targets:
        help:      This help message
+       doc:       Generate documentation
        install:   Install script, doc and resources
        uninstall: Remove script, doc and resources
        tests:     Run functional tests
+       clean:     Clean temporary files
 
 ### Manual page
 
