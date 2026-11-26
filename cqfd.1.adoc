@@ -65,6 +65,7 @@ Linux distribution.
 
 By default, the _--run_ command is assumed, with the default command string
 configured in your _.cqfdrc_ (see build.command).
+If a program is given instead of a command, the _--exec_ command is assumed.
 
 Command options for --run:
 

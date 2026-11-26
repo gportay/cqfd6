@@ -95,6 +95,8 @@ Commands:
 
     By default, the '--run' command is assumed, with the default command string
     configured in your .cqfdrc (see build.command).
+    If a program is given instead of a command, the '--exec' command
+    is assumed.
 
 Command options for --run:
     -c <argstring>       Append argument string to the default command string.
