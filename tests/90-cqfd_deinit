@@ -9,7 +9,7 @@ else
 	jtest_result fail
 fi
 
-# backup cqfdrc
+# backup .cqfdrc
 mv .cqfdrc .cqfdrc.orig
 
 jtest_prepare "run cqfd --deinit with a nonexistent Dockerfile should fail"
