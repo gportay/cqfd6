@@ -26,7 +26,7 @@ cqfd6 - a tool to wrap commands in controlled Docker containers using docker.
 
 *cqfd6* [OPTIONS] --shell [SHELL_ARGUMENTS]
 
-*cqfd6* [OPTIONS] [--] [PROGRAM] [ARGUMENTS]
+*cqfd6* [OPTIONS] [--] PROGRAM [ARGUMENTS]
 
 == DESCRIPTION
 
