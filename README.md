@@ -183,14 +183,15 @@ Example:
 
     fred@host:~/project$ make SHELL="cqfd sh"
     Available make targets:
-       help:      This help message
-       doc:       Generate documentation
-       install:   Install script, doc and resources
-       uninstall: Remove script, doc and resources
-       test:      Run functional tests
-       check:     Run analysis tool
-       clean:     Clean temporary files
-       sources:   Make sources needed for packaging.
+       help:             This help message
+       doc:              Generate documentation
+       install:          Install script, doc and resources
+       uninstall:        Remove script, doc and resources
+       test:             Run functional tests
+       check:            Run analysis tool
+       clean:            Clean temporary files
+       maintainer-clean: Delete almost everything.
+       sources:          Make sources needed for packaging.
 
 ### Manual page
 
