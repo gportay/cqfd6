@@ -31,7 +31,7 @@ make check
 
 
 %build
-%make_build doc
+%make_build man
 
 
 %install

@@ -4,7 +4,7 @@ name='cqfd6'
 
 [build]
 shell='/bin/bash'
-command='make doc'
+command='make man'
 files='AUTHORS \
        CHANGELOG.md \
        LICENSE \

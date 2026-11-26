@@ -22,7 +22,7 @@ pkgver() {
 
 build() {
 	cd "$srcdir/$pkgname"
-	make doc
+	make man
 }
 
 check() {
