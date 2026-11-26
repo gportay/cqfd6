@@ -190,8 +190,8 @@ Example:
        test:             Run functional tests
        check:            Run analysis tool
        clean:            Clean temporary files
-       maintainer-clean: Delete almost everything.
-       sources:          Make sources needed for packaging.
+       maintainer-clean: Delete almost everything
+       sources:          Make sources needed for packaging
 
 ### Manual page
 
