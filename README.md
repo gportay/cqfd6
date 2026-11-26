@@ -190,6 +190,7 @@ Example:
        test:      Run functional tests
        check:     Run analysis tool
        clean:     Clean temporary files
+       sources:   Make sources needed for packaging.
 
 ### Manual page
 
