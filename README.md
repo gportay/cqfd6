@@ -188,6 +188,7 @@ Example:
        install:   Install script, doc and resources
        uninstall: Remove script, doc and resources
        test:      Run functional tests
+       check:     Run analysis tool
        clean:     Clean temporary files
 
 ### Manual page
