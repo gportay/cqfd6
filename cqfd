@@ -57,7 +57,7 @@ Usage: $PROGNAME [OPTIONS] --init|--deinit
        $PROGNAME [OPTIONS] --run [COMMAND_STRING]
        $PROGNAME [OPTIONS] --run -c ARGUMENT_STRING
        $PROGNAME [OPTIONS] --shell [SHELL_ARGUMENTS]
-       $PROGNAME [OPTIONS] [--] [PROGRAM] [ARGUMENTS]
+       $PROGNAME [OPTIONS] [--] PROGRAM [ARGUMENTS]
 
 Options:
           --reinit       Reinitialize build container.
