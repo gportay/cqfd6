@@ -110,12 +110,7 @@ _cqfd6() {
 		COMPREPLY=($(compgen -W "$flavors" -- "$cur"))
 		return
 		;;
-	--init|--deinit|--ls|--gc|--flavors|-v|--version|-h|--help)
-		return
-		;;
-	--compatibility)
-		# shellcheck disable=SC2207
-		COMPREPLY=($(compgen -W "5 6" -- "$cur"))
+	--init|--deinit|--ls|--gc|--flavors|-v|--version|--compatibility|-h|--help)
 		return
 		;;
 	esac
