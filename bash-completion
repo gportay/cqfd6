@@ -54,22 +54,11 @@ _get_first_arg_2()
 
 # This function returns the compatibility
 _get_compat() {
-	local i
-
-	compat="${COMP_WORDS[0]}"
-	compat="${compat##*/}"
+	compat="${CQFD_COMPAT:-${COMP_WORDS[0]##*/}}"
 	compat="${compat#*cqfd}"
 	if [[ ! "$compat" =~ ^[0-9]+$ ]]; then
-		compat=5
+		compat=6
 	fi
-	for ((i = 1; i < COMP_CWORD - 1; i++)); do
-		if [[ ${COMP_WORDS[i]} == --compatibility ]]; then
-			if [[ "${COMP_WORDS[i+1]}" =~ ^[0-9]+$ ]]; then
-				compat="${COMP_WORDS[i+1]}"
-			fi
-			break
-		fi
-	done
 }
 
 # This function returns the command
