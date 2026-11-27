@@ -152,7 +152,8 @@ _cqfd6() {
 					break
 				fi
 			done
-			COMP_WORDS=("${SHELL:-/bin/sh}" "${COMP_WORDS[@]:$i}" "$cur")
+			COMP_WORDS=("${SHELL:-/bin/sh}" "${COMP_WORDS[@]:$i}")
+			COMP_CWORD="$((COMP_CWORD - i + 1))"
 			COMP_LINE="${COMP_WORDS[*]}"
 			COMP_POINT="${#COMP_LINE}"
 			_command_offset 0
