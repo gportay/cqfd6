@@ -76,7 +76,7 @@ _get_cmd() {
 
 	cmd=
 	for ((i = 1; i < COMP_CWORD; i++)); do
-		if [[ ${COMP_WORDS[i]} =~ --(init|deinit|ls|gc|flavors|exec|run|release|shell|-v|version|-h|help) ]]; then
+		if [[ ${COMP_WORDS[i]} =~ ^(--init|--deinit|--ls|--gc|--flavors|--exec|--run|--release|--shell|-v|--version|-h|--help)$ ]]; then
 			cmd=${COMP_WORDS[i]}
 			break
 		fi
