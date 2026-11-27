@@ -104,22 +104,21 @@ _cqfd6() {
 		return
 		;;
 	-b|--build)
-		local flavors cqfdrc=.cqfdrc
-		# before we scan for flavors, see if a cqfdrc name was
-		# specified with -f or --cqfdrc-file
-		for ((i = 1; i < cword; i++)); do
-			if [[ ${words[i]} == @(-f|--cqfdrc-file) ]]; then
-				cqfdrc="$(dequote "${words[i+1]}")"
+		local flavors cqfd_opts=()
+		# before we list the flavors, forward the options locating the
+		# cqfdrc file, in order; cqfd looks it up as it does to build
+		for ((i = 1; i + 1 < cword; i++)); do
+			if [[ ${words[i]} == @(-C|--directory|-d|--cqfd-directory|-f|--cqfdrc-file) ]]; then
+				cqfd_opts+=("${words[i]}" "$(dequote "${words[i+1]}")")
+				((i++))
 			fi
 		done
 
-		if [ -e "$cqfdrc" ]; then
-			flavors=$(CQFD_NO_DEPRECATED_COMMAND_WARNING=true \
-				  CQFD_NO_DEPRECATED_WARNING=true \
-				  "${COMP_WORDS[0]}" -f "$cqfdrc" --flavors 2>/dev/null)
-			# shellcheck disable=SC2207
-			COMPREPLY=($(compgen -W "$flavors" -- "$cur"))
-		fi
+		flavors=$(CQFD_NO_DEPRECATED_COMMAND_WARNING=true \
+			  CQFD_NO_DEPRECATED_WARNING=true \
+			  "${COMP_WORDS[0]}" "${cqfd_opts[@]}" --flavors 2>/dev/null)
+		# shellcheck disable=SC2207
+		COMPREPLY=($(compgen -W "$flavors" -- "$cur"))
 		return
 		;;
 	--init|--deinit|--ls|--gc|--flavors|-v|--version|-h|--help)
