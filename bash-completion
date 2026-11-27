@@ -76,7 +76,7 @@ _get_cmd() {
 
 	cmd=
 	for ((i = 1; i < COMP_CWORD; i++)); do
-		if [[ ${COMP_WORDS[i]} =~ ^(--init|--deinit|--ls|--gc|--flavors|--exec|--run|--release|--shell|-v|--version|-h|--help)$ ]]; then
+		if [[ ${COMP_WORDS[i]} == @(--init|--deinit|--ls|--gc|--flavors|--exec|--run|--release|--shell|-v|--version|-h|--help) ]]; then
 			cmd=${COMP_WORDS[i]}
 			break
 		fi
@@ -136,7 +136,7 @@ _cqfd6() {
 	if ((compat < 6)); then
 		local cmd
 		_get_cmd
-		if [[ "$cmd" =~ ^--(exec|run)$ ]]; then
+		if [[ "$cmd" == @(--exec|--run) ]]; then
 			for ((i = 1; i < cword; i++)); do
 				if [[ ${words[i]} == "$cmd" ]]; then
 					if (( i + 1 == cword )); then
