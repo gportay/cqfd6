@@ -107,8 +107,7 @@ _cqfd6() {
 		# specified with -f or --cqfdrc-file
 		for ((i = 1; i < cword; i++)); do
 			if [[ ${words[i]} == @(-f|--cqfdrc-file) ]]; then
-				# eval for tilde expansion
-				eval "cqfdrc=(\"${words[i+1]}\")"
+				cqfdrc="$(dequote "${words[i+1]}")"
 			fi
 		done
 
