@@ -84,7 +84,7 @@ _get_cmd() {
 }
 
 _cqfd6() {
-	local cur prev words cword
+	local cur prev words cword i
 	_init_completion || return
 
 	case $prev in
