@@ -104,9 +104,9 @@ _cqfd6() {
 	-b|--build)
 		local flavors cqfdrc=.cqfdrc
 		# before we scan for flavors, see if a cqfdrc name was
-		# specified with -f
+		# specified with -f or --cqfdrc-file
 		for ((i = 1; i < cword; i++)); do
-			if [[ ${words[i]} == -f ]]; then
+			if [[ ${words[i]} == @(-f|--cqfdrc-file) ]]; then
 				# eval for tilde expansion
 				eval "cqfdrc=(\"${words[i+1]}\")"
 			fi
