@@ -131,6 +131,9 @@ _cqfd6() {
 		;;
 	esac
 
+	local opts="-C --directory -w --working-directory -d --cqfd-directory -f --cqfdrc-file -b --build -q --quiet --reinit --release --platform -y --yes"
+	local cmds="--init --deinit --ls --gc --flavors -v --version --compatibility -D --verbose -h --help"
+
 	local compat
 	_get_compat
 	if ((compat < 6)); then
@@ -167,8 +170,7 @@ _cqfd6() {
 			done
 		fi
 
-		local opts="-C --directory -w --working-directory -d --cqfd-directory -f --cqfdrc-file -b --build -q --quiet --reinit --release --platform -y --yes"
-		local cmds="--init --deinit --ls --gc --flavors --exec --run --shell -v --version --compatibility -D --verbose -h --help"
+		cmds+=" --exec --run --shell"
 		# shellcheck disable=SC2207
 		COMPREPLY=($(compgen -W "$cmds $opts" -- "$cur"))
 		return
@@ -190,8 +192,6 @@ _cqfd6() {
 	fi
 
 	if [[ "$cur" == -* ]]; then
-		local opts="-C --directory -w --working-directory -d --cqfd-directory -f --cqfdrc-file -b --build -q --quiet --reinit --release --platform -y --yes"
-		local cmds="--init --deinit --ls --gc --flavors -v --version --compatibility -D --verbose -h --help"
 		# shellcheck disable=SC2207
 		COMPREPLY=($(compgen -W "$cmds $opts" -- "$cur"))
 		return
