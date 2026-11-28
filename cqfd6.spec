@@ -67,12 +67,12 @@ fi
 %doc %{_datadir}/doc/%{name}/README.md
 %license %{_licensedir}/%{name}/LICENSE
 %{_bindir}/%{name}
-%{_bindir}/linux-amd64-cqfd6
-%{_bindir}/linux-arm-cqfd6
-%{_bindir}/linux-arm64-cqfd6
-%{_bindir}/linux-ppc64le-cqfd6
-%{_bindir}/linux-riscv64-cqfd6
-%{_bindir}/linux-s390x-cqfd6
+%{_bindir}/linux-amd64-%{name}
+%{_bindir}/linux-arm-%{name}
+%{_bindir}/linux-arm64-%{name}
+%{_bindir}/linux-ppc64le-%{name}
+%{_bindir}/linux-riscv64-%{name}
+%{_bindir}/linux-s390x-%{name}
 %{_datadir}/%{name}/samples/Dockerfile.Ubuntu:24.04
 %{_datadir}/%{name}/samples/Dockerfile.Yocto:scarthgap
 %{_datadir}/%{name}/samples/dot-cqfdrc
