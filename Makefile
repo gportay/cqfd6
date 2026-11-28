@@ -25,7 +25,7 @@ man: cqfd.1.gz cqfdrc.5.gz
 install: DOCKERLIBDIR ?= $(PREFIX)/lib/docker
 install:
 	install -d $(DESTDIR)$(PREFIX)/bin/
-	install -m 0755 cqfd $(DESTDIR)$(PREFIX)/bin/cqfd$(COMPAT)
+	install -m 0755 cqfd $(DESTDIR)$(PREFIX)/bin/cqfd6
 	for i in linux-amd64 linux-arm linux-arm64 linux-ppc64le linux-riscv64 linux-s390x; do \
 		ln -sf cqfd6 $(DESTDIR)$(PREFIX)/bin/$$i-cqfd6; \
 	done
